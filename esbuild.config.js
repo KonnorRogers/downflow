@@ -40,7 +40,7 @@ const bundleDir = path.join(process.cwd(), "bundles");
    */
   const allConfig = {
     ...coreConfig,
-    entryPoints: ["./exports/index.js"],
+    entryPoints: ["./exports/application.js"],
     outfile: path.join(bundleDir, "all.js"),
   };
 
