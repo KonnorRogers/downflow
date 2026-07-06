@@ -1,38 +1,26 @@
 # `flow-state`
 
+## WIP: Come back later
+
+## Purpose
+
+Some amalgamation between Stimulus and Alpine, with less focus on component level state, and instead looking to (ab)use "app level" state.
+
+I eventually want to look into how you can hook up component-like rendering as well, possibly using `<template>` tags, but baby steps...
+
+The basic idea is: "You have HTML from a server, you know the app state from the server, there's no reason you shouldn't be able to use that and be able to update all the places that need it"
+
+Right now im affectionately calling it "flow-state", with the idea being data "flows" down.
+
 ## Documentation
 
-<https://konnorrogers.github.io/flow-state>
-
-## Initial install
-
-```bash
-mkdir -p my-project-name
-cd my-project-name
-git clone https://github.com/konnorrogers/npm-starter . --depth 1
-rm -rf .git
-git init
-pnpm install -D @web/test-runner @open-wc/testing-helpers @web/test-runner-playwright typescript rimraf @esm-bundle/chai playwright
-pnpm exec playwright install --with-deps
-```
-
-## Renaming your package
-
-**THIS IS A DESTRUCTIVE ACTION THAT CANNOT BE UNDONE**
-
-To rename your package, you can run the following command:
-
-```bash
-npm run rename-package
-```
-
-Which will prompt you for a new name.
+Coming Soon™️
 
 ## Structure
 
 `exports/` is publicly available files
 `internal/` is...well...internal.
 
-`exports` and `internal` shouldn **NOT** write their own `.d.ts` that are co-located.
+`exports` and `internal` should **NOT** write their own `.d.ts` that are co-located.
 
 `types/` is where you place your handwritten `.d.ts` files.
