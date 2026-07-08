@@ -30,16 +30,18 @@ Right now im affectionately calling it "downflow", with the idea being data "flo
 
 <script flow-component="bar" type="template">
     <div>
-        <span flow-text="item.comment"></span>
-        <form flow-prop:action="item.url">
-            <textarea></textarea>
+        <span flow-text="post.comment"></span>
+        <form flow-prop="action:post.url">
+            <label>
+                <textarea></textarea>
+            </label>
             <button>Leave a reply</button>
         </form>
     </div>
 </script>
 
 <!-- for (const item of context.posts) { render("bar") } -->
-<div flow-loop="context.posts" flow-name="item" flow-render="bar">
+<div flow-for="post in context.posts" flow-render="bar">
 </div>
 ```
 
