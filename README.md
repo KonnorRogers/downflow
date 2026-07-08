@@ -20,18 +20,26 @@ Right now im affectionately calling it "downflow", with the idea being data "flo
 `flow-component` - "stamps" a component for re-rendering.
 
 ```html
-<script type="template">
-    <div data-component="foo">
-        <button data-action="#decrement">-</button>
-        <span flow-text="context.foo"></span>
-        <button data-action="#increment">+</button>
+<script flow-component="foo" type="template">
+    <button data-action="#decrement">-</button>
+    <span flow-text="context.foo"></span>
+    <button data-action="#increment">+</button>
+</script>
+
+<div flow-component="foo"></div>
+
+<script flow-component="bar" type="template">
+    <div>
+        <span flow-text="item.comment"></span>
+        <form flow-prop:action="item.url">
+            <textarea></textarea>
+            <button>Leave a reply</button>
+        </form>
     </div>
 </script>
 
-<div data-component="foo">
-    <button data-action="#decrement">-</button>
-    <span>0</span>
-    <button data-action="#increment">+</button>
+<!-- for (const item of context.posts) { render("bar") } -->
+<div flow-loop="context.posts" flow-name="item" flow-render="bar">
 </div>
 ```
 
