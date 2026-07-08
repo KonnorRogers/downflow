@@ -7,17 +7,26 @@ export function reactive (val) {
   return new State(val, globalBus)
 }
 
+/**
+ * @template [T=unknown]
+ * @typedef {Object} UpdateObject
+ * @property {string | undefined | null} key
+ * @property {T} oldValue
+ * @property {T} newValue
+ */
+
 class StateChangeEvent extends Event {
   /**
    * @param {string} name
-   * @param {EventInit & { oldValue: unknown, newValue: unknown }} [init]
+   * @param {EventInit & { key?: null | string, oldValue: unknown, newValue: unknown }} [init]
    */
   constructor(name, init) {
     super(name, init)
 
     if (init) {
       this.oldValue = init.oldValue
-      this.oldValue = init.newValue
+      this.newValue = init.newValue
+      this.key = init.key
     }
   }
 }
@@ -39,22 +48,54 @@ class State {
     this.eventTarget = eventTarget
   }
 
-  get valueOf () {
+  valueOf () {
     return this.value
   }
 
   get value () {
-    return this.value
+    return this._value
   }
 
   /**
-    * @param {T} val
-    * @returns {T}
+    * @param {T} newValue
     */
-  set value (val) {
-    if (this._value !== val) {
-      this.eventTarget.dispatchEvent(new StateChangeEvent("change", {oldValue: this._value, newValue: val}))
+  set value (newValue) {
+    const oldValue = this._value
+    const shouldUpdate = oldValue !== newValue
+
+    this._value = newValue
+
+    if (shouldUpdate) {
+      this.requestUpdate({key: null, newValue, oldValue})
     }
-    this._value = val
+  }
+
+  /**
+   * @param {UpdateObject<T>} updateObject - paramDescription
+   */
+  requestUpdate (updateObject) {
+    const evt = new StateChangeEvent("flow:change", updateObject)
+    this.eventTarget.dispatchEvent(evt)
+  }
+
+  /**
+    * @param {T} newValue
+    */
+  set (newValue) {
+    this.value = newValue
+  }
+
+  /**
+    * @param {(oldValue: T) => T} callback
+    * @param {boolean} force
+    */
+  update (callback, force = false) {
+    const oldValue = this._value
+    const newValue = callback(this._value)
+    this._value = newValue
+
+    if (oldValue !== newValue || force) {
+      this.requestUpdate({key: null, newValue, oldValue})
+    }
   }
 }

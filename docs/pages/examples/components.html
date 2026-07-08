@@ -1,5 +1,5 @@
 ---
-layout: default.njk
+default.njk
 ---
 
 <script type="module">
@@ -34,15 +34,3 @@ layout: default.njk
     application.registerGlobalFunction("increment", increment)
     application.registerGlobalFunction("decrement", decrement)
 </script>
-
-<div flow-controller="counter">
-    <button flow-action="click->counter#decrement">-</button>
-    <span flow-text="context.count">0</span>
-    <button flow-action="click->counter#increment">+</button>
-</div>
-
-<div>
-    <button flow-action="click->global#decrement">-</button>
-    <span flow-text="context.count">0</span>
-    <button flow-action="click->global#increment">+</button>
-</div>

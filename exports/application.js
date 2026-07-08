@@ -148,14 +148,36 @@ export class Application {
       this.actionAttribute,
     ];
 
+    this._context = {}
     this.stores = {};
-    this.context = {};
     this.register(GlobalController, "global");
     this._createControllerInstance("global", this.rootElement);
     this.globalController = this.getController(this.rootElement, "global");
     this.globalBus = globalBus
-    const updateContext = () => this.updateContext()
-    this.globalBus.addEventListener("change", updateContext)
+    // TODO: should be keyed so we only need to update places that rely on this context.
+    const updateContext = () => {
+      this.updateContext()
+    }
+    this.globalBus.addEventListener("flow:change", updateContext)
+
+    /**
+     * @type (options: {str: string, context: Object}) => string
+     */
+    this.componentRenderer = (options) => options.str
+  }
+
+  get context () {
+    return this._context
+  }
+
+  set context (ctx) {
+    let shouldUpdate = ctx !== this._context
+
+    this._context = ctx
+
+    if (shouldUpdate) {
+      this.updateContext()
+    }
   }
 
   /**
@@ -181,11 +203,16 @@ export class Application {
 
       const keys = key.split(/\./g);
       let value = dig(this, ...keys);
+
+      if (value == null) {
+        value = "";
+      } else {
+        value = value.valueOf()
+      }
+
       if (el.textContent !== value) {
-        if (value == null) {
-          value = "";
-        }
-        el.textContent = value.toString();
+        // @ts-expect-error
+        el.textContent = value
       }
     });
   }
