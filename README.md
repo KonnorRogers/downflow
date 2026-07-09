@@ -14,32 +14,35 @@ Right now im affectionately calling it "downflow", with the idea being data "flo
 
 ## Documentation
 
-`flow-controller` - mixins
-`flow-action` - events
-`flow-text` - sets `element.textContent`
-`flow-component` - "stamps" a component for re-rendering.
+- `flow-controller` - mixins (Stimulus Controllers)
+- `flow-action` - events
+- `flow-text` - sets `element.textContent`
+- `flow-component` - "stamps" a component for re-rendering.
+- `flow-render` - Renders a component with a given name
+- `flow-scope` - Sets a top level scope that can be accessed via `#<key>`
 
 ```html
-<script flow-component="foo" type="template">
-    <button data-action="#decrement">-</button>
-    <span flow-text="context.foo"></span>
-    <button data-action="#increment">+</button>
-</script>
+<template flow-component="bar">
+    <!-- # automatically inherits the "scope" of whatever is passed to the component. -->
+    <span flow-text="#comment"></span>
+    <form flow-prop:action="#url">
+        <textarea></textarea>
+        <button flow-action="#reply">Leave a reply</button>
+    </form>
+</template>
 
-<div flow-component="foo"></div>
+<div
+    flow-for="post in context.posts"
+    flow-render="bar"
+    flow-key="id"
+>
+</div>
 
-<script flow-component="bar" type="template">
-    <div>
-        <span flow-text="item.comment"></span>
-        <form flow-prop:action="item.url">
-            <textarea></textarea>
-            <button>Leave a reply</button>
-        </form>
-    </div>
-</script>
-
-<!-- for (const item of context.posts) { render("bar") } -->
-<div flow-loop="context.posts" flow-name="item" flow-render="bar">
+<div
+    flow-for="post in my-controller#posts"
+    flow-render="bar"
+    flow-key="id"
+>
 </div>
 ```
 
