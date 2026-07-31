@@ -24,6 +24,7 @@ So here's downflow's counter.
     <span flow-text="#context.count">0</span>
     <button flow-action="click->counter#increment">+</button>
 </div>
+
 <script type="module">
     import { Application, Controller, reactive } from "downflow"
 
