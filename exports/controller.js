@@ -90,6 +90,23 @@ export class Controller {
     this.isConnected = false;
   }
 
+  /**
+   * @returns {HTMLFormElement | null}
+   */
+  get form () {
+    // @ts-expect-error this will only work when attached to an element that is a form controller
+    let form = this.element.form
+    if (form) { return form }
+
+    const formAttr = this.element?.getAttribute?.("form")
+
+    if (formAttr) {
+      return this.element.querySelector(`#${formAttr}`)
+    }
+
+    return this.element.closest("form") || null
+  }
+
   initialize() {}
   connectedCallback() {}
   disconnectedCallback() {}

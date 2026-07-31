@@ -149,21 +149,28 @@ export class Application {
     ];
 
     this._context = {}
+    this.forms = document.forms
     this.stores = {};
     this.register(GlobalController, "global");
     this._createControllerInstance("global", this.rootElement);
     this.globalController = this.getController(this.rootElement, "global");
     this.globalBus = globalBus
     // TODO: should be keyed so we only need to update places that rely on this context.
-    const updateContext = () => {
+    this.eventUpdateContext = (evt) => {
       this.updateContext()
     }
-    this.globalBus.addEventListener("flow:change", updateContext)
+    this.globalBus.addEventListener("flow:change", this.eventUpdateContext)
 
     /**
      * @type (options: {str: string, context: Object}) => string
      */
     this.componentRenderer = (options) => options.str
+
+    this.formEvents = ["change", "input"]
+
+    this.formEvents.forEach((evt) => {
+      this.rootElement.addEventListener(evt, this.eventUpdateContext)
+    })
   }
 
   get context () {
@@ -196,13 +203,60 @@ export class Application {
     }
 
     els.forEach((el) => {
-      const key = el.getAttribute(this.textAttribute);
+      let key = el.getAttribute(this.textAttribute);
       if (!key) {
         return;
       }
 
+      let context = /** @type {Controller | Application} */(this)
+
+      if (key.includes("#state")) {
+        const keys = key.split("#state")
+        let controllerName = keys.shift() // pop off the controller key, won't be needed anymore
+
+        const closestControllerEl = el.closest(`[${this.controllerAttribute}~="${controllerName}"]`)
+        const controller = this.getController(/** @type {HTMLElement} */ (closestControllerEl), controllerName)
+
+        console.log({ controllerName, el, controller })
+        if (!controller) {
+          return
+        }
+
+        context = controller
+        key = "#state" + keys.join("")
+      }
+
       const keys = key.split(/\./g);
-      let value = dig(this, ...keys);
+      const allowedKeys = ["#context", "#forms", "#form", "#state"]
+      let firstKey = keys.shift() || ""
+
+      if (!firstKey || !allowedKeys.includes(firstKey)) {
+        return
+      }
+
+      let value = null
+
+      if (firstKey === "#form") {
+        const formAttr = el.getAttribute("form")
+        const rootNode = /** @type {HTMLElement} */ ((el.getRootNode() || document))
+        const form = /** @type {HTMLFormElement | null} */(formAttr ? rootNode.querySelector(`form#${formAttr}`) : el.closest("form"))
+
+        if (form) {
+          // need to rejoin keys because we won't support thing.foo.bar. We just use the name="" of the key
+          value = new FormData(form).get(keys.join(""))
+        }
+      } else {
+        firstKey = firstKey.slice(1, firstKey.length)
+        console.log({firstKey})
+        // @ts-expect-error
+        const obj = context[/** @type {"context" | "forms" | "state"} */ (firstKey)]
+
+        if (!obj) {
+          return
+        }
+
+        value = dig(obj, ...keys);
+      }
 
       if (value == null) {
         value = "";
@@ -278,6 +332,10 @@ export class Application {
       }
 
       this.observer?.disconnect();
+
+      this.formEvents.forEach((evt) => {
+        this.rootElement.removeEventListener(evt, this.eventUpdateContext)
+      })
     }
     return this;
   }

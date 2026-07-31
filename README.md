@@ -24,20 +24,21 @@ Right now im affectionately calling it "downflow", with the idea being data "flo
 - `flow-attr="<attribute>:<value>"` - sets a given attribute
 - `flow-component="<name>"` - "stamps" a component for re-rendering.
 - `flow-render="<component-name>"` - Renders a component with a given name
-- `flow-scope="<state>"` - Sets a top level scope that can be accessed via `#<key>`
 
 ```html
 <template flow-component="bar">
-    <!-- # automatically inherits the "scope" of whatever is passed to the component. -->
-    <span flow-text="#comment"></span>
-    <form flow-prop:action="#url">
-        <textarea></textarea>
-        <button flow-action="#reply">Leave a reply</button>
-    </form>
+    <div id="$id">
+        <!-- # automatically inherits the "scope" of whatever is passed to the component. -->
+        <span flow-text="$comment"></span>
+        <form flow-prop:action="$url">
+            <textarea></textarea>
+            <button>Leave a reply</button>
+        </form>
+    </div>
 </template>
 
 <div
-    flow-for="post in context.posts"
+    flow-for="post in #context.posts"
     flow-render="bar"
     flow-key="id"
 >
