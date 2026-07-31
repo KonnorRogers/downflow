@@ -29,11 +29,11 @@
   ],
   "scripts": {
     "start": "npx @11ty/eleventy --config ./docs/eleventy.config.js --serve --watch",
-    "setup": "pnpm install && cd docs && pnpm install && bundle install",
+    "setup": "npm install",
     "build:api": "typedoc --out ./docs/output/references/api/ ./exports/**/*.js",
     "build:api-json": "typedoc --json ./typedoc-generation.json ./exports/**/*.js",
     "build:cdn": "node esbuild.config.js",
-    "build:docs": "pnpm run build && cd docs && pnpm run build",
+    "build:docs": "npm run build && cd docs && npm run build",
     "build": "npm run clean && tsc && npm run build:cdn",
     "clean": "rimraf -g \"./{exports,internal}/**/*.d.ts\" -g \"./cdn\"",
     "create:component": "plop component --plopfile scripts/plop/plopfile.js",
