@@ -3,7 +3,7 @@ layout: default.njk
 ---
 
 <script type="module">
-    import { Application, Controller, reactive } from "downflow/exports/application.js"
+    import { Application, Controller, reactive } from "downflow"
 
     const application = Application.start()
 

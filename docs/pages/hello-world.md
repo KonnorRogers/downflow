@@ -41,6 +41,7 @@ layout: default.njk
         if (formData) {
           const name = formData.get("name")
           this.outputTarget.textContent = name ? `Hello, ${name}` : ''
+        }
       }
     }
 
@@ -136,3 +137,12 @@ class HelloController extends Controller {
 </form>
 
 </div>
+
+
+<br><br><br><br>
+
+<form id="foo">
+    <input name="email">
+</form>
+
+<span>Your email is: <output form="foo" flow-text="#form.email"></output></span>
