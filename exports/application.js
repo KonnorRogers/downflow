@@ -4,8 +4,6 @@ import { reactive, globalBus } from "./reactive.js"
 
 export { reactive }
 
-class GlobalController extends Controller {}
-
 export { Controller };
 
 /**
@@ -151,11 +149,11 @@ export class Application {
     this._context = {}
     this.forms = document.forms
     this.stores = {};
-    this.register(GlobalController, "global");
-    this._createControllerInstance("global", this.rootElement);
-    this.globalController = this.getController(this.rootElement, "global");
     this.globalBus = globalBus
     // TODO: should be keyed so we only need to update places that rely on this context.
+    /**
+    * @param {Event} evt
+    */
     this.eventUpdateContext = (evt) => {
       this.updateContext()
     }
@@ -214,10 +212,12 @@ export class Application {
         const keys = key.split("#state")
         let controllerName = keys.shift() // pop off the controller key, won't be needed anymore
 
+        if (!controllerName) { return }
+
         const closestControllerEl = el.closest(`[${this.controllerAttribute}~="${controllerName}"]`)
         const controller = this.getController(/** @type {HTMLElement} */ (closestControllerEl), controllerName)
 
-        console.log({ controllerName, el, controller })
+        // console.log({ controllerName, el, controller })
         if (!controller) {
           return
         }
@@ -247,7 +247,6 @@ export class Application {
         }
       } else {
         firstKey = firstKey.slice(1, firstKey.length)
-        console.log({firstKey})
         // @ts-expect-error
         const obj = context[/** @type {"context" | "forms" | "state"} */ (firstKey)]
 
@@ -269,15 +268,6 @@ export class Application {
         el.textContent = value
       }
     });
-  }
-
-  /**
-   * @param {string} name
-   * @param {(event: Event) => any} fn
-   */
-  registerGlobalFunction(name, fn) {
-    // @ts-expect-error
-    GlobalController.prototype[name] = fn;
   }
 
   /**
@@ -316,6 +306,7 @@ export class Application {
       this.started = true;
     }
     this._upgradeAllElements(this.rootElement);
+    this.updateContext()
     return this;
   }
 
@@ -954,8 +945,6 @@ export class Application {
     const modifierSchema = this.modifierSchema;
     const self = this;
 
-    const globalController = this.globalController;
-
     /**
      * @param {Event} evt
      */
@@ -966,13 +955,9 @@ export class Application {
       // The controller may not always be at the element level. We need to search for its closest parent controller, we use closest on the target *IN CASE* the controller is defined on the current element.
       let closestControllerElement = null;
 
-      if (controllerName === "global") {
-        closestControllerElement = globalController;
-      } else {
-        closestControllerElement = element?.closest(
-          self._controllerQuery(controllerName),
-        );
-      }
+      closestControllerElement = element?.closest(
+        self._controllerQuery(controllerName),
+      );
 
       if (!closestControllerElement) {
         // TODO: Should we throw an error if no controller found? Maybe in debug logs?
@@ -981,14 +966,10 @@ export class Application {
 
       let controller = null;
 
-      if (controllerName === "global") {
-        controller = globalController;
-      } else {
-        controller = self.getController(
-          /** @type {HTMLElement} */ (closestControllerElement),
-          controllerName,
-        );
-      }
+      controller = self.getController(
+        /** @type {HTMLElement} */ (closestControllerElement),
+        controllerName,
+      );
 
       // This will need to check the keymapSchema to see if it should fire.
       if (eventModifier && evt instanceof KeyboardEvent) {

@@ -15,7 +15,10 @@
       }
     </script>
 
-    <style>.cloak { display: none; }</style>
+    <style>
+      .cloak { display: none; }
+      .content { max-width: 1000px; margin: 0 auto; }
+    </style>
 
     <script type="module">
       await Promise.allSettled([...document.querySelectorAll("[did-ssr], :not(:defined)")].map(async (el) => {
@@ -26,13 +29,13 @@
       document.documentElement.classList.remove("cloak")
     </script>
 
-    <script type="module" src="{{ "/webawesome/dist-cdn/webawesome.loader.js" | url }}"></script>
+    <script type="module" src="{{ "/webawesome/dist-cdn/webawesome.ssr-loader.js" | url }}"></script>
 
     {% block head %}{% endblock %}
   </head>
   <body>
     <wa-page>
-      <main>
+      <main class="content">
         {{ content | safe }}
       </main>
     </wa-page>

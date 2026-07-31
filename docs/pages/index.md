@@ -42,8 +42,6 @@ layout: default.njk
 
     application.register(CounterController)
     application.register(FooController)
-    application.registerGlobalFunction("increment", increment)
-    application.registerGlobalFunction("decrement", decrement)
 </script>
 
 <div flow-controller="counter">
@@ -53,9 +51,9 @@ layout: default.njk
 </div>
 
 <div>
-    <button flow-action="click->global#decrement">-</button>
+    <button flow-action="click->counter#decrement">-</button>
     <span flow-text="#context.count">0</span>
-    <button flow-action="click->global#increment">+</button>
+    <button flow-action="click->counter#increment">+</button>
 </div>
 
 <br><br>

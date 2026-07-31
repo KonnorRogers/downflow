@@ -38,16 +38,9 @@ Right now im affectionately calling it "downflow", with the idea being data "flo
 </template>
 
 <div
-    flow-for="post in #context.posts"
-    flow-render="bar"
-    flow-key="id"
->
-</div>
-
-<div
     flow-for="post in my-controller#posts"
     flow-render="bar"
-    flow-key="id"
+    flow-key="$id"
 >
 </div>
 ```

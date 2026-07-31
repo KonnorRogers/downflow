@@ -16,6 +16,14 @@ layout: default.njk
     white-space: nowrap;
     border-bottom: .1em solid #000;
   }
+
+  .side-by-side {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
 </style>
 
 
@@ -26,37 +34,30 @@ layout: default.njk
 
     class HelloController extends Controller {
       static controllerName = "hello"
-      static targets = [ "name" ]
-
-      initialize() {
-        this.state = {
-          greeting: reactive("")
-        }
-      }
+      static targets = [ "output" ]
 
       greet () {
-        this.state.greeting.update(() => {
-          return `Hello, ${this.nameTarget.value}`
-        })
+        const formData = new FormData(this.form)
+        this.outputTarget.textContent = `Hello, ${formData.get("name")}`
       }
     }
 
     application.register(HelloController)
 </script>
 
-<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem;">
+<div class="side-by-side">
 
 
 ```html
-<div flow-controller="hello">
-  <input flow-target="hello.name">
+<form flow-controller="hello">
+  <input name="name">
 
-  <button flow-action="click->hello#greet">
+  <button type="button" flow-action="click->hello#greet">
     Greet
   </button>
 
-  <div flow-text="hello#state.greeting"></div>
-</div>
+  <div flow-target="hello.output"></div>
+</form>
 ```
 
 ```js
@@ -82,7 +83,7 @@ class HelloController extends Controller {
 
 </div>
 
-<div flow-controller="hello" style="
+<form flow-controller="hello" style="
   display: grid;
   grid-template-columns: minmax(0, auto) minmax(0, 1fr);
   place-items: end;
@@ -91,12 +92,45 @@ class HelloController extends Controller {
   margin: 0 auto;
 ">
   <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, auto); gap: 4px;">
-    <input flow-target="hello.name" type="text">
+    <input name="name">
 
-    <button flow-action="click->hello#greet">
+    <button type="button" flow-action="click->hello#greet">
       Greet
     </button>
   </div>
 
-  <div class="hello-output" flow-text="hello#state.greeting"></div>
+  <div class="hello-output" flow-target="hello.output" flow-text="hello#state.greeting"></div>
+</form>
+
+<br><br><br>
+
+## Live Bindings from forms
+
+<div>
+
+```html
+<form>
+  <label>
+    <div>Give us your name!</div>
+    <input name="name">
+  </label>
+  <div flow-text="#form.name"></div>
+</form>
+```
+
+<form style="
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+  place-items: end;
+  gap: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+">
+  <label>
+    <div>Give us your name!</div>
+    <input name="name">
+  </label>
+  <div class="hello-output" flow-text="#form.name"></div>
+</form>
+
 </div>
