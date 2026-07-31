@@ -37,8 +37,10 @@ layout: default.njk
       static targets = [ "output" ]
 
       greet () {
-        const formData = new FormData(this.form)
-        this.outputTarget.textContent = `Hello, ${formData.get("name")}`
+        const formData = this.formData
+        if (formData) {
+          const name = formData.get("name")
+          this.outputTarget.textContent = name ? `Hello, ${name}` : ''
       }
     }
 
@@ -75,7 +77,7 @@ class HelloController extends Controller {
 
   greet () {
     this.state.greeting.update(() => {
-      return `Hello, ${this.nameTarget.value}`
+      return this.nameTarget.value ? `Hello, ${this.nameTarget.value}` : ''
     })
   }
 }

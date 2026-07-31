@@ -94,7 +94,7 @@ export class Controller {
    * @returns {HTMLFormElement | null}
    */
   get form () {
-    // @ts-expect-error this will only work when attached to an element that is a form controller
+    // @ts-expect-error this will only work when attached to an element that is a form control IE: button, input, etc.
     let form = this.element.form
     if (form) { return form }
 
@@ -105,6 +105,14 @@ export class Controller {
     }
 
     return this.element.closest("form") || null
+  }
+
+  get formData () {
+    const form = this.form
+
+    if (!form) { return null }
+
+    return new FormData(form)
   }
 
   initialize() {}
