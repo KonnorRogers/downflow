@@ -78,13 +78,15 @@ We can also disconnect the form and reference it by its id, similar to form cont
 <div>Your name is: <span form="my-form" flow-text="#form.name"></span></div>
 ```
 
-## Implemented
+## Reference
+
+### Implemented
 
 - `flow-controller="<controller_name>"` - mixins (Stimulus Controllers)
 - `flow-action="<event>"` - events
 - `flow-text="<state>"` - sets `element.textContent`
 
-### State
+#### State
 
 There are 3 keywords for state.
 
@@ -106,7 +108,7 @@ class HelloController extends Controller {
 }
 ```
 
-### Reactivity
+#### Reactivity
 
 ```js
 import { Application, Controller, reactive } from "downflow"
@@ -134,7 +136,7 @@ application.context = {
 <span>Your email is: <output form="foo" flow-text="#form.email"></output></span>
 ```
 
-## Not implemented
+### Not implemented
 
 - `flow-prop="<property>:<value>"` - sets a given property
 - `flow-attr="<attribute>:<value>"` - sets a given attribute
@@ -170,7 +172,7 @@ Coming Soon™️
 
 Right now reactivity is very naive. We can either move to signals, or use Vue's reactivity model. I haven't decided which. Right now, reactivity is a crude hammer under the hood that kind of just "updates everything".
 
-## Structure
+## Internal Structure
 
 `exports/` is publicly available files
 `internal/` is...well...internal.
