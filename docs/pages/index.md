@@ -3,7 +3,7 @@ layout: default.njk
 ---
 
 <script type="module">
-    import { Application, Controller, reactive } from "downflow/exports/application.js"
+    import { Application, Controller, reactive } from "downflow"
 
     const application = Application.start()
 
@@ -30,19 +30,41 @@ layout: default.njk
         }
     }
 
+    class FooController extends Controller {
+        static controllerName = "foo"
+
+        initialize () {
+            this.state = {
+                bar: reactive("baz")
+            }
+        }
+    }
+
     application.register(CounterController)
-    application.registerGlobalFunction("increment", increment)
-    application.registerGlobalFunction("decrement", decrement)
+    application.register(FooController)
 </script>
 
 <div flow-controller="counter">
     <button flow-action="click->counter#decrement">-</button>
-    <span flow-text="context.count">0</span>
+    <span flow-text="#context.count">0</span>
     <button flow-action="click->counter#increment">+</button>
 </div>
 
 <div>
-    <button flow-action="click->global#decrement">-</button>
-    <span flow-text="context.count">0</span>
-    <button flow-action="click->global#increment">+</button>
+    <button flow-action="click->counter#decrement">-</button>
+    <span flow-text="#context.count">0</span>
+    <button flow-action="click->counter#increment">+</button>
 </div>
+
+<br><br>
+
+<form>
+    <input name="email" value="foo@gmail.com">
+    <output flow-text="#form.email"></output>
+</form>
+
+<form>
+    <div data-controller="foo">
+        <div flow-text="foo#state.bar"></div>
+    </div>
+</form>

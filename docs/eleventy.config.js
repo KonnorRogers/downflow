@@ -4,6 +4,7 @@ import * as fs from 'node:fs';
 import * as path from "node:path"
 
 import * as url from 'url';
+import { shikiPlugin } from './plugins/shiki.js';
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 const root = path.resolve(__dirname, '..')
@@ -19,13 +20,15 @@ const flowStateDirectories = [
 ]
 
 export default async function (eleventyConfig) {
-  // eleventyConfig.addPlugin(litPlugin, {
-  //   mode: 'worker',
-  //   componentModules: webawesomeComponents,
-  // });
+  eleventyConfig.addPlugin(litPlugin, {
+    mode: 'worker',
+    componentModules: webawesomeComponents,
+  });
   eleventyConfig.addPassthroughCopy({
     [webawesomeDir]: 'webawesome',
   });
+
+  eleventyConfig.addPlugin(shikiPlugin({ theme: "dark-plus" }));
 
   flowStateDirectories.forEach((dir) => {
     const resolvedDir = path.join(root, dir)
