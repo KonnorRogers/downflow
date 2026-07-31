@@ -12,6 +12,72 @@ The basic idea is: "You have HTML from a server, you know the app state from the
 
 Right now im affectionately calling it "downflow", with the idea being data "flows" down.
 
+## A basic counter
+
+The most important question of a "reactivity" / "templating" library is "What does your counter example look like?"
+
+So here's downflow's counter.
+
+```html
+<div flow-controller="counter">
+    <button flow-action="click->counter#decrement">-</button>
+    <span flow-text="#context.count">0</span>
+    <button flow-action="click->counter#increment">+</button>
+</div>
+<script type="module">
+    import { Application, Controller, reactive } from "downflow"
+
+    const application = Application.start()
+
+    application.context = {
+        count: reactive(0)
+    }
+
+    class CounterController extends Controller {
+        static controllerName = "counter"
+
+        increment () {
+            application.context.count.update(oldVal => oldVal + 1)
+        }
+        decrement () {
+            application.context.count.update(oldVal => oldVal - 1)
+        }
+    }
+
+    application.register(CounterController)
+</script>
+```
+
+### Live bindings
+
+We can do other fun things like "live bindings"
+
+So if we have a form, we can access a value on the form like so and have a "live render" of what a user is typing.
+
+```html
+<form>
+  <label>
+    <div>Give us your name!</div>
+    <input name="name">
+  </label>
+  Your name is: <span flow-text="#form.name"></span>
+</form>
+```
+
+We can also disconnect the form and reference it by its id, similar to form controls.
+
+```html
+<form id="my-form">
+  <label>
+    <div>Give us your name!</div>
+    <input name="name">
+  </label>
+</form>
+
+<!-- lots of DOM stuff -->
+<div>Your name is: <span form="my-form" flow-text="#form.name"></span></div>
+```
+
 ## Implemented
 
 - `flow-controller="<controller_name>"` - mixins (Stimulus Controllers)
@@ -74,7 +140,7 @@ application.context = {
 - `flow-attr="<attribute>:<value>"` - sets a given attribute
 - `flow-component="<name>"` - "stamps" a component for re-rendering.
 - `flow-render="<component-name>"` - Renders a component with a given name
-- `flow-for="<item> in <items>"` - Renders a list of items (client side only)
+- `flow-for="<item> in <items>"` - Renders a list of items
 
 
 ```html
