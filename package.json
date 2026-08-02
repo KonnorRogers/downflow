@@ -91,5 +91,8 @@
     "sinon": "^22.0.0",
     "typedoc": "^0.26.1",
     "typescript": "~5.5.2"
+  },
+  "dependencies": {
+    "@vue/reactivity": "^3.5.40"
   }
 }

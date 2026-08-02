@@ -26,12 +26,12 @@ So here's downflow's counter.
 </div>
 
 <script type="module">
-    import { Application, Controller, reactive } from "downflow"
+    import { Application, Controller } from "downflow"
 
     const application = Application.start()
 
     application.context = {
-        count: reactive(0)
+        count: 0
     }
 
     class CounterController extends Controller {
@@ -98,11 +98,11 @@ We have `#form`, `#context`, and `#state`
 - `<controller_name>#state` requires a prefix of the controller you plan to use. IE: `<div flow-text="hello#state.foo">` would pull `state.foo` from your instance of a `HelloController`.
 
 ```js
-import { Controller, reactive }
+import { Controller }
 class HelloController extends Controller {
     initialize () {
         this.state = {
-            foo: reactive("bar") // <-- used by `flow-text="hello#state.foo"`
+            foo: "bar" // <-- used by `flow-text="hello#state.foo"`
                                                        //   ^ controller name. Will use the closest controller parent defined in the DOM.
         }
     }
@@ -112,12 +112,12 @@ class HelloController extends Controller {
 #### Reactivity
 
 ```js
-import { Application, Controller, reactive } from "downflow"
+import { Application, Controller } from "downflow"
 
 const application = Application.start()
 
 application.context = {
-    count: reactive(0)
+    count: 0
 }
 ```
 

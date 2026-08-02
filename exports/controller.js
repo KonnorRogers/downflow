@@ -1,3 +1,5 @@
+import { ref, isRef, reactive } from "@vue/reactivity"
+
 /**
  * The base class for creating oil controllers.
  */
@@ -88,6 +90,21 @@ export class Controller {
      * @type {boolean}
      */
     this.isConnected = false;
+
+    this._stateRef = ref({})
+  }
+
+  get state () {
+    return this._stateRef.value
+  }
+
+  set state (obj) {
+    if (isRef(obj)) {
+      this._stateRef.value = obj.value;
+      return
+    }
+
+    this._stateRef.value = obj
   }
 
   /**

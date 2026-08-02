@@ -28,7 +28,7 @@ layout: default.njk
 
 
 <script type="module">
-    import { Application, Controller, reactive } from "downflow"
+    import { Application, Controller } from "downflow"
 
     const application = Application.start()
 
@@ -64,7 +64,7 @@ layout: default.njk
 ```
 
 ```js
-import { Controller, reactive } from "downflow"
+import { Controller } from "downflow"
 
 class HelloController extends Controller {
   static controllerName = "hello"
@@ -72,7 +72,7 @@ class HelloController extends Controller {
 
   initialize() {
     this.state = {
-      greeting: reactive("")
+      greeting: ""
     }
   }
 
