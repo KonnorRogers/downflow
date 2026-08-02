@@ -13,6 +13,7 @@ export { Controller };
  * @property {string} [RegistryOptions.targetAttribute="flow-target"]
  * @property {string} [RegistryOptions.textAttribute="flow-text"]
  * @property {string} [RegistryOptions.actionAttribute="flow-action"]
+ * @property {string} [RegistryOptions.scopeAttribute="flow-scope"]
  */
 
 /**
@@ -110,7 +111,7 @@ export class Application {
     this.targetAttribute = options.targetAttribute || "flow-target";
 
     /**
-     * The attribute to use for finding text updates. Defaults to "flow-target".
+     * The attribute to use for finding text updates. Defaults to "flow-text".
      * @type {string}
      */
     this.textAttribute = options.textAttribute || "flow-text";
@@ -120,6 +121,12 @@ export class Application {
      * @type {string}
      */
     this.actionAttribute = options.actionAttribute || "flow-action";
+
+    /**
+     * The attribute to use for finding scopes. Scopes are the "data" you're trying to read. Defaults to "flow-scope".
+     * @type {string}
+     */
+    this.scopeAttribute = options.scopeAttribute || "flow-scope";
 
     this.modifierSchema = /** @const */ {
       ctrl: "ctrlKey",
@@ -318,11 +325,11 @@ export class Application {
       return null;
     }
 
-    let context = /** @type {Controller | Application} */(this)
+    const scope = el.getAttribute(this.scopeAttribute)
+    let context = /** @type {Controller["state"] | Application["context"]} */(this.context)
 
-    if (key.includes("#state")) {
-      const keys = key.split("#state")
-      let controllerName = keys.shift() // pop off the controller key, won't be needed anymore
+    if (scope && scope !== "$form") {
+      let controllerName = scope
 
       if (!controllerName) { return null }
 
@@ -333,21 +340,14 @@ export class Application {
         return null
       }
 
-      context = controller
-      key = "#state" + keys.join("")
+      context = controller.state
     }
 
     const keys = key.split(/\./g);
-    const allowedKeys = ["#context", "#forms", "#form", "#state"]
-    let firstKey = keys.shift() || ""
-
-    if (!firstKey || !allowedKeys.includes(firstKey)) {
-      return null
-    }
 
     let value = null
 
-    if (firstKey === "#form") {
+    if (scope === "$form") {
       const formAttr = el.getAttribute("form")
       const rootNode = /** @type {HTMLElement} */ ((el.getRootNode() || document))
       const form = /** @type {HTMLFormElement | null} */(formAttr ? rootNode.querySelector(`form#${formAttr}`) : el.closest("form"))
@@ -356,15 +356,7 @@ export class Application {
         value = this._stateForForm(form)[keys.join("")] // reactive READ -> tracked
       }
     } else {
-      firstKey = firstKey.slice(1, firstKey.length)
-      // @ts-expect-error
-      const obj = context[/** @type {"context" | "forms" | "state"} */ (firstKey)]
-
-      if (!obj) {
-        return null
-      }
-
-      value = dig(obj, ...keys);
+      value = dig(context, ...keys);
     }
 
     return value
@@ -579,7 +571,6 @@ export class Application {
       const parsedActions = this._parseActionsFromActionAttribute(eventAttr);
 
       parsedActions.forEach((parsedAction) => {
-        console.log(parsedAction)
         this.addParsedActionToElement(parsedAction, element);
       });
     }
