@@ -77,9 +77,7 @@ class HelloController extends Controller {
   }
 
   greet () {
-    this.state.greeting.update(() => {
-      return this.nameTarget.value ? `Hello, ${this.nameTarget.value}` : ''
-    })
+    this.state.greeting = this.nameTarget.value ? `Hello, ${this.nameTarget.value}` : ''
   }
 }
 ```
@@ -102,7 +100,7 @@ class HelloController extends Controller {
     </button>
   </div>
 
-  <div class="hello-output" flow-target="hello.output" flow-text="hello#state.greeting"></div>
+  <div class="hello-output" flow-target="hello.output" flow-scope="hello" flow-text="greeting"></div>
 </form>
 
 <br><br><br>
@@ -117,7 +115,7 @@ class HelloController extends Controller {
     <div>Give us your name!</div>
     <input name="name">
   </label>
-  <div flow-text="#form.name"></div>
+  <div flow-scope="$form" flow-text="name"></div>
 </form>
 ```
 
@@ -133,7 +131,7 @@ class HelloController extends Controller {
     <div>Give us your name!</div>
     <input name="name">
   </label>
-  <div class="hello-output" flow-text="#form.name"></div>
+  <div class="hello-output" flow-scope="$form" flow-text="name"></div>
 </form>
 
 </div>
@@ -142,7 +140,7 @@ class HelloController extends Controller {
 <br><br><br><br>
 
 <form id="foo">
-    <input name="email">
+    <input name="email" value="bar">
 </form>
 
-<span>Your email is: <output form="foo" flow-text="#form.email"></output></span>
+<span>Your email is: <output flow-scope="$form" form="foo" flow-text="email"></output></span>

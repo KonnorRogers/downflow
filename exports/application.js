@@ -352,6 +352,7 @@ export class Application {
       const rootNode = /** @type {HTMLElement} */ ((el.getRootNode() || document))
       const form = /** @type {HTMLFormElement | null} */(formAttr ? rootNode.querySelector(`form#${formAttr}`) : el.closest("form"))
 
+      console.log({ form, formAttr, rootNode })
       if (form) {
         value = this._stateForForm(form)[keys.join("")] // reactive READ -> tracked
       }
