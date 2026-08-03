@@ -19,12 +19,6 @@ The most important question of a "reactivity" / "templating" library is "What do
 So here's downflow's counter.
 
 ```html
-<div>
-  <button flow-action="click->#decrement">-</button>
-  <span flow-text="count">0</span>
-  <button flow-action="click->#increment">+</button>
-</div>
-
 <script type="module">
   import { Application, Controller } from "downflow";
 
@@ -33,7 +27,16 @@ So here's downflow's counter.
   application.context = {
     count: 0,
   };
+  application.functions = {
+    increment () { application.context.count++ },
+    decrement () { application.context.count-- },
+  }
 </script>
+<div>
+  <button flow-action="click->#decrement">-</button>
+  <span flow-text="count">0</span>
+  <button flow-action="click->#increment">+</button>
+</div>
 ```
 
 ### Live bindings
