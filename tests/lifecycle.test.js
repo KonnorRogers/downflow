@@ -2,6 +2,7 @@ import { aTimeout, fixture, html } from "@open-wc/testing-helpers";
 import { assert } from "@esm-bundle/chai";
 import { Application, Controller } from "downflow";
 import Sinon from "sinon";
+import { clickOnElement } from "./test-helpers";
 
 setup(() => {
   Sinon.restore();
@@ -222,3 +223,30 @@ test("It should invoke lifecycles when attributes change", async () => {
 
   application.stop();
 });
+
+test("Should remove global listeners when the element is removed", async () => {
+  const application = Application.start();
+
+  const clickSpy = Sinon.spy();
+
+  application.register(
+    class Example extends Controller {
+      static controllerName = "example";
+
+      handleClick() {
+        clickSpy()
+      }
+    },
+  );
+
+  document.body.innerHTML = `<div flow-controller="example" flow-action="click@document->example#handleClick">Hello World.</div>`
+  await clickOnElement(document.querySelector("div"))
+  Sinon.assert.calledOnce(clickSpy);
+
+  // Remove the data-action and we should no longer listen.
+  document.querySelector("div").setAttribute("flow-action", "")
+  await clickOnElement(document.querySelector("div"))
+  Sinon.assert.calledOnce(clickSpy);
+
+  application.stop();
+})

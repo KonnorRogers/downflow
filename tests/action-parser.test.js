@@ -125,7 +125,7 @@ test("falls back to global controller", () => {
   assert.equal(obj.eventName, "keydownescmy-gallery");
   assert.equal(obj.eventModifier, null);
   assert.equal(obj.additionalEventModifiers.length, 0);
-  assert.equal(obj.controllerName, "global");
+  assert.equal(obj.controllerName, null);
   assert.equal(obj.controllerFunction, "my_function");
   assert.equal(obj.globalTarget, null);
   assert.equal(obj.errors.length, 0);
@@ -171,7 +171,7 @@ test("Omitted controller defaults to global controllerName", () => {
   assert.equal(obj.eventName, "click");
   assert.equal(obj.eventModifier, null);
   assert.equal(obj.additionalEventModifiers.length, 0);
-  assert.equal(obj.controllerName, "global");
+  assert.equal(obj.controllerName, null);
   assert.equal(obj.controllerFunction, "increment");
   assert.equal(obj.globalTarget, null)
   assert.equal(obj.actionOptions.length, 0);
