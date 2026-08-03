@@ -3,30 +3,31 @@ layout: default.njk
 ---
 
 <script type="module">
-    import { Application, Controller, reactive } from "downflow"
+    import { Application, Controller } from "downflow"
 
     const application = Application.start()
 
     application.context = {
-        count: reactive(0)
+        count: 0
     }
 
-    function increment() {
-        application.context.count.update(oldVal => oldVal + 1)
-    }
-
-    function decrement() {
-        application.context.count.update(oldVal => oldVal - 1)
+    application.functions = {
+        increment () {
+            application.context.count++
+        },
+        decrement () {
+            application.context.count--
+        }
     }
 
     class CounterController extends Controller {
         static controllerName = "counter"
 
         increment () {
-            increment()
+            application.context.count++
         }
         decrement () {
-            decrement()
+            application.context.count--
         }
     }
 
@@ -35,7 +36,7 @@ layout: default.njk
 
         initialize () {
             this.state = {
-                bar: reactive("baz")
+                bar: "baz"
             }
         }
     }
@@ -46,25 +47,25 @@ layout: default.njk
 
 <div flow-controller="counter">
     <button flow-action="click->counter#decrement">-</button>
-    <span flow-text="#context.count">0</span>
+    <span flow-text="count">0</span>
     <button flow-action="click->counter#increment">+</button>
 </div>
 
 <div>
-    <button flow-action="click->counter#decrement">-</button>
-    <span flow-text="#context.count">0</span>
-    <button flow-action="click->counter#increment">+</button>
+    <button flow-action="click#decrement">-</button>
+    <span flow-text="count">0</span>
+    <button flow-action="click#increment">+</button>
 </div>
 
 <br><br>
 
 <form>
     <input name="email" value="foo@gmail.com">
-    <output flow-text="#form.email"></output>
+    <output flow-scope="$form" flow-text="email"></output>
 </form>
 
 <form>
     <div data-controller="foo">
-        <div flow-text="foo#state.bar"></div>
+        <div flow-scope="foo" flow-text="bar"></div>
     </div>
 </form>

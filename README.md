@@ -19,33 +19,20 @@ The most important question of a "reactivity" / "templating" library is "What do
 So here's downflow's counter.
 
 ```html
-<div flow-controller="counter">
-    <button flow-action="click->counter#decrement">-</button>
-    <span flow-text="#context.count">0</span>
-    <button flow-action="click->counter#increment">+</button>
+<div>
+  <button flow-action="click->#decrement">-</button>
+  <span flow-text="count">0</span>
+  <button flow-action="click->#increment">+</button>
 </div>
 
 <script type="module">
-    import { Application, Controller, reactive } from "downflow"
+  import { Application, Controller } from "downflow";
 
-    const application = Application.start()
+  const application = Application.start();
 
-    application.context = {
-        count: reactive(0)
-    }
-
-    class CounterController extends Controller {
-        static controllerName = "counter"
-
-        increment () {
-            application.context.count.update(oldVal => oldVal + 1)
-        }
-        decrement () {
-            application.context.count.update(oldVal => oldVal - 1)
-        }
-    }
-
-    application.register(CounterController)
+  application.context = {
+    count: 0,
+  };
 </script>
 ```
 
@@ -59,9 +46,9 @@ So if we have a form, we can access a value on the form like so and have a "live
 <form>
   <label>
     <div>Give us your name!</div>
-    <input name="name">
+    <input name="name" />
   </label>
-  Your name is: <span flow-text="#form.name"></span>
+  Your name is: <span flow-scope="$form" flow-text="name"></span>
 </form>
 ```
 
@@ -71,12 +58,37 @@ We can also disconnect the form and reference it by its id, similar to form cont
 <form id="my-form">
   <label>
     <div>Give us your name!</div>
-    <input name="name">
+    <input flow-scope="$form" name="name" />
   </label>
 </form>
 
 <!-- lots of DOM stuff -->
-<div>Your name is: <span form="my-form" flow-text="#form.name"></span></div>
+
+<div>
+  Your name is: <span form="my-form" flow-scope="$form" flow-text="name"></span>
+</div>
+```
+
+### Attribute bindings
+
+We can bind more than just textContent. We can bind attributes like so:
+
+```html
+<form>
+  <input name="email">
+  <input readonly flow-scope="$form" flow-attr="value:email">
+</form>
+```
+
+### Property bindings
+
+Similar to attributes, we can also bind properties.
+
+```html
+<form>
+  <input name="email">
+  <input readonly flow-scope="$form" flow-prop="value:email">
+</form>
 ```
 
 ## Reference
@@ -86,23 +98,24 @@ We can also disconnect the form and reference it by its id, similar to form cont
 - `flow-controller="<controller_name>"` - mixins (Stimulus Controllers)
 - `flow-action="<event>"` - events
 - `flow-text="<state>"` - sets `element.textContent`
+- `flow-prop="<property>:<value>"` - sets a given property
+- `flow-attr="<attribute>:<value>"` - sets a given attribute
 
 #### State
 
-There are 3 keywords for state.
+There are 3 different places "state" can come from and is defined with `flow-scope`.
 
-We have `#form`, `#context`, and `#state`
+We have `$form` and `<controller-name>`
 
-- `#form` is either the form with `id` on the element. IE: `<div flow-text="#form" id="my-form">` would look for `<form id="my-form"`. If no form attribute is on the element, the closest `<form>` element is used.
-- `#context` is the global app context.
-- `<controller_name>#state` requires a prefix of the controller you plan to use. IE: `<div flow-text="hello#state.foo">` would pull `state.foo` from your instance of a `HelloController`.
+- `$form` is either the form with `id` on the element. IE: `<div flow-scope="$form" id="my-form">` would look for `<form id="my-form"`. If no form attribute is on the element, the closest `<form>` element is used.
+- `flow-scope="<controller_name>"` will find the closest `flow-controller` requires a prefix of the controller you plan to use. IE: `<div flow-scope="hello" flow-text="foo">` would pull `state.foo` from your instance of a `HelloController`.
 
 ```js
-import { Controller, reactive }
+import { Controller }
 class HelloController extends Controller {
     initialize () {
         this.state = {
-            foo: reactive("bar") // <-- used by `flow-text="hello#state.foo"`
+            foo: "bar" // <-- used by `flow-text="hello#state.foo"`
                                                        //   ^ controller name. Will use the closest controller parent defined in the DOM.
         }
     }
@@ -112,66 +125,61 @@ class HelloController extends Controller {
 #### Reactivity
 
 ```js
-import { Application, Controller, reactive } from "downflow"
+import { Application, Controller } from "downflow";
 
-const application = Application.start()
+const application = Application.start();
 
 application.context = {
-    count: reactive(0)
-}
+  count: 0,
+};
 ```
 
 ```html
 <form>
-    <input name="email">
-    <span>Your email is: <output flow-text="#form.email"></output></span>
+  <input name="email" />
+  <span>Your email is: <output flow-text="#form.email"></output></span>
 </form>
 <!-- Live reactivity from the host "form" -->
 
-
 <!-- this also works -->
 <form id="foo">
-    <input name="email">
+  <input name="email" />
 </form>
 
-<span>Your email is: <output form="foo" flow-text="#form.email"></output></span>
+<span>
+  Your email is:
+  <output form="foo" flow-scope="$form" flow-text="email"></output>
+</span>
 ```
 
 ### Not implemented
 
-- `flow-prop="<property>:<value>"` - sets a given property
-- `flow-attr="<attribute>:<value>"` - sets a given attribute
+Right now the main feature I think is missing is "component"" rendering. This is a rough idea of what I think it would look like.
+
 - `flow-component="<name>"` - "stamps" a component for re-rendering.
 - `flow-render="<component-name>"` - Renders a component with a given name
 - `flow-for="<item> in <items>"` - Renders a list of items
 
-
 ```html
 <template flow-component="bar">
-    <div id="$id">
-        <!-- # automatically inherits the "scope" of whatever is passed to the component. So this would be "post.id", "post.comment", "post.url" etc. -->
-        <span flow-text="$comment"></span>
-        <form flow-prop:action="$url">
-            <textarea></textarea>
-            <button>Leave a reply</button>
-        </form>
-    </div>
+  <div id="id">
+    <!-- # automatically inherits the "scope" of whatever is passed to the component. So this would be "post.id", "post.comment", "post.url" etc. -->
+    <span flow-text="comment"></span>
+    <form flow-prop:action="url">
+      <textarea></textarea>
+      <button>Leave a reply</button>
+    </form>
+  </div>
 </template>
 
 <div
-    flow-for="post in my-controller#posts"
-    flow-render="bar"
-    flow-key="$id"
->
-</div>
+  flow-for="post in my-controller#posts"
+  flow-render="bar"
+  flow-key="id"
+></div>
 ```
 
-
 Coming Soon™️
-
-## Things left to decide
-
-Right now reactivity is very naive. We can either move to signals, or use Vue's reactivity model. I haven't decided which. Right now, reactivity is a crude hammer under the hood that kind of just "updates everything".
 
 ## Internal Structure
 

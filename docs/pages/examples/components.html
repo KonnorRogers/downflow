@@ -3,20 +3,20 @@ default.njk
 ---
 
 <script type="module">
-    import { Application, Controller, reactive } from "downflow/exports/application.js"
+    import { Application, Controller } from "downflow/exports/application.js"
 
     const application = Application.start()
 
     application.context = {
-        count: reactive(0)
+        count: 0
     }
 
     function increment() {
-        application.context.count.update(oldVal => oldVal + 1)
+        application.context.count++
     }
 
     function decrement() {
-        application.context.count.update(oldVal => oldVal - 1)
+        application.context.count--
     }
 
     class CounterController extends Controller {

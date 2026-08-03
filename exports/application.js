@@ -1,8 +1,8 @@
 import { ActionParser } from "../internal/action-parser.js";
 import { Controller } from "./controller.js";
-import { reactive, globalBus } from "./reactive.js"
 
-export { reactive }
+import {reactive, ref, isRef, effectScope, effect} from "@vue/reactivity"
+import { EffectScheduler } from "./effect-scheduler.js";
 
 export { Controller };
 
@@ -13,6 +13,9 @@ export { Controller };
  * @property {string} [RegistryOptions.targetAttribute="flow-target"]
  * @property {string} [RegistryOptions.textAttribute="flow-text"]
  * @property {string} [RegistryOptions.actionAttribute="flow-action"]
+ * @property {string} [RegistryOptions.scopeAttribute="flow-scope"]
+ * @property {string} [RegistryOptions.attributeBindingAttribute="flow-attr"]
+ * @property {string} [RegistryOptions.propertyBindingAttribute="flow-prop"]
  */
 
 /**
@@ -65,8 +68,17 @@ export class Application {
     this._controllerConstructorMap = new Map();
 
     /**
+    * Action listeners attached per element, so they can be removed on downgrade.
+    * Keyed by the element the action was declared on — even when the listener
+    * target is window/document — so removal cleans those up too. Inner map is
+    * keyed by the raw action source string for cheap diffing.
+    * @type {Map<Element, Map<string, { target: EventTarget, eventName: string, fn: EventListener, options: AddEventListenerOptions }>>}
+    */
+    this._actionListenerMap = new Map();
+
+    /**
      * A weakmap of all controller instances attach to a particular element
-     * @type {WeakMap<HTMLElement, Map<string, Controller>>}
+     * @type {Map<HTMLElement, Map<string, Controller>>}
      */
     this._controllerInstanceMap = new Map();
 
@@ -74,7 +86,7 @@ export class Application {
      * A weakmap to track if a target has connected or not for a particular controller.
      * @type {WeakMap<Element | HTMLElement, Map<Controller, boolean>>}
      */
-    this._targetConnectionMap = new Map();
+    this._targetConnectionMap = new WeakMap();
 
     /**
      * String keyed cached so we can cache parse results.
@@ -101,7 +113,7 @@ export class Application {
     this.targetAttribute = options.targetAttribute || "flow-target";
 
     /**
-     * The attribute to use for finding text updates. Defaults to "flow-target".
+     * The attribute to use for finding text updates. Defaults to "flow-text".
      * @type {string}
      */
     this.textAttribute = options.textAttribute || "flow-text";
@@ -111,6 +123,24 @@ export class Application {
      * @type {string}
      */
     this.actionAttribute = options.actionAttribute || "flow-action";
+
+    /**
+     * The attribute to use for finding scopes. Scopes are the "data" you're trying to read. Defaults to "flow-scope".
+     * @type {string}
+     */
+    this.scopeAttribute = options.scopeAttribute || "flow-scope";
+
+    /**
+     * @type {string}
+     * The attribute to use for binding attributes. Defaults to "flow-attr".
+     */
+    this.attributeBindingAttribute = options.attributeBindingAttribute || "flow-attr";
+
+    /**
+     * @type {string}
+     * The attribute to use for binding properties. Defaults to "flow-prop".
+     */
+    this.propertyBindingAttribute = options.propertyBindingAttribute || "flow-prop";
 
     this.modifierSchema = /** @const */ {
       ctrl: "ctrlKey",
@@ -143,21 +173,30 @@ export class Application {
       this.controllerAttribute,
       this.targetAttribute,
       this.textAttribute,
+      this.attributeBindingAttribute,
+      this.propertyBindingAttribute,
       this.actionAttribute,
     ];
 
-    this._context = {}
+    this._contextRef = ref({})
+
     this.forms = document.forms
     this.stores = {};
-    this.globalBus = globalBus
+
+    /**
+     * @type {Record<string, (evt: Event) => unknown>}
+     */
+    this.functions = {}
+
+    this.effectScheduler = new EffectScheduler()
+
+    this._bindingScopes = new Map()
+    this._formState = new WeakMap()
+
     // TODO: should be keyed so we only need to update places that rely on this context.
     /**
     * @param {Event} evt
     */
-    this.eventUpdateContext = (evt) => {
-      this.updateContext()
-    }
-    this.globalBus.addEventListener("flow:change", this.eventUpdateContext)
 
     /**
      * @type (options: {str: string, context: Object}) => string
@@ -166,108 +205,241 @@ export class Application {
 
     this.formEvents = ["change", "input"]
 
+    this.eventUpdateContext = (e) => {
+      const target = e.target
+
+      if (!target) { return }
+      if (!target.name) { return }
+
+      const form = target?.form
+
+      if (!form) { return }
+      this._stateForForm(target.form)[target.name] = this._readFormControl(target) // reactive WRITE
+    }
+
     this.formEvents.forEach((evt) => {
-      this.rootElement.addEventListener(evt, this.eventUpdateContext)
+      this.rootElement.addEventListener(evt, this.eventUpdateContext, { signal: this.abortController?.signal })
     })
   }
 
-  get context () {
-    return this._context
+  get context() {
+    return this._contextRef.value
   }
 
-  set context (ctx) {
-    let shouldUpdate = ctx !== this._context
+  set context(ctx) {
+    if (isRef(ctx)) {
+      this._contextRef.value = ctx.value;
+      return
+    }
 
-    this._context = ctx
+    this._contextRef.value = ctx
+  }
 
-    if (shouldUpdate) {
-      this.updateContext()
+  // in the Application:
+  /**
+   * @param {Element} el
+   */
+  _bindText(el) {
+    const scope = effectScope();
+    scope.run(() => {
+      const runner = effect(() => {
+        const value = this.resolveValue(el, el.getAttribute(this.textAttribute)); // reactive READ -> tracked
+        const text = value == null ? "" : String(value);
+        if (el.textContent !== text) { el.textContent = text };
+      }, { scheduler: () => this.effectScheduler.schedule(runner) });
+    });
+    this._bindingScopes.set(el, scope); // Map<Element, EffectScope>
+  }
+
+  /**
+   * @param {Element} el
+   *
+   */
+  _bindAttributes (el) {
+    const scope = effectScope();
+    scope.run(() => {
+      const runner = effect(() => {
+        let attributeText = el.getAttribute(this.attributeBindingAttribute)
+        if (!attributeText) { return }
+
+        const [attr, key] = attributeText.split(":")
+        let value = this.resolveValue(el, key); // reactive READ -> tracked
+
+        if (value == null) {
+          el.removeAttribute(attr)
+          return
+        }
+
+        if (typeof value === "object") {
+          // Should we stringify?? idk.
+        }
+        el.setAttribute(attr, value)
+      }, { scheduler: () => this.effectScheduler.schedule(runner) });
+    });
+    this._bindingScopes.set(el, scope); // Map<Element, EffectScope>
+  }
+
+  /**
+   * @param {Element} el
+   *
+   */
+  _bindProperties (el) {
+    const scope = effectScope();
+    scope.run(() => {
+      const runner = effect(() => {
+        let propertyText = el.getAttribute(this.propertyBindingAttribute)
+        if (!propertyText) { return }
+
+        const [prop, key] = propertyText.split(":")
+        let value = this.resolveValue(el, key); // reactive READ -> tracked
+
+        // no mashaling here folks.
+        // @ts-expect-error
+        el[prop] = value
+      }, { scheduler: () => this.effectScheduler.schedule(runner) });
+    });
+    this._bindingScopes.set(el, scope); // Map<Element, EffectScope>
+  }
+
+
+  /**
+   * @param {Element} el
+   */
+  _downgradeBindings(el) {
+    const scope = this._bindingScopes.get(el);
+    if (scope) {
+      scope.stop();
+      this._bindingScopes.delete(el);
     }
   }
 
   /**
-   * @param {string | null | undefined} [key]
+    * @param {HTMLFormElement} form
    */
-  updateContext(key) {
+  _stateForForm(form) {
+    let state = this._formState.get(form)
+    if (!state) {
+      state = reactive({})
+      this._formState.set(form, state)
+      for (const _el of form.elements) {
+        const el = /** @type {Element & {name: string | null | undefined}} */(_el)
+        if (el.name) {
+          state[el.name] = this._readFormControl(el) // seed initial values
+        }
+      }
+    }
+    return state
+  }
+
+  /**
+   * @param {Element} el
+   */
+  _readFormControl(el) {
+    if (el.localName === "input") {
+      const element = /** @type {HTMLInputElement} */(el)
+      if (element.type === "checkbox") {
+        return element.checked
+      }
+
+      if (element.type === "radio") {
+        const elements = element.form?.elements
+
+        if (!elements) { return null }
+
+        return /** @type {HTMLInputElement} */ (Array.from(elements).find((el) => {
+          return /** @type {HTMLInputElement} */ (el).name === element.name && /** @type {HTMLInputElement} */ (el).checked === true
+        }))?.value ?? null
+      }
+
+    }
+    if (el.localName === "select") {
+      const element = /** @type {HTMLSelectElement} */ (el)
+      return Array.from(element.selectedOptions, o => o.value)
+    }
+
+    return /** @type {HTMLInputElement} */ (el).value
+  }
+
+
+  /**
+   * @param {string | null | undefined} [contextKey]
+   */
+  updateContext(contextKey) {
     /** @type {Array<Element> | NodeListOf<Element>} */
     let els = [];
 
-    if (key) {
-      const query = `[${this.textAttribute}='${key}']`;
-      els = document.querySelectorAll(query);
-    } else {
-      const query = `[${this.textAttribute}]`;
-      els = document.querySelectorAll(query);
+    const attributes = {
+      attr: this.attributeBindingAttribute,
+      prop: this.propertyBindingAttribute,
+      text: this.textAttribute
     }
 
-    els.forEach((el) => {
-      let key = el.getAttribute(this.textAttribute);
-      if (!key) {
-        return;
+    const query = Object.entries(attributes).map(([key, attr]) => {
+      // No contextKey, just check all attrs.
+      if (!contextKey) { return `[${attr}]` }
+
+      if (key === "attr" || key === "prop") {
+        // these get splits like `value:foo` so we need to check the context key with any text before it.
+        return `[${attr}~=":${contextKey}"]`
       }
 
-      let context = /** @type {Controller | Application} */(this)
+      return `[${attr}="${contextKey}"]`
+    }).join(", ")
 
-      if (key.includes("#state")) {
-        const keys = key.split("#state")
-        let controllerName = keys.shift() // pop off the controller key, won't be needed anymore
+    els = this.rootElement.querySelectorAll(query)
 
-        if (!controllerName) { return }
+    for (const el of els) {
+      this._bindText(el)
+      this._bindAttributes(el)
+      this._bindProperties(el)
+    }
+  }
 
-        const closestControllerEl = el.closest(`[${this.controllerAttribute}~="${controllerName}"]`)
-        const controller = this.getController(/** @type {HTMLElement} */ (closestControllerEl), controllerName)
+  /**
+   * @param {Element} el
+   * @param {string | null} key
+   */
+  resolveValue (el, key) {
+    if (!key) {
+      return null;
+    }
 
-        // console.log({ controllerName, el, controller })
-        if (!controller) {
-          return
-        }
+    const scope = el.getAttribute(this.scopeAttribute)
+    let context = /** @type {Controller["state"] | Application["context"]} */(this.context)
 
-        context = controller
-        key = "#state" + keys.join("")
+    if (scope && scope !== "$form") {
+      let controllerName = scope
+
+      if (!controllerName) { return null }
+
+      const query = `[${this.controllerAttribute}~="${controllerName}"]`
+      const closestControllerEl = el.closest(query)
+      const controller = this.getController(/** @type {HTMLElement} */(closestControllerEl), controllerName)
+
+      if (!controller) {
+        return null
       }
 
-      const keys = key.split(/\./g);
-      const allowedKeys = ["#context", "#forms", "#form", "#state"]
-      let firstKey = keys.shift() || ""
+      context = controller.state
+    }
 
-      if (!firstKey || !allowedKeys.includes(firstKey)) {
-        return
+    const keys = key.split(/\./g);
+
+    let value = null
+
+    if (scope === "$form") {
+      const formAttr = el.getAttribute("form")
+      const rootNode = /** @type {HTMLElement} */ ((el.getRootNode() || document))
+      const form = /** @type {HTMLFormElement | null} */(formAttr ? rootNode.querySelector(`form#${formAttr}`) : el.closest("form"))
+
+      if (form) {
+        value = this._stateForForm(form)[keys.join("")] // reactive READ -> tracked
       }
+    } else {
+      value = dig(context, ...keys);
+    }
 
-      let value = null
-
-      if (firstKey === "#form") {
-        const formAttr = el.getAttribute("form")
-        const rootNode = /** @type {HTMLElement} */ ((el.getRootNode() || document))
-        const form = /** @type {HTMLFormElement | null} */(formAttr ? rootNode.querySelector(`form#${formAttr}`) : el.closest("form"))
-
-        if (form) {
-          // need to rejoin keys because we won't support thing.foo.bar. We just use the name="" of the key
-          value = new FormData(form).get(keys.join(""))
-        }
-      } else {
-        firstKey = firstKey.slice(1, firstKey.length)
-        // @ts-expect-error
-        const obj = context[/** @type {"context" | "forms" | "state"} */ (firstKey)]
-
-        if (!obj) {
-          return
-        }
-
-        value = dig(obj, ...keys);
-      }
-
-      if (value == null) {
-        value = "";
-      } else {
-        value = value.valueOf()
-      }
-
-      if (el.textContent !== value) {
-        // @ts-expect-error
-        el.textContent = value
-      }
-    });
+    return value
   }
 
   /**
@@ -275,6 +447,11 @@ export class Application {
    * @param {RegistryOptions} options
    */
   start(options = {}) {
+    /**
+     * Used to stop all events added during this when you call "stop"
+     */
+    this.abortController = new AbortController()
+
     this.rootElement =
       options.rootElement || document.documentElement || this.rootElement;
 
@@ -306,7 +483,8 @@ export class Application {
       this.started = true;
     }
     this._upgradeAllElements(this.rootElement);
-    this.updateContext()
+    // Need to wait for all elements to upgrade before updating context.
+    queueMicrotask(() => this.updateContext())
     return this;
   }
 
@@ -323,10 +501,8 @@ export class Application {
       }
 
       this.observer?.disconnect();
-
-      this.formEvents.forEach((evt) => {
-        this.rootElement.removeEventListener(evt, this.eventUpdateContext)
-      })
+      this._actionListenerMap.clear();
+      this.abortController?.abort("application stopped")
     }
     return this;
   }
@@ -337,7 +513,7 @@ export class Application {
    * @param {string} [controllerName] - Use this to override the registration name.
    */
   register(Constructor, controllerName) {
-    const name = Constructor.controllerName || controllerName;
+    const name = controllerName || Constructor.controllerName;
     if (!name) {
       console.error(`No "controllerName" given for ${Constructor}.`);
       return;
@@ -378,7 +554,12 @@ export class Application {
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: [this.controllerAttribute, this.targetAttribute],
+      attributeFilter: [
+        this.controllerAttribute,
+        this.targetAttribute,
+        this.textAttribute,
+        this.actionAttribute
+      ],
       attributeOldValue: true,
     });
   }
@@ -393,20 +574,22 @@ export class Application {
 
         if (m.attributeName === this.controllerAttribute) {
           this._handleControllerAttributeMutation(m);
-          continue;
         } else if (m.attributeName === this.targetAttribute) {
           this._handleTargetAttributeMutation(m);
         } else if (m.attributeName === this.actionAttribute) {
           this._handleActionAttributeMutation(m);
+        } else {
         }
+
+        continue
       }
       // childList
       else {
         m.removedNodes.forEach((node) => {
-          this._downgradeAllElements(/** @type {HTMLElement} */ (node));
+          this._downgradeAllElements(/** @type {HTMLElement} */(node));
         });
         m.addedNodes.forEach((node) => {
-          this._upgradeAllElements(/** @type {HTMLElement} */ (node));
+          this._upgradeAllElements(/** @type {HTMLElement} */(node));
         });
       }
     }
@@ -424,7 +607,7 @@ export class Application {
     matches.forEach((match) => {
       this._createControllerInstance(
         controllerName,
-        /** @type {HTMLElement} */ (match),
+        /** @type {HTMLElement} */(match),
       );
     });
   }
@@ -444,7 +627,7 @@ export class Application {
     // }).join(", ")
 
     element.querySelectorAll("*").forEach((el) => {
-      this._upgradeElement(/** @type {HTMLElement} */ (el));
+      this._upgradeElement(/** @type {HTMLElement} */(el));
     });
   };
 
@@ -480,13 +663,15 @@ export class Application {
   _downgradeAllElements = (element) => {
     if (element.nodeType !== 1) return;
 
-    // this._downgradeTargetFromElement(element)
     this._downgradeTargets(element);
     this._downgradeElement(element);
+    this._downgradeBindings(element);
 
     [...new Set(Array.from(element.querySelectorAll("*")))].forEach((el) => {
-      this._downgradeTargets(element);
-      this._downgradeElement(/** @type {HTMLElement} */ (el));
+      this._removeActionsForElement(el)
+      this._downgradeTargets(el);
+      this._downgradeElement(/** @type {HTMLElement} */(el));
+      this._downgradeBindings(element);
     });
   };
 
@@ -520,10 +705,10 @@ export class Application {
         (targetName) => {
           // @ts-expect-error
           /** @type {HTMLElement[]} */ (inst[`${targetName}Targets`]).forEach(
-            (target) => {
-              this._downgradeTargets(target);
-            },
-          );
+          (target) => {
+            this._downgradeTargets(target);
+          },
+        );
         },
       );
 
@@ -533,6 +718,51 @@ export class Application {
       }
     });
   };
+
+  /**
+   * @param {MutationRecord} mutation
+   */
+  _handleActionAttributeMutation(mutation) {
+    if (mutation.attributeName !== this.actionAttribute) return;
+
+    const target = /** @type {HTMLElement} */ (mutation.target);
+    const listeners = this._actionListenerMap.get(target) ?? new Map();
+
+    const attr = target.getAttribute(this.actionAttribute) || "";
+
+    /** @type {Map<string, import("../internal/action-parser.js").ParsedAction>} */
+    const desired = new Map();
+    this._parseActionsFromActionAttribute(attr).forEach((pa) => desired.set(pa.source, pa));
+
+    // Remove attached actions that are no longer declared.
+    for (const [source, record] of listeners) {
+      if (!desired.has(source)) {
+        record.target.removeEventListener(record.eventName, record.fn, record.options);
+        listeners.delete(source);
+      }
+    }
+
+    // Add declared actions that aren't attached yet.
+    for (const [source, parsedAction] of desired) {
+      if (!listeners.has(source)) {
+        this.addParsedActionToElement(parsedAction, target);
+      }
+    }
+  }
+
+  /**
+   * @param {Element} element
+   */
+  _removeActionsForElement(element) {
+    const listeners = this._actionListenerMap.get(element);
+    if (!listeners) return;
+
+    listeners.forEach(({ target, eventName, fn, options }) => {
+      target?.removeEventListener?.(eventName, fn, options);
+    });
+
+    this._actionListenerMap.delete(element);
+  }
 
   /**
    * @param {HTMLElement} target
@@ -546,8 +776,7 @@ export class Application {
 
     if (!targetMap.get(controller)) return;
 
-    disconnectTarget(controller, targetName, target);
-    // this._targetConnectionMap.delete(target)
+    this._disconnectTarget(controller, targetName, target);
   }
 
   /**
@@ -589,7 +818,7 @@ export class Application {
       inst.connectedCallback();
 
       // Find children targets and upgrade them
-      setTimeout(() => {
+      queueMicrotask(() => {
         if (inst) {
           this._upgradeTargets(inst);
         }
@@ -624,7 +853,7 @@ export class Application {
 
     // If we remove the attribute, we can just remove all controllers.
     if (!attribute) {
-      this._downgradeElement(/** @type {HTMLElement} */ (target));
+      this._downgradeElement(/** @type {HTMLElement} */(target));
       return;
     }
 
@@ -702,7 +931,7 @@ export class Application {
       }
 
       const controller = this.getController(
-        /** @type {HTMLElement} */ (closestController),
+        /** @type {HTMLElement} */(closestController),
         controllerName,
       );
 
@@ -716,26 +945,13 @@ export class Application {
 
       const targetNames =
         this._parseControllersAndTargetsFromTargetAttribute(oldVal)[
-          controller.controllerName
+        controller.controllerName
         ];
 
       targetNames.forEach((targetName) => {
         this._downgradeTargetForAttribute(target, targetName, controller);
       });
     });
-  }
-
-  /**
-   * @param {MutationRecord} mutation
-   */
-  _handleActionAttributeMutation(mutation) {
-    if (!mutation.attributeName) return;
-
-    if (mutation.attributeName !== this.actionAttribute) {
-      return;
-    }
-
-    // TODO: need to handle attribute mutations.
   }
 
   /**
@@ -760,14 +976,15 @@ export class Application {
       if (!connected) continue;
       const targetNames = controllersAndTargetsObj[controller.controllerName];
 
+
       targetNames?.forEach((targetName) => {
         if (!target.isConnected) {
-          disconnectTarget(controller, targetName, target);
+          this._disconnectTarget(controller, targetName, target);
           return;
         }
 
         if (!targetAttr) {
-          disconnectTarget(controller, targetName, target);
+          this._disconnectTarget(controller, targetName, target);
           return;
         }
 
@@ -777,7 +994,7 @@ export class Application {
             this._controllerQuery(controller.controllerName),
           ) !== controller.element
         ) {
-          disconnectTarget(controller, targetName, target);
+          this._disconnectTarget(controller, targetName, target);
           return;
         }
       });
@@ -808,43 +1025,43 @@ export class Application {
    */
   _upgradeTargets(controller) {
     /** @type {typeof Controller} */ (controller.constructor).targets.forEach(
-      (targetName) => {
-        const { element, controllerName } = controller;
-        const query = this._targetQuery(controllerName, targetName);
+    (targetName) => {
+      const { element, controllerName } = controller;
+      const query = this._targetQuery(controllerName, targetName);
 
-        element.querySelectorAll(query).forEach((target) => {
-          // This preserves scope.
-          if (
-            target.parentElement?.closest(
-              this._controllerQuery(controllerName),
-            ) !== element
-          ) {
-            return;
-          }
+      element.querySelectorAll(query).forEach((target) => {
+        // This preserves scope.
+        if (
+          target.parentElement?.closest(
+            this._controllerQuery(controllerName),
+          ) !== element
+        ) {
+          return;
+        }
 
-          let targetMap = this._targetConnectionMap.get(target);
+        let targetMap = this._targetConnectionMap.get(target);
 
-          if (!targetMap) {
-            targetMap = new Map();
-            this._targetConnectionMap.set(target, targetMap);
-          }
+        if (!targetMap) {
+          targetMap = new Map();
+          this._targetConnectionMap.set(target, targetMap);
+        }
 
-          const isConnected = targetMap.get(controller);
+        const isConnected = targetMap.get(controller);
 
-          if (isConnected) return;
+        if (isConnected) return;
 
-          targetMap.set(controller, true);
+        targetMap.set(controller, true);
 
-          /** @type {(target: Element) => void} */
-          // @ts-expect-error
-          const targetConnectedFn = controller[`${targetName}TargetConnected`];
+        /** @type {(target: Element) => void} */
+        // @ts-expect-error
+        const targetConnectedFn = controller[`${targetName}TargetConnected`];
 
-          if (typeof targetConnectedFn === "function") {
-            targetConnectedFn(target);
-          }
-        });
-      },
-    );
+        if (typeof targetConnectedFn === "function") {
+          targetConnectedFn(target);
+        }
+      });
+    },
+  );
   }
 
   /**
@@ -938,7 +1155,9 @@ export class Application {
       actionOptions,
     } = parsedAction;
 
-    if (!controllerName) { return }
+    const _controllerName = /** @type {any} */ (controllerName)
+    if (_controllerName instanceof Error) { return }
+
     if (!eventName) { return }
 
     const keymapSchema = this.keymapSchema;
@@ -950,26 +1169,29 @@ export class Application {
      */
     const fn = function (evt) {
       let shouldCallFunction = true;
-
-
-      // The controller may not always be at the element level. We need to search for its closest parent controller, we use closest on the target *IN CASE* the controller is defined on the current element.
-      let closestControllerElement = null;
-
-      closestControllerElement = element?.closest(
-        self._controllerQuery(controllerName),
-      );
-
-      if (!closestControllerElement) {
-        // TODO: Should we throw an error if no controller found? Maybe in debug logs?
-        return;
-      }
-
       let controller = null;
 
-      controller = self.getController(
-        /** @type {HTMLElement} */ (closestControllerElement),
-        controllerName,
-      );
+      if (controllerName) {
+        // The controller may not always be at the element level. We need to search for its closest parent controller, we use closest on the target *IN CASE* the controller is defined on the current element.
+        let closestControllerElement = null;
+
+        closestControllerElement = element?.closest?.(
+          self._controllerQuery(controllerName),
+        );
+
+        if (!closestControllerElement) {
+          // TODO: Should we throw an error if no controller found? Maybe in debug logs?
+          return;
+        }
+
+
+        controller = self.getController(
+          /** @type {HTMLElement} */(closestControllerElement),
+          controllerName,
+        );
+      } else {
+        controller = self.functions
+      }
 
       // This will need to check the keymapSchema to see if it should fire.
       if (eventModifier && evt instanceof KeyboardEvent) {
@@ -1012,9 +1234,10 @@ export class Application {
       }
     };
 
+    let target = element
     if (globalTarget) {
       // @ts-expect-error
-      const target = globalThis[globalTarget];
+      target = globalThis[globalTarget];
 
       if (!target) {
         throw Error(`${target} does not exist on "globalThis"`);
@@ -1023,8 +1246,6 @@ export class Application {
       if (typeof target.addEventListener !== "function") {
         throw Error(`${target} does not have an "addEventListener" function`);
       }
-
-      element = target;
     }
 
     /**
@@ -1040,21 +1261,37 @@ export class Application {
       options[option] = true;
     });
 
-    element.addEventListener(eventName, fn, options);
+    target.addEventListener(eventName, fn, { ...options, signal: this.abortController?.signal });
+
+    let listeners = this._actionListenerMap.get(element);
+    if (!listeners) {
+      listeners = new Map();
+      this._actionListenerMap.set(element, listeners);
+    }
+
+    // Idempotent: if this exact action is somehow already bound, drop the old one.
+    const existing = listeners.get(parsedAction.source);
+    if (existing) {
+      existing.target.removeEventListener(existing.eventName, existing.fn, existing.options);
+    }
+
+    listeners.set(parsedAction.source, { target, eventName, fn, options });
+  }
+
+  /**
+  * @param {Controller} controller
+  * @param {string} targetName
+  * @param {HTMLElement | Element} target
+  */
+  _disconnectTarget(controller, targetName, target) {
+    /** @type {(target: Element) => void} */
+    // @ts-expect-error
+    const targetDisconnectedFn = controller[`${targetName}TargetDisconnected`];
+
+    if (typeof targetDisconnectedFn === "function") {
+      targetDisconnectedFn(target);
+      this._targetConnectionMap.delete(target)
+    }
   }
 }
 
-/**
- * @param {Controller} controller
- * @param {string} targetName
- * @param {HTMLElement | Element} target
- */
-function disconnectTarget(controller, targetName, target) {
-  /** @type {(target: Element) => void} */
-  // @ts-expect-error
-  const targetDisconnectedFn = controller[`${targetName}TargetDisconnected`];
-
-  if (typeof targetDisconnectedFn === "function") {
-    targetDisconnectedFn(target);
-  }
-}

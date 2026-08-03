@@ -9,6 +9,7 @@ import { StringScanner } from "./string-scanner.js";
  * @property {Array<string>} additionalEventModifiers - additional event modifiers such as "ctrl", "alt", "shift", etc.
  * @property {Array<string>} actionOptions - Additional options IE: capture, passive, etc. https://stimulus.hotwired.dev/reference/actions#options.
  * @property {undefined | null | string} globalTarget - The target, IE: `@window`, `@document`.
+ * @property {string} source - the original string passed in
  * @property {string[]} errors - If there was an error parsing, it'll live here.
  */
 
@@ -56,6 +57,7 @@ export class ActionParser {
       controllerFunction: null,
       actionOptions: [],
       errors: [],
+      source: this.input
     };
 
     const scanner = new StringScanner(this.input);
@@ -91,7 +93,7 @@ export class ActionParser {
     const controllerName = this.findControllerName(scanner);
 
     // If controllerName is empty, we no-op because the syntax is probably wrong.
-    if (!controllerName) {
+    if (controllerName instanceof Error) {
       obj.errors.push(ctor.NoControllerNameError);
       return obj;
     }
@@ -197,17 +199,17 @@ export class ActionParser {
   /**
    * Finds the `controllerName`, IE: "my-controller"
    * @param {StringScanner} scanner
-   * @return {string | null}
+   * @return {Error | string | null}
    */
   findControllerName(scanner) {
     let controllerName = "";
 
     if (scanner.currentCharacter + scanner.peek() !== "->" && scanner.currentCharacter !== "#") {
-      return null;
+      return Error(`Expected "->" or "#"`);
     }
 
     if (scanner.currentCharacter === "#") {
-      return "global"
+      return null
     } else {
       // Remove the "->"
       scanner.pop(2);

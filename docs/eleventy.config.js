@@ -14,6 +14,9 @@ const webawesomeComponents = fs.readdirSync(webawesomeComponentsDir).map(compone
   return path.join(webawesomeComponentsDir, componentName, componentName + '.js');
 });
 
+const vueReactivityDir = path.join(root, 'node_modules/@vue/reactivity');
+// const vueReactivityFiles = fs.readdirSync(vueReactivityDir, {recursive: true})
+
 const flowStateDirectories = [
   'exports',
   'internal'
@@ -26,6 +29,7 @@ export default async function (eleventyConfig) {
   });
   eleventyConfig.addPassthroughCopy({
     [webawesomeDir]: 'webawesome',
+    [vueReactivityDir]: 'vue/reactivity'
   });
 
   eleventyConfig.addPlugin(shikiPlugin({ theme: "dark-plus" }));
