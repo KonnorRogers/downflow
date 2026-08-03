@@ -205,8 +205,12 @@ export class Application {
 
     this.formEvents = ["change", "input"]
 
+    /**
+     * @param {Event} e
+     */
     this.eventUpdateContext = (e) => {
-      const target = e.target
+      // this is a lie, but its just for type checking satisfaction.
+      const target = /** @type {HTMLInputElement | null} */ (e.target)
 
       if (!target) { return }
       if (!target.name) { return }
