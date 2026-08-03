@@ -14,6 +14,8 @@ export { Controller };
  * @property {string} [RegistryOptions.textAttribute="flow-text"]
  * @property {string} [RegistryOptions.actionAttribute="flow-action"]
  * @property {string} [RegistryOptions.scopeAttribute="flow-scope"]
+ * @property {string} [RegistryOptions.attributeBindingAttribute="flow-attr"]
+ * @property {string} [RegistryOptions.propertyBindingAttribute="flow-prop"]
  */
 
 /**
@@ -128,6 +130,18 @@ export class Application {
      */
     this.scopeAttribute = options.scopeAttribute || "flow-scope";
 
+    /**
+     * @type {string}
+     * The attribute to use for binding attributes. Defaults to "flow-attr".
+     */
+    this.attributeBindingAttribute = options.attributeBindingAttribute || "flow-attr";
+
+    /**
+     * @type {string}
+     * The attribute to use for binding properties. Defaults to "flow-prop".
+     */
+    this.propertyBindingAttribute = options.propertyBindingAttribute || "flow-prop";
+
     this.modifierSchema = /** @const */ {
       ctrl: "ctrlKey",
       alt: "altKey",
@@ -159,6 +173,8 @@ export class Application {
       this.controllerAttribute,
       this.targetAttribute,
       this.textAttribute,
+      this.attributeBindingAttribute,
+      this.propertyBindingAttribute,
       this.actionAttribute,
     ];
 
@@ -227,13 +243,64 @@ export class Application {
     const scope = effectScope();
     scope.run(() => {
       const runner = effect(() => {
-        const value = this.resolveContextForElement(el, this.textAttribute); // reactive READ -> tracked
+        const value = this.resolveValue(el, el.getAttribute(this.textAttribute)); // reactive READ -> tracked
         const text = value == null ? "" : String(value);
         if (el.textContent !== text) { el.textContent = text };
       }, { scheduler: () => this.effectScheduler.schedule(runner) });
     });
     this._bindingScopes.set(el, scope); // Map<Element, EffectScope>
   }
+
+  /**
+   * @param {Element} el
+   *
+   */
+  _bindAttributes (el) {
+    const scope = effectScope();
+    scope.run(() => {
+      const runner = effect(() => {
+        let attributeText = el.getAttribute(this.attributeBindingAttribute)
+        if (!attributeText) { return }
+
+        const [attr, key] = attributeText.split(":")
+        let value = this.resolveValue(el, key); // reactive READ -> tracked
+
+        if (value == null) {
+          el.removeAttribute(attr)
+          return
+        }
+
+        if (typeof value === "object") {
+          // Should we stringify?? idk.
+        }
+        el.setAttribute(attr, value)
+      }, { scheduler: () => this.effectScheduler.schedule(runner) });
+    });
+    this._bindingScopes.set(el, scope); // Map<Element, EffectScope>
+  }
+
+  /**
+   * @param {Element} el
+   *
+   */
+  _bindProperties (el) {
+    const scope = effectScope();
+    scope.run(() => {
+      const runner = effect(() => {
+        let propertyText = el.getAttribute(this.propertyBindingAttribute)
+        if (!propertyText) { return }
+
+        const [prop, key] = propertyText.split(":")
+        let value = this.resolveValue(el, key); // reactive READ -> tracked
+
+        // no mashaling here folks.
+        // @ts-expect-error
+        el[prop] = value
+      }, { scheduler: () => this.effectScheduler.schedule(runner) });
+    });
+    this._bindingScopes.set(el, scope); // Map<Element, EffectScope>
+  }
+
 
   /**
    * @param {Element} el
@@ -295,32 +362,44 @@ export class Application {
 
 
   /**
-   * @param {string | null | undefined} [key]
+   * @param {string | null | undefined} [contextKey]
    */
-  updateContext(key) {
+  updateContext(contextKey) {
     /** @type {Array<Element> | NodeListOf<Element>} */
     let els = [];
 
-    if (key) {
-      const query = `[${this.textAttribute}='${key}']`;
-      els = this.rootElement.querySelectorAll(query);
-    } else {
-      const query = `[${this.textAttribute}]`;
-      els = this.rootElement.querySelectorAll(query);
+    const attributes = {
+      attr: this.attributeBindingAttribute,
+      prop: this.propertyBindingAttribute,
+      text: this.textAttribute
     }
+
+    const query = Object.entries(attributes).map(([key, attr]) => {
+      // No contextKey, just check all attrs.
+      if (!contextKey) { return `[${attr}]` }
+
+      if (key === "attr" || key === "prop") {
+        // these get splits like `value:foo` so we need to check the context key with any text before it.
+        return `[${attr}~=":${contextKey}"]`
+      }
+
+      return `[${attr}="${contextKey}"]`
+    }).join(", ")
+
+    els = this.rootElement.querySelectorAll(query)
 
     for (const el of els) {
       this._bindText(el)
+      this._bindAttributes(el)
+      this._bindProperties(el)
     }
   }
 
   /**
    * @param {Element} el
-   * @param {string} attr
+   * @param {string | null} key
    */
-  resolveContextForElement (el, attr) {
-    let key = el.getAttribute(attr);
-
+  resolveValue (el, key) {
     if (!key) {
       return null;
     }
@@ -333,7 +412,8 @@ export class Application {
 
       if (!controllerName) { return null }
 
-      const closestControllerEl = el.closest(`[${this.controllerAttribute}~="${controllerName}"]`)
+      const query = `[${this.controllerAttribute}~="${controllerName}"]`
+      const closestControllerEl = el.closest(query)
       const controller = this.getController(/** @type {HTMLElement} */(closestControllerEl), controllerName)
 
       if (!controller) {
@@ -352,7 +432,6 @@ export class Application {
       const rootNode = /** @type {HTMLElement} */ ((el.getRootNode() || document))
       const form = /** @type {HTMLFormElement | null} */(formAttr ? rootNode.querySelector(`form#${formAttr}`) : el.closest("form"))
 
-      console.log({ form, formAttr, rootNode })
       if (form) {
         value = this._stateForForm(form)[keys.join("")] // reactive READ -> tracked
       }
@@ -404,7 +483,8 @@ export class Application {
       this.started = true;
     }
     this._upgradeAllElements(this.rootElement);
-    this.updateContext()
+    // Need to wait for all elements to upgrade before updating context.
+    queueMicrotask(() => this.updateContext())
     return this;
   }
 
@@ -1111,7 +1191,6 @@ export class Application {
         );
       } else {
         controller = self.functions
-        console.log({ controller })
       }
 
       // This will need to check the keymapSchema to see if it should fire.
