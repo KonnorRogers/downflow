@@ -36,8 +36,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [22]
-        ruby-version: ["3.2"]
+        node-version: [24]
     env:
       PR_PATH: pull/${{github.event.number}}
     steps:
@@ -55,17 +54,15 @@ jobs:
         # If you're using the default github pages url, use this instead:
         run: echo "DOMAIN=${{ github.actor }}.github.io" >> $GITHUB_ENV
 
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
+
+      # 7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-          cache-dependency-path: |
-            package-lock.json
 
       - name: Set production base URL
         run: |
@@ -81,10 +78,8 @@ jobs:
 
       - name: Build website
         run: |
-          npm run setup
           npm run build
           npm run build:docs
-          npm run build:api
 
       - name: Set username + email
         run: |
@@ -103,7 +98,7 @@ jobs:
         if: github.ref != 'refs/heads/main'
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-          pnpm exec gh-pages -d ./docs/output --dotfiles --dest "${{ env.PR_PATH }}" -b gh-pages -- -u "github-actions-bot <support+actions@github.com>"
+          npx gh-pages -d ./docs/_site --dotfiles --dest "${{ env.PR_PATH }}" -b gh-pages -- -u "github-actions-bot <support+actions@github.com>"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
