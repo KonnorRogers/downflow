@@ -15,13 +15,13 @@ test("Should properly handle swapping of scopes", async () => {
 
 
   const el = await fixture(html`<div flow-controller="foo">
-    <span flow-scope="foo" flow-text="email"></span>
+    <span flow-context="foo" flow-text="email"></span>
   </div>`)
 
 
   assert.equal(el.querySelector("span").textContent, "foo")
   // We change the scope.
-  el.querySelector("span").removeAttribute("flow-scope")
+  el.querySelector("span").removeAttribute("flow-context")
   await aTimeout(1)
   assert.equal(el.querySelector("span").textContent, "foo")
 })

@@ -91,20 +91,20 @@ export class Controller {
      */
     this.isConnected = false;
 
-    this._stateRef = ref({})
+    this._contextRef = ref({})
   }
 
-  get state () {
-    return this._stateRef.value
+  get context () {
+    return this._contextRef.value
   }
 
-  set state (obj) {
+  set context (obj) {
     if (isRef(obj)) {
-      this._stateRef.value = obj.value;
+      this._contextRef.value = obj.value;
       return
     }
 
-    this._stateRef.value = obj
+    this._contextRef.value = obj
   }
 
   /**

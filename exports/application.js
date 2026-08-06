@@ -13,7 +13,7 @@ export { Controller };
  * @property {string} [RegistryOptions.targetAttribute="flow-target"]
  * @property {string} [RegistryOptions.textAttribute="flow-text"]
  * @property {string} [RegistryOptions.actionAttribute="flow-action"]
- * @property {string} [RegistryOptions.scopeAttribute="flow-scope"]
+ * @property {string} [RegistryOptions.contextAttribute="flow-context"]
  * @property {string} [RegistryOptions.attributeBindingAttribute="flow-attr"]
  * @property {string} [RegistryOptions.propertyBindingAttribute="flow-prop"]
  */
@@ -125,10 +125,10 @@ export class Application {
     this.actionAttribute = options.actionAttribute || "flow-action";
 
     /**
-     * The attribute to use for finding scopes. Scopes are the "data" you're trying to read. Defaults to "flow-scope".
+     * The attribute to use for finding contexts. contexts are the "data" you're trying to read. Defaults to "flow-context".
      * @type {string}
      */
-    this.scopeAttribute = options.scopeAttribute || "flow-scope";
+    this.contextAttribute = options.contextAttribute || "flow-context";
 
     /**
      * @type {string}
@@ -297,7 +297,7 @@ export class Application {
         const [prop, key] = propertyText.split(":")
         let value = this.resolveValue(el, key); // reactive READ -> tracked
 
-        // no mashaling here folks.
+        // no marshaling here folks.
         // @ts-expect-error
         el[prop] = value
       }, { scheduler: () => this.effectScheduler.schedule(runner) });
@@ -361,6 +361,8 @@ export class Application {
       return Array.from(element.selectedOptions, o => o.value)
     }
 
+    // TODO: Add a hook here for people to people to have their own reading logic from a form control.
+
     return /** @type {HTMLInputElement} */ (el).value
   }
 
@@ -408,11 +410,22 @@ export class Application {
       return null;
     }
 
-    const scope = el.getAttribute(this.scopeAttribute)
+    // Search upward for closest "context"
+    const contextEl = el.closest(`[${this.contextAttribute}]`)
+
+    /** @type {null | string} */
+    let contextStr = null
+
+    if (contextEl) {
+      contextStr = contextEl.getAttribute(this.contextAttribute)
+    }
+
     let context = /** @type {Controller["state"] | Application["context"]} */(this.context)
 
-    if (scope && scope !== "$form") {
-      let controllerName = scope
+    const keywords = ["$form", "$context"]
+
+    if (contextStr && !keywords.includes(contextStr)) {
+      let controllerName = contextStr
 
       if (!controllerName) { return null }
 
@@ -431,7 +444,7 @@ export class Application {
 
     let value = null
 
-    if (scope === "$form") {
+    if (context === "$form") {
       const formAttr = el.getAttribute("form")
       const rootNode = /** @type {HTMLElement} */ ((el.getRootNode() || document))
       const form = /** @type {HTMLFormElement | null} */(formAttr ? rootNode.querySelector(`form#${formAttr}`) : el.closest("form"))
