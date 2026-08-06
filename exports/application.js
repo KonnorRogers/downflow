@@ -443,6 +443,11 @@ export class Application {
       value = dig(context, ...keys);
     }
 
+
+    if (isRef(value)) {
+      value = value.value
+    }
+
     return value
   }
 

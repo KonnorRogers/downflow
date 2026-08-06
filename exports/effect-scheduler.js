@@ -19,8 +19,8 @@ export class EffectScheduler {
     this.queue.add(job);
     if (!this.scheduled) {
       this.scheduled = true;
+      queueMicrotask(this.boundFlush);
     }
-    queueMicrotask(this.boundFlush);
   }
 }
 

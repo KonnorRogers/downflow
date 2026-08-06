@@ -1,19 +1,16 @@
 # `downflow`
 
+Reactive templating in a way that doesn't drive a steamroller through the DOM
+
 ## WIP: Come back later
 
 ## Inspiration
 
 <https://bsky.app/profile/lea.verou.me/post/3lx34db4osc23>
 
-
-
 ## Purpose
 
->
-
-
-Some amalgamation between Stimulus and Alpine, with less focus on component level state, and instead looking to (ab)use "app level" state.
+Some amalgamation between Stimulus, Alpine and petite-vue, with less focus on components, and more focus on composition and shared state.
 
 I eventually want to look into how you can hook up component-like rendering as well, possibly using `<template>` tags, but baby steps...
 
