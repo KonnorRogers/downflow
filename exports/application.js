@@ -420,12 +420,13 @@ export class Application {
       contextStr = contextEl.getAttribute(this.contextAttribute)
     }
 
-    let context = /** @type {Controller["state"] | Application["context"]} */(this.context)
+    let context = /** @type {Controller["context"] | Application["context"]} */(this.context)
 
     const keywords = ["$form", "$context"]
 
     if (contextStr && !keywords.includes(contextStr)) {
       let controllerName = contextStr
+
 
       if (!controllerName) { return null }
 
@@ -433,18 +434,19 @@ export class Application {
       const closestControllerEl = el.closest(query)
       const controller = this.getController(/** @type {HTMLElement} */(closestControllerEl), controllerName)
 
+
       if (!controller) {
         return null
       }
 
-      context = controller.state
+      context = controller.context
     }
 
     const keys = key.split(/\./g);
 
     let value = null
 
-    if (context === "$form") {
+    if (contextStr === "$form") {
       const formAttr = el.getAttribute("form")
       const rootNode = /** @type {HTMLElement} */ ((el.getRootNode() || document))
       const form = /** @type {HTMLFormElement | null} */(formAttr ? rootNode.querySelector(`form#${formAttr}`) : el.closest("form"))
@@ -453,9 +455,8 @@ export class Application {
         value = this._stateForForm(form)[keys.join("")] // reactive READ -> tracked
       }
     } else {
-      value = dig(context, ...keys);
+      value = dig(context, ...keys)
     }
-
 
     if (isRef(value)) {
       value = value.value

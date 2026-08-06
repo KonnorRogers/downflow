@@ -1,6 +1,7 @@
 import { aTimeout, fixture, html } from "@open-wc/testing-helpers"
 import { Application, Controller } from "downflow"
 import {assert} from "@esm-bundle/chai"
+import { sendKeys } from "@web/test-runner-commands"
 
 
 test("Should properly handle swapping of scopes", async () => {
@@ -24,4 +25,25 @@ test("Should properly handle swapping of scopes", async () => {
   el.querySelector("span").removeAttribute("flow-context")
   await aTimeout(1)
   assert.equal(el.querySelector("span").textContent, "foo")
+  application.stop()
+})
+
+test("Should properly handle form scopes", async () => {
+  const application = Application.start()
+  const form = await fixture(html`<form>
+    <input name="foo">
+    <span flow-context="$form" flow-text="foo"></span>
+  </form>`)
+
+
+  assert.equal(form.querySelector("span").textContent, "")
+
+  form.querySelector("input").focus()
+  await sendKeys({ type: "foo" })
+
+
+  assert.equal(form.querySelector("input").value, "foo")
+  assert.equal(form.querySelector("span").textContent, "foo")
+
+  application.stop()
 })

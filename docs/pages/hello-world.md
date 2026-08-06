@@ -2,6 +2,11 @@
 layout: default.njk
 ---
 
+SHOULD BE FOO
+  <div flow-controller="foo">
+    <span flow-context="foo" flow-text="email"></span>
+  </div>
+
 <style>
   .hello-output {
     display: block;
@@ -31,6 +36,12 @@ layout: default.njk
     import { Application, Controller } from "downflow"
 
     const application = Application.start()
+
+    application.register(class extends Controller {
+      initialize () {
+        this.context = {email: "foo"}
+      }
+    }, "foo")
 
     class HelloController extends Controller {
       static controllerName = "hello"
