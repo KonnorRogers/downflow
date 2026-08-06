@@ -2,6 +2,8 @@
 layout: default.njk
 ---
 
+
+
 <script type="module">
     import { Application, Controller } from "downflow"
 
@@ -35,7 +37,7 @@ layout: default.njk
         static controllerName = "foo"
 
         initialize () {
-            this.state = {
+            this.context = {
                 bar: "baz"
             }
         }
@@ -61,11 +63,11 @@ layout: default.njk
 
 <form>
     <input name="email" value="foo@gmail.com">
-    <output flow-scope="$form" flow-text="email"></output>
+    <output flow-context="$form" flow-text="email"></output>
 </form>
 
 <form>
     <div data-controller="foo">
-        <div flow-scope="foo" flow-text="bar"></div>
+        <div flow-context="foo" flow-text="bar"></div>
     </div>
 </form>

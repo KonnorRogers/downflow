@@ -32,8 +32,6 @@ export default async function (eleventyConfig) {
     [vueReactivityDir]: 'vue/reactivity'
   });
 
-  eleventyConfig.addPlugin(shikiPlugin({ theme: "dark-plus" }));
-
   flowStateDirectories.forEach((dir) => {
     const resolvedDir = path.join(root, dir)
     eleventyConfig.addPassthroughCopy({
@@ -42,6 +40,9 @@ export default async function (eleventyConfig) {
 
     eleventyConfig.addWatchTarget(resolvedDir)
   })
+
+  eleventyConfig.addPlugin(shikiPlugin({ theme: "nord" }));
+
 }
 
 export const config = {

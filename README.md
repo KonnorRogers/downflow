@@ -57,7 +57,7 @@ So if we have a form, we can access a value on the form like so and have a "live
     <div>Give us your name!</div>
     <input name="name" />
   </label>
-  Your name is: <span flow-scope="$form" flow-text="name"></span>
+  Your name is: <span flow-context="$form" flow-text="name"></span>
 </form>
 ```
 
@@ -67,14 +67,14 @@ We can also disconnect the form and reference it by its id, similar to form cont
 <form id="my-form">
   <label>
     <div>Give us your name!</div>
-    <input flow-scope="$form" name="name" />
+    <input flow-context="$form" name="name" />
   </label>
 </form>
 
 <!-- lots of DOM stuff -->
 
 <div>
-  Your name is: <span form="my-form" flow-scope="$form" flow-text="name"></span>
+  Your name is: <span form="my-form" flow-context="$form" flow-text="name"></span>
 </div>
 ```
 
@@ -85,7 +85,7 @@ We can bind more than just textContent. We can bind attributes like so:
 ```html
 <form>
   <input name="email">
-  <input readonly flow-scope="$form" flow-attr="value:email">
+  <input readonly flow-context="$form" flow-attr="value:email">
 </form>
 ```
 
@@ -96,7 +96,7 @@ Similar to attributes, we can also bind properties.
 ```html
 <form>
   <input name="email">
-  <input readonly flow-scope="$form" flow-prop="value:email">
+  <input readonly flow-context="$form" flow-prop="value:email">
 </form>
 ```
 
@@ -112,18 +112,18 @@ Similar to attributes, we can also bind properties.
 
 #### State
 
-There are 3 different places "state" can come from and is defined with `flow-scope`.
+There are 3 different places "state" can come from and is defined with `flow-context`.
 
 We have `$form` and `<controller-name>`
 
-- `$form` is either the form with `id` on the element. IE: `<div flow-scope="$form" id="my-form">` would look for `<form id="my-form"`. If no form attribute is on the element, the closest `<form>` element is used.
-- `flow-scope="<controller_name>"` will find the closest `flow-controller` requires a prefix of the controller you plan to use. IE: `<div flow-scope="hello" flow-text="foo">` would pull `state.foo` from your instance of a `HelloController`.
+- `$form` is either the form with `id` on the element. IE: `<div flow-context="$form" id="my-form">` would look for `<form id="my-form"`. If no form attribute is on the element, the closest `<form>` element is used.
+- `flow-context="<controller_name>"` will find the closest `flow-controller` requires a prefix of the controller you plan to use. IE: `<div flow-context="hello" flow-text="foo">` would pull `state.foo` from your instance of a `HelloController`.
 
 ```js
 import { Controller }
 class HelloController extends Controller {
     initialize () {
-        this.state = {
+        this.context = {
             foo: "bar" // <-- used by `flow-text="hello#state.foo"`
                                                        //   ^ controller name. Will use the closest controller parent defined in the DOM.
         }
@@ -146,7 +146,7 @@ application.context = {
 ```html
 <form>
   <input name="email" />
-  <span>Your email is: <output flow-scope="$form" flow-text="email"></output></span>
+  <span>Your email is: <output flow-context="$form" flow-text="email"></output></span>
 </form>
 <!-- Live reactivity from the host "form" -->
 
@@ -157,7 +157,7 @@ application.context = {
 
 <span>
   Your email is:
-  <output form="foo" flow-scope="$form" flow-text="email"></output>
+  <output form="foo" flow-context="$form" flow-text="email"></output>
 </span>
 ```
 

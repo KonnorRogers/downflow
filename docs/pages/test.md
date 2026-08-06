@@ -13,7 +13,7 @@ layout: default.njk
       static controllerName = "example";
 
       initialize () {
-        this.state = {foo: "bar"}
+        this.context = {foo: "bar"}
       }
 
       handleClick() {
@@ -25,4 +25,4 @@ layout: default.njk
 
 <div flow-controller="example" flow-action="click@document->example#handleClick">Hello World.</div>
 
-<div flow-controller="example" flow-scope="example" flow-text="foo">Hello World.</div>
+<div flow-controller="example" flow-context="example" flow-text="foo">Hello World.</div>

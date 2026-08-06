@@ -9,7 +9,7 @@ test("Should properly handle swapping of scopes", async () => {
 
   application.register(class extends Controller {
     initialize () {
-      this.state = {email: "foo"}
+      this.context = {email: "foo"}
     }
   }, "foo")
 
