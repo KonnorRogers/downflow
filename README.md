@@ -2,7 +2,16 @@
 
 ## WIP: Come back later
 
+## Inspiration
+
+<https://bsky.app/profile/lea.verou.me/post/3lx34db4osc23>
+
+
+
 ## Purpose
+
+>
+
 
 Some amalgamation between Stimulus and Alpine, with less focus on component level state, and instead looking to (ab)use "app level" state.
 
@@ -137,7 +146,7 @@ application.context = {
 ```html
 <form>
   <input name="email" />
-  <span>Your email is: <output flow-text="#form.email"></output></span>
+  <span>Your email is: <output flow-scope="$form" flow-text="email"></output></span>
 </form>
 <!-- Live reactivity from the host "form" -->
 
