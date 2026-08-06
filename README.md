@@ -8,6 +8,8 @@ Reactive templating in a way that doesn't drive a steamroller through the DOM
 
 <https://bsky.app/profile/lea.verou.me/post/3lx34db4osc23>
 
+![Image of Lea's Bluesky post that is linked above](./docs/assets/images/inspiration.png)
+
 ## Purpose
 
 Some amalgamation between Stimulus, Alpine and petite-vue, with less focus on components, and more focus on composition and shared state.
