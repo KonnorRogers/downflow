@@ -1,45 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title></title>
-
-    <link href="{{ "/webawesome/dist-cdn/styles/webawesome.css" | url }}" rel="stylesheet">
-    <script type="importmap">
-      {
-        "imports": {
-          "downflow": "/downflow/exports/application.js",
-          "downflow/": "/downflow/",
-          "@vue/reactivity": "/vue/reactivity/dist/reactivity.esm-browser.js",
-          "@vue/reactivity/": "/vue/reactivity/"
-        }
-      }
-    </script>
-
-    <style>
-      .cloak { display: none; }
-      .content { max-width: 1000px; margin: 0 auto; }
-    </style>
-
-    <script type="module">
-      await Promise.allSettled([...document.querySelectorAll("[did-ssr], :not(:defined)")].map(async (el) => {
-        await customElements.whenDefined(el.localName)
-        await el.updateComplete
-      }))
-
-      document.documentElement.classList.remove("cloak")
-    </script>
-
-    <script type="module" src="{{ "/webawesome/dist-cdn/webawesome.ssr-loader.js" | url }}"></script>
-
-    {% block head %}{% endblock %}
+    {% block head %}
+      {% include "head.njk" %}
+    {% endblock %}
   </head>
   <body>
     <wa-page>
+      {% block navigation %}
+        <aside slot="navigation">
+          {%- for category in collections.docsByCategory -%}
+            {%- if category.slug == category %}
+              <ul>
+                {% for doc in category.pages %}
+                  <li>
+                    <a href="{{ doc.url }}">{{ doc.data.title }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {%- endif -%}
+          {%- endfor -%}
+        </aside>
+      {% endblock %}
       <main class="content">
         {{ content | safe }}
       </main>
+
+      <footer slot="main-footer">
+        <nav class="pager">
+          {% if prevDoc %}<a href="{{ prevDoc.url }}">&larr; {{ prevDoc.data.title }}</a>{% endif %}
+          {% if nextDoc %}<a href="{{ nextDoc.url }}">{{ nextDoc.data.title }} &rarr;</a>{% endif %}
+        </nav>
+      </footer>
     </wa-page>
   </body>
 </html>

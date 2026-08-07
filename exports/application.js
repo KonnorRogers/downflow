@@ -1213,7 +1213,7 @@ export class Application {
           controllerName,
         );
       } else {
-        controller = self.functions
+        controller = self.context
       }
 
       // This will need to check the keymapSchema to see if it should fire.
