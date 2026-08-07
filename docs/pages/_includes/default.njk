@@ -23,14 +23,12 @@
         </aside>
       {% endblock %}
       <main class="content">
+        {% block heading %}
+        {% endblock %}
         {{ content | safe }}
       </main>
 
       <footer slot="main-footer">
-        <nav class="pager">
-          {% if prevDoc %}<a href="{{ prevDoc.url }}">&larr; {{ prevDoc.data.title }}</a>{% endif %}
-          {% if nextDoc %}<a href="{{ nextDoc.url }}">{{ nextDoc.data.title }} &rarr;</a>{% endif %}
-        </nav>
       </footer>
     </wa-page>
   </body>

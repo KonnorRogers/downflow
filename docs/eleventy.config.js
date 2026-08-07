@@ -5,7 +5,7 @@ import * as path from "node:path"
 
 import * as url from 'url';
 import { shikiPlugin } from './plugins/shiki.js';
-import { humanize, neighborsInCategory, parseDocPath } from './pagination-helpers.js';
+import { titleize } from './helpers.js';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -59,40 +59,97 @@ export default async function (eleventyConfig) {
 
   eleventyConfig.ignores.add("**/.keep");
 
-  const docFileGlob = eleventyConfig.directories.input + "**/*[0-9]*-*.(html|md)"
-  // --- Collections -----------------------------------------------------
-  eleventyConfig.addCollection("docs", (api) =>
-    api
+  const docFileGlob = eleventyConfig.directories.input.replace(/^.\//, "") + "docs/**/*.*"
+
+  const categories = new Set()
+  const filesForCategory = new Map()
+  /** Regex to strip leading numbers */
+  const LEADING_NUMBERS_REGEX = /^\d+-/
+
+  function stripLeadingNumbers (str) {
+    return str.replace(LEADING_NUMBERS_REGEX, "")
+  }
+
+  const outputPath = eleventyConfig.directories.output
+  console.log({outputPath})
+  eleventyConfig.addCollection("docs", async (api) => {
+    const collection = api
       .getFilteredByGlob(docFileGlob)
       .filter((item) => {
-        return path.parse(item.page.filePathStem).basename !== "index"
+        const file = item.page.filePathStem
+        const parsedFile = path.parse(file)
+        const baseName = parsedFile.base
+
+        const slug = stripLeadingNumbers(baseName)
+
+        const directoryName = path.basename(path.dirname(file) )
+        const category = stripLeadingNumbers(directoryName)
+
+        const title = titleize(slug)
+
+        item.data.layout = "doc.njk"
+
+        if (!item.data.title) {
+          item.title = title
+          item.data.title = title
+          item.page.title = title
+        }
+
+        const url = item.url.split("/").map(stripLeadingNumbers).join("/")
+        const outputPath = item.outputPath.split("/").map(stripLeadingNumbers).join("/")
+
+        // item.data.title ??= title
+        if (item.data.permalink == null) {
+          item.url = url
+          item.data.url = url
+          item.page.url = url
+
+          item.outputPath = outputPath
+          item.data.outputPath = outputPath
+          item.page.outputPath = outputPath
+        }
+
+        // item.page.title ??= title
+        // item.data.title ??= title
+        // item.title ??= title
+
+        // item.fileSlug ??= slug
+        // item.data.fileSlug ??= slug
+        // item.page.fileSlug ??= slug
+
+        if (!categories.has(category)) {
+          categories.add(category)
+        }
+
+        if (!filesForCategory.has(category)) {
+          filesForCategory.set(category, [])
+        }
+
+        const files = filesForCategory.get(category)
+        const notIndexPage = path.parse(item.page.filePathStem).base !== "index"
+
+        if (notIndexPage) {
+          files.push(item)
+        }
+
+        return notIndexPage
       })
       .sort((a, b) => a.page.filePathStem.localeCompare(b.page.filePathStem, "en"))
-  );
 
-  // --- Per-page computed data  ----------------
-  eleventyConfig.addGlobalData("eleventyComputed", {
-    // category: (data) => data.page.filePathStem,
-    // categoryTitle: (data) => {
-    //   const m = parseDocPath(data.page.filePathStem);
-    //   return m ? humanize(m.categorySlug) : null;
-    // },
-    // order: (data) => parseDocPath(data.page.filePathStem)?.fileOrder ?? null,
-    // prevDoc: (data) => neighborsInCategory(data).prev,
-    // nextDoc: (data) => neighborsInCategory(data).next,
 
-    // // OPTIONAL: strip number prefixes from URLs. Remove to keep the numbers.
-    // permalink: (data) => {
-    //   if (data.permalink) return data.permalink;
-    //   const m = parseDocPath(data.page.filePathStem);
-    //   if (!m) return undefined;
-    //   return m.isIndex ? `/${m.categorySlug}/` : `/${m.categorySlug}/${m.fileSlug}/`;
-    // },
-    // layout: (data) => {
-    //   if (data.layout) return data.layout;
-    //   const m = parseDocPath(data.page.filePathStem);
-    //   return m && !m.isIndex ? "layouts/doc.njk" : undefined;
-    // },
+
+    // categories.forEach((category) => {
+    //   eleventyConfig.addCollection(category, () => {
+    //     const files = filesForCategory.get(category) || []
+    //     return files
+    //   })
+    // })
+
+    setTimeout(() => {
+      // console.log(collection[0])
+    })
+
+    return collection
   });
 }
 
