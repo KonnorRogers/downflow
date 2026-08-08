@@ -5,6 +5,7 @@ import * as path from "node:path"
 
 import * as url from 'url';
 import { shikiPlugin } from './plugins/shiki.js';
+import { pagefindPlugin } from './plugins/pagefind.js';
 import { titleize } from './helpers.js';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
@@ -17,6 +18,7 @@ const webawesomeComponents = fs.readdirSync(webawesomeComponentsDir).map(compone
 });
 
 const vueReactivityDir = path.join(root, 'node_modules/@vue/reactivity');
+const pagefindUiDir = path.join(root, 'node_modules/@pagefind/component-ui');
 // const vueReactivityFiles = fs.readdirSync(vueReactivityDir, {recursive: true})
 
 const flowStateDirectories = [
@@ -55,12 +57,16 @@ function processItem (item) {
 
   const title = titleize(slug)
 
-  item.data.layout ??= "doc.njk"
+  item.data.layout = "doc.njk"
 
   const url = item.url.split("/").map(stripLeadingNumbers).join("/")
   const outputPath = item.outputPath.split("/").map(stripLeadingNumbers).join("/")
 
-  item.data.title ??= title
+  if (item.data.title == null) {
+    // item.title = title
+    item.data.title = title
+    // item.page.title = title
+  }
 
   if (item.data.permalink == null) {
     item.url = url
@@ -83,15 +89,19 @@ export default async function (eleventyConfig) {
     componentModules: webawesomeComponents,
   });
 
+  const assetsDir = path.join(__dirname, "assets")
+
   eleventyConfig.addPassthroughCopy({
+    [assetsDir]: "assets",
     [webawesomeDir]: 'assets/vendor/webawesome',
-    [vueReactivityDir]: 'assets/vendor/vue/reactivity'
+    [vueReactivityDir]: 'assets/vendor/vue/reactivity',
+    [pagefindUiDir]: 'assets/vendor/pagefind/ui'
   });
 
   flowStateDirectories.forEach((dir) => {
     const resolvedDir = path.join(root, dir)
     eleventyConfig.addPassthroughCopy({
-      [resolvedDir]: path.join('downflow', dir),
+      [resolvedDir]: path.join('assets/vendor/downflow', dir),
     })
 
     eleventyConfig.addWatchTarget(resolvedDir)
@@ -134,5 +144,10 @@ export default async function (eleventyConfig) {
   eleventyConfig.addGlobalData("layout", "default.njk");
   eleventyConfig.addFilter("titleize", titleize)
   eleventyConfig.addPlugin(shikiPlugin({ theme: "nord" }));
+  eleventyConfig.addPlugin(pagefindPlugin({
+    pageFindOptions: {
+      rootSelector: "main",
+    }
+  }))
 }
 

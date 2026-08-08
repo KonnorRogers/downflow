@@ -1,0 +1,49 @@
+:root {
+  --wa-font-family-body: 'Iosevka Web', sans-serif;
+  --wa-font-family-longform: var(--wa-font-family-body);
+  --wa-font-family-code: var(--wa-font-family-body);
+  --wa-font-family-heading: 'Pathway Gothic One', sans-serif;
+  --wa-border-radius-scale: 0;
+  --wa-color-brand: #5e81ac;
+  --wa-color-neutral: #81a1c1;
+}
+
+pre {
+  font-size: 110%;
+}
+
+.pagefind-result {
+  position: relative;
+  margin: 0;
+  padding: 1rem;
+  border: 2px solid transparent;
+
+  &:hover {
+    background: var(--wa-color-neutral-fill-quiet);
+  }
+
+  &:focus-within {
+    border: 2px solid black;
+  }
+
+  & > * {
+    margin: 0;
+  }
+
+  & .pagefind-result-heading {
+    color: var(--wa-color-neutral-on-normal);
+  }
+
+  & .pagefind-result-excerpt {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--wa-color-neutral-on-quiet);
+  }
+
+  & a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+}

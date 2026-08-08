@@ -9,7 +9,8 @@
       "downflow": "/assets/vendor/downflow/exports/application.js",
       "downflow/": "/assets/vendor/downflow/",
       "@vue/reactivity": "/assets/vendor/vue/reactivity/dist/reactivity.esm-browser.js",
-      "@vue/reactivity/": "/assets/vendor/vue/reactivity/"
+      "@vue/reactivity/": "/assets/vendor/vue/reactivity/",
+      "pagefind/": "/assets/vendor/pagefind/"
     }
   }
 </script>
@@ -22,16 +23,10 @@
   }
 </style>
 
-<link rel="stylesheet" href="/assets/css/fonts.css">
-<link rel="stylesheet" href="/assets/css/index.css">
-
-<script type="module">
-  await Promise.allSettled([...document.querySelectorAll("[did-ssr], :not(:defined)")].map(async (el) => {
-    await customElements.whenDefined(el.localName)
-    await el.updateComplete
-  }))
-
-  document.documentElement.classList.remove("cloak")
-</script>
+<link rel="stylesheet" href="{{ "/assets/fonts/iosevka/iosevka.css" | url }}">
+<link rel="stylesheet" href="{{ "/assets/fonts/pathway-gothic-one/pathway-gothic-one.css" | url }}">
+<link rel="stylesheet" href="{{ "/assets/css/theme.css" | url }}">
+<link href="{{ "/assets/vendor/pagefind/ui/css/pagefind-component-ui.css" | url }}" rel="stylesheet">
+<script src="{{ "/assets/vendor/pagefind/ui/npm_dist/mjs/component-ui.mjs" | url }}" type="module"></script>
 
 <script type="module" src="{{ "/assets/vendor/webawesome/dist-cdn/webawesome.ssr-loader.js" | url }}"></script>

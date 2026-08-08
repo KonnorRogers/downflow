@@ -1,0 +1,29 @@
+<pagefind-config
+  base-url="{{ "/" | url }}"
+  bundle-path="{{ "/assets/search/pagefind/" | url }}"
+></pagefind-config>
+
+<pagefind-modal-trigger placeholder="Search docs..."></pagefind-modal-trigger>
+
+<pagefind-modal>
+  <pagefind-modal-header>
+    <pagefind-input></pagefind-input>
+  </pagefind-modal-header>
+  <pagefind-modal-body>
+    <pagefind-summary></pagefind-summary>
+    <pagefind-results>
+      <script type="text/pagefind-template">
+        {% raw %}
+          <li class="pagefind-result">
+            <h3 class="pagefind-result-heading">{{ meta.title }}</h3>
+            <p class="pagefind-result-excerpt">{{+ excerpt +}}</p>
+            <a href="{{ url | safeUrl }}">{{ url }}</a>
+          </li>
+        {% endraw %}
+      </script>
+    </pagefind-results>
+  </pagefind-modal-body>
+  <pagefind-modal-footer>
+    <pagefind-keyboard-hints></pagefind-keyboard-hints>
+  </pagefind-modal-footer>
+</pagefind-modal>

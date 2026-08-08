@@ -7,6 +7,9 @@
   </head>
   <body>
     <wa-page>
+      {% block header %}
+        {% include "header.njk" %}
+      {% endblock %}
       {% block navigation %}
         {% include "sidebar.njk" %}
       {% endblock %}
