@@ -8,19 +8,7 @@
   <body>
     <wa-page>
       {% block navigation %}
-        <aside slot="navigation">
-          {%- for category in collections.docsByCategory -%}
-            {%- if category.slug == category %}
-              <ul>
-                {% for doc in category.pages %}
-                  <li>
-                    <a href="{{ doc.url }}">{{ doc.data.title }}</a>
-                  </li>
-                {% endfor %}
-              </ul>
-            {%- endif -%}
-          {%- endfor -%}
-        </aside>
+        {% include "sidebar.njk" %}
       {% endblock %}
       <main class="content">
         {% block heading %}

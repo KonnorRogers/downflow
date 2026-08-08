@@ -1,0 +1,14 @@
+<h2 slot="navigation-header" style="margin: 0;">Downflow</h2>
+<aside slot="navigation">
+  {%- for category in docCategories -%}
+    <wa-divider></wa-divider>
+
+    <wa-details open summary="{{ category | titleize }}">
+      <ol style="list-style: none;">
+        {%- for doc in collections[category] -%}
+          <li><a href="{{ doc.url }}">{{ doc.data.title }}</a></li>
+        {%- endfor -%}
+      </ol>
+    </wa-details>
+  {%- endfor -%}
+</aside>
