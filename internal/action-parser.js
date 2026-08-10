@@ -215,6 +215,11 @@ export class ActionParser {
       scanner.pop(2);
     }
 
+    // in case someone does something liek `click->#foo`, we accept there's no controller name.
+    if (scanner.currentCharacter === "#") {
+      return null
+    }
+
     while (!scanner.done) {
       if (scanner.peek() === "#") {
         controllerName += scanner.pop();

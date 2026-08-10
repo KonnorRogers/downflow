@@ -2,12 +2,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Downflow</title>
 
-<link href="{{ "/assets/vendor/webawesome/dist-cdn/styles/webawesome.css" | url }}" rel="stylesheet">
 <script type="importmap">
   {
     "imports": {
       "downflow": "/assets/vendor/downflow/exports/application.js",
       "downflow/": "/assets/vendor/downflow/",
+      "driveshaft": "/assets/vendor/driveshaft/exports/driveshaft.js",
       "@vue/reactivity": "/assets/vendor/vue/reactivity/dist/reactivity.esm-browser.js",
       "@vue/reactivity/": "/assets/vendor/vue/reactivity/",
       "pagefind/": "/assets/vendor/pagefind/"
@@ -23,10 +23,209 @@
   }
 </style>
 
+{# Fonts #}
 <link rel="stylesheet" href="{{ "/assets/fonts/iosevka/iosevka.css" | url }}">
 <link rel="stylesheet" href="{{ "/assets/fonts/pathway-gothic-one/pathway-gothic-one.css" | url }}">
+
+{# Layers #}
+<link href="{{ "/assets/vendor/webawesome/dist-cdn/styles/layers.css" | url }}" rel="stylesheet">
+{# Add our own layers. #}
+<link rel="stylesheet" href="{{ "/assets/css/layers.css" | url }}">
+
+{# Utility classes #}
+<link href="{{ "/assets/vendor/webawesome/dist-cdn/styles/utilities.css" | url }}" rel="stylesheet">
+{# Style native elements #}
+<link href="{{ "/assets/vendor/webawesome/dist-cdn/styles/native.css" | url }}" rel="stylesheet">
+
+{# Themes #}
+<link href="{{ "/assets/vendor/webawesome/dist-cdn/styles/themes/default.css" | url }}" rel="stylesheet">
 <link rel="stylesheet" href="{{ "/assets/css/theme.css" | url }}">
-<link href="{{ "/assets/vendor/pagefind/ui/css/pagefind-component-ui.css" | url }}" rel="stylesheet">
-<script src="{{ "/assets/vendor/pagefind/ui/npm_dist/mjs/component-ui.mjs" | url }}" type="module"></script>
+
+{# Overrides #}
+<link rel="stylesheet" href="{{ "/assets/css/overrides/pagefind.css" | url }}">
 
 <script type="module" src="{{ "/assets/vendor/webawesome/dist-cdn/webawesome.ssr-loader.js" | url }}"></script>
+
+{% include "color-switcher-js.njk" %}
+
+<style>
+@view-transition {
+  navigation: auto;
+}
+
+@keyframes move-out {
+  from {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(-60px);
+    opacity: 0;
+  }
+}
+
+@keyframes move-in {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes swap-out {
+  0% {
+    opacity: 1;
+  }
+
+  99% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes swap-in {
+  0% {
+    opacity: 0;
+  }
+
+  99% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+  /** Not wrapped in prefers-reduced-motion because its just to reduce scrollbar jank. */
+  ::view-transition-old(sidebar) {
+    animation: 0.1s ease-in both swap-out;
+  }
+
+  ::view-transition-new(sidebar) {
+    animation: 0.1s ease-in both swap-in;
+  }
+
+@media not (prefers-reduced-motion: reduce) {
+  main {
+    view-transition-name: main;
+  }
+
+  wa-page::part(menu) {
+    view-transition-name: sidebar;
+  }
+
+  /* Apply the custom animation to the old and new page states */
+  ::view-transition-old(main) {
+    animation: 0.2s ease-in both move-out;
+  }
+
+  ::view-transition-new(main) {
+    animation: 0.2s ease-in both move-in;
+  }
+}
+</style>
+
+
+<script type="module">
+  import { DriveShaft } from "driveshaft";
+  import { Application, Controller } from "downflow";
+  const driveShaft = new DriveShaft()
+  driveShaft.start();
+  const application = new Application()
+  application.context = window?.application?.context || {};
+  window.application = application
+  application.start()
+
+  class ColorSwitcherController extends Controller {
+    static controllerName = "color-switcher"
+
+    connectedCallback () {
+    console.log("Connect!")
+      document.addEventListener("keydown", this.handleShortcut)
+    }
+
+    disconnectedCallback () {
+      document.removeEventListener("keydown", this.handleShortcut)
+    }
+
+    handleShortcut = (event) => {
+      if (
+        event.key === '\\' &&
+        !event.composedPath().some(el => {
+          return (
+            ['input', 'textarea'].includes(el?.tagName?.toLowerCase()) ||
+            el.hasAttribute?.("contenteditable") ||
+            el.getAttribute?.("role") === "textbox"
+          )
+        })
+      ) {
+        event.preventDefault();
+        window.application.context.color.toggleMode()
+      }
+    }
+  }
+
+  application.register(ColorSwitcherController)
+
+  function getMenu(root = document) {
+    return root.querySelector("wa-page").shadowRoot.querySelector("::part(menu)")
+  }
+
+  function updateMenu(root = document) {
+    const menu = getMenu(root)
+    if (!menu) { return }
+    const scrollPosition = window.scrollPositions?.menu
+
+    if (scrollPosition) {
+      menu.scrollTop = scrollPosition.scrollTop
+      menu.scrollLeft = scrollPosition.scrollLeft
+    }
+  }
+
+  function updatePage (body) {
+    const currentPage = document.querySelector("wa-page")
+    const newPage = body.querySelector("wa-page")
+
+    if (currentPage && newPage) {
+      driveShaft.replacer.syncAttributes(currentPage, newPage)
+    }
+  }
+
+  document.addEventListener("driveshaft:before-replace", (e) => {
+    document.documentElement.classList.remove("js-loaded");
+    const newBody = e.newBody
+    window.scrollPositions ||= {}
+    const menu = getMenu()
+    if (!menu) { return }
+    window.scrollPositions.menu = {
+      scrollTop: menu.scrollTop,
+      scrollLeft: menu.scrollLeft
+    }
+    updateMenu(newBody)
+    updatePage(newBody)
+
+    const { light, dark, mode } = application.context.color
+    application.updateContext(null, newBody)
+  })
+
+  document.addEventListener("driveshaft:after-replace", (e) => {
+    updateMenu()
+    document.querySelector("wa-page").updateComplete.then(() => {
+      setTimeout(() => {
+        requestAnimationFrame(() => {
+          updateMenu()
+          document.documentElement.classList.add("js-loaded");
+        })
+      }, 50)
+    })
+  })
+
+  setTimeout(() => document.documentElement.classList.add("js-loaded"), 50);
+</script>

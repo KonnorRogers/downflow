@@ -1,9 +1,7 @@
 <script type="module">
-    import { Application, Controller } from "downflow"
-
-    const application = Application.start()
-
+    import { Controller } from "downflow"
     application.context = {
+        ...application.context,
         count: 0,
         increment () {
             this.count++
@@ -15,6 +13,10 @@
 
     class CounterController extends Controller {
         static controllerName = "counter"
+
+        initialize () {
+            console.log("initialize...")
+        }
 
         increment () {
             application.context.count++

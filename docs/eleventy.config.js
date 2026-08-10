@@ -7,6 +7,7 @@ import * as url from 'url';
 import { shikiPlugin } from './plugins/shiki.js';
 import { pagefindPlugin } from './plugins/pagefind.js';
 import { titleize } from './helpers.js';
+import { codeBlocks } from './plugins/code-blocks.js';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -19,7 +20,9 @@ const webawesomeComponents = fs.readdirSync(webawesomeComponentsDir).map(compone
 
 const vueReactivityDir = path.join(root, 'node_modules/@vue/reactivity');
 const pagefindUiDir = path.join(root, 'node_modules/@pagefind/component-ui');
-// const vueReactivityFiles = fs.readdirSync(vueReactivityDir, {recursive: true})
+// const driveshiftDir = path.join(root, 'node_modules/driveshaft')
+const driveshiftDir = path.join(path.resolve(root, '..'), 'driveshaft')
+// const vueReactivityFiles = fs.readdirSync(vueReacti, {recursive: true})
 
 const flowStateDirectories = [
   'exports',
@@ -84,18 +87,14 @@ function processItem (item) {
 }
 
 export default async function (eleventyConfig) {
-  eleventyConfig.addPlugin(litPlugin, {
-    mode: 'worker',
-    componentModules: webawesomeComponents,
-  });
-
   const assetsDir = path.join(__dirname, "assets")
 
   eleventyConfig.addPassthroughCopy({
     [assetsDir]: "assets",
     [webawesomeDir]: 'assets/vendor/webawesome',
     [vueReactivityDir]: 'assets/vendor/vue/reactivity',
-    [pagefindUiDir]: 'assets/vendor/pagefind/ui'
+    [pagefindUiDir]: 'assets/vendor/pagefind/ui',
+    [driveshiftDir]: 'assets/vendor/driveshaft'
   });
 
   flowStateDirectories.forEach((dir) => {
@@ -119,6 +118,8 @@ export default async function (eleventyConfig) {
 
     return collection
   });
+
+
   let categories = new Set()
 
   fs.globSync(docFileGlob).forEach((file) => {
@@ -138,10 +139,11 @@ export default async function (eleventyConfig) {
     })
   }
 
-
-  eleventyConfig.ignores.add("**/.keep");
   eleventyConfig.addGlobalData("docCategories", categories)
+
+
   eleventyConfig.addGlobalData("layout", "default.njk");
+  eleventyConfig.ignores.add("**/.keep");
   eleventyConfig.addFilter("titleize", titleize)
   eleventyConfig.addPlugin(shikiPlugin({ theme: "nord" }));
   eleventyConfig.addPlugin(pagefindPlugin({
@@ -149,5 +151,21 @@ export default async function (eleventyConfig) {
       rootSelector: "main",
     }
   }))
+  eleventyConfig.addPlugin(codeBlocks())
+
+
+  // Make sure lit plugin comes *after* any transform blocks. Make this last.
+  eleventyConfig.addPlugin(litPlugin, {
+    mode: 'worker',
+    componentModules: webawesomeComponents,
+  });
+
+  eleventyConfig.setServerOptions({
+    // Disable automatic browser refreshing
+    // liveReload: false,
+
+    // Optional: Also disable DOM diffing updates if necessary
+    // domDiff: false
+  });
 }
 

@@ -3,11 +3,8 @@ layout: default.njk
 ---
 
 <script type="module">
-  import { Application, Controller } from "downflow"
+  import { Controller } from "downflow"
 
-  const application = Application.start()
-
-  window.application = application
   application.register(
     class Example extends Controller {
       static controllerName = "example";

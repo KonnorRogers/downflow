@@ -2,11 +2,6 @@
 layout: default.njk
 ---
 
-SHOULD BE FOO
-  <div flow-controller="foo">
-    <span flow-context="foo" flow-text="email"></span>
-  </div>
-
 <style>
   .hello-output {
     display: block;
@@ -15,11 +10,11 @@ SHOULD BE FOO
     padding: 1.1em .25em;
     font-size: 1.25em;
     line-height: 0;
-    color: #000;
+    color: light-dark(#000, white);
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    border-bottom: .1em solid #000;
+    border-bottom: .1em solid light-dark(#000, white);
   }
 
   .side-by-side {
@@ -28,35 +23,35 @@ SHOULD BE FOO
     gap: 1rem;
     max-width: 1000px;
     margin: 0 auto;
+    & > * {
+      margin: 0;
+    }
   }
 </style>
 
 
 <script type="module">
-    import { Application, Controller } from "downflow"
+  import { Controller } from "downflow"
+  application.register(class extends Controller {
+    initialize () {
+      this.context = {email: "foo"}
+    }
+  }, "foo")
 
-    const application = Application.start()
+  class HelloController extends Controller {
+    static controllerName = "hello"
+    static targets = [ "output" ]
 
-    application.register(class extends Controller {
-      initialize () {
-        this.context = {email: "foo"}
-      }
-    }, "foo")
-
-    class HelloController extends Controller {
-      static controllerName = "hello"
-      static targets = [ "output" ]
-
-      greet () {
-        const formData = this.formData
-        if (formData) {
-          const name = formData.get("name")
-          this.outputTarget.textContent = name ? `Hello, ${name}` : ''
-        }
+    greet () {
+      const formData = this.formData
+      if (formData) {
+        const name = formData.get("name")
+        this.outputTarget.textContent = name ? `Hello, ${name}` : ''
       }
     }
+  }
 
-    application.register(HelloController)
+  application.register(HelloController)
 </script>
 
 <div class="side-by-side">

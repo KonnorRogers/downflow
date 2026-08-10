@@ -3,11 +3,10 @@ default.njk
 ---
 
 <script type="module">
-    import { Application, Controller } from "downflow/exports/application.js"
-
-    const application = Application.start()
+    import { Controller } from "downflow"
 
     application.context = {
+        ...application.context,
         count: 0
     }
 

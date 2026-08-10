@@ -13,7 +13,6 @@ export function pagefindPlugin(options) {
 	  // Can be sync or async
     eleventyConfig.addTransform("pagefind-index", async function (content) {
       // Index HTML content, giving it a specific URL
-      console.log({url: this.page.url})
       await index.addHTMLFile({
       	  url: this.page.url,
       	  content

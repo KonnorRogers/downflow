@@ -11,4 +11,16 @@
       </ol>
     </wa-details>
   {%- endfor -%}
+
+  {%- for category in docCategories -%}
+    <wa-divider></wa-divider>
+
+    <wa-details open summary="{{ category | titleize }}">
+      <ol style="list-style: none;">
+        {%- for doc in collections[category] -%}
+          <li><a href="{{ doc.url }}">{{ doc.data.title }}</a></li>
+        {%- endfor -%}
+      </ol>
+    </wa-details>
+  {%- endfor -%}
 </aside>

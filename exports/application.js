@@ -169,15 +169,6 @@ export class Application {
       [`[0-9]`]: /[0-9]/,
     };
 
-    this._watchedAttributes = [
-      this.controllerAttribute,
-      this.targetAttribute,
-      this.textAttribute,
-      this.attributeBindingAttribute,
-      this.propertyBindingAttribute,
-      this.actionAttribute,
-    ];
-
     this._contextRef = ref({})
 
     this.forms = document.forms
@@ -224,6 +215,15 @@ export class Application {
     this.formEvents.forEach((evt) => {
       this.rootElement.addEventListener(evt, this.eventUpdateContext, { signal: this.abortController?.signal })
     })
+
+    this._watchedAttributes = [
+      this.controllerAttribute,
+      this.targetAttribute,
+      this.textAttribute,
+      this.attributeBindingAttribute,
+      this.propertyBindingAttribute,
+      this.actionAttribute,
+    ];
   }
 
   get context() {
@@ -244,6 +244,9 @@ export class Application {
    * @param {Element} el
    */
   _bindText(el) {
+    if (!el.hasAttribute(this.textAttribute)) {
+      return
+    }
     const scope = effectScope();
     scope.run(() => {
       const runner = effect(() => {
@@ -260,6 +263,9 @@ export class Application {
    *
    */
   _bindAttributes (el) {
+    if (!el.hasAttribute(this.attributeBindingAttribute)) {
+      return
+    }
     const scope = effectScope();
     scope.run(() => {
       const runner = effect(() => {
@@ -288,15 +294,21 @@ export class Application {
    *
    */
   _bindProperties (el) {
+    if (!el.hasAttribute(this.propertyBindingAttribute)) {
+      return
+    }
     const scope = effectScope();
     scope.run(() => {
       const runner = effect(() => {
         let propertyText = el.getAttribute(this.propertyBindingAttribute)
         if (!propertyText) { return }
 
-        const [prop, key] = propertyText.split(":")
+
+        let [prop, key] = propertyText.split(":")
+
         let value = this.resolveValue(el, key); // reactive READ -> tracked
 
+        // console.log({prop, key, value})
         // no marshaling here folks.
         // @ts-expect-error
         el[prop] = value
@@ -304,7 +316,6 @@ export class Application {
     });
     this._bindingScopes.set(el, scope); // Map<Element, EffectScope>
   }
-
 
   /**
    * @param {Element} el
@@ -369,8 +380,9 @@ export class Application {
 
   /**
    * @param {string | null | undefined} [contextKey]
+   * @param {HTMLElement | ShadowRoot} root
    */
-  updateContext(contextKey) {
+  updateContext(contextKey, root = this.rootElement) {
     /** @type {Array<Element> | NodeListOf<Element>} */
     let els = [];
 
@@ -392,7 +404,7 @@ export class Application {
       return `[${attr}="${contextKey}"]`
     }).join(", ")
 
-    els = this.rootElement.querySelectorAll(query)
+    els = root.querySelectorAll(query)
 
     for (const el of els) {
       this._bindText(el)
@@ -409,6 +421,16 @@ export class Application {
     if (!key) {
       return null;
     }
+
+    let negativeLength = 0
+    if (key.startsWith("!")) {
+      const negatives = key.match(/^\!+/g)?.[0]
+      if (negatives) {
+        negativeLength = negatives.length
+      }
+    }
+
+    key = key.slice(negativeLength)
 
     // Search upward for closest "context"
     const contextEl = el.closest(`[${this.contextAttribute}]`)
@@ -462,6 +484,12 @@ export class Application {
       value = value.value
     }
 
+
+    // Marshal the negatives
+    for (let i = 0; i < negativeLength; i++) {
+      value = !value
+    }
+
     return value
   }
 
@@ -498,6 +526,8 @@ export class Application {
       this.controllerAttribute,
       this.targetAttribute,
       this.textAttribute,
+      this.attributeBindingAttribute,
+      this.propertyBindingAttribute,
       this.actionAttribute,
     ];
 
@@ -506,8 +536,6 @@ export class Application {
       this.started = true;
     }
     this._upgradeAllElements(this.rootElement);
-    // Need to wait for all elements to upgrade before updating context.
-    queueMicrotask(() => this.updateContext())
     return this;
   }
 
@@ -524,8 +552,9 @@ export class Application {
       }
 
       this.observer?.disconnect();
-      this._actionListenerMap.clear();
       this.abortController?.abort("application stopped")
+      this._controllerInstanceMap.clear()
+      this._actionListenerMap.clear();
     }
     return this;
   }
@@ -543,7 +572,21 @@ export class Application {
     }
 
     this._controllerConstructorMap.set(name, Constructor);
+
     this._upgradeControllers(name);
+    this._upgradeAllElements(this.rootElement)
+  }
+
+  /**
+   * Registers a new controller to listen for.
+    * @param {{controllerName: string} | string} strOrObj
+   */
+  unregister(strOrObj) {
+    if (typeof strOrObj === "object") {
+      this._controllerConstructorMap.delete(strOrObj.controllerName);
+      return
+    }
+    this._controllerConstructorMap.delete(strOrObj);
   }
 
   /**
@@ -577,12 +620,7 @@ export class Application {
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: [
-        this.controllerAttribute,
-        this.targetAttribute,
-        this.textAttribute,
-        this.actionAttribute
-      ],
+      attributeFilter: this._watchedAttributes,
       attributeOldValue: true,
     });
   }
@@ -645,13 +683,16 @@ export class Application {
 
     this._upgradeElement(element);
 
-    // const query = this._watchedAttributes.map((attr) => {
-    //   return `[${attr}]`
-    // }).join(", ")
+    const query = this._watchedAttributes.map((attr) => {
+      return `[${attr}]`
+    }).join(", ")
 
-    element.querySelectorAll("*").forEach((el) => {
+    element.querySelectorAll(query).forEach((el) => {
       this._upgradeElement(/** @type {HTMLElement} */(el));
     });
+
+    // Need to wait for all elements to upgrade before updating context.
+    queueMicrotask(() => this.updateContext())
   };
 
   /**
@@ -678,6 +719,13 @@ export class Application {
         this.addParsedActionToElement(parsedAction, element);
       });
     }
+
+
+    // queueMicrotask(() => {
+      this._bindText(element)
+      this._bindAttributes(element)
+      this._bindProperties(element)
+    // })
   }
 
   /**
@@ -716,7 +764,9 @@ export class Application {
 
     if (controllerName) {
       const inst = map.get(controllerName);
-      if (inst) instances.set(controllerName, inst);
+      if (inst) {
+        instances.set(controllerName, inst);
+      }
     } else {
       instances = map;
     }
@@ -1251,9 +1301,28 @@ export class Application {
         }
       }
 
-      if (shouldCallFunction) {
-        // @ts-expect-error
-        controller[controllerFunction].call(controller, evt);
+      if (shouldCallFunction && controllerFunction) {
+        // controller function may contain `.`, so dig for the keys.
+        if (controller) {
+          let keys = controllerFunction.split(".")
+          let context = controller
+
+          let fnString = controllerFunction
+
+          if (keys.length > 1) {
+            // @ts-expect-error
+            fnString = keys.pop()
+
+            // @ts-expect-error
+            context = dig(controller, ...keys)
+          }
+
+          // @ts-expect-error
+          if (typeof context === "object" && typeof context[fnString] === "function") {
+            // @ts-expect-error
+            context[fnString].call(controller, evt);
+          }
+        }
       }
     };
 
