@@ -20,8 +20,8 @@ const webawesomeComponents = fs.readdirSync(webawesomeComponentsDir).map(compone
 
 const vueReactivityDir = path.join(root, 'node_modules/@vue/reactivity');
 const pagefindUiDir = path.join(root, 'node_modules/@pagefind/component-ui');
-// const driveshiftDir = path.join(root, 'node_modules/driveshaft')
-const driveshiftDir = path.join(path.resolve(root, '..'), 'driveshaft')
+const driveshiftDir = path.join(root, 'node_modules/driveshaft')
+// const driveshiftDir = path.join(path.resolve(root, '..'), 'driveshaft')
 // const vueReactivityFiles = fs.readdirSync(vueReacti, {recursive: true})
 
 const flowStateDirectories = [

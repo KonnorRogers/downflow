@@ -79,7 +79,7 @@
     "@web/test-runner-commands": "^0.9.0",
     "@web/test-runner-playwright": "^0.11.0",
     "downflow": "file:.",
-    "driveshaft": "^0.0.3",
+    "driveshaft": "^0.1.0",
     "esbuild": "^0.23.0",
     "fdir": "^6.3.0",
     "gh-pages": "^6.1.1",
