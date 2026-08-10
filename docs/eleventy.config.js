@@ -20,8 +20,8 @@ const webawesomeComponents = fs.readdirSync(webawesomeComponentsDir).map(compone
 
 const vueReactivityDir = path.join(root, 'node_modules/@vue/reactivity');
 const pagefindUiDir = path.join(root, 'node_modules/@pagefind/component-ui');
-const driveshiftDir = path.join(root, 'node_modules/driveshaft')
-// const driveshiftDir = path.join(path.resolve(root, '..'), 'driveshaft')
+let driveshaftDir = path.join(root, 'node_modules/driveshaft')
+driveshaftDir = path.join(path.resolve(root, '..'), 'driveshaft')
 // const vueReactivityFiles = fs.readdirSync(vueReacti, {recursive: true})
 
 const flowStateDirectories = [
@@ -89,13 +89,16 @@ function processItem (item) {
 export default async function (eleventyConfig) {
   const assetsDir = path.join(__dirname, "assets")
 
-  eleventyConfig.addPassthroughCopy({
+
+  const passthroughCopy = {
     [assetsDir]: "assets",
     [webawesomeDir]: 'assets/vendor/webawesome',
     [vueReactivityDir]: 'assets/vendor/vue/reactivity',
     [pagefindUiDir]: 'assets/vendor/pagefind/ui',
-    [driveshiftDir]: 'assets/vendor/driveshaft'
-  });
+    [driveshaftDir]: 'assets/vendor/driveshaft'
+  }
+
+  eleventyConfig.addPassthroughCopy(passthroughCopy);
 
   flowStateDirectories.forEach((dir) => {
     const resolvedDir = path.join(root, dir)

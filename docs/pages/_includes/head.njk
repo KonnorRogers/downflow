@@ -55,23 +55,23 @@
 
 @keyframes move-out {
   from {
-    transform: translateX(0%);
     opacity: 1;
   }
 
   to {
-    transform: translateX(-60px);
     opacity: 0;
   }
 }
 
 @keyframes move-in {
   from {
-    transform: translateX(100%);
+    transform: translateY(-10px);
+    opacity: 0;
   }
 
   to {
-    transform: translateX(0%);
+    transform: translateY(0%);
+    opacity: 1;
   }
 }
 
@@ -84,7 +84,7 @@
     opacity: 1;
   }
 
-  to {
+  100% {
     opacity: 0;
   }
 }
@@ -127,7 +127,8 @@
   }
 
   ::view-transition-new(main) {
-    animation: 0.2s ease-in both move-in;
+    animation: 0.1s ease-in both move-in;
+    animation-delay: 0.2s;
   }
 }
 </style>
