@@ -29,9 +29,6 @@
     --outline-offset: 4px;
   }
 
-  wa-page {
-  }
-
   a {
     color: var(--link-color);
   }

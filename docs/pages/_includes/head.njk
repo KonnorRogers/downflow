@@ -112,7 +112,6 @@
     animation: 0.1s ease-in both swap-in;
   }
 
-@media not (prefers-reduced-motion: reduce) {
   main {
     view-transition-name: main;
   }
@@ -121,6 +120,7 @@
     view-transition-name: sidebar;
   }
 
+@media not (prefers-reduced-motion: reduce) {
   /* Apply the custom animation to the old and new page states */
   ::view-transition-old(main) {
     animation: 0.2s ease-in both move-out;
