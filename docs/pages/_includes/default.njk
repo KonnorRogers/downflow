@@ -6,7 +6,7 @@
     {% endblock %}
   </head>
   <body>
-    <wa-page style="--header-height: 99px;">
+    <wa-page>
       {% block header %}
         {% include "header.njk" %}
       {% endblock %}
@@ -23,9 +23,5 @@
       </footer>
     </wa-page>
 
-    {# Pagefind #}
-    <script>
-      import("/assets/vendor/pagefind/ui/npm_dist/mjs/component-ui.mjs");
-    </script>
   </body>
 </html>

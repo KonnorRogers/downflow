@@ -49,94 +49,15 @@
 {% include "color-switcher-js.njk" %}
 
 <style>
-@view-transition {
-  navigation: auto;
-}
-
-@keyframes move-out {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes move-in {
-  from {
-    transform: translateY(-10px);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateY(0%);
-    opacity: 1;
-  }
-}
-
-@keyframes swap-out {
-  0% {
-    opacity: 1;
-  }
-
-  99% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes swap-in {
-  0% {
-    opacity: 0;
-  }
-
-  99% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
-  /** Not wrapped in prefers-reduced-motion because its just to reduce scrollbar jank. */
-  ::view-transition-old(sidebar) {
-    animation: 0.1s ease-in both swap-out;
-  }
-
-  ::view-transition-new(sidebar) {
-    animation: 0.1s ease-in both swap-in;
-  }
-
-  main {
-    view-transition-name: main;
-  }
-
-  wa-page::part(menu) {
-    view-transition-name: sidebar;
-  }
-
-@media not (prefers-reduced-motion: reduce) {
-  /* Apply the custom animation to the old and new page states */
-  ::view-transition-old(main) {
-    animation: 0.2s ease-in both move-out;
-  }
-
-  ::view-transition-new(main) {
-    animation: 0.1s ease-in both move-in;
-    animation-delay: 0.2s;
-  }
-}
+  {% include "styles.css" %}
 </style>
 
 
 <script type="module">
   import { DriveShaft } from "driveshaft";
   import { Application, Controller } from "downflow";
+  // pagefind
+  import "/assets/vendor/pagefind/ui/npm_dist/mjs/component-ui.mjs";
   const driveShaft = new DriveShaft()
   driveShaft.start();
   const application = new Application()
@@ -148,7 +69,6 @@
     static controllerName = "color-switcher"
 
     connectedCallback () {
-    console.log("Connect!")
       document.addEventListener("keydown", this.handleShortcut)
     }
 
@@ -176,7 +96,7 @@
   application.register(ColorSwitcherController)
 
   function getMenu(root = document) {
-    return root.querySelector("wa-page").shadowRoot.querySelector("::part(menu)")
+    return root.querySelector("wa-page").shadowRoot.querySelector("[part~='menu']")
   }
 
   function updateMenu(root = document) {
@@ -199,16 +119,34 @@
     }
   }
 
-  document.addEventListener("driveshaft:before-replace", (e) => {
-    document.documentElement.classList.remove("js-loaded");
-    const newBody = e.newBody
+  document.addEventListener("driveshaft:navigation-start", (e) => {
     window.scrollPositions ||= {}
     const menu = getMenu()
+    console.log({menu})
     if (!menu) { return }
-    window.scrollPositions.menu = {
+    const scrollPosition = {
       scrollTop: menu.scrollTop,
       scrollLeft: menu.scrollLeft
     }
+    window.scrollPositions.menu = scrollPosition
+  })
+
+  document.addEventListener("driveshaft:before-replace", (e) => {
+    const newBody = e.newBody
+
+    // close any modals
+    document.querySelectorAll("dialog.pf-modal[open]").forEach((d) => d.close());
+    const instanceManager = window.PagefindComponents?.getInstanceManager?.()
+
+    if (instanceManager) {
+      // clear all instances
+      // https://github.com/Pagefind/pagefind/issues/1273
+      // if not...it'll be unresponsive.
+      instanceManager.instances.clear();
+    }
+
+    document.documentElement.classList.remove("js-loaded");
+
     updateMenu(newBody)
     updatePage(newBody)
 
@@ -217,8 +155,10 @@
   })
 
   document.addEventListener("driveshaft:after-replace", (e) => {
+    const currentPage = document.querySelector("wa-page")
+
     updateMenu()
-    document.querySelector("wa-page").updateComplete.then(() => {
+    currentPage.updateComplete.then(() => {
       setTimeout(() => {
         requestAnimationFrame(() => {
           updateMenu()
