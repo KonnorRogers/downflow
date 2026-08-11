@@ -13,6 +13,10 @@
     --wa-color-neutral-50: var(--wa-color-accent);
     --wa-color-surface-border: light-dark(black, var(--wa-color-brand));
 
+    --wa-color-surface-border: light-dark(black, var(--wa-color-brand));
+
+
+
     --border-width: 4px;
     --border-color: var(--wa-color-surface-border);
     --border-style: solid;
@@ -28,6 +32,7 @@
     --outline: 2px dotted light-dark(black, white);
     --outline-offset: 4px;
   }
+
 
   a {
     color: var(--link-color);
