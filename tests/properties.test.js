@@ -26,7 +26,7 @@ test("Should properly re-bind properties on change", async () => {
 
   el.setAttribute("value", "baz")
   await aTimeout(0)
-  assert.equal(el.getAttribute("value", "baz"))
+  assert.equal(el.getAttribute("value"), "baz")
 
   application.context.foo = "foo"
   await aTimeout(0)
