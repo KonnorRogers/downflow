@@ -31,30 +31,8 @@ export class Controller {
         Object.defineProperties(ctor.prototype, {
           [`${targetName}Targets`]: {
             get() {
-              /**
-                * @type {HTMLElement[]}
-                */
-              const ary = [];
-              /** @type {NodeListOf<HTMLElement>} */ (
-                this.element.querySelectorAll(
-                  this.application._targetQuery(
-                    this.controllerName,
-                    targetName,
-                  ),
-                )
-              ).forEach((el) => {
-                if (
-                  el.closest(
-                    this.application._controllerQuery(this.controllerName),
-                  ) !== this.element
-                ) {
-                  return;
-                }
-
-                ary.push(el);
-              });
-
-              return ary;
+              const targets = this.application.targetsForController(this, targetName)
+              return targets
             },
           },
           [`has${capitalize(targetName)}Target`]: {

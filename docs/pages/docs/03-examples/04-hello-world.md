@@ -35,6 +35,7 @@ layout: default.njk
   application.register(class extends Controller {
     initialize () {
       this.context = {email: "foo"}
+      console.log("HELLO WORLD")
     }
   }, "foo")
 
@@ -44,6 +45,7 @@ layout: default.njk
 
     greet () {
       const formData = this.formData
+      console.log("hello")
       if (formData) {
         const name = formData.get("name")
         this.outputTarget.textContent = name ? `Hello, ${name}` : ''
@@ -106,7 +108,7 @@ class HelloController extends Controller {
     </button>
   </div>
 
-  <div class="hello-output" flow-target="hello.output" flow-context="hello" flow-text="greeting"></div>
+  <div class="hello-output" flow-target="hello.output"></div>
 </form>
 
 <br><br><br>
