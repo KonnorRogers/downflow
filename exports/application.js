@@ -188,11 +188,6 @@ export class Application {
     this.forms = document.forms
     this.stores = {};
 
-    /**
-     * @type {Record<string, (evt: Event) => unknown>}
-     */
-    this.functions = {}
-
     this.effectScheduler = new EffectScheduler()
 
     this._bindingScopes = new Map()
@@ -765,6 +760,7 @@ export class Application {
    * @param {Element | ShadowRoot} element
    */
   _upgradeAllElements = (element) => {
+    this._upgradeElement(element)
     this.walkElements(element, (node) => {
       this._upgradeElement(node)
     })
