@@ -43,6 +43,9 @@ layout: default.njk
     static controllerName = "hello"
     static targets = [ "output" ]
 
+    outputTargetConnected () {
+      console.log("output target connected")
+    }
     greet () {
       const formData = this.formData
       console.log("hello")

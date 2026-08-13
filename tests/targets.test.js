@@ -346,7 +346,6 @@ test("It should only disconnect nested targets when using multiple controllers",
   application.stop();
   await aTimeout(1000);
   el.remove();
-  application.stop()
 });
 
 test("It should not count nested targets when using multiple controllers", async () => {

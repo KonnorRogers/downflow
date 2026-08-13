@@ -83,10 +83,10 @@ export class Application {
     this._controllerInstanceMap = new Map();
 
     /**
-     * A weakmap to track if a target has connected or not for a particular controller.
-     * @type {WeakMap<HTMLElement | Element, Map<Controller, boolean>>}
+     * A Map to track if a target has connected or not for a particular controller.
+     * @type {Map<Controller, Set<Element>>}
      */
-    this._targetConnectionMap = new WeakMap();
+    this._targetConnectionMap = new Map();
 
     /**
      * String keyed cached so we can cache parse results.
@@ -930,11 +930,11 @@ export class Application {
    * @param {Controller} controller
    */
   _downgradeTargetForAttribute(target, targetName, controller) {
-    const targetMap = this._targetConnectionMap.get(target);
+    // const targetMap = this._targetConnectionMap.get(target);
 
-    if (!targetMap) return;
+    // if (!targetMap) return;
 
-    if (!targetMap.get(controller)) return;
+    // if (!targetMap.get(controller)) return;
 
     this._disconnectTarget(controller, targetName, target);
   }
@@ -1103,46 +1103,46 @@ export class Application {
    * @param {HTMLElement | Element} target
    */
   _downgradeTargets(target) {
-    let controllerMap = this._targetConnectionMap.get(target);
+    // let controllerMap = this._targetConnectionMap.get(target);
 
-    if (!controllerMap) return;
+    // if (!controllerMap) return;
 
-    const targetAttr = target.getAttribute(this.targetAttribute);
+    // const targetAttr = target.getAttribute(this.targetAttribute);
 
-    /** @type {Record<string, Array<string>>} */
-    let controllersAndTargetsObj = {};
+    // /** @type {Record<string, Array<string>>} */
+    // let controllersAndTargetsObj = {};
 
-    if (targetAttr) {
-      controllersAndTargetsObj =
-        this._parseControllersAndTargetsFromTargetAttribute(targetAttr);
-    }
+    // if (targetAttr) {
+    //   controllersAndTargetsObj =
+    //     this._parseControllersAndTargetsFromTargetAttribute(targetAttr);
+    // }
 
-    for (const [controller, connected] of controllerMap) {
-      if (!connected) continue;
-      const targetNames = controllersAndTargetsObj[controller.controllerName];
+    // for (const [controller, connected] of controllerMap) {
+    //   if (!connected) continue;
+    //   const targetNames = controllersAndTargetsObj[controller.controllerName];
 
 
-      targetNames?.forEach((targetName) => {
-        if (!target.isConnected) {
-          this._disconnectTarget(controller, targetName, target);
-          return;
-        }
+    //   targetNames?.forEach((targetName) => {
+    //     if (!target.isConnected) {
+    //       this._disconnectTarget(controller, targetName, target);
+    //       return;
+    //     }
 
-        if (!targetAttr) {
-          this._disconnectTarget(controller, targetName, target);
-          return;
-        }
+    //     if (!targetAttr) {
+    //       this._disconnectTarget(controller, targetName, target);
+    //       return;
+    //     }
 
-        // This preserves scope.
-        if (
-          target.parentElement == null ||
-          this.getClosestControllerElement(target?.parentElement, controller.controllerName) !== controller.element
-        ) {
-          this._disconnectTarget(controller, targetName, target);
-          return;
-        }
-      });
-    }
+    //     // This preserves scope.
+    //     if (
+    //       target.parentElement == null ||
+    //       this.getClosestControllerElement(target?.parentElement, controller.controllerName) !== controller.element
+    //     ) {
+    //       this._disconnectTarget(controller, targetName, target);
+    //       return;
+    //     }
+    //   });
+    // }
   }
 
   /**
@@ -1186,28 +1186,29 @@ export class Application {
   _upgradeTargets(controller) {
     /** @type {typeof Controller} */ (controller.constructor).targets.forEach(
     (targetName) => {
+
+      if (!this._targetConnectionMap.has(controller)) {
+        this._targetConnectionMap.set(controller, new Set())
+      }
+
+      const targetSet = this._targetConnectionMap.get(controller);
+
+      if (!targetSet) { return }
+
       const targets = this.targetsForController(controller, targetName)
 
       targets.forEach((target) => {
-        let targetMap = this._targetConnectionMap.get(target);
+        const isConnected = targetSet.has(target);
+        if (isConnected) { return }
 
-        if (!targetMap) {
-          targetMap = new Map();
-          this._targetConnectionMap.set(target, targetMap);
+        targetSet.add(target)
 
-          const isConnected = targetMap.get(controller);
+        /** @type {(target: Element) => void} */
+        // @ts-expect-error
+        const targetConnectedFn = controller[`${targetName}TargetConnected`];
 
-          if (isConnected) return;
-
-          targetMap.set(controller, true);
-
-          /** @type {(target: Element) => void} */
-          // @ts-expect-error
-          const targetConnectedFn = controller[`${targetName}TargetConnected`];
-
-          if (typeof targetConnectedFn === "function") {
-            targetConnectedFn(target);
-          }
+        if (typeof targetConnectedFn === "function") {
+          targetConnectedFn.call(controller, target);
         }
       });
     },
@@ -1447,10 +1448,10 @@ export class Application {
     if (!controllerMap) { return }
 
     if (typeof targetDisconnectedFn === "function") {
-      if (controllerMap.get(controller)) {
-        targetDisconnectedFn(target);
-        controllerMap.delete(controller)
-      }
+      // if (controllerMap.get(controller)) {
+      //   targetDisconnectedFn.call(controller, target);
+      //   controllerMap.delete(controller)
+      // }
     }
   }
 }
