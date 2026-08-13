@@ -1158,6 +1158,9 @@ export class Application {
     const targets = []
 
     this.walkElements(element, (node) => {
+      // skip ourselves.
+      if (element === node) { return }
+
       const parsedBindings = this.parseTargetBinding(node)
 
       if (parsedBindings.length <= 0) { return }
