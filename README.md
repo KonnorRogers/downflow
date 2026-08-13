@@ -173,10 +173,10 @@ Right now the main feature I think is missing is "component"" rendering. This is
 
 ```html
 <template flow-component="bar">
-  <div id="id">
+  <div id="$this.id">
     <!-- # automatically inherits the "scope" of whatever is passed to the component. So this would be "post.id", "post.comment", "post.url" etc. -->
-    <span flow-text="comment"></span>
-    <form flow-prop:action="url">
+    <span flow-text="$this.comment"></span>
+    <form flow-prop:action="$this.url">
       <textarea></textarea>
       <button>Leave a reply</button>
     </form>

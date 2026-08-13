@@ -432,12 +432,31 @@ export class Application {
    * @param {string} controllerName
    */
   getClosestController (root, controllerName) {
-    // Need to check root before walking upwards.
-    let controller = this.getController(root, controllerName)
-
-    if (controller) { return controller }
+    /** @type {Controller | null | undefined} */
+    let controller = null
 
     this.walkParentElements(root, (el) => {
+      controller = this.getController(el, controllerName)
+
+      // end the walk early.
+      if (controller) { return true }
+    })
+
+    return controller
+  }
+
+  /**
+   * Search upwards from current node to find closest controller for a given name. This *excludes* the root element.
+   * @param {Element} root
+   * @param {string} controllerName
+   */
+  getClosestParentController (root, controllerName) {
+    /** @type {Controller | null | undefined} */
+    let controller = null
+
+    this.walkParentElements(root, (el) => {
+      if (root === el) { return }
+
       controller = this.getController(el, controllerName)
 
       // end the walk early.
@@ -456,19 +475,22 @@ export class Application {
   getClosestControllerElement (root, controllerName) {
     // Need to check root before walking upwards.
 
-    let controller = this.getController(root, controllerName)
-
-    if (controller) { return root }
+    /** @type {Controller | undefined | null} */
+    let controller = null
 
     /**
      * @type {Element | null}
      */
     let element = null
+
     this.walkParentElements(root, (el) => {
       controller = this.getController(el, controllerName)
 
       // end the walk early.
-      if (controller) { return true }
+      if (controller) {
+        element = el
+        return true
+      }
     })
 
     return element
@@ -481,9 +503,8 @@ export class Application {
    */
   getClosestContextString (root) {
     // Need to check root before walking upwards.
-    let contextString = this.getContextBinding(root)
-
-    if (contextString) { return contextString }
+    /** @type {string | null | undefined} */
+    let contextString = null
 
     this.walkParentElements(root, (el) => {
       contextString = this.getContextBinding(el)
@@ -494,11 +515,7 @@ export class Application {
       }
     })
 
-    if (contextString) {
-      return contextString
-    }
-
-    return null
+    return contextString
   }
 
   /**
@@ -700,14 +717,7 @@ export class Application {
       if (m.type === "attributes") {
         if (m.attributeName == null) continue;
 
-        if (m.attributeName === this.controllerAttribute) {
-          this._handleControllerAttributeMutation(m);
-        } else if (m.attributeName === this.targetAttribute) {
-          this._handleTargetAttributeMutation(m);
-        } else if (m.attributeName === this.actionAttribute) {
-          this._handleActionAttributeMutation(m);
-        } else {
-        }
+        // this._upgradeElement(/** @type {Element} */(m.target));
 
         continue
       }
@@ -732,13 +742,18 @@ export class Application {
     const treeWalker = document.createTreeWalker(this.rootElement, NodeFilter.SHOW_ELEMENT)
 
     treeWalker.currentNode = rootNode
-    let node = null
-    while (node = treeWalker.parentNode()) {
+    /** @type {null | Node} */
+    let node = treeWalker.currentNode
+
+    while (node) {
       let el = /** @type {Element} */ (node)
+
       const retVal = callback(el, treeWalker)
 
       // If true, return early so we don't keep walking.
       if (retVal === true) { return }
+
+      node = treeWalker.parentNode()
     }
   }
 
@@ -749,10 +764,13 @@ export class Application {
   walkElements (rootNode, callback) {
     const treeWalker = document.createTreeWalker(rootNode, NodeFilter.SHOW_ELEMENT)
 
-    let node = null
-    while (node = treeWalker.nextNode()) {
+    /** @type {null | Node} */
+    let node = treeWalker.currentNode
+
+    while (node) {
       let el = /** @type {Element} */ (node)
       callback(el, treeWalker)
+      node = treeWalker.nextNode()
     }
   }
 
@@ -760,7 +778,6 @@ export class Application {
    * @param {Element | ShadowRoot} element
    */
   _upgradeAllElements = (element) => {
-    this._upgradeElement(element)
     this.walkElements(element, (node) => {
       this._upgradeElement(node)
     })
@@ -807,11 +824,6 @@ export class Application {
    */
   _downgradeAllElements = (element) => {
     if (element.nodeType !== 1) return;
-
-    this._removeActionsForElement(element)
-    this._downgradeTargets(element);
-    this._downgradeElement(element);
-    this._downgradeBindings(element);
 
     this.walkElements(element, (el) => {
       this._removeActionsForElement(el)
@@ -1154,7 +1166,7 @@ export class Application {
         if (binding.controllerName !== controllerName) { return }
         if (binding.target !== targetName) { return }
 
-        if (this.getClosestController(node, controllerName) !== controller) {
+        if (this.getClosestParentController(node, controllerName) !== controller) {
           return
         }
 
@@ -1309,6 +1321,7 @@ export class Application {
       if (controllerName) {
         // The controller may not always be at the element level. We need to search for its closest parent controller, we use closest on the target *IN CASE* the controller is defined on the current element.
         controller = self.getClosestController(element, controllerName)
+
       } else {
         controller = self.context
       }
