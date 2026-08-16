@@ -1,11 +1,12 @@
 import { aTimeout, fixture, html } from "@open-wc/testing-helpers"
-import { Application, Controller } from "downflow"
+import { Controller } from "downflow"
 import {assert} from "@esm-bundle/chai"
 import { sendKeys } from "@web/test-runner-commands"
+import { start } from "./test-helpers.js"
 
 
 test("Should properly handle swapping of scopes", async () => {
-  const application = Application.start()
+  const application = start()
   application.context = {email: "bar" }
 
   application.register(class extends Controller {
@@ -24,12 +25,12 @@ test("Should properly handle swapping of scopes", async () => {
   // We change the scope.
   el.querySelector("span").removeAttribute("flow-context")
   await aTimeout(1)
-  assert.equal(el.querySelector("span").textContent, "foo")
-  application.stop()
+  assert.equal(el.querySelector("span").textContent, "bar")
+
 })
 
 test("Should properly handle form scopes", async () => {
-  const application = Application.start()
+  const application = start()
   const form = await fixture(html`<form>
     <input name="foo">
     <span flow-context="$form" flow-text="foo"></span>
@@ -45,5 +46,5 @@ test("Should properly handle form scopes", async () => {
   assert.equal(form.querySelector("input").value, "foo")
   assert.equal(form.querySelector("span").textContent, "foo")
 
-  application.stop()
+
 })

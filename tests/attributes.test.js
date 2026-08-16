@@ -1,9 +1,9 @@
 import {fixture, html} from "@open-wc/testing"
 import { assert } from "@esm-bundle/chai"
-import { Application } from "downflow"
+import { start } from "./test-helpers.js"
 
 test("Should properly bind attributes", async () => {
-  const application = Application.start()
+  const application = start()
   application.context = {
     foo: "bar"
   }

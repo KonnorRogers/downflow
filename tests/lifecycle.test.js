@@ -1,15 +1,15 @@
 import { aTimeout, fixture, html } from "@open-wc/testing-helpers";
 import { assert } from "@esm-bundle/chai";
-import { Application, Controller } from "downflow";
+import { Controller } from "downflow";
 import Sinon from "sinon";
-import { clickOnElement } from "./test-helpers";
+import { clickOnElement, start } from "./test-helpers";
 
 setup(() => {
   Sinon.restore();
 });
 
 test("It should bind to document and listen for new controllers (append nested)", async () => {
-  const application = Application.start();
+  const application = start()
 
   const connectSpy = Sinon.spy();
   const disconnectSpy = Sinon.spy();
@@ -70,14 +70,13 @@ test("It should bind to document and listen for new controllers (append nested)"
   Sinon.assert.calledTwice(connectSpy);
   Sinon.assert.calledTwice(disconnectSpy);
 
-  application.stop();
 });
 
 /**
  * Test again, this time with a slightly different fixture.
  */
 test("It should bind root level and listen for new controllers (append top-level)", async () => {
-  const application = Application.start();
+  const application = start();
 
   const connectSpy = Sinon.spy();
   const disconnectSpy = Sinon.spy();
@@ -133,14 +132,13 @@ test("It should bind root level and listen for new controllers (append top-level
   Sinon.assert.calledTwice(connectSpy);
   Sinon.assert.calledTwice(disconnectSpy);
 
-  application.stop();
 });
 
 test("It should invoke the lifecycle if the controllers already exist in the DOM.", async () => {
   const el = await fixture(html`<div flow-controller="example"></div>`);
   await aTimeout(1);
 
-  const application = Application.start();
+  const application = start();
 
   const connectSpy = Sinon.spy();
   const disconnectSpy = Sinon.spy();
@@ -169,14 +167,13 @@ test("It should invoke the lifecycle if the controllers already exist in the DOM
 
   Sinon.assert.calledOnce(constructorSpy);
 
-  application.stop();
 });
 
 test("It should invoke lifecycles when attributes change", async () => {
   const el = await fixture(html`<div></div>`);
   await aTimeout(1);
 
-  const application = Application.start();
+  const application = start();
 
   const connectSpy = Sinon.spy();
   const disconnectSpy = Sinon.spy();
@@ -221,11 +218,10 @@ test("It should invoke lifecycles when attributes change", async () => {
   Sinon.assert.calledOnce(connectSpy);
   Sinon.assert.calledOnce(disconnectSpy);
 
-  application.stop();
 });
 
 test("Should remove global listeners when the element is removed", async () => {
-  const application = Application.start();
+  const application = start();
 
   const clickSpy = Sinon.spy();
 
@@ -248,5 +244,4 @@ test("Should remove global listeners when the element is removed", async () => {
   await clickOnElement(document.querySelector("div"))
   Sinon.assert.calledOnce(clickSpy);
 
-  application.stop();
 })

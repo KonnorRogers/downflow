@@ -15,6 +15,8 @@
 
     --wa-color-surface-border: light-dark(black, var(--wa-color-brand));
 
+    font-size: 110%;
+
     --border-width: 4px;
     --border-color: var(--wa-color-surface-border);
     --border-style: solid;
@@ -38,6 +40,10 @@
 
   pre {
     font-size: 110%;
+  }
+
+  wa-page {
+    --menu-width: 275px;
   }
 
   .js-loaded .color-switcher::before {
