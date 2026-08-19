@@ -36,9 +36,13 @@ So here's downflow's counter.
     count: 0,
   };
   application.functions = {
-    increment () { application.context.count++ },
-    decrement () { application.context.count-- },
-  }
+    increment() {
+      application.context.count++;
+    },
+    decrement() {
+      application.context.count--;
+    },
+  };
 </script>
 <div>
   <button flow-action="click->#decrement">-</button>
@@ -76,7 +80,8 @@ We can also disconnect the form and reference it by its id, similar to form cont
 <!-- lots of DOM stuff -->
 
 <div>
-  Your name is: <span form="my-form" flow-context="$form" flow-text="name"></span>
+  Your name is:
+  <span form="my-form" flow-context="$form" flow-text="name"></span>
 </div>
 ```
 
@@ -86,8 +91,8 @@ We can bind more than just textContent. We can bind attributes like so:
 
 ```html
 <form>
-  <input name="email">
-  <input readonly flow-context="$form" flow-attr="value:email">
+  <input name="email" />
+  <input readonly flow-context="$form" flow-attr="value:email" />
 </form>
 ```
 
@@ -97,8 +102,8 @@ Similar to attributes, we can also bind properties.
 
 ```html
 <form>
-  <input name="email">
-  <input readonly flow-context="$form" flow-prop="value:email">
+  <input name="email" />
+  <input readonly flow-context="$form" flow-prop="value:email" />
 </form>
 ```
 
@@ -148,7 +153,9 @@ application.context = {
 ```html
 <form>
   <input name="email" />
-  <span>Your email is: <output flow-context="$form" flow-text="email"></output></span>
+  <span
+    >Your email is: <output flow-context="$form" flow-text="email"></output
+  ></span>
 </form>
 <!-- Live reactivity from the host "form" -->
 
@@ -173,10 +180,10 @@ Right now the main feature I think is missing is "component"" rendering. This is
 
 ```html
 <template flow-component="bar">
-  <div id="id">
+  <div id="$this.id">
     <!-- # automatically inherits the "scope" of whatever is passed to the component. So this would be "post.id", "post.comment", "post.url" etc. -->
-    <span flow-text="comment"></span>
-    <form flow-prop:action="url">
+    <span flow-text="$this.comment"></span>
+    <form flow-prop:action="$this.url">
       <textarea></textarea>
       <button>Leave a reply</button>
     </form>

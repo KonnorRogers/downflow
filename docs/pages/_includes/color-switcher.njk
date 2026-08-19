@@ -1,0 +1,34 @@
+<div class="color-switcher" flow-controller="color-switcher">
+  <label class="light-label">
+    <wa-icon name="sun"></wa-icon>
+    <input
+      name="color-switch"
+      value="light"
+      type="radio"
+      flow-prop="checked:!!color.light"
+      flow-action="
+        click->#color.switchMode
+        change->#color.switchMode
+      "
+    >
+  </label>
+
+  <label class="dark-label">
+    <!-- 0.3em is "optical center" so it doesn't look wrong. -->
+    <wa-icon
+      name="moon"
+      style="padding-inline-start: 0.3em;"
+    >
+    </wa-icon>
+    <input
+      name="color-switch"
+      value="dark"
+      type="radio"
+      flow-prop="checked:!!color.dark"
+      flow-action="
+        click->#color.switchMode
+        change->#color.switchMode
+      "
+    >
+  </label>
+</div>

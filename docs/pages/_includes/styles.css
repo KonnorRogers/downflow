@@ -1,0 +1,84 @@
+@view-transition {
+  navigation: auto;
+}
+
+@keyframes move-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes move-in {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes swap-out {
+  0% {
+    opacity: 1;
+    z-index: 1;
+  }
+
+  99% {
+    opacity: 1;
+    z-index: 1;
+  }
+
+  100% {
+    opacity: 0;
+    z-index: -1;
+  }
+}
+
+@keyframes swap-in {
+  0% {
+    opacity: 0;
+    z-index: -1;
+  }
+
+  99% {
+    opacity: 0;
+    z-index: -1;
+  }
+
+  100% {
+    opacity: 1;
+    z-index: 0;
+  }
+}
+
+/** Not wrapped in prefers-reduced-motion because its just to reduce scrollbar jank. */
+::view-transition-old(root) {
+  mix-blend-mode: normal;
+  animation: 0.1s ease-in both swap-out;
+}
+
+/* render new immediately, fade the old out on top — no translucent dip */
+::view-transition-new(root) {
+  mix-blend-mode: normal;
+  animation: 0.1s ease-in both swap-in;
+}
+
+::view-transition-image-pair(root) { isolation: auto; }
+
+main {
+  view-transition-name: main;
+}
+
+wa-page::part(menu) {
+  view-transition-name: sidebar;
+}
+
+@media not (prefers-reduced-motion: reduce) {
+}

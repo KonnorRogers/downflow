@@ -1,45 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title></title>
-
-    <link href="{{ "/webawesome/dist-cdn/styles/webawesome.css" | url }}" rel="stylesheet">
-    <script type="importmap">
-      {
-        "imports": {
-          "downflow": "/downflow/exports/application.js",
-          "downflow/": "/downflow/",
-          "@vue/reactivity": "/vue/reactivity/dist/reactivity.esm-browser.js",
-          "@vue/reactivity/": "/vue/reactivity/"
-        }
-      }
-    </script>
-
-    <style>
-      .cloak { display: none; }
-      .content { max-width: 1000px; margin: 0 auto; }
-    </style>
-
-    <script type="module">
-      await Promise.allSettled([...document.querySelectorAll("[did-ssr], :not(:defined)")].map(async (el) => {
-        await customElements.whenDefined(el.localName)
-        await el.updateComplete
-      }))
-
-      document.documentElement.classList.remove("cloak")
-    </script>
-
-    <script type="module" src="{{ "/webawesome/dist-cdn/webawesome.ssr-loader.js" | url }}"></script>
-
-    {% block head %}{% endblock %}
+    {% block head %}
+      {% include "head.njk" %}
+    {% endblock %}
   </head>
   <body>
-    <wa-page>
-      <main class="content">
+    <!-- not sure why this needs to 30px smaller? maybe the auto injected nav button?? -->
+    <wa-page mobile-breakpoint="1170">
+      {% block header %}
+        {% include "header.njk" %}
+      {% endblock %}
+      {% block navigation %}
+        {% include "sidebar.njk" %}
+      {% endblock %}
+
+      <div slot="aside">{% block aside %}{% endblock %}</div>
+
+      <main class="content prose">
+        {% block heading %}
+        {% endblock %}
         {{ content | safe }}
       </main>
+
+      <footer slot="main-footer" style="display: block;">
+        {% block inline_footer %}
+        {% endblock %}
+      </footer>
     </wa-page>
+
   </body>
 </html>
