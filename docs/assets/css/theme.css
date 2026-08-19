@@ -19,6 +19,7 @@
 
     --border-width: 4px;
     --border-color: var(--wa-color-surface-border);
+    --border-color-muted: light-dark(var(--wa-color-neutral-90), var(--wa-color-neutral-20));
     --border-style: solid;
     --border: var(--border-width) var(--border-style) var(--border-color);
     --inverted-border-color: light-dark(white, black);
@@ -33,6 +34,9 @@
     --outline-offset: 4px;
   }
 
+  input, textarea, button {
+    border: 2px solid var(--border-color);
+  }
 
   a {
     color: var(--link-color);
@@ -43,8 +47,50 @@
   }
 
   wa-page {
-    --menu-width: 275px;
+    max-width: 1800px;
+    margin: 0 auto;
+    --menu-width: 0px;
+    --main-width: 1fr;
+    --aside-width: 0px;
+
+    &::part(header) {
+      border-block-end: 2px solid var(--border-color-muted);
+    }
+
+    &::part(body) {
+      padding-top: 0;
+    }
+
+    &::part(drawer__header) {
+      padding-block-end: var(--wa-space-m);
+      border-block-end: 2px solid var(--border-color-muted);
+    }
+
+    &::part(body) {
+      padding: 0px;
+    }
   }
+
+  @media screen and (min-width: 1200px) {
+    wa-page {
+      --menu-width: 275px;
+      --main-width: 1fr;
+      --aside-width: 275px;
+
+      &::part(body) {
+        padding: var(--spacing);
+      }
+
+      &::part(menu) {
+        border-inline-end: 2px solid var(--border-color-muted);
+      }
+
+      & > [slot~="navigation-header"] {
+        display: none;
+      }
+    }
+  }
+
 
   .js-loaded .color-switcher::before {
     transition: transform 0.25s ease;
@@ -55,7 +101,7 @@
     align-items: center;
     border: var(--border);
     position: relative;            /* anchor for the pill */
-    --size: 4rem;
+    --size: 2rem;
 
     &:focus-within {
       outline: var(--outline);
@@ -71,6 +117,10 @@
       width: var(--size);
       height: var(--size);
       z-index: 0;
+    }
+
+    & input {
+      margin: 0;
     }
 
     &:has(input:checked)::before {
@@ -95,7 +145,7 @@
       /* background removed — the pill provides it now */
     }
 
-    label:has(> input:checked) {
+    & li:has([aria-current]:not(aria-current="false")) {
       color: var(--inverted-text-color);
     }
 
@@ -122,6 +172,137 @@
     border: var(--border);
     .wa-dark & {
       border-style: dotted;
+    }
+  }
+
+  .pagination {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .pagination-link {
+    text-decoration: none;
+    border: 4px solid var(--wa-color-neutral-border-loud);
+    padding: 1rem;
+    display: block;
+    transform: translateY(0%);
+    transition: transform 0.2s ease-in-out;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+
+    &:hover {
+      border-color: var(--wa-color-brand);
+      background: color-mix(in srgb, var(--wa-color-brand) 10%);
+      transform: translateY(-5px);
+    }
+    & small {
+      color: var(--wa-color-text-quiet);
+    }
+  }
+
+  .pagination-next {
+    text-align: end;
+  }
+
+  wa-page > [slot~="navigation"] {
+    ol > li {
+      padding: var(--wa-space-2xs);
+      padding-inline-start: var(--wa-space-m);
+      margin: 0;
+      position: relative;
+    }
+
+    ol {
+      border-inline-start: 2px solid var(--border-color-muted);
+    }
+
+    ol:is([aria-current]):not([aria-current="false"]) {
+      & li:has([aria-current]:not([aria-current="false"])) {
+        background: color-mix(in srgb, var(--wa-color-brand) 5%);
+
+        &::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: -5px; /* -4px feels off center */
+          height: 100%;
+          width: 8px;
+          background: var(--wa-color-brand);
+        }
+      }
+    }
+    & wa-details {
+      &::part(content) {
+        padding-top: 0px;
+      }
+      &::part(header) {
+        font-size: 120%;
+      }
+
+      &::part(base) {
+        border-color: transparent;
+      }
+    }
+  }
+
+  #table-of-contents {
+    & ol {
+      list-style: none;
+      margin: 0;
+    }
+
+    & li > span:has(> [aria-current]:not([aria-current="false"])) {
+      background: color-mix(in srgb, var(--wa-color-brand) 5%);
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0px; /* -4px feels off center */
+        height: 100%;
+        width: 4px;
+        background: var(--wa-color-brand);
+      }
+    }
+
+    ol > li > span {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    ol > li {
+      padding: 0;
+      margin: 0;
+    }
+
+    & ol > li > span {
+      --depth: 0;
+      padding: var(--wa-space-2xs);
+      padding-inline-start: calc(var(--wa-space-m) + (var(--wa-space-xs) * var(--depth)));
+      position: relative;
+
+      &[data-level="1"] {
+        --depth: 1;
+      }
+      &[data-level="2"] {
+        --depth: 2;
+      }
+      &[data-level="3"] {
+        --depth: 3;
+      }
+      &[data-level="4"] {
+        --depth: 4;
+      }
+      &[data-level="5"] {
+        --depth: 5;
+      }
+    }
+
+    & > ol {
+      border-inline-start: 2px solid var(--border-color-muted);
     }
   }
 }

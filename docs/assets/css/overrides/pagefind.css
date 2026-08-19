@@ -45,7 +45,7 @@
     }
 
     & button {
-      border: solid var(--wa-border-width-s) color-mix(in oklab, currentColor, transparent 50%);
+      border: 2px solid var(--border-color);
       color: var(--wa-color-on-normal, var(--wa-color-neutral-on-normal));
       background-color: var(--wa-color-fill-quiet, var(--wa-color-neutral-fill-quiet));
     }
@@ -69,8 +69,9 @@
       font-family: var(--wa-font-family-code);
       font-size: var(--wa-font-size-smaller);
       font-weight: var(--wa-font-weight-code);
+      gap: 0.5em;
 
-      border: solid var(--wa-border-width-s) color-mix(in oklab, currentColor, transparent 50%);
+      border: 2px solid var(--border-color);
       border-radius: var(--wa-border-radius-s);
       box-shadow: 0 0.125em 0 0 color-mix(in oklab, currentColor, transparent 50%);
 

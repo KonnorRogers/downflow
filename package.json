@@ -78,6 +78,7 @@
     "@web/test-runner": "^0.18.2",
     "@web/test-runner-commands": "^0.9.0",
     "@web/test-runner-playwright": "^0.11.0",
+    "chalk": "^6.0.0",
     "downflow": "file:.",
     "driveshaft": "^0.1.0",
     "esbuild": "^0.23.0",

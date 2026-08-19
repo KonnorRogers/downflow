@@ -8,6 +8,7 @@ import { shikiPlugin } from './plugins/shiki.js';
 import { pagefindPlugin } from './plugins/pagefind.js';
 import { titleize } from './helpers.js';
 import { codeBlocks } from './plugins/code-blocks.js';
+import { tableOfContents } from './plugins/table-of-contents.js';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -51,6 +52,14 @@ function sortByFilePathStem (a, b) {
   return a.page.filePathStem.localeCompare(b.page.filePathStem, "en")
 }
 
+function getCategoryForFile(file) {
+  return stripLeadingNumbers(path.basename(path.dirname(file)))
+}
+
+function getSortedCategoryForFile(file) {
+  return path.basename(path.dirname(file))
+}
+
 function processItem (item) {
   const file = item.page.filePathStem
   const parsedFile = path.parse(file)
@@ -65,10 +74,14 @@ function processItem (item) {
   const url = item.url.split("/").map(stripLeadingNumbers).join("/")
   const outputPath = item.outputPath.split("/").map(stripLeadingNumbers).join("/")
 
+  if (item.data.category == null) {
+    item.data.category = getCategoryForFile(file)
+  }
+
+  const category = item.data.category
+
   if (item.data.title == null) {
-    // item.title = title
     item.data.title = title
-    // item.page.title = title
   }
 
   if (item.data.permalink == null) {
@@ -83,7 +96,7 @@ function processItem (item) {
 
   const notIndexPage = parsedFile.base !== "index"
 
-  return { notIndexPage }
+  return { notIndexPage, category }
 }
 
 export default async function (eleventyConfig) {
@@ -112,49 +125,73 @@ export default async function (eleventyConfig) {
   const docFileGlob = eleventyConfig.directories.input.replace(/^.\//, "") + "docs/**/*.*"
 
   eleventyConfig.addCollection("docs", async (api) => {
+    const categories = new Set()
+
     const collection = api
       .getFilteredByGlob(docFileGlob)
       .filter((item) => {
-        return processItem(item).notIndexPage
+        const {notIndexPage, category} = processItem(item)
+
+        if (notIndexPage && category) {
+          categories.add(category)
+        }
+
+        return notIndexPage
       })
       .sort(sortByFilePathStem)
+
+    // Add pagination data.
+    for (const category of categories) {
+      const collectionForCategory = getCollectionForCategory(category, collection)
+
+      collectionForCategory.forEach((item, i) => {
+        const paginationObject = {}
+        paginationObject.previous_page = collectionForCategory[i - 1]
+        paginationObject.next_page = collectionForCategory[i + 1]
+        item.data.konnors_pagination = paginationObject
+      })
+    }
 
     return collection
   });
 
-
-  let categories = new Set()
-
-  fs.globSync(docFileGlob).forEach((file) => {
-      categories.add(stripLeadingNumbers(path.basename(path.dirname(file))))
-  })
-
-  categories = Array.from(categories)
-  for (const category of categories) {
-    eleventyConfig.addCollection(category, (api) => {
-      return api
-        .getFilteredByGlob(docFileGlob)
-        .filter((item) => {
-          const dir = path.basename(path.dirname(item.page.filePathStem))
-          return stripLeadingNumbers(dir) === category && processItem(item).notIndexPage
-        })
-        .sort(sortByFilePathStem)
+  function getCollectionForCategory (category, collection = eleventyConfig.collections.docs) {
+    return collection.filter((item) => {
+      return item.data.category === category
     })
   }
 
-  eleventyConfig.addGlobalData("docCategories", categories)
+  function docCategories (collection) {
+    const categories = new Set()
 
+    collection.forEach((item) => {
+      const file = item.page.filePathStem
+      const category = getSortedCategoryForFile(file)
+      if (category) { categories.add(category) }
+    })
+
+    const sortedCategories = [...categories]
+      .sort((a, b) => a.localeCompare(b, "en"))
+      .map((category) => {
+        return stripLeadingNumbers(category)
+      })
+    return sortedCategories
+  }
+
+  eleventyConfig.addGlobalData("docCategories", () => docCategories)
+  eleventyConfig.addGlobalData("getCollectionForCategory", () => getCollectionForCategory);
 
   eleventyConfig.addGlobalData("layout", "default.njk");
   eleventyConfig.ignores.add("**/.keep");
   eleventyConfig.addFilter("titleize", titleize)
   eleventyConfig.addPlugin(shikiPlugin({ theme: "nord" }));
+  eleventyConfig.addPlugin(codeBlocks())
+  eleventyConfig.addPlugin(tableOfContents())
   eleventyConfig.addPlugin(pagefindPlugin({
     pageFindOptions: {
       rootSelector: "main",
     }
   }))
-  eleventyConfig.addPlugin(codeBlocks())
 
 
   // Make sure lit plugin comes *after* any transform blocks. Make this last.

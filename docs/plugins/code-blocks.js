@@ -4,7 +4,7 @@ import * as crypto from "node:crypto"
 export function codeBlocks () {
   return function (eleventyConfig) {
     // Can be sync or async
-    eleventyConfig.addTransform("transform-name", async function (content) {
+    eleventyConfig.addTransform("code-blocks", async function (content) {
       const doc = parse(content, {
         blockTextElements: {
           code: true

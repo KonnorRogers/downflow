@@ -1,24 +1,24 @@
 <h2 slot="navigation-header" style="margin: 0;"><a href="{{ "/" | url }}">Downflow</a></h2>
 <aside slot="navigation">
-  {%- for category in docCategories -%}
-    <wa-divider></wa-divider>
-
-    <wa-details open summary="{{ category | titleize }}">
-      <ol style="list-style: none;">
-        {%- for doc in collections[category] -%}
-          <li><a href="{{ doc.url }}">{{ doc.data.title }}</a></li>
-        {%- endfor -%}
-      </ol>
-    </wa-details>
-  {%- endfor -%}
-
-  {%- for category in docCategories -%}
-    <wa-divider></wa-divider>
-
-    <wa-details open summary="{{ category | titleize }}">
-      <ol style="list-style: none;">
-        {%- for doc in collections[category] -%}
-          <li><a href="{{ doc.url }}">{{ doc.data.title }}</a></li>
+  {%- for docCategory in docCategories(collections.docs) -%}
+    <wa-details open summary="{{ docCategory | titleize }}">
+      <ol
+        {% if category == docCategory %}
+          aria-current="true"
+        {% endif %}
+        style="list-style: none;"
+      >
+        {%- for doc in getCollectionForCategory(docCategory, collections.docs) -%}
+          <li>
+            <a
+              href="{{ doc.url }}"
+              {% if doc.url == page.url %}
+                aria-current="page"
+              {% endif %}
+            >
+              {{ doc.data.title }}
+            </a>
+          </li>
         {%- endfor -%}
       </ol>
     </wa-details>

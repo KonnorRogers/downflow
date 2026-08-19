@@ -3,3 +3,12 @@
 {% block heading %}
   <h1 class="page-heading">{{ title }}</h1>
 {% endblock %}
+
+{% block aside %}
+  <div flow-controller="scroll-spy" id="table-of-contents"></div>
+{% endblock %}
+
+{% block inline_footer %}
+  {% include "pagination.njk" %}
+{% endblock %}
+
