@@ -92,7 +92,7 @@
     "playwright": "^1.44.1",
     "plop": "^4.0.1",
     "prettier": "^3.3.3",
-    "rimraf": "^5.0.7",
+    "rimraf": "^5.0.10",
     "shiki": "^4.4.1",
     "sinon": "^22.0.0",
     "typedoc": "^0.26.1",
