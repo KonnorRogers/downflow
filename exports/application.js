@@ -1,7 +1,7 @@
 import { ActionParser } from "../internal/action-parser.js";
 import { Controller } from "./controller.js";
 
-import {reactive, ref, isRef, effectScope, effect} from "@vue/reactivity"
+import { reactive, ref, isRef, effectScope, effect } from "@vue/reactivity";
 import { EffectScheduler } from "./effect-scheduler.js";
 
 export { Controller };
@@ -54,7 +54,7 @@ export class Application {
      */
     this.rootElement = options.rootElement;
 
-    this.handleMutations = this.handleMutations.bind(this)
+    this.handleMutations = this.handleMutations.bind(this);
 
     /**
      * Bookkeeping of controllers to be tracked in the effect bindings.
@@ -75,12 +75,12 @@ export class Application {
     this._controllerConstructorMap = new Map();
 
     /**
-    * Action listeners attached per element, so they can be removed on downgrade.
-    * Keyed by the element the action was declared on — even when the listener
-    * target is window/document — so removal cleans those up too. Inner map is
-    * keyed by the raw action source string for cheap diffing.
-    * @type {Map<Element, Map<string, { target: EventTarget, eventName: string, fn: EventListener, options: AddEventListenerOptions }>>}
-    */
+     * Action listeners attached per element, so they can be removed on downgrade.
+     * Keyed by the element the action was declared on — even when the listener
+     * target is window/document — so removal cleans those up too. Inner map is
+     * keyed by the raw action source string for cheap diffing.
+     * @type {Map<Element, Map<string, { target: EventTarget, eventName: string, fn: EventListener, options: AddEventListenerOptions }>>}
+     */
     this._actionListenerMap = new Map();
 
     /**
@@ -96,9 +96,9 @@ export class Application {
     this._targetConnectionMap = new Map();
 
     /**
-      * last-seen text|attr|prop signature
-      * @type {Map<Element, string>}
-      */
+     * last-seen text|attr|prop signature
+     * @type {Map<Element, string>}
+     */
     this._bindingSignatures = new Map();
 
     /**
@@ -115,16 +115,16 @@ export class Application {
      * @type {(node: Element) => string | null | undefined}
      */
     this.getControllerBinding = (node) => {
-      return node.getAttribute?.("flow-controller")
-    }
+      return node.getAttribute?.("flow-controller");
+    };
 
     /**
      * The attribute to use for finding a controller. Defaults to "flow-target".
      * @type {(node: Element) => string[] | null | undefined}
      */
     this.getTargetBinding = (node) => {
-      return node.getAttribute?.(`flow-target`)?.split(/\s+/)
-    }
+      return node.getAttribute?.(`flow-target`)?.split(/\s+/);
+    };
 
     /**
      * The attribute to use for finding text updates. Defaults to "flow-text".
@@ -132,7 +132,7 @@ export class Application {
      */
     this.getTextBinding = (node) => {
       return node.getAttribute?.("flow-text");
-    }
+    };
 
     /**
      * The attribute to use for finding actions. Defaults to "flow-action".
@@ -140,7 +140,7 @@ export class Application {
      */
     this.getActionBinding = (node) => {
       return node.getAttribute?.("flow-action");
-    }
+    };
 
     /**
      * The attribute to use for finding contexts. contexts are the "data" you're trying to read. Defaults to "flow-context".
@@ -148,15 +148,14 @@ export class Application {
      */
     this.getContextBinding = (node) => {
       return node.getAttribute?.("flow-context");
-    }
+    };
 
     /**
      * @type {(node: Element) => null | undefined | string}
      */
     this.getAttributeBinding = (node) => {
       return node.getAttribute?.("flow-attr");
-    }
-
+    };
 
     /**
      * The attribute to use for binding properties. Defaults to "flow-prop".
@@ -164,7 +163,7 @@ export class Application {
      */
     this.getPropertyBinding = (node) => {
       return node.getAttribute?.("flow-prop");
-    }
+    };
 
     this.modifierSchema = /** @const */ {
       ctrl: "ctrlKey",
@@ -193,55 +192,62 @@ export class Application {
       [`[0-9]`]: /[0-9]/,
     };
 
-    this._contextRef = ref({})
+    this._contextRef = ref({});
 
-    this.forms = document.forms
+    this.forms = document.forms;
     this.stores = {};
 
-    this.effectScheduler = new EffectScheduler((fn) => this.flushChanges(fn))
+    this.effectScheduler = new EffectScheduler((fn) => this.flushChanges(fn));
 
-    this._bindingScopes = new Map()
-    this._formState = new WeakMap()
+    this._bindingScopes = new Map();
+    this._formState = new WeakMap();
 
     /**
      * These are events to listen for that affect 2 way binding.
      */
-    this.formEvents = ["change", "input"]
+    this.formEvents = ["change", "input"];
 
     /**
      * @param {Event} e
      */
     this.eventUpdateContext = (e) => {
       // this is a lie, but its just for type checking satisfaction.
-      const target = /** @type {HTMLInputElement | null} */ (e.target)
+      const target = /** @type {HTMLInputElement | null} */ (e.target);
 
-      if (!target) { return }
-      if (!target.name) { return }
+      if (!target) {
+        return;
+      }
+      if (!target.name) {
+        return;
+      }
 
-      const form = target?.form
+      const form = target?.form;
 
-      if (!form) { return }
-      this._stateForForm(target.form)[target.name] = this._readFormControl(target) // reactive WRITE
-    }
+      if (!form) {
+        return;
+      }
+      this._stateForForm(target.form)[target.name] =
+        this._readFormControl(target); // reactive WRITE
+    };
   }
 
   get context() {
-    return this._contextRef.value
+    return this._contextRef.value;
   }
 
   set context(ctx) {
     if (isRef(ctx)) {
       this._contextRef.value = ctx.value;
-      return
+      return;
     }
 
-    this._contextRef.value = ctx
+    this._contextRef.value = ctx;
   }
 
   /**
-    * Flushes changes and pauses the observer.
-    * @param {() => void} fn
-    */
+   * Flushes changes and pauses the observer.
+   * @param {() => void} fn
+   */
   flushChanges(fn) {
     if (this._pauseCount === 0) this.observer?.disconnect();
     this._pauseCount++;
@@ -250,57 +256,61 @@ export class Application {
     } finally {
       this._pauseCount--;
       if (this._pauseCount === 0 && this.started) {
-        this.observer?.takeRecords();   // drop records our own writes generated
-        this._observe();                // re-attach
+        this.observer?.takeRecords(); // drop records our own writes generated
+        this._observe(); // re-attach
       }
     }
   }
 
   /**
-    * The attribute to use for finding a controller. Defaults to "flow-target".
-    * @param {Element} node
-    * @returns {{controllerName: string, target: string}[]}
-    */
-  parseTargetBinding (node) {
-    const binding = this.getTargetBinding(node)
+   * The attribute to use for finding a controller. Defaults to "flow-target".
+   * @param {Element} node
+   * @returns {{controllerName: string, target: string}[]}
+   */
+  parseTargetBinding(node) {
+    const binding = this.getTargetBinding(node);
 
-    if (!binding) { return [] }
+    if (!binding) {
+      return [];
+    }
 
     /** @type {{controllerName: string, target: string}[]} */
-    const controllers = []
+    const controllers = [];
 
     binding.forEach((str) => {
       if (str.includes(".")) {
-        const parsedStr = str.split(".")
+        const parsedStr = str.split(".");
 
         if (parsedStr[0] && parsedStr[1]) {
           controllers.push({
             controllerName: parsedStr[0],
-            target: parsedStr[1]
-          })
+            target: parsedStr[1],
+          });
         }
       }
-    })
+    });
 
-    return controllers
+    return controllers;
   }
 
   /**
-    * @param {HTMLFormElement} form
+   * @param {HTMLFormElement} form
    */
   _stateForForm(form) {
-    let state = this._formState.get(form)
+    let state = this._formState.get(form);
     if (!state) {
-      state = reactive({})
-      this._formState.set(form, state)
+      state = reactive({});
+      this._formState.set(form, state);
       for (const _el of form.elements) {
-        const el = /** @type {Element & {name: string | null | undefined}} */(_el)
+        const el = /** @type {Element & {name: string | null | undefined}} */ (
+          _el
+        );
         if (el.name) {
-          state[el.name] = this._readFormControl(el) // seed initial values
+          state[el.name] = this._readFormControl(el); // seed initial values
         }
       }
     }
-    return state
+    return state;
   }
 
   /**
@@ -308,50 +318,59 @@ export class Application {
    */
   _readFormControl(el) {
     if (el.localName === "input") {
-      const element = /** @type {HTMLInputElement} */(el)
+      const element = /** @type {HTMLInputElement} */ (el);
       if (element.type === "checkbox") {
-        return element.checked
+        return element.checked;
       }
 
       if (element.type === "radio") {
-        const elements = element.form?.elements
+        const elements = element.form?.elements;
 
-        if (!elements) { return null }
+        if (!elements) {
+          return null;
+        }
 
-        return /** @type {HTMLInputElement} */ (Array.from(elements).find((el) => {
-          return /** @type {HTMLInputElement} */ (el).name === element.name && /** @type {HTMLInputElement} */ (el).checked === true
-        }))?.value ?? null
+        return (
+          /** @type {HTMLInputElement} */ (
+            Array.from(elements).find((el) => {
+              return (
+                /** @type {HTMLInputElement} */ (el).name === element.name &&
+                /** @type {HTMLInputElement} */ (el).checked === true
+              );
+            })
+          )?.value ?? null
+        );
       }
-
     }
     if (el.localName === "select") {
-      const element = /** @type {HTMLSelectElement} */ (el)
-      return Array.from(element.selectedOptions, o => o.value)
+      const element = /** @type {HTMLSelectElement} */ (el);
+      return Array.from(element.selectedOptions, (o) => o.value);
     }
 
     // TODO: Add a hook here for people to people to have their own reading logic from a form control.
 
-    return /** @type {HTMLInputElement} */ (el).value
+    return /** @type {HTMLInputElement} */ (el).value;
   }
-
 
   /**
    * Search upwards from current node to find closest controller for a given name.
    * @param {Element} root
    * @param {string} controllerName
    */
-  getClosestController (root, controllerName) {
+  getClosestController(root, controllerName) {
     /** @type {Controller | null | undefined} */
-    let controller = null
+    let controller = null;
 
     this.walkParentElements(root, (el) => {
-      controller = this.getController(el, controllerName)
+      controller = this.getController(el, controllerName);
 
       // end the walk early.
-      if (controller) { return true }
-    })
+      if (controller) {
+        return true;
+      }
+    });
 
-    return controller
+    return controller;
   }
 
   /**
@@ -359,20 +378,24 @@ export class Application {
    * @param {Element} root
    * @param {string} controllerName
    */
-  getClosestParentController (root, controllerName) {
+  getClosestParentController(root, controllerName) {
     /** @type {Controller | null | undefined} */
-    let controller = null
+    let controller = null;
 
     this.walkParentElements(root, (el) => {
-      if (root === el) { return }
+      if (root === el) {
+        return;
+      }
 
-      controller = this.getController(el, controllerName)
+      controller = this.getController(el, controllerName);
 
       // end the walk early.
-      if (controller) { return true }
-    })
+      if (controller) {
+        return true;
+      }
+    });
 
-    return controller
+    return controller;
   }
 
   /**
@@ -381,27 +404,27 @@ export class Application {
    * @param {string} controllerName
    * @returns {Element | null | undefined}
    */
-  getClosestControllerElement (root, controllerName) {
+  getClosestControllerElement(root, controllerName) {
     /** @type {Controller | undefined | null} */
-    let controller = null
+    let controller = null;
 
     /**
      * @type {Element | null}
      */
-    let element = null
+    let element = null;
 
     this.walkParentElements(root, (el) => {
       /** Don't skip root because the closest controller could be the current controller. */
-      controller = this.getController(el, controllerName)
+      controller = this.getController(el, controllerName);
 
       // end the walk early.
       if (controller) {
-        element = el
-        return true
+        element = el;
+        return true;
       }
-    })
+    });
 
-    return element
+    return element;
   }
 
   /**
@@ -409,91 +432,98 @@ export class Application {
    * @param {Element} root
    * @returns {string | undefined | null}
    */
-  getClosestContextString (root) {
+  getClosestContextString(root) {
     /** @type {string | null | undefined} */
-    let contextString = null
+    let contextString = null;
 
     this.walkParentElements(root, (el) => {
-      contextString = this.getContextBinding(el)
+      contextString = this.getContextBinding(el);
 
       if (contextString) {
         // end the walk early.
-        return true
+        return true;
       }
-    })
+    });
 
-    return contextString
+    return contextString;
   }
 
   /**
    * @param {Element} el
    * @param {string | null} key
    */
-  resolveValue (el, key) {
+  resolveValue(el, key) {
     if (!key) {
       return null;
     }
 
-    let negativeLength = 0
+    let negativeLength = 0;
 
     // Handle cases of things like `!context.foo`
     if (key.startsWith("!")) {
-      const negatives = key.match(/^\!+/g)?.[0]
+      const negatives = key.match(/^\!+/g)?.[0];
       if (negatives) {
-        negativeLength = negatives.length
+        negativeLength = negatives.length;
       }
     }
 
-    key = key.slice(negativeLength)
+    key = key.slice(negativeLength);
 
+    let contextStr = this.getClosestContextString(el);
 
-    let contextStr = this.getClosestContextString(el)
+    let context =
+      /** @type {Controller["context"] | Application["context"]} */ (
+        this.context
+      );
 
-    let context = /** @type {Controller["context"] | Application["context"]} */(this.context)
-
-    const keywords = ["$form", "$context"]
+    const keywords = ["$form", "$context"];
 
     if (contextStr && !keywords.includes(contextStr)) {
-      let controllerName = contextStr
+      let controllerName = contextStr;
 
-      if (!controllerName) { return null }
-
-      const controller = this.getClosestController(el, controllerName)
-
-      if (!controller) {
-        return null
+      if (!controllerName) {
+        return null;
       }
 
-      context = controller.context
+      const controller = this.getClosestController(el, controllerName);
+
+      if (!controller) {
+        return null;
+      }
+
+      context = controller.context;
     }
 
     const keys = key.split(/\./g);
 
-    let value = null
+    let value = null;
 
     if (contextStr === "$form") {
-      const formAttr = el.getAttribute("form")
-      const rootNode = /** @type {Element} */ ((el.getRootNode() || document))
-      const form = /** @type {HTMLFormElement | null} */(formAttr ? rootNode.querySelector(`form#${formAttr}`) : el.closest("form"))
+      const formAttr = el.getAttribute("form");
+      const rootNode = /** @type {Element} */ (el.getRootNode() || document);
+      const form = /** @type {HTMLFormElement | null} */ (
+        formAttr
+          ? rootNode.querySelector(`form#${formAttr}`)
+          : el.closest("form")
+      );
 
       if (form) {
-        value = this._stateForForm(form)[keys.join("")] // reactive READ -> tracked
+        value = this._stateForForm(form)[keys.join("")]; // reactive READ -> tracked
       }
     } else {
-      value = dig(context, ...keys)
+      value = dig(context, ...keys);
     }
 
     if (isRef(value)) {
-      value = value.value
+      value = value.value;
     }
-
 
     // Marshal the negatives
     for (let i = 0; i < negativeLength; i++) {
-      value = !value
+      value = !value;
     }
 
-    return value
+    return value;
   }
 
   /**
@@ -502,12 +532,15 @@ export class Application {
    */
   start(options = {}) {
     this.abortController = new AbortController();
-    this.rootElement = options.rootElement || document.documentElement || this.rootElement;
+    this.rootElement =
+      options.rootElement || document.documentElement || this.rootElement;
 
     // move the form listeners here — in the constructor abortController is undefined,
     // so they were never tied to the signal and leaked across stop/start.
     this.formEvents.forEach((evt) => {
-      this.rootElement.addEventListener(evt, this.eventUpdateContext, { signal: this.abortController?.signal });
+      this.rootElement.addEventListener(evt, this.eventUpdateContext, {
+        signal: this.abortController?.signal,
+      });
     });
 
     if (!this.started) {
@@ -529,12 +562,12 @@ export class Application {
     this.observer?.disconnect();
 
     for (const el of [...this._controllerInstanceMap.keys()]) {
-      this._destroyElement(el)
-    };
+      this._destroyElement(el);
+    }
 
     for (const el of [...this._actionListenerMap.keys()]) {
-      this._removeActionsForElement(el)
-    };
+      this._removeActionsForElement(el);
+    }
 
     for (const el of [...this._bindingScopes.keys()]) {
       this._downgradeBindings(el);
@@ -564,18 +597,18 @@ export class Application {
     this._controllerConstructorMap.set(name, Constructor);
 
     if (this.started) {
-      this.reconcile()
-    };
+      this.reconcile();
+    }
   }
 
   /**
    * Registers a new controller to listen for.
-    * @param {{controllerName: string} | string} strOrObj
+   * @param {{controllerName: string} | string} strOrObj
    */
   unregister(strOrObj) {
     if (typeof strOrObj === "object") {
       this._controllerConstructorMap.delete(strOrObj.controllerName);
-      return
+      return;
     }
     this._controllerConstructorMap.delete(strOrObj);
   }
@@ -618,7 +651,7 @@ export class Application {
   /**
    * @param {MutationRecord[]} _mutations
    */
-  handleMutations (_mutations) {
+  handleMutations(_mutations) {
     if (this._reconcileQueued) return;
     this._reconcileQueued = true;
     queueMicrotask(() => {
@@ -627,7 +660,7 @@ export class Application {
         this.reconcile();
       }
     });
-  };
+  }
 
   reconcile(root = this.rootElement) {
     const seen = new Set();
@@ -637,12 +670,12 @@ export class Application {
       this.walkElements(root, (el) => {
         seen.add(el);
         this._reconcileControllers(el); // desired flow-controller names vs connected
-        this._reconcileActions(el);     // desired action sources vs listener map
-        this._reconcileBindings(el);    // rebind only if text/attr/prop changed
+        this._reconcileActions(el); // desired action sources vs listener map
+        this._reconcileBindings(el); // rebind only if text/attr/prop changed
       });
 
       // Pass 2: sweep detached elements
-      let downgradeElements = []
+      let downgradeElements = [];
       for (const el of this._controllerInstanceMap.keys()) {
         if (!seen.has(el)) {
           downgradeElements.push(el);
@@ -650,10 +683,10 @@ export class Application {
       }
       for (const el of downgradeElements) {
         // Don't fully delete this controller so we can re-use it.
-        this._disconnectElement(el)
+        this._disconnectElement(el);
       }
 
-      let removeActions = []
+      let removeActions = [];
       for (const el of this._actionListenerMap.keys()) {
         if (!seen.has(el)) {
           removeActions.push(el);
@@ -661,13 +694,13 @@ export class Application {
       }
 
       for (const el of removeActions) {
-        this._removeActionsForElement(el)
+        this._removeActionsForElement(el);
       }
 
-      const downgradeBindings = []
+      const downgradeBindings = [];
       for (const el of this._bindingScopes.keys()) {
         if (!seen.has(el)) {
-          downgradeBindings.push(el)
+          downgradeBindings.push(el);
         }
       }
 
@@ -683,14 +716,16 @@ export class Application {
           }
         }
       }
-    })
+    });
   }
   /**
-    * @param {Element} el
-    */
+   * @param {Element} el
+   */
   _reconcileControllers(el) {
     const binding = this.getControllerBinding(el);
-    const desired = new Set(binding ? this.parseControllerNamesFromString(binding) : []);
+    const desired = new Set(
+      binding ? this.parseControllerNamesFromString(binding) : [],
+    );
 
     for (const name of desired) {
       this._createControllerInstance(name, el); // idempotent: creates + connects
@@ -698,15 +733,15 @@ export class Application {
 
     const map = this._controllerInstanceMap.get(el);
     if (!map) return;
-    const names = []
+    const names = [];
     for (const name of map.keys()) {
       if (!desired.has(name)) {
-        names.push(name)
+        names.push(name);
       }
     }
 
     for (const name of names) {
-      this._destroyElement(el, name)
+      this._destroyElement(el, name);
     }
   }
 
@@ -714,23 +749,28 @@ export class Application {
    * @param {Element | ShadowRoot} rootNode
    * @param {(node: Element, treeWalker: TreeWalker) => unknown} callback
    */
-  walkParentElements (rootNode, callback) {
+  walkParentElements(rootNode, callback) {
     // need to set to `this.rootElement`, otherwise we can never walk upwards.
-    const treeWalker = document.createTreeWalker(this.rootElement, NodeFilter.SHOW_ELEMENT)
+    const treeWalker = document.createTreeWalker(
+      this.rootElement,
+      NodeFilter.SHOW_ELEMENT,
+    );
 
-    treeWalker.currentNode = rootNode
+    treeWalker.currentNode = rootNode;
     /** @type {null | Node} */
-    let node = treeWalker.currentNode
+    let node = treeWalker.currentNode;
 
     while (node) {
-      let el = /** @type {Element} */ (node)
+      let el = /** @type {Element} */ (node);
 
-      const retVal = callback(el, treeWalker)
+      const retVal = callback(el, treeWalker);
 
       // If true, return early so we don't keep walking.
-      if (retVal === true) { return }
+      if (retVal === true) {
+        return;
+      }
 
-      node = treeWalker.parentNode()
+      node = treeWalker.parentNode();
     }
   }
 
@@ -738,29 +778,32 @@ export class Application {
    * @param {Element | ShadowRoot} rootNode
    * @param {(node: Element, treeWalker: TreeWalker) => unknown} callback
    */
-  walkElements (rootNode, callback) {
-    const treeWalker = document.createTreeWalker(rootNode, NodeFilter.SHOW_ELEMENT)
+  walkElements(rootNode, callback) {
+    const treeWalker = document.createTreeWalker(
+      rootNode,
+      NodeFilter.SHOW_ELEMENT,
+    );
 
     /** @type {null | Node} */
-    let node = treeWalker.currentNode
+    let node = treeWalker.currentNode;
 
     while (node) {
-      let el = /** @type {Element} */ (node)
-      callback(el, treeWalker)
-      node = treeWalker.nextNode()
+      let el = /** @type {Element} */ (node);
+      callback(el, treeWalker);
+      node = treeWalker.nextNode();
     }
   }
 
   /**
-  * Fires disconnect lifecycle but KEEPS the instance for potential re-append.
-  * @param {Element} element
-  * @param {string} [controllerName]
-  */
+   * Fires disconnect lifecycle but KEEPS the instance for potential re-append.
+   * @param {Element} element
+   * @param {string} [controllerName]
+   */
   _disconnectElement(element, controllerName) {
     const map = this._controllerInstanceMap.get(element);
     if (!map) return;
     const names = controllerName ? [controllerName] : [...map.keys()];
-    const ary = []
+    const ary = [];
     for (const name of names) {
       const inst = map.get(name);
       if (!inst || !inst.isConnected) continue;
@@ -768,23 +811,25 @@ export class Application {
       inst.disconnectedCallback?.();
       inst.isConnected = false;
       // NOTE: instance stays in the map; targets map entry stays too
-      ary.push({controller: inst, name })
+      ary.push({ controller: inst, name });
     }
 
-    return { map: map, disconnectedControllers: ary }
+    return { map: map, disconnectedControllers: ary };
   }
 
   /**
-  * Fully destroys the controller — attribute removed or app stopped.
-  * @param {Element} element
-  * @param {string} [controllerName]
-  */
+   * Fully destroys the controller — attribute removed or app stopped.
+   * @param {Element} element
+   * @param {string} [controllerName]
+   */
   _destroyElement(element, controllerName) {
-    const retVal = this._disconnectElement(element, controllerName)
-    if (!retVal) { return }
-    const {map, disconnectedControllers} = retVal
+    const retVal = this._disconnectElement(element, controllerName);
+    if (!retVal) {
+      return;
+    }
+    const { map, disconnectedControllers } = retVal;
 
-    for (const {controller, name} of disconnectedControllers) {
+    for (const { controller, name } of disconnectedControllers) {
       this._targetConnectionMap.delete(controller);
       map.delete(name);
     }
@@ -822,8 +867,14 @@ export class Application {
     let inst = map.get(controllerName);
     if (!inst) {
       const Constructor = this._getConstructor(controllerName);
-      if (!Constructor) { return };
-      inst = new Constructor({ element: /** @type {HTMLElement} */ (el), application: this, controllerName });
+      if (!Constructor) {
+        return;
+      }
+      inst = new Constructor({
+        element: /** @type {HTMLElement} */ (el),
+        application: this,
+        controllerName,
+      });
       inst.initialize();
       map.set(controllerName, inst);
     }
@@ -849,10 +900,14 @@ export class Application {
 
     const listeners = this._actionListenerMap.get(el);
 
-    if (!listeners) { return };
+    if (!listeners) {
+      return;
+    }
 
     for (const source of [...listeners.keys()]) {
-      if (desired.has(source)) { continue };
+      if (desired.has(source)) {
+        continue;
+      }
       const rec = listeners.get(source);
       rec?.target?.removeEventListener?.(rec.eventName, rec.fn, rec.options);
       listeners.delete(source);
@@ -876,35 +931,45 @@ export class Application {
    * @param {Controller} controller
    * @param {string} targetName
    */
-  targetsForController (controller, targetName) {
+  targetsForController(controller, targetName) {
     const { element, controllerName } = controller;
 
     /**
      * @type {Element[]}
      */
-    const targets = []
+    const targets = [];
 
     this.walkElements(element, (node) => {
       // skip ourselves.
-      if (element === node) { return }
+      if (element === node) {
+        return;
+      }
 
-      const parsedBindings = this.parseTargetBinding(node)
+      const parsedBindings = this.parseTargetBinding(node);
 
-      if (parsedBindings.length <= 0) { return }
+      if (parsedBindings.length <= 0) {
+        return;
+      }
 
       parsedBindings.forEach((binding) => {
-        if (binding.controllerName !== controllerName) { return }
-        if (binding.target !== targetName) { return }
-
-        if (this.getClosestParentController(node, controllerName) !== controller) {
-          return
+        if (binding.controllerName !== controllerName) {
+          return;
+        }
+        if (binding.target !== targetName) {
+          return;
         }
 
-        targets.push(node)
-      })
-    })
+        if (
+          this.getClosestParentController(node, controllerName) !== controller
+        ) {
+          return;
+        }
 
-    return targets
+        targets.push(node);
+      });
+    });
+
+    return targets;
   }
 
   /**
@@ -972,10 +1037,14 @@ export class Application {
       actionOptions,
     } = parsedAction;
 
-    const _controllerName = /** @type {any} */ (controllerName)
-    if (_controllerName instanceof Error) { return }
+    const _controllerName = /** @type {any} */ (controllerName);
+    if (_controllerName instanceof Error) {
+      return;
+    }
 
-    if (!eventName) { return }
+    if (!eventName) {
+      return;
+    }
 
     const keymapSchema = this.keymapSchema;
     const modifierSchema = this.modifierSchema;
@@ -990,10 +1059,9 @@ export class Application {
 
       if (controllerName) {
         // The controller may not always be at the element level. We need to search for its closest parent controller, we use closest on the target *IN CASE* the controller is defined on the current element.
-        controller = self.getClosestController(element, controllerName)
-
+        controller = self.getClosestController(element, controllerName);
       } else {
-        controller = self.context
+        controller = self.context;
       }
 
       // This will need to check the keymapSchema to see if it should fire.
@@ -1034,21 +1102,24 @@ export class Application {
       if (shouldCallFunction && controllerFunction) {
         // controller function may contain `.`, so dig for the keys.
         if (controller) {
-          let keys = controllerFunction.split(".")
-          let context = controller
+          let keys = controllerFunction.split(".");
+          let context = controller;
 
-          let fnString = controllerFunction
+          let fnString = controllerFunction;
 
           if (keys.length > 1) {
             // @ts-expect-error
-            fnString = keys.pop()
+            fnString = keys.pop();
 
             // @ts-expect-error
-            context = dig(controller, ...keys)
+            context = dig(controller, ...keys);
           }
 
           // @ts-expect-error
-          if (typeof context === "object" && typeof context[fnString] === "function") {
+          if (
+            typeof context === "object" &&
+            typeof context[fnString] === "function"
+          ) {
             // @ts-expect-error
             context[fnString].call(controller, evt);
           }
@@ -1056,7 +1127,7 @@ export class Application {
       }
     };
 
-    let target = element
+    let target = element;
     if (globalTarget) {
       // @ts-expect-error
       target = globalThis[globalTarget];
@@ -1083,7 +1154,10 @@ export class Application {
       options[option] = true;
     });
 
-    target.addEventListener(eventName, fn, { ...options, signal: this.abortController?.signal });
+    target.addEventListener(eventName, fn, {
+      ...options,
+      signal: this.abortController?.signal,
+    });
 
     let listeners = this._actionListenerMap.get(element);
     if (!listeners) {
@@ -1094,7 +1168,11 @@ export class Application {
     // Idempotent: if this exact action is somehow already bound, drop the old one.
     const existing = listeners.get(parsedAction.source);
     if (existing) {
-      existing.target.removeEventListener(existing.eventName, existing.fn, existing.options);
+      existing.target.removeEventListener(
+        existing.eventName,
+        existing.fn,
+        existing.options,
+      );
     }
 
     listeners.set(parsedAction.source, { target, eventName, fn, options });
@@ -1105,13 +1183,21 @@ export class Application {
     const Ctor = /** @type {typeof Controller} */ (controller.constructor);
 
     let byName = this._targetConnectionMap.get(controller);
-    if (!byName) { byName = new Map(); this._targetConnectionMap.set(controller, byName); }
+    if (!byName) {
+      byName = new Map();
+      this._targetConnectionMap.set(controller, byName);
+    }
 
     Ctor.targets.forEach((targetName) => {
       let connected = byName.get(targetName);
-      if (!connected) { connected = new Set(); byName.set(targetName, connected); }
+      if (!connected) {
+        connected = new Set();
+        byName.set(targetName, connected);
+      }
 
-      const desired = new Set(this.targetsForController(controller, targetName));
+      const desired = new Set(
+        this.targetsForController(controller, targetName),
+      );
 
       for (const el of desired) {
         if (connected.has(el)) continue;
@@ -1142,7 +1228,9 @@ export class Application {
    * @param {Element} target
    */
   _fireTargetDisconnected(controller, targetName, target) {
-    const fn = /** @type {any} */ (controller)[`${targetName}TargetDisconnected`];
+    const fn = /** @type {any} */ (controller)[
+      `${targetName}TargetDisconnected`
+    ];
     if (typeof fn === "function") fn.call(controller, target);
   }
 
@@ -1164,40 +1252,54 @@ export class Application {
    * @param {Element} el
    */
   _effectText(el) {
-    const runner = effect(() => {
-      const binding = this.getTextBinding(el);
-      if (!binding) { return };
-      const value = this.resolveValue(el, binding);
-      const text = value == null ? "" : String(value);
-      if (el.textContent !== text) el.textContent = text;
-    }, { scheduler: () => this.effectScheduler.schedule(runner) });
+    const runner = effect(
+      () => {
+        const binding = this.getTextBinding(el);
+        if (!binding) {
+          return;
+        }
+        const value = this.resolveValue(el, binding);
+        const text = value == null ? "" : String(value);
+        if (el.textContent !== text) el.textContent = text;
+      },
+      { scheduler: () => this.effectScheduler.schedule(runner) },
+    );
   }
 
   /**
    * @param {Element} el
    */
   _effectAttributes(el) {
-    const runner = effect(() => {
-      const attributeText = this.getAttributeBinding(el);
-      if (!attributeText) return;
-      const [attr, key] = attributeText.split(":");
-      const value = this.resolveValue(el, key);
-      if (value == null) { el.removeAttribute(attr); return; }
-      el.setAttribute(attr, value);
-    }, { scheduler: () => this.effectScheduler.schedule(runner) });
+    const runner = effect(
+      () => {
+        const attributeText = this.getAttributeBinding(el);
+        if (!attributeText) return;
+        const [attr, key] = attributeText.split(":");
+        const value = this.resolveValue(el, key);
+        if (value == null) {
+          el.removeAttribute(attr);
+          return;
+        }
+        el.setAttribute(attr, value);
+      },
+      { scheduler: () => this.effectScheduler.schedule(runner) },
+    );
   }
 
   /**
    * @param {Element} el
    */
   _effectProperties(el) {
-    const runner = effect(() => {
-      const propertyText = this.getPropertyBinding(el);
-      if (!propertyText) return;
-      const [prop, key] = propertyText.split(":");
-      // @ts-expect-error
-      el[prop] = this.resolveValue(el, key);
-    }, { scheduler: () => this.effectScheduler.schedule(runner) });
+    const runner = effect(
+      () => {
+        const propertyText = this.getPropertyBinding(el);
+        if (!propertyText) return;
+        const [prop, key] = propertyText.split(":");
+        // @ts-expect-error
+        el[prop] = this.resolveValue(el, key);
+      },
+      { scheduler: () => this.effectScheduler.schedule(runner) },
+    );
   }
 
   /** @param {Element} el */
@@ -1221,16 +1323,14 @@ export class Application {
     // keywords ($form/$context) don't resolve to a controller — id stays "".
     let controllerId = "";
     if (context && context !== "$form" && context !== "$context") {
-      const controller = this.getClosestController(el, context)
+      const controller = this.getClosestController(el, context);
       if (controller) {
         controllerId = this._idForController(controller).toString();
         if (controllerId) {
-          signature = signature + `||${controllerId}`
+          signature = signature + `||${controllerId}`;
         }
       }
     }
-
-
 
     /**
      * Copy it all into a single string for diff porpoises.
@@ -1248,7 +1348,7 @@ export class Application {
         if (attr) this._effectAttributes(el);
         if (prop) this._effectProperties(el);
       });
-    })
+    });
     this._bindingScopes.set(el, scope);
     this._bindingSignatures.set(el, signature);
   }
@@ -1275,4 +1375,3 @@ export class Application {
     return id;
   }
 }
-

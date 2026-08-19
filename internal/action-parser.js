@@ -57,7 +57,7 @@ export class ActionParser {
       controllerFunction: null,
       actionOptions: [],
       errors: [],
-      source: this.input
+      source: this.input,
     };
 
     const scanner = new StringScanner(this.input);
@@ -204,12 +204,15 @@ export class ActionParser {
   findControllerName(scanner) {
     let controllerName = "";
 
-    if (scanner.currentCharacter + scanner.peek() !== "->" && scanner.currentCharacter !== "#") {
+    if (
+      scanner.currentCharacter + scanner.peek() !== "->" &&
+      scanner.currentCharacter !== "#"
+    ) {
       return Error(`Expected "->" or "#"`);
     }
 
     if (scanner.currentCharacter === "#") {
-      return null
+      return null;
     } else {
       // Remove the "->"
       scanner.pop(2);
@@ -217,7 +220,7 @@ export class ActionParser {
 
     // in case someone does something liek `click->#foo`, we accept there's no controller name.
     if (scanner.currentCharacter === "#") {
-      return null
+      return null;
     }
 
     while (!scanner.done) {
@@ -268,7 +271,7 @@ export class ActionParser {
     let parsedStr = "";
 
     while (!scanner.done) {
-      const nextChar = scanner.peek()
+      const nextChar = scanner.peek();
       if (["@", "#"].includes(nextChar) || scanner.peek(2) === "->") {
         parsedStr += scanner.pop();
         break;
@@ -286,7 +289,7 @@ export class ActionParser {
     const additionalEventModifiers = [];
 
     // Remove the last modifier which is the original "modifier"
-    const eventModifier = modifiers.pop() || null
+    const eventModifier = modifiers.pop() || null;
 
     // Find additionalEventModifiers
     if (modifiers.length > 0) {

@@ -54,7 +54,6 @@ jobs:
         # If you're using the default github pages url, use this instead:
         run: echo "DOMAIN=${{ github.actor }}.github.io" >> $GITHUB_ENV
 
-
       # 7.0.1
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 

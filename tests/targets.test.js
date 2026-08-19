@@ -17,12 +17,11 @@ test("It should have target functions in the constructor", () => {
     }
   }
 
-  const application = start()
+  const application = start();
   new Example({
     element: document.createElement("div"),
     application,
   });
-
 });
 
 test("It should record when a target connects", async () => {
@@ -66,7 +65,6 @@ test("It should record when a target connects", async () => {
       assert.equal(target, controller.itemTargets[index]);
     },
   );
-
 });
 
 test("It should record when a target attribute changes and disconnects", async () => {
@@ -109,7 +107,6 @@ test("It should record when a target attribute changes and disconnects", async (
   assert.equal(controller.itemTargets.length, 0);
 
   assert.equal(itemTargetDisconnectedSpy.callCount, 1);
-
 });
 
 test("It should record when a target element changes its attribute and connects", async () => {
@@ -166,7 +163,6 @@ test("It should record when a target element changes its attribute and connects"
       assert.equal(target, controller.itemTargets[index]);
     },
   );
-
 });
 
 test("It should not count nested targets", async () => {
@@ -219,7 +215,6 @@ test("It should not count nested targets", async () => {
     });
 
   assert.equal(itemTargetConnectedSpy.callCount, 5);
-
 });
 
 test("Should record target disconnects when the parent disconnect", async () => {
@@ -279,7 +274,6 @@ test("Should record target disconnects when the parent disconnect", async () => 
     "itemTargetDisconnected",
     "disconnectedCallback",
   ]);
-
 });
 
 test("It should only disconnect nested targets when using multiple controllers", async () => {
@@ -344,7 +338,6 @@ test("It should only disconnect nested targets when using multiple controllers",
   assert.equal(exampleOneDisconnectedSpy.callCount, 2);
   assert.equal(exampleTwoDisconnectedSpy.callCount, 2);
 
-  ;
   await aTimeout(1000);
   el.remove();
 });
@@ -456,5 +449,4 @@ test("It should not count nested targets when using multiple controllers", async
   await aTimeout(1);
   // Should not fire any disconnects despite a controller being removed
   assert.equal(itemTargetDisconnectedSpy.callCount, 5);
-
 });

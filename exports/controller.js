@@ -1,4 +1,4 @@
-import { ref, isRef, reactive } from "@vue/reactivity"
+import { ref, isRef, reactive } from "@vue/reactivity";
 
 /**
  * The base class for creating oil controllers.
@@ -31,8 +31,11 @@ export class Controller {
         Object.defineProperties(ctor.prototype, {
           [`${targetName}Targets`]: {
             get() {
-              const targets = this.application.targetsForController(this, targetName)
-              return targets
+              const targets = this.application.targetsForController(
+                this,
+                targetName,
+              );
+              return targets;
             },
           },
           [`has${capitalize(targetName)}Target`]: {
@@ -69,45 +72,49 @@ export class Controller {
      */
     this.isConnected = false;
 
-    this._contextRef = ref({})
+    this._contextRef = ref({});
   }
 
-  get context () {
-    return this._contextRef.value
+  get context() {
+    return this._contextRef.value;
   }
 
-  set context (obj) {
+  set context(obj) {
     if (isRef(obj)) {
       this._contextRef.value = obj.value;
-      return
+      return;
     }
 
-    this._contextRef.value = obj
+    this._contextRef.value = obj;
   }
 
   /**
    * @returns {HTMLFormElement | null}
    */
-  get form () {
+  get form() {
     // @ts-expect-error this will only work when attached to an element that is a form control IE: button, input, etc.
-    let form = this.element.form
-    if (form) { return form }
-
-    const formAttr = this.element?.getAttribute?.("form")
-
-    if (formAttr) {
-      return this.element.querySelector(`#${formAttr}`)
+    let form = this.element.form;
+    if (form) {
+      return form;
     }
 
-    return this.element.closest("form") || null
+    const formAttr = this.element?.getAttribute?.("form");
+
+    if (formAttr) {
+      return this.element.querySelector(`#${formAttr}`);
+    }
+
+    return this.element.closest("form") || null;
   }
 
-  get formData () {
-    const form = this.form
+  get formData() {
+    const form = this.form;
 
-    if (!form) { return null }
+    if (!form) {
+      return null;
+    }
 
-    return new FormData(form)
+    return new FormData(form);
   }
 
   initialize() {}

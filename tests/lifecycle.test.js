@@ -9,7 +9,7 @@ setup(() => {
 });
 
 test("It should bind to document and listen for new controllers (append nested)", async () => {
-  const application = start()
+  const application = start();
 
   const connectSpy = Sinon.spy();
   const disconnectSpy = Sinon.spy();
@@ -69,7 +69,6 @@ test("It should bind to document and listen for new controllers (append nested)"
   Sinon.assert.calledOnce(constructorSpy);
   Sinon.assert.calledTwice(connectSpy);
   Sinon.assert.calledTwice(disconnectSpy);
-
 });
 
 /**
@@ -131,7 +130,6 @@ test("It should bind root level and listen for new controllers (append top-level
   Sinon.assert.calledOnce(constructorSpy);
   Sinon.assert.calledTwice(connectSpy);
   Sinon.assert.calledTwice(disconnectSpy);
-
 });
 
 test("It should invoke the lifecycle if the controllers already exist in the DOM.", async () => {
@@ -166,7 +164,6 @@ test("It should invoke the lifecycle if the controllers already exist in the DOM
   );
 
   Sinon.assert.calledOnce(constructorSpy);
-
 });
 
 test("It should invoke lifecycles when attributes change", async () => {
@@ -217,7 +214,6 @@ test("It should invoke lifecycles when attributes change", async () => {
   Sinon.assert.calledOnce(constructorSpy);
   Sinon.assert.calledOnce(connectSpy);
   Sinon.assert.calledOnce(disconnectSpy);
-
 });
 
 test("Should remove global listeners when the element is removed", async () => {
@@ -230,18 +226,17 @@ test("Should remove global listeners when the element is removed", async () => {
       static controllerName = "example";
 
       handleClick() {
-        clickSpy()
+        clickSpy();
       }
     },
   );
 
-  document.body.innerHTML = `<div flow-controller="example" flow-action="click@document->example#handleClick">Hello World.</div>`
-  await clickOnElement(document.querySelector("div"))
+  document.body.innerHTML = `<div flow-controller="example" flow-action="click@document->example#handleClick">Hello World.</div>`;
+  await clickOnElement(document.querySelector("div"));
   Sinon.assert.calledOnce(clickSpy);
 
   // Remove the data-action and we should no longer listen.
-  document.querySelector("div").setAttribute("flow-action", "")
-  await clickOnElement(document.querySelector("div"))
+  document.querySelector("div").setAttribute("flow-action", "");
+  await clickOnElement(document.querySelector("div"));
   Sinon.assert.calledOnce(clickSpy);
-
-})
+});
