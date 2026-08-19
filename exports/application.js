@@ -370,7 +370,7 @@ export class Application {
       }
     });
 
-    return controller;
+    return /** @type {Controller | null | undefined} */ (controller);
   }
 
   /**
@@ -1115,9 +1115,9 @@ export class Application {
             context = dig(controller, ...keys);
           }
 
-          // @ts-expect-error
           if (
             typeof context === "object" &&
+            // @ts-expect-error
             typeof context[fnString] === "function"
           ) {
             // @ts-expect-error
