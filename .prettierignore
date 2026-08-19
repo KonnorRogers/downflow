@@ -1,6 +1,0 @@
-scripts/
-docs/
-!docs/**/*.md
-*.hbs
-tests/fixtures/
-*.yaml
