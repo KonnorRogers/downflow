@@ -1,15 +1,19 @@
 export class EffectScheduler {
-  constructor () {
-    this.queue = new Set()
-    this.scheduled = false
-    this.boundFlush = this.flush.bind(this)
+  /**
+   * @param {(fn: () => void) => void} [runMutations]
+   */
+  constructor(runMutations) {
+    this.queue = new Set();
+    this.scheduled = false;
+    this.boundFlush = this.flush.bind(this);
+    this.runMutations = runMutations || ((callback) => callback());
   }
 
   flush() {
-    this.scheduled = false
-    const jobs = [...this.queue]
+    this.scheduled = false;
+    const jobs = [...this.queue];
     this.queue.clear();
-    jobs.forEach(j => j());
+    this.runMutations(() => jobs.forEach((j) => j()));
   }
 
   /**
@@ -23,4 +27,3 @@ export class EffectScheduler {
     }
   }
 }
-

@@ -4,3 +4,4 @@ docs/
 *.hbs
 tests/fixtures/
 *.yaml
+internal/version.js

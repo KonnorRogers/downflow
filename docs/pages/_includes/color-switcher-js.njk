@@ -1,0 +1,80 @@
+{# needs to be inline script #}
+<script>
+  ;(() => {
+    window.application ||= {}
+    window.application.context = {
+      color: {
+        mode: null,
+        light: false,
+        dark: false,
+        sessionKey: "color-mode",
+        switchMode (e) {
+          const target = e.target
+          if (!target) { return }
+
+          const context = window.application.context.color
+
+          let mode = target.value
+
+          if (e.type === "change") {
+            context.setMode(mode)
+            context.storeMode(mode)
+            return
+          }
+
+          const clickedMode = mode
+          const currentMode = context.mode
+          if (clickedMode === currentMode) {
+            mode = clickedMode === "dark" ? "light" : "dark"
+            context.setMode(mode)
+            context.storeMode(mode)
+          }
+        },
+        toggleMode () {
+          const color = window.application.context.color
+          let mode = color.mode
+          if (mode === "dark") {
+            mode = "light"
+          } else {
+            mode = "dark"
+          }
+
+          color.setMode(mode)
+          color.storeMode(mode)
+        },
+        prefersDarkMode() {
+          return window.matchMedia('(prefers-color-scheme: dark)').matches;
+        },
+        setMode (mode) {
+          document.documentElement.classList.toggle("wa-dark", mode === "dark")
+          const color = window.application.context.color
+          color.mode = mode
+          color.light = mode === "light"
+          color.dark = mode === "dark"
+        },
+        storeMode (mode) {
+           globalThis.sessionStorage.setItem(window.application.context.color.sessionKey, mode)
+        },
+        getMode (mode) {
+           return globalThis.sessionStorage.getItem(window.application.context.color.sessionKey)
+        },
+        setInitialMode () {
+          const color = window.application.context.color
+          color.light = false
+          color.dark = false
+          color.mode = null
+
+          let mode = color.getMode()
+
+          if (!mode) {
+            mode = color.prefersDarkMode() ? "dark" : "light"
+          }
+          color.setMode(mode)
+        }
+      }
+    }
+
+    window.application.context.color.setInitialMode()
+  })();
+</script>
+

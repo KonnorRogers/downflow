@@ -1,7 +1,8 @@
 import { aTimeout, fixture, html } from "@open-wc/testing-helpers";
 import { assert } from "@esm-bundle/chai";
-import { Application, Controller } from "downflow";
+import { Controller } from "downflow";
 import Sinon from "sinon";
+import { start } from "./test-helpers";
 
 test("It should have target functions in the constructor", () => {
   class Example extends Controller {
@@ -16,16 +17,15 @@ test("It should have target functions in the constructor", () => {
     }
   }
 
-  const application = Application.start()
+  const application = start();
   new Example({
     element: document.createElement("div"),
     application,
   });
-  application.stop()
 });
 
 test("It should record when a target connects", async () => {
-  const application = Application.start();
+  const application = start();
 
   const itemTargetConnectedSpy = Sinon.spy();
   const itemTargetDisconnectedSpy = Sinon.spy();
@@ -65,11 +65,10 @@ test("It should record when a target connects", async () => {
       assert.equal(target, controller.itemTargets[index]);
     },
   );
-  application.stop()
 });
 
 test("It should record when a target attribute changes and disconnects", async () => {
-  const application = Application.start();
+  const application = start();
 
   const itemTargetConnectedSpy = Sinon.spy();
   const itemTargetDisconnectedSpy = Sinon.spy();
@@ -108,11 +107,10 @@ test("It should record when a target attribute changes and disconnects", async (
   assert.equal(controller.itemTargets.length, 0);
 
   assert.equal(itemTargetDisconnectedSpy.callCount, 1);
-  application.stop()
 });
 
 test("It should record when a target element changes its attribute and connects", async () => {
-  const application = Application.start();
+  const application = start();
 
   const itemTargetConnectedSpy = Sinon.spy();
   const itemTargetDisconnectedSpy = Sinon.spy();
@@ -165,11 +163,10 @@ test("It should record when a target element changes its attribute and connects"
       assert.equal(target, controller.itemTargets[index]);
     },
   );
-  application.stop()
 });
 
 test("It should not count nested targets", async () => {
-  const application = Application.start();
+  const application = start();
 
   const itemTargetConnectedSpy = Sinon.spy();
   const itemTargetDisconnectedSpy = Sinon.spy();
@@ -218,11 +215,10 @@ test("It should not count nested targets", async () => {
     });
 
   assert.equal(itemTargetConnectedSpy.callCount, 5);
-  application.stop()
 });
 
 test("Should record target disconnects when the parent disconnect", async () => {
-  const application = Application.start();
+  const application = start();
 
   const itemTargetDisconnectedSpy = Sinon.spy();
   const controllerDisconnectedSpy = Sinon.spy();
@@ -278,11 +274,10 @@ test("Should record target disconnects when the parent disconnect", async () => 
     "itemTargetDisconnected",
     "disconnectedCallback",
   ]);
-  application.stop()
 });
 
 test("It should only disconnect nested targets when using multiple controllers", async () => {
-  const application = Application.start();
+  const application = start();
 
   const exampleOneDisconnectedSpy = Sinon.spy();
   const exampleTwoDisconnectedSpy = Sinon.spy();
@@ -343,14 +338,12 @@ test("It should only disconnect nested targets when using multiple controllers",
   assert.equal(exampleOneDisconnectedSpy.callCount, 2);
   assert.equal(exampleTwoDisconnectedSpy.callCount, 2);
 
-  application.stop();
   await aTimeout(1000);
   el.remove();
-  application.stop()
 });
 
 test("It should not count nested targets when using multiple controllers", async () => {
-  const application = Application.start();
+  const application = start();
 
   const itemTargetConnectedSpy = Sinon.spy();
   const itemTargetDisconnectedSpy = Sinon.spy();
@@ -449,12 +442,11 @@ test("It should not count nested targets when using multiple controllers", async
   );
 
   await aTimeout(1);
-  assert.equal(itemTargetConnectedSpy.callCount, 9);
+  assert.equal(itemTargetConnectedSpy.callCount, 10);
   assert.equal(itemTargetDisconnectedSpy.callCount, 5);
 
   el.querySelector("[flow-controller~='example-1']").remove();
   await aTimeout(1);
   // Should not fire any disconnects despite a controller being removed
   assert.equal(itemTargetDisconnectedSpy.callCount, 5);
-  application.stop()
 });

@@ -5,6 +5,11 @@ import * as path from "node:path"
 
 import * as url from 'url';
 import { shikiPlugin } from './plugins/shiki.js';
+import { pagefindPlugin } from './plugins/pagefind.js';
+import { titleize } from './helpers.js';
+import { codeBlocks } from './plugins/code-blocks.js';
+import { tableOfContents } from './plugins/table-of-contents.js';
+
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 const root = path.resolve(__dirname, '..')
@@ -15,38 +20,19 @@ const webawesomeComponents = fs.readdirSync(webawesomeComponentsDir).map(compone
 });
 
 const vueReactivityDir = path.join(root, 'node_modules/@vue/reactivity');
-// const vueReactivityFiles = fs.readdirSync(vueReactivityDir, {recursive: true})
+const pagefindUiDir = path.join(root, 'node_modules/@pagefind/component-ui');
+let driveshaftDir = path.join(root, 'node_modules/driveshaft')
+driveshaftDir = path.join(path.resolve(root, '..'), 'driveshaft')
+// const vueReactivityFiles = fs.readdirSync(vueReacti, {recursive: true})
 
 const flowStateDirectories = [
   'exports',
   'internal'
 ]
 
-export default async function (eleventyConfig) {
-  eleventyConfig.addPlugin(litPlugin, {
-    mode: 'worker',
-    componentModules: webawesomeComponents,
-  });
-  eleventyConfig.addPassthroughCopy({
-    [webawesomeDir]: 'webawesome',
-    [vueReactivityDir]: 'vue/reactivity'
-  });
-
-  flowStateDirectories.forEach((dir) => {
-    const resolvedDir = path.join(root, dir)
-    eleventyConfig.addPassthroughCopy({
-      [resolvedDir]: path.join('downflow', dir),
-    })
-
-    eleventyConfig.addWatchTarget(resolvedDir)
-  })
-
-  eleventyConfig.addPlugin(shikiPlugin({ theme: "nord" }));
-
-}
-
 export const config = {
   markdownTemplateEngine: 'njk',
+  htmlTemplateEngine: 'njk',
   dir: {
     input: 'docs/pages',
     includes: '_includes',
@@ -54,3 +40,172 @@ export const config = {
   },
   templateFormats: ['njk', 'md', 'html'],
 };
+
+/** Regex to strip leading numbers */
+const LEADING_NUMBERS_REGEX = /^\d+-/
+
+function stripLeadingNumbers (str) {
+  return str.replace(LEADING_NUMBERS_REGEX, "")
+}
+
+function sortByFilePathStem (a, b) {
+  return a.page.filePathStem.localeCompare(b.page.filePathStem, "en")
+}
+
+function getCategoryForFile(file) {
+  return stripLeadingNumbers(path.basename(path.dirname(file)))
+}
+
+function getSortedCategoryForFile(file) {
+  return path.basename(path.dirname(file))
+}
+
+function processItem (item) {
+  const file = item.page.filePathStem
+  const parsedFile = path.parse(file)
+  const baseName = parsedFile.base
+
+  const slug = stripLeadingNumbers(baseName)
+
+  const title = titleize(slug)
+
+  item.data.layout = "doc.njk"
+
+  const url = item.url.split("/").map(stripLeadingNumbers).join("/")
+  const outputPath = item.outputPath.split("/").map(stripLeadingNumbers).join("/")
+
+  if (item.data.category == null) {
+    item.data.category = getCategoryForFile(file)
+  }
+
+  const category = item.data.category
+
+  if (item.data.title == null) {
+    item.data.title = title
+  }
+
+  if (item.data.permalink == null) {
+    item.url = url
+    item.data.url = url
+    item.page.url = url
+
+    item.outputPath = outputPath
+    item.data.outputPath = outputPath
+    item.page.outputPath = outputPath
+  }
+
+  const notIndexPage = parsedFile.base !== "index"
+
+  return { notIndexPage, category }
+}
+
+export default async function (eleventyConfig) {
+  const assetsDir = path.join(__dirname, "assets")
+
+
+  const passthroughCopy = {
+    [assetsDir]: "assets",
+    [webawesomeDir]: 'assets/vendor/webawesome',
+    [vueReactivityDir]: 'assets/vendor/vue/reactivity',
+    [pagefindUiDir]: 'assets/vendor/pagefind/ui',
+    [driveshaftDir]: 'assets/vendor/driveshaft'
+  }
+
+  eleventyConfig.addPassthroughCopy(passthroughCopy);
+
+  flowStateDirectories.forEach((dir) => {
+    const resolvedDir = path.join(root, dir)
+    eleventyConfig.addPassthroughCopy({
+      [resolvedDir]: path.join('assets/vendor/downflow', dir),
+    })
+
+    eleventyConfig.addWatchTarget(resolvedDir)
+  })
+
+  const docFileGlob = eleventyConfig.directories.input.replace(/^.\//, "") + "docs/**/*.*"
+
+  eleventyConfig.addCollection("docs", async (api) => {
+    const categories = new Set()
+
+    const collection = api
+      .getFilteredByGlob(docFileGlob)
+      .filter((item) => {
+        const {notIndexPage, category} = processItem(item)
+
+        if (notIndexPage && category) {
+          categories.add(category)
+        }
+
+        return notIndexPage
+      })
+      .sort(sortByFilePathStem)
+
+    // Add pagination data.
+    for (const category of categories) {
+      const collectionForCategory = getCollectionForCategory(category, collection)
+
+      collectionForCategory.forEach((item, i) => {
+        const paginationObject = {}
+        paginationObject.previous_page = collectionForCategory[i - 1]
+        paginationObject.next_page = collectionForCategory[i + 1]
+        item.data.konnors_pagination = paginationObject
+      })
+    }
+
+    return collection
+  });
+
+  function getCollectionForCategory (category, collection = eleventyConfig.collections.docs) {
+    return collection.filter((item) => {
+      return item.data.category === category
+    })
+  }
+
+  function docCategories (collection) {
+    const categories = new Set()
+
+    collection.forEach((item) => {
+      const file = item.page.filePathStem
+      const category = getSortedCategoryForFile(file)
+      if (category) { categories.add(category) }
+    })
+
+    const sortedCategories = [...categories]
+      .sort((a, b) => a.localeCompare(b, "en"))
+      .map((category) => {
+        return stripLeadingNumbers(category)
+      })
+    return sortedCategories
+  }
+
+  eleventyConfig.addGlobalData("docCategories", () => docCategories)
+  eleventyConfig.addGlobalData("getCollectionForCategory", () => getCollectionForCategory);
+
+  eleventyConfig.addGlobalData("layout", "default.njk");
+  eleventyConfig.ignores.add("**/.keep");
+  eleventyConfig.addFilter("titleize", titleize)
+  eleventyConfig.addPlugin(shikiPlugin({ theme: "nord" }));
+  eleventyConfig.addPlugin(codeBlocks())
+  eleventyConfig.addPlugin(tableOfContents())
+  eleventyConfig.addPlugin(pagefindPlugin({
+    pageFindOptions: {
+      rootSelector: "main",
+    }
+  }))
+
+
+  // Make sure lit plugin comes *after* any transform blocks. Make this last.
+  eleventyConfig.addPlugin(litPlugin, {
+    mode: 'worker',
+    componentModules: webawesomeComponents,
+  });
+
+  eleventyConfig.setServerOptions({
+    // Disable automatic browser refreshing
+    // liveReload: false,
+
+    // Optional: Also disable DOM diffing updates if necessary
+    // domDiff: false
+  });
+}
+

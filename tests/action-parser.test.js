@@ -80,7 +80,7 @@ test("Should properly parse actions 5", () => {
 
   assert.equal(obj.eventName, "my-thing");
   assert.equal(obj.additionalEventModifiers.length, 0);
-  assert.equal(obj.eventModifier, null)
+  assert.equal(obj.eventModifier, null);
   assert.equal(obj.controllerName, "my-gallery");
   assert.equal(obj.controllerFunction, "my_function");
   assert.equal(obj.globalTarget, null);
@@ -173,6 +173,36 @@ test("Omitted controller defaults to global controllerName", () => {
   assert.equal(obj.additionalEventModifiers.length, 0);
   assert.equal(obj.controllerName, null);
   assert.equal(obj.controllerFunction, "increment");
-  assert.equal(obj.globalTarget, null)
+  assert.equal(obj.globalTarget, null);
+  assert.equal(obj.actionOptions.length, 0);
+});
+
+test("Should capture nested options", () => {
+  let action = "click#foo.increment";
+
+  const obj = new ActionParser(action).parse();
+
+  assert.equal(obj.errors.length, 0);
+  assert.equal(obj.eventName, "click");
+  assert.equal(obj.eventModifier, null);
+  assert.equal(obj.additionalEventModifiers.length, 0);
+  assert.equal(obj.controllerName, null);
+  assert.equal(obj.controllerFunction, "foo.increment");
+  assert.equal(obj.globalTarget, null);
+  assert.equal(obj.actionOptions.length, 0);
+});
+
+test("Should capture nested options", () => {
+  let action = "click->#foo.increment";
+
+  const obj = new ActionParser(action).parse();
+
+  assert.equal(obj.errors.length, 0);
+  assert.equal(obj.eventName, "click");
+  assert.equal(obj.eventModifier, null);
+  assert.equal(obj.additionalEventModifiers.length, 0);
+  assert.equal(obj.controllerName, null);
+  assert.equal(obj.controllerFunction, "foo.increment");
+  assert.equal(obj.globalTarget, null);
   assert.equal(obj.actionOptions.length, 0);
 });
