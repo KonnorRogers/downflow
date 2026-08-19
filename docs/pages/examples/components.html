@@ -1,0 +1,34 @@
+---
+default.njk
+---
+
+<script type="module">
+    import { Application, Controller } from "downflow/exports/application.js"
+
+    const application = Application.start()
+
+    application.context = {
+        count: 0
+    }
+
+    function increment() {
+        application.context.count++
+    }
+
+    function decrement() {
+        application.context.count--
+    }
+
+    class CounterController extends Controller {
+        static controllerName = "counter"
+
+        increment () {
+            increment()
+        }
+        decrement () {
+            decrement()
+        }
+    }
+
+    application.register(CounterController)
+</script>

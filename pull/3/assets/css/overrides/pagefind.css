@@ -1,0 +1,188 @@
+@layer overrides {
+  :is([data-pagefind-announcer], [data-pf-sr-hidden="true"]):not(:focus-within) {
+    position: fixed !important;
+    width: 1px !important;
+    height: 1px !important;
+    clip: rect(0 0 0 0) !important;
+    clip-path: inset(50%) !important;
+    border: none !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    padding: 0 !important;
+    top: 0;
+    left: 0;
+  }
+
+  .pf-modal-close {
+    display: none;
+  }
+
+  .pf-modal-header {
+    width: 100%;
+    max-width: 100%;
+  }
+  .pf-modal-body {
+    padding-top: 0.5rem;
+    width: 100%;
+    max-width: 100%;
+    border-top: var(--border);
+    border-bottom: var(--border);
+    overflow: auto;
+  }
+
+  .pf-input-wrapper {
+    position: relative;
+  }
+
+  .pf-input {
+    margin: 0;
+  }
+
+  .pagefind {
+    & ul {
+      list-style: none;
+      margin: 0;
+    }
+
+    & button {
+      border: 2px solid var(--border-color);
+      color: var(--wa-color-on-normal, var(--wa-color-neutral-on-normal));
+      background-color: var(--wa-color-fill-quiet, var(--wa-color-neutral-fill-quiet));
+    }
+
+    .pf-trigger-shortcut {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* kbd: https://github.com/shoelace-style/webawesome/blob/f8a109817d94626caae20146c3ba8f961ece1bcf/packages/webawesome/src/styles/native.css#L263-L277 */
+    .pf-trigger-key {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 2em;
+      height: 2em;
+      padding: 0.125em 0.25em;
+
+      font-family: var(--wa-font-family-code);
+      font-size: var(--wa-font-size-smaller);
+      font-weight: var(--wa-font-weight-code);
+      gap: 0.5em;
+
+      border: 2px solid var(--border-color);
+      border-radius: var(--wa-border-radius-s);
+      box-shadow: 0 0.125em 0 0 color-mix(in oklab, currentColor, transparent 50%);
+
+      wa-icon {
+        vertical-align: -2px;
+      }
+    }
+
+
+    .pf-input-clear {
+      position: absolute;
+      display: inline-block;
+      inset-inline-end: 2px;
+      top: 50%;
+      transform: translateY(-50%);
+      height: calc(100% - 4px);
+      min-width: 44px;
+      padding: 0 8px;
+      background: none;
+      border: none;
+      font-size: 12px;
+      color: var(--wa-color-neutral-on-quiet);
+      cursor: pointer;
+      border-radius: 4px;
+    }
+  }
+
+  pagefind-summary {
+    font-size: 0.9em;
+    color: var(--wa-color-neutral-on-quiet);
+    margin-bottom: var(--wa-space-l);
+  }
+
+
+  pagefind-modal {
+    & dialog {
+      border-radius: var(--wa-border-radius-m);
+      top: 15%;
+      margin: 0 auto;
+      padding: 0;
+
+      border: none;
+      box-shadow: 30px 30px 0px 0px rgba(0, 0, 0, 1);
+
+      .wa-dark & {
+        border: var(--border);
+        border-style: dotted;
+      }
+
+
+
+      &::backdrop {
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(0.5px);
+      }
+
+      & > * {
+        padding: var(--wa-space-l);
+      }
+    }
+  }
+
+  pagefind-modal-body {
+    max-height: 50vh;
+  }
+
+  pagefind-keyboard-hints {
+    display: flex;
+    gap: var(--wa-space-s);
+    align-items: center;
+  }
+
+  .pagefind-result {
+    position: relative;
+    margin: 0;
+    padding: 1rem;
+    border: var(--border-width) dotted var(--border-color);
+    border-color: transparent;
+
+    .wa-dark & {
+      border-style: solid;
+    }
+
+
+    &:hover {
+      background: light-dark(var(--wa-color-neutral-fill-quiet), var(--wa-color-neutral-20));
+    }
+
+    &:focus-within {
+      border-color: var(--border-color);
+    }
+
+    & > * {
+      margin: 0;
+    }
+
+    & .pagefind-result-heading {
+      color: var(--wa-color-neutral-on-normal);
+    }
+
+    & .pagefind-result-excerpt {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--wa-color-neutral-on-quiet);
+    }
+
+    & a::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+    }
+  }
+}
