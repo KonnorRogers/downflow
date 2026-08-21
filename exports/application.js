@@ -25,6 +25,29 @@ function dig(obj, ...args) {
   return current;
 }
 
+/**
+ * If there are still more keys to walk, and the current key is undefined, make it an object.
+ * `dig_p` after `mkdir_p` ;)
+ * @param {Object} obj
+ * @param {...any} args
+ */
+function dig_p(obj, ...args) {
+  let current = obj;
+  for (const key of args) {
+    if (current == null) { return null }
+
+    // @ts-expect-error
+    if (current[key] == null) {
+      // @ts-expect-error
+      current[key] = {}
+    }
+
+    // @ts-expect-error
+    current = current[key];
+  }
+  return current;
+}
+
 export class Application {
   /**
    * Starts the registry and listens.
@@ -217,6 +240,22 @@ export class Application {
       if (!target) {
         return;
       }
+
+      const bindings = this.parseBindings(target)
+
+      bindings.forEach((binding) => {
+        const context = this.resolveContext(target, binding.contextString)
+        const keys = binding.property.split(".")
+        const finalKey = keys.pop()
+        const obj = dig_p(context, ...keys)
+
+        if (finalKey && obj) {
+          // @ts-expect-error
+          obj[finalKey] = this._readFormControl(target);
+        }
+      })
+
+      // Bindings for `$form`
       if (!target.name) {
         return;
       }
@@ -226,8 +265,7 @@ export class Application {
       if (!form) {
         return;
       }
-      this._stateForForm(target.form)[target.name] =
-        this._readFormControl(target); // reactive WRITE
+      this._stateForForm(target.form)[target.name] = this._readFormControl(target); // reactive WRITE
     };
   }
 
@@ -469,50 +507,11 @@ export class Application {
 
     key = key.slice(negativeLength);
 
-    let contextStr = this.getClosestContextString(el);
-
-    let context =
-      /** @type {Controller["context"] | Application["context"]} */ (
-        this.context
-      );
-
-    const keywords = ["$form", "$context"];
-
-    if (contextStr && !keywords.includes(contextStr)) {
-      let controllerName = contextStr;
-
-      if (!controllerName) {
-        return null;
-      }
-
-      const controller = this.getClosestController(el, controllerName);
-
-      if (!controller) {
-        return null;
-      }
-
-      context = controller.context;
-    }
-
+    const contextStr = this.getClosestContextString(el)
+    const context = this.resolveContext(el, contextStr)
     const keys = key.split(/\./g);
 
-    let value = null;
-
-    if (contextStr === "$form") {
-      const formAttr = el.getAttribute("form");
-      const rootNode = /** @type {Element} */ (el.getRootNode() || document);
-      const form = /** @type {HTMLFormElement | null} */ (
-        formAttr
-          ? rootNode.querySelector(`form#${formAttr}`)
-          : el.closest("form")
-      );
-
-      if (form) {
-        value = this._stateForForm(form)[keys.join("")]; // reactive READ -> tracked
-      }
-    } else {
-      value = dig(context, ...keys);
-    }
+    let value = dig(context, ...keys);
 
     if (isRef(value)) {
       value = value.value;
@@ -1280,10 +1279,55 @@ export class Application {
           el.removeAttribute(attr);
           return;
         }
-        el.setAttribute(attr, value);
+        el.setAttribute(attr, String(value));
       },
       { scheduler: () => this.effectScheduler.schedule(runner) },
     );
+  }
+
+  /**
+   * @param {Element} el
+   * @param {string | null | undefined} [contextStr]
+   */
+  resolveContext (el, contextStr) {
+    let context =
+      /** @type {Controller["context"] | Application["context"]} */ (
+        this.context
+      );
+
+    const keywords = ["$form", "$context"];
+
+    if (contextStr && !keywords.includes(contextStr)) {
+      let controllerName = contextStr;
+
+      if (!controllerName) {
+        return null;
+      }
+
+      const controller = this.getClosestController(el, controllerName);
+
+      if (!controller) {
+        return null;
+      }
+
+      context = controller.context;
+    }
+
+    if (contextStr === "$form") {
+      const formAttr = el.getAttribute("form");
+      const rootNode = /** @type {Element} */ (el.getRootNode() || document);
+      const form = /** @type {HTMLFormElement | null} */ (
+        formAttr
+          ? rootNode.querySelector(`form#${formAttr}`)
+          : el.closest("form")
+      );
+
+      if (form) {
+        return this._stateForForm(form)
+      }
+    } else {
+      return context
+    }
   }
 
   /**
@@ -1302,8 +1346,50 @@ export class Application {
     );
   }
 
+
+  /**
+   * @param {Element} el
+   */
+  parseBindings (el) {
+    // There are a few ways to define bindings. We can do
+    // - `flow-bind="name"`
+    // - `flow-bind:name`
+    // - `flow-bind:name="my-controller"
+    // - `flow-bind:name="$context"
+    // - `flow-bind="name:$context"`
+    // - `flow-bind="myName:my-controller"`
+    // So we need to be sure we support all the above syntaxes.
+
+    // Start with `flow-bind` attribute. I don't *think* we need to support multiple instances? if we ever do, we can add a `;` delimiter.
+
+    /**
+     * @type {{contextString: string | null | undefined, property: string}[]}
+     */
+    const bindings = []
+
+    const str = el.getAttribute("flow-bind")
+
+    if (str) {
+      const [property, contextString] = str.split(":")
+      bindings.push({property, contextString})
+    }
+
+    // Now we parse the attributes array.
+    ;[...el.attributes].forEach((attr) => {
+      if (attr.name.startsWith("flow-bind:")) {
+        // This covers `flow-bind:foo="$context"` for example.
+        const [_, property] = attr.name.split(":")
+        const contextString = attr.value
+        bindings.push({property, contextString})
+      }
+    })
+
+    return bindings
+  }
+
   /** @param {Element} el */
   _reconcileBindings(el) {
+    // TODO: these should be more like "parseTextBindings", "parseAttributeBindings", "parsePropertyBindings", so that we can support things like `@click=""`, `flow-bind:foo`, etc.
     const text = this.getTextBinding(el) ?? "";
     const attr = this.getAttributeBinding(el) ?? "";
     const prop = this.getPropertyBinding(el) ?? "";
@@ -1319,8 +1405,8 @@ export class Application {
 
     let signature = `${context}||${text}||${attr}||${prop}`;
 
-    // resolve the *instance* the string points at, and fold its id in.
-    // keywords ($form/$context) don't resolve to a controller — id stays "".
+    // resolve the controller *instance* the string points at in case the underlying controller changes.
+    // keywords ($form/$context) don't resolve to a controller, so they stay as a blank stirng.
     let controllerId = "";
     if (context && context !== "$form" && context !== "$context") {
       const controller = this.getClosestController(el, context);
@@ -1369,7 +1455,8 @@ export class Application {
   _idForController(controller) {
     let id = this._controllerIds.get(controller);
     if (id == null) {
-      id = ++this._controllerSequentialId;
+      this._controllerSequentialId++;
+      id = this._controllerSequentialId;
       this._controllerIds.set(controller, id);
     }
     return id;
