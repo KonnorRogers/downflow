@@ -6,6 +6,7 @@ import * as path from "node:path"
 import * as url from 'url';
 import { shikiPlugin } from './plugins/shiki.js';
 import { pagefindPlugin } from './plugins/pagefind.js';
+import { jsBundlePlugin } from './plugins/js-bundle.js';
 import { titleize } from './helpers.js';
 import { codeBlocks } from './plugins/code-blocks.js';
 import { tableOfContents } from './plugins/table-of-contents.js';
@@ -19,16 +20,7 @@ const webawesomeComponents = fs.readdirSync(webawesomeComponentsDir).map(compone
   return path.join(webawesomeComponentsDir, componentName, componentName + '.js');
 });
 
-const vueReactivityDir = path.join(root, 'node_modules/@vue/reactivity');
 const pagefindUiDir = path.join(root, 'node_modules/@pagefind/component-ui');
-let driveshaftDir = path.join(root, 'node_modules/driveshaft')
-driveshaftDir = path.join(path.resolve(root, '..'), 'driveshaft')
-// const vueReactivityFiles = fs.readdirSync(vueReacti, {recursive: true})
-
-const flowStateDirectories = [
-  'exports',
-  'internal'
-]
 
 export const config = {
   markdownTemplateEngine: 'njk',
@@ -106,21 +98,10 @@ export default async function (eleventyConfig) {
   const passthroughCopy = {
     [assetsDir]: "assets",
     [webawesomeDir]: 'assets/vendor/webawesome',
-    [vueReactivityDir]: 'assets/vendor/vue/reactivity',
     [pagefindUiDir]: 'assets/vendor/pagefind/ui',
-    [driveshaftDir]: 'assets/vendor/driveshaft'
   }
 
   eleventyConfig.addPassthroughCopy(passthroughCopy);
-
-  flowStateDirectories.forEach((dir) => {
-    const resolvedDir = path.join(root, dir)
-    eleventyConfig.addPassthroughCopy({
-      [resolvedDir]: path.join('assets/vendor/downflow', dir),
-    })
-
-    eleventyConfig.addWatchTarget(resolvedDir)
-  })
 
   const docFileGlob = eleventyConfig.directories.input.replace(/^.\//, "") + "docs/**/*.*"
 
@@ -192,6 +173,7 @@ export default async function (eleventyConfig) {
       rootSelector: "main",
     }
   }))
+  eleventyConfig.addPlugin(jsBundlePlugin())
 
 
   // Make sure lit plugin comes *after* any transform blocks. Make this last.

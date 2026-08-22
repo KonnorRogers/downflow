@@ -2,19 +2,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Downflow</title>
 
-<script type="importmap">
-  {
-    "imports": {
-      "downflow": "{{ "/assets/vendor/downflow/exports/application.js" | url }}",
-      "downflow/": "{{ "/assets/vendor/downflow/" | url }}",
-      "driveshaft": "{{ "/assets/vendor/driveshaft/exports/driveshaft.js" | url }}",
-      "@vue/reactivity": "{{ "/assets/vendor/vue/reactivity/dist/reactivity.esm-browser.js" | url }}",
-      "@vue/reactivity/": "{{ "/assets/vendor/vue/reactivity/" | url }}",
-      "pagefind/": "{{ "/assets/vendor/pagefind/" | url }}"
-    }
-  }
-</script>
-
 <style>
   .content { max-width: 1000px; margin: 0 auto; }
 
@@ -55,4 +42,4 @@
 </style>
 
 
-<script type="module" src="{{ "/assets/js/index.js" | url }}"></script>
+<script type="module" src="{{ "/assets/js/bundle.js" | url }}"></script>
