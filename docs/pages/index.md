@@ -56,11 +56,11 @@ npm install downflow
 
 ## Why
 
-Most reactive libraries want you to write a template, write logic inside HTML attributes, or hand your Content Security Policy an `unsafe-eval`. Downflow reads values off plain objects. No template language, no expressions to evaluate, no reason to loosen your CSP. Read [why not use something that already exists?](/docs/introduction/why-not-something/) for the full case.
+Most reactive libraries want you to write a template, write logic inside HTML attributes, or hand your Content Security Policy an `unsafe-eval`. Downflow reads values off plain objects. No template language, no expressions to evaluate, no reason to loosen your CSP. Read [why not use something that already exists?]({{ "/docs/introduction/why-not-something/" | url }}) for the full case.
 
 ## Start here
 
-Head to [Getting Started](/docs/introduction/getting-started/) to build the counter above step by step, or jump straight into [Learn](/docs/learn/bindings/) for the full attribute reference.
+Head to [Getting Started]({{ "/docs/introduction/getting-started/" | url }}) to build the counter above step by step, or jump straight into [Learn]({{ "/docs/learn/bindings/" | url }}) for the full attribute reference.
 
 ---
 

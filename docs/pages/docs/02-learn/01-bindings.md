@@ -52,7 +52,7 @@ By default, `flow-text`, `flow-attr`, and `flow-prop` read from `application.con
 
 `flow-context` takes one of:
 
-- `$form`: the closest `<form>` ancestor, or a form referenced by a `form="id"` attribute. See [Forms](/docs/learn/forms/).
+- `$form`: the closest `<form>` ancestor, or a form referenced by a `form="id"` attribute. See [Forms]({{ "/docs/learn/forms/" | url }}).
 - `$context`: `application.context`, no matter what.
 - a controller name: the closest ancestor with that name in its `flow-controller` attribute, reading that controller's own `context`.
 
@@ -91,7 +91,7 @@ A key can start with `!` to flip a boolean. Stack them if you really want to (`!
 
 ## Filters
 
-`flow-text` (and only `flow-text`) can pipe its value through a named filter before it hits the page. See [Filters](/docs/learn/filters/).
+`flow-text` (and only `flow-text`) can pipe its value through a named filter before it hits the page. See [Filters]({{ "/docs/learn/filters/" | url }}).
 
 ```html
 <span flow-text="name | displayName"></span>

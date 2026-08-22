@@ -11,7 +11,7 @@
         {%- for doc in getCollectionForCategory(docCategory, collections.docs) -%}
           <li>
             <a
-              href="{{ doc.url }}"
+              href="{{ doc.url | url }}"
               {% if doc.url == page.url %}
                 aria-current="page"
               {% endif %}
@@ -35,7 +35,7 @@
         {%- for doc in getCollectionForCategory(docCategory, collections.docs) -%}
           <li>
             <a
-              href="{{ doc.url }}"
+              href="{{ doc.url | url }}"
               {% if doc.url == page.url %}
                 aria-current="page"
               {% endif %}

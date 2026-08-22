@@ -51,4 +51,4 @@ The state seeds itself from whatever is already in the input when downflow first
 
 ## This is read only
 
-`$form` gives you a live view of the form. It doesn't let you write into it from your own state, and it doesn't write into `application.context`. To push a value from a form control into your own state, see [Two-Way Binding](/docs/learn/two-way-binding/).
+`$form` gives you a live view of the form. It doesn't let you write into it from your own state, and it doesn't write into `application.context`. To push a value from a form control into your own state, see [Two-Way Binding]({{ "/docs/learn/two-way-binding/" | url }}).

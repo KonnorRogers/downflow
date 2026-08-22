@@ -2,7 +2,7 @@
 
 <div class="pagination">
   {% if pagination.previous_page %}
-    <a href="{{ pagination.previous_page.url }}" class="pagination-link pagination-previous">
+    <a href="{{ pagination.previous_page.url | url }}" class="pagination-link pagination-previous">
       <small><wa-icon name="arrow-left"></wa-icon> Previous Page</small>
       <br>
       <span>{{ pagination.previous_page.data.title }}</span>
@@ -12,7 +12,7 @@
   {% endif %}
 
   {% if pagination.next_page %}
-    <a href="{{ pagination.next_page.url }}" class="pagination-link pagination-next">
+    <a href="{{ pagination.next_page.url | url }}" class="pagination-link pagination-next">
       <small>Next Page <wa-icon name="arrow-right"></wa-icon></small>
       <br>
       <span>{{ pagination.next_page.data.title }}</span>
