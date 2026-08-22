@@ -306,4 +306,16 @@
       border-inline-start: 2px solid var(--border-color-muted);
     }
   }
+
+  h1,h2,h3,h4,h5,h6 {
+    margin-top: var(--wa-space-5xl);
+  }
+
+  .code-block {
+    margin-bottom: var(--wa-space-2xl);
+  }
+
+  .content {
+    padding-top: 0;
+  }
 }

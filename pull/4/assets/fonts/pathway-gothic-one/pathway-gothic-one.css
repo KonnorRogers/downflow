@@ -1,8 +1,0 @@
-/* Pathway Gothic One — used for headings (single weight, 400) */
-@font-face {
-  font-family: "Pathway Gothic One";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/assets/fonts/pathway-gothic-one/pathway-gothic-one.woff2") format("woff2");
-}
