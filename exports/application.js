@@ -158,6 +158,44 @@ export class Application {
     };
 
     /**
+     * Always returns a string. If no text binding found, returns null.
+     * @param {Element} el
+     * @returns {string | null}
+     */
+    this.parseTextBinding = (el) => {
+      const binding = this.getTextBinding(el);
+
+      if (!binding) {
+        return null;
+      }
+
+      /**
+        * @type {string[]}
+        */
+      const filters = []
+      let key = binding.trim()
+      binding.split("|").forEach((str, index) => {
+        if (index === 0) {
+          key = str.trim()
+        } else {
+          filters.push(str)
+        }
+      })
+
+      let value = this.resolveValue(el, key);
+      filters.forEach((key) => {
+        // @ts-expect-error
+        const callback = this.filters[key.trim()]
+        if (typeof callback === "function") {
+          value = callback(value)
+          return
+        }
+      })
+
+      return value == null ? "" : String(value);
+    }
+
+    /**
      * The attribute to use for finding actions. Defaults to "flow-action".
      * @type {(node: Element) => string | null | undefined}
      */
@@ -215,10 +253,46 @@ export class Application {
       [`[0-9]`]: /[0-9]/,
     };
 
+    /**
+     * @type {Record<string, (el: Element) => unknown>}
+     */
+    this.twoWayBindingSchema = {
+      "input[type='checkbox']": (element) => {
+        return /** @type {HTMLInputElement} */ (element).checked
+      },
+      "input[type='radio']": (element) => {
+        const elements = /** @type {HTMLInputElement} */ (element).form?.elements;
+
+        if (!elements) {
+          return null;
+        }
+
+        return (
+          /** @type {HTMLInputElement} */ (
+            Array.from(elements).find((el) => {
+              return (
+                /** @type {HTMLInputElement} */ (el).name === /** @type {HTMLInputElement} */(element).name &&
+                /** @type {HTMLInputElement} */ (el).checked === true
+              );
+            })
+          )?.value ?? null
+        );
+      },
+      input: (element) => {
+        return /** @type {HTMLInputElement} */ (element).value
+      },
+      select: /** @param {Element} el */ (el) => {
+        const element = /** @type {HTMLSelectElement} */ (el);
+        return Array.from(element.selectedOptions, (o) => o.value);
+      },
+      default: (element) => {
+        return /** @type {HTMLInputElement} */ (element).value
+      }
+    }
+
     this._contextRef = ref({});
 
     this.forms = document.forms;
-    this.stores = {};
 
     this.effectScheduler = new EffectScheduler((fn) => this.flushChanges(fn));
 
@@ -241,32 +315,45 @@ export class Application {
         return;
       }
 
-      const bindings = this.parseBindings(target)
+      this.updateBindingsForElement(target)
+    };
+
+    this.filters = {}
+  }
+
+  /**
+   * @param {Element} el
+   */
+  updateBindingsForElement (el) {
+      const bindings = this.parseBindings(el)
 
       bindings.forEach((binding) => {
-        const context = this.resolveContext(target, binding.contextString)
+        const context = this.resolveContext(el, binding.contextString)
         const keys = binding.property.split(".")
         const finalKey = keys.pop()
         const obj = dig_p(context, ...keys)
 
         if (finalKey && obj) {
           // @ts-expect-error
-          obj[finalKey] = this._readFormControl(target);
+          obj[finalKey] = this._readFormControl(el);
         }
       })
 
       // Bindings for `$form`
-      if (!target.name) {
+      // @ts-expect-error
+      const name = el.name
+      if (!name) {
         return;
       }
 
-      const form = target?.form;
+      // @ts-expect-error
+      const form = el?.form;
 
       if (!form) {
         return;
       }
-      this._stateForForm(target.form)[target.name] = this._readFormControl(target); // reactive WRITE
-    };
+
+      this._stateForForm(form)[name] = this._readFormControl(el); // reactive WRITE
   }
 
   get context() {
@@ -355,39 +442,13 @@ export class Application {
    * @param {Element} el
    */
   _readFormControl(el) {
-    if (el.localName === "input") {
-      const element = /** @type {HTMLInputElement} */ (el);
-      if (element.type === "checkbox") {
-        return element.checked;
-      }
-
-      if (element.type === "radio") {
-        const elements = element.form?.elements;
-
-        if (!elements) {
-          return null;
-        }
-
-        return (
-          /** @type {HTMLInputElement} */ (
-            Array.from(elements).find((el) => {
-              return (
-                /** @type {HTMLInputElement} */ (el).name === element.name &&
-                /** @type {HTMLInputElement} */ (el).checked === true
-              );
-            })
-          )?.value ?? null
-        );
+    for (const [key, fn] of Object.entries(this.twoWayBindingSchema)) {
+      if (el.matches(key)) {
+        return fn(el)
       }
     }
-    if (el.localName === "select") {
-      const element = /** @type {HTMLSelectElement} */ (el);
-      return Array.from(element.selectedOptions, (o) => o.value);
-    }
 
-    // TODO: Add a hook here for people to people to have their own reading logic from a form control.
-
-    return /** @type {HTMLInputElement} */ (el).value;
+    return this.twoWayBindingSchema.default(el);
   }
 
   /**
@@ -507,9 +568,28 @@ export class Application {
 
     key = key.slice(negativeLength);
 
-    const contextStr = this.getClosestContextString(el)
-    const context = this.resolveContext(el, contextStr)
+    /**
+     * @type {string | null}
+     */
+    let contextString = null
+
+    if (key.includes("#")) {
+      const splitKeys = key.split(/#/)
+      const controllerName = splitKeys[0]
+      key = splitKeys.slice(1).join("")
+      contextString = controllerName
+    }
+
     const keys = key.split(/\./g);
+
+    const firstKey = keys[0]
+
+    if (firstKey === "$form" || firstKey === "$context") {
+      contextString = firstKey
+      keys.shift()
+    }
+
+    const context = this.resolveContext(el, contextString)
 
     let value = dig(context, ...keys);
 
@@ -668,6 +748,7 @@ export class Application {
       // Pass 1: walk live tree, upgrade idempotently
       this.walkElements(root, (el) => {
         seen.add(el);
+        this.updateBindingsForElement(el)
         this._reconcileControllers(el); // desired flow-controller names vs connected
         this._reconcileActions(el); // desired action sources vs listener map
         this._reconcileBindings(el); // rebind only if text/attr/prop changed
@@ -1253,13 +1334,16 @@ export class Application {
   _effectText(el) {
     const runner = effect(
       () => {
-        const binding = this.getTextBinding(el);
-        if (!binding) {
-          return;
+        let text = this.parseTextBinding(el)
+
+        /**
+         * Should only be null if no binding found.
+         */
+        if (text == null) { return }
+
+        if (el.textContent !== text) {
+          el.textContent = text;
         }
-        const value = this.resolveValue(el, binding);
-        const text = value == null ? "" : String(value);
-        if (el.textContent !== text) el.textContent = text;
       },
       { scheduler: () => this.effectScheduler.schedule(runner) },
     );
@@ -1296,6 +1380,10 @@ export class Application {
       );
 
     const keywords = ["$form", "$context"];
+
+    if (!contextStr) {
+      contextStr = this.getClosestContextString(el)
+    }
 
     if (contextStr && !keywords.includes(contextStr)) {
       let controllerName = contextStr;

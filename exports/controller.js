@@ -73,6 +73,12 @@ export class Controller {
     this.isConnected = false;
 
     this._contextRef = ref({});
+
+    /**
+     * Controller level filters in case you don't want to pollute the main `application`.
+     * TODO: Should we do this? This could get cumbersome and dumb.
+     */
+    // this.filters = {}
   }
 
   get context() {
@@ -118,7 +124,10 @@ export class Controller {
   }
 
   initialize() {}
+  // Should we support connect / disconnect shorthand??
+  // connect () {}
   connectedCallback() {}
+  // disconnect() {}
   disconnectedCallback() {}
 }
 

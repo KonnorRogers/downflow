@@ -2,7 +2,7 @@
 ---
 
 <script type="module">
-    window.application.context = {
+    application.context = {
         ...application.context,
         get displayName () {
             const name = application.context.name || "stranger"
@@ -11,7 +11,7 @@
     }
 
 
-    window.application.filters = {
+    application.filters = {
       displayName (str) {
         return `Hello ${str || "stranger"}`
       }

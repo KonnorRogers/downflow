@@ -55,6 +55,7 @@
 
     &::part(header) {
       border-block-end: 2px solid var(--border-color-muted);
+      background: var(--wa-color-surface-default);
     }
 
     &::part(body) {

@@ -60,6 +60,11 @@
 </form>
 
 <form>
+    <input name="email" value="foo@gmail.com">
+    <output flow-text="$form.email"></output>
+</form>
+
+<form>
     <div data-controller="foo">
         <div flow-context="foo" flow-text="bar"></div>
     </div>

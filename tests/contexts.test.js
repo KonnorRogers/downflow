@@ -47,3 +47,4 @@ test("Should properly handle form scopes", async () => {
   assert.equal(form.querySelector("input").value, "foo");
   assert.equal(form.querySelector("span").textContent, "foo");
 });
+
