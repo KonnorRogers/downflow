@@ -55,7 +55,7 @@ export function shikiPlugin(options) {
         }
       }
 
-      if (newLangs.length > 1) {
+      if (newLangs.length >= 1) {
         await Promise.allSettled(newLangs.map((lang) => {
           highlighter.loadLanguage(lang)
         }))
