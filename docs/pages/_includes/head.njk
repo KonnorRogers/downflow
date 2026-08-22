@@ -5,12 +5,12 @@
 <script type="importmap">
   {
     "imports": {
-      "downflow": "/assets/vendor/downflow/exports/application.js",
-      "downflow/": "/assets/vendor/downflow/",
-      "driveshaft": "/assets/vendor/driveshaft/exports/driveshaft.js",
-      "@vue/reactivity": "/assets/vendor/vue/reactivity/dist/reactivity.esm-browser.js",
-      "@vue/reactivity/": "/assets/vendor/vue/reactivity/",
-      "pagefind/": "/assets/vendor/pagefind/"
+      "downflow": "{{ "/assets/vendor/downflow/exports/application.js" | url }}",
+      "downflow/": "{{ "/assets/vendor/downflow/" | url }}",
+      "driveshaft": "{{ "/assets/vendor/driveshaft/exports/driveshaft.js" | url }}",
+      "@vue/reactivity": "{{ "/assets/vendor/vue/reactivity/dist/reactivity.esm-browser.js" | url }}",
+      "@vue/reactivity/": "{{ "/assets/vendor/vue/reactivity/" | url }}",
+      "pagefind/": "{{ "/assets/vendor/pagefind/" | url }}"
     }
   }
 </script>
@@ -22,10 +22,6 @@
     align-self: center;
   }
 </style>
-
-{# Fonts #}
-<link rel="stylesheet" href="{{ "/assets/fonts/iosevka/iosevka.css" | url }}">
-<link rel="stylesheet" href="{{ "/assets/fonts/pathway-gothic-one/pathway-gothic-one.css" | url }}">
 
 {# Layers #}
 <link href="{{ "/assets/vendor/webawesome/dist-cdn/styles/layers.css" | url }}" rel="stylesheet">
@@ -51,6 +47,12 @@
 <style>
   {% include "styles.css" %}
 </style>
+<style>
+  {% include "fonts/iosevka.njk" %}
+</style>
+<style>
+  {% include "fonts/pathway-gothic-one.njk" %}
+</style>
 
 
-<script type="module" src="/assets/js/index.js"></script>
+<script type="module" src="{{ "/assets/js/index.js" | url }}"></script>
