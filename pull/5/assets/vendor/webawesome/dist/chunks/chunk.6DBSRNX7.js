@@ -1,0 +1,351 @@
+/*! Copyright 2026 Fonticons, Inc. - https://webawesome.com/license */
+import {
+  WaHoverEvent
+} from "./chunk.XW6BKGGI.js";
+import {
+  rating_styles_default
+} from "./chunk.TL7XMOW4.js";
+import {
+  RequiredValidator
+} from "./chunk.GWSUX3V5.js";
+import {
+  clamp
+} from "./chunk.KNJT7KBU.js";
+import {
+  WebAwesomeFormAssociatedElement
+} from "./chunk.KBXNFZQL.js";
+import {
+  warnDeprecatedSize
+} from "./chunk.RPQJAXXR.js";
+import {
+  size_styles_default
+} from "./chunk.G5ZZIGWB.js";
+import {
+  watch
+} from "./chunk.PZAN6FPN.js";
+import {
+  LocalizeController
+} from "./chunk.CDGKIW7Y.js";
+import {
+  __decorateClass
+} from "./chunk.7VGCIHDG.js";
+
+// src/components/rating/rating.ts
+import { html } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
+import { styleMap } from "lit/directives/style-map.js";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
+var WaRating = class extends WebAwesomeFormAssociatedElement {
+  constructor() {
+    super(...arguments);
+    this.assumeInteractionOn = ["change"];
+    this.localize = new LocalizeController(this);
+    this.role = "slider";
+    this.hoverValue = 0;
+    this.isHovering = false;
+    this.name = null;
+    this.label = "";
+    this.value = 0;
+    this.defaultValue = 0;
+    this.max = 5;
+    this.precision = 1;
+    this.readonly = false;
+    this.required = false;
+    this.getSymbol = (_value, isSelected) => {
+      return isSelected ? '<wa-icon name="star" library="system" variant="solid"></wa-icon>' : '<wa-icon name="star" library="system" variant="regular"></wa-icon>';
+    };
+    this.size = "m";
+    this.handleClick = (event) => {
+      if (this.disabled) {
+        return;
+      }
+      this.setRatingValue(this.getValueFromXCoordinate(event.clientX));
+      this.updateComplete.then(() => {
+        this.dispatchEvent(new Event("change", { bubbles: true, composed: true }));
+      });
+    };
+    this.handleKeyDown = (event) => {
+      const isLtr = this.matches(":dir(ltr)");
+      const isRtl = this.localize.dir() === "rtl";
+      const oldValue = this.value;
+      if (this.disabled || this.readonly) {
+        return;
+      }
+      if (event.key === "ArrowDown" || isLtr && event.key === "ArrowLeft" || isRtl && event.key === "ArrowRight") {
+        const decrement = event.shiftKey ? 1 : this.precision;
+        this.value = Math.max(0, this.value - decrement);
+        event.preventDefault();
+      }
+      if (event.key === "ArrowUp" || isLtr && event.key === "ArrowRight" || isRtl && event.key === "ArrowLeft") {
+        const increment = event.shiftKey ? 1 : this.precision;
+        this.value = Math.min(this.max, this.value + increment);
+        event.preventDefault();
+      }
+      if (event.key === "Home") {
+        this.value = 0;
+        event.preventDefault();
+      }
+      if (event.key === "End") {
+        this.value = this.max;
+        event.preventDefault();
+      }
+      if (this.value !== oldValue) {
+        this.updateComplete.then(() => {
+          this.dispatchEvent(new Event("change", { bubbles: true, composed: true }));
+        });
+      }
+    };
+    this.handlePointerEnter = (event) => {
+      this.isHovering = true;
+      this.hoverValue = this.getValueFromPointerPosition(event);
+    };
+    this.handlePointerMove = (event) => {
+      this.hoverValue = this.getValueFromPointerPosition(event);
+    };
+    this.handlePointerLeave = () => {
+      this.isHovering = false;
+    };
+    this.handlePointerDown = (event) => {
+      if (event.button !== 0) {
+        return;
+      }
+      this.isHovering = true;
+      this.hoverValue = this.getValueFromPointerPosition(event);
+      this.setPointerCapture(event.pointerId);
+      event.preventDefault();
+    };
+    this.handlePointerUp = (event) => {
+      this.releasePointerCapture(event.pointerId);
+      this.isHovering = false;
+    };
+  }
+  static get validators() {
+    return [...super.validators, RequiredValidator()];
+  }
+  connectedCallback() {
+    super.connectedCallback();
+    this.setAttribute("aria-valuenow", String(this.value));
+    this.setAttribute("aria-valuemin", "0");
+    this.setAttribute("aria-valuemax", String(this.max));
+    this.setAttribute("aria-disabled", this.disabled ? "true" : "false");
+    this.setAttribute("aria-readonly", this.readonly ? "true" : "false");
+    if (this.label) {
+      this.setAttribute("aria-label", this.label);
+    }
+    if (!this.disabled && !this.readonly) {
+      this.tabIndex = 0;
+    } else {
+      this.tabIndex = -1;
+    }
+    this.addEventListener("click", this.handleClick);
+    this.addEventListener("keydown", this.handleKeyDown);
+    this.addEventListener("pointerenter", this.handlePointerEnter);
+    this.addEventListener("pointermove", this.handlePointerMove);
+    this.addEventListener("pointerleave", this.handlePointerLeave);
+    this.addEventListener("pointerdown", this.handlePointerDown);
+    this.addEventListener("pointerup", this.handlePointerUp);
+  }
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener("click", this.handleClick);
+    this.removeEventListener("keydown", this.handleKeyDown);
+    this.removeEventListener("pointerenter", this.handlePointerEnter);
+    this.removeEventListener("pointermove", this.handlePointerMove);
+    this.removeEventListener("pointerleave", this.handlePointerLeave);
+    this.removeEventListener("pointerdown", this.handlePointerDown);
+    this.removeEventListener("pointerup", this.handlePointerUp);
+  }
+  updated(changedProperties) {
+    super.updated(changedProperties);
+    if (changedProperties.has("value")) {
+      this.setAttribute("aria-valuenow", String(this.value));
+    }
+    if (changedProperties.has("max")) {
+      this.setAttribute("aria-valuemax", String(this.max));
+    }
+    if (changedProperties.has("disabled")) {
+      this.setAttribute("aria-disabled", this.disabled ? "true" : "false");
+      this.tabIndex = this.disabled || this.readonly ? -1 : 0;
+    }
+    if (changedProperties.has("readonly")) {
+      this.setAttribute("aria-readonly", this.readonly ? "true" : "false");
+      this.tabIndex = this.disabled || this.readonly ? -1 : 0;
+    }
+    if (changedProperties.has("label")) {
+      if (this.label) {
+        this.setAttribute("aria-label", this.label);
+      } else {
+        this.removeAttribute("aria-label");
+      }
+    }
+  }
+  handleSizeChange() {
+    warnDeprecatedSize(this.localName, this.size);
+  }
+  getValueFromPointerPosition(event) {
+    return this.getValueFromXCoordinate(event.clientX);
+  }
+  getValueFromXCoordinate(coordinate) {
+    const isRtl = this.localize.dir() === "rtl";
+    const { left, right, width } = this.getBoundingClientRect();
+    const value = isRtl ? this.roundToPrecision((right - coordinate) / width * this.max, this.precision) : this.roundToPrecision((coordinate - left) / width * this.max, this.precision);
+    return clamp(value, 0, this.max);
+  }
+  setRatingValue(newValue) {
+    if (this.disabled || this.readonly) {
+      return;
+    }
+    this.value = newValue === this.value ? 0 : newValue;
+    this.isHovering = false;
+  }
+  roundToPrecision(numberToRound, precision = 0.5) {
+    const multiplier = 1 / precision;
+    return Math.ceil(numberToRound * multiplier) / multiplier;
+  }
+  handleHoverValueChange() {
+    this.dispatchEvent(
+      new WaHoverEvent({
+        phase: "move",
+        value: this.hoverValue
+      })
+    );
+  }
+  handleIsHoveringChange() {
+    this.dispatchEvent(
+      new WaHoverEvent({
+        phase: this.isHovering ? "start" : "end",
+        value: this.hoverValue
+      })
+    );
+  }
+  formResetCallback() {
+    this.value = this.defaultValue;
+    super.formResetCallback();
+  }
+  render() {
+    const isRtl = this.didSSR && !this.hasUpdated ? this.dir : this.localize.dir() === "rtl";
+    const counter = Array.from(Array(this.max).keys());
+    let displayValue = 0;
+    if (this.disabled || this.readonly) {
+      displayValue = this.value;
+    } else {
+      displayValue = this.isHovering ? this.hoverValue : this.value;
+    }
+    return html`
+      <div
+        part="base"
+        class=${classMap({
+      rating: true,
+      "rating-readonly": this.readonly,
+      "rating-disabled": this.disabled
+    })}
+      >
+        <span class="symbols">
+          ${counter.map((index) => {
+      const isSelected = displayValue >= index + 1;
+      if (displayValue > index && displayValue < index + 1) {
+        return html`
+                <span
+                  class=${classMap({
+          symbol: true,
+          "partial-symbol-container": true,
+          "symbol-hover": this.isHovering && Math.ceil(displayValue) === index + 1
+        })}
+                  role="presentation"
+                >
+                  <div
+                    style=${styleMap({
+          clipPath: isRtl ? `inset(0 ${(displayValue - index) * 100}% 0 0)` : `inset(0 0 0 ${(displayValue - index) * 100}%)`
+        })}
+                  >
+                    ${unsafeHTML(this.getSymbol(index + 1, false))}
+                  </div>
+                  <div
+                    class="partial-filled"
+                    style=${styleMap({
+          clipPath: isRtl ? `inset(0 0 0 ${100 - (displayValue - index) * 100}%)` : `inset(0 ${100 - (displayValue - index) * 100}% 0 0)`
+        })}
+                  >
+                    ${unsafeHTML(this.getSymbol(index + 1, true))}
+                  </div>
+                </span>
+              `;
+      }
+      return html`
+              <span
+                class=${classMap({
+        symbol: true,
+        "symbol-hover": this.isHovering && Math.ceil(displayValue) === index + 1,
+        "symbol-active": displayValue >= index + 1
+      })}
+                role="presentation"
+              >
+                ${unsafeHTML(this.getSymbol(index + 1, isSelected))}
+              </span>
+            `;
+    })}
+        </span>
+      </div>
+    `;
+  }
+};
+WaRating.css = [size_styles_default, rating_styles_default];
+__decorateClass([
+  property({ reflect: true })
+], WaRating.prototype, "role", 2);
+__decorateClass([
+  state()
+], WaRating.prototype, "hoverValue", 2);
+__decorateClass([
+  state()
+], WaRating.prototype, "isHovering", 2);
+__decorateClass([
+  property()
+], WaRating.prototype, "name", 2);
+__decorateClass([
+  property()
+], WaRating.prototype, "label", 2);
+__decorateClass([
+  property({ type: Number })
+], WaRating.prototype, "value", 2);
+__decorateClass([
+  property({ type: Number, attribute: "default-value" })
+], WaRating.prototype, "defaultValue", 2);
+__decorateClass([
+  property({ type: Number })
+], WaRating.prototype, "max", 2);
+__decorateClass([
+  property({ type: Number })
+], WaRating.prototype, "precision", 2);
+__decorateClass([
+  property({ type: Boolean, reflect: true })
+], WaRating.prototype, "readonly", 2);
+__decorateClass([
+  property({ type: Boolean })
+], WaRating.prototype, "disabled", 2);
+__decorateClass([
+  property({ type: Boolean, reflect: true })
+], WaRating.prototype, "required", 2);
+__decorateClass([
+  property()
+], WaRating.prototype, "getSymbol", 2);
+__decorateClass([
+  property({ reflect: true })
+], WaRating.prototype, "size", 2);
+__decorateClass([
+  watch("size")
+], WaRating.prototype, "handleSizeChange", 1);
+__decorateClass([
+  watch("hoverValue")
+], WaRating.prototype, "handleHoverValueChange", 1);
+__decorateClass([
+  watch("isHovering")
+], WaRating.prototype, "handleIsHoveringChange", 1);
+WaRating = __decorateClass([
+  customElement("wa-rating")
+], WaRating);
+
+export {
+  WaRating
+};
