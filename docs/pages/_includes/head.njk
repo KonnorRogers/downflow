@@ -23,10 +23,6 @@
   }
 </style>
 
-{# Fonts #}
-<link rel="stylesheet" href="{{ "/assets/fonts/iosevka/iosevka.css" | url }}">
-<link rel="stylesheet" href="{{ "/assets/fonts/pathway-gothic-one/pathway-gothic-one.css" | url }}">
-
 {# Layers #}
 <link href="{{ "/assets/vendor/webawesome/dist-cdn/styles/layers.css" | url }}" rel="stylesheet">
 {# Add our own layers. #}
@@ -50,7 +46,11 @@
 
 <style>
   {% include "styles.css" %}
+</style>
+<style>
   {% include "fonts/iosevka.njk" %}
+</style>
+<style>
   {% include "fonts/pathway-gothic-one.njk" %}
 </style>
 
