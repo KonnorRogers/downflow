@@ -34,7 +34,7 @@ export function jsBundlePlugin(options = {}) {
         // Passthrough-copied vendor files (pagefind-ui, etc.) live only in
         // the built output, not next to the source - keep these as runtime
         // relative imports instead of trying to resolve/inline them.
-        external: ["../vendor/*"],
+        // external: ["../vendor/*"],
       });
     });
   };

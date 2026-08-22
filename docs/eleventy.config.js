@@ -20,8 +20,6 @@ const webawesomeComponents = fs.readdirSync(webawesomeComponentsDir).map(compone
   return path.join(webawesomeComponentsDir, componentName, componentName + '.js');
 });
 
-const pagefindUiDir = path.join(root, 'node_modules/@pagefind/component-ui');
-
 export const config = {
   markdownTemplateEngine: 'njk',
   htmlTemplateEngine: 'njk',
@@ -98,7 +96,6 @@ export default async function (eleventyConfig) {
   const passthroughCopy = {
     [assetsDir]: "assets",
     [webawesomeDir]: 'assets/vendor/webawesome',
-    [pagefindUiDir]: 'assets/vendor/pagefind/ui',
   }
 
   eleventyConfig.addPassthroughCopy(passthroughCopy);

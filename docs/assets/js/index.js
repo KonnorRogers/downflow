@@ -1,8 +1,9 @@
+import "../css/index.css"
 // import { DriveShaft } from "driveshaft";
 import { Application, Controller } from "downflow";
 import { ScrollSpyController } from "./scroll_spy_controller.js";
 // pagefind
-import "../vendor/pagefind/ui/npm_dist/mjs/component-ui.mjs";
+import '@pagefind/component-ui';
 // const driveShaft = new DriveShaft()
 // driveShaft.start();
 const application = new Application()
