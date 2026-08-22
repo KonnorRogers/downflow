@@ -49,11 +49,9 @@ function updateMenu(root = document) {
   const menu = getMenu(root)
   if (!menu) { return }
   let scrollPosition = sessionStorage.getItem(menuKey)
-  console.log({scrollPosition})
 
   if (scrollPosition) {
     scrollPosition = JSON.parse(scrollPosition)
-    console.log({scrollPosition})
     menu.scrollTop = scrollPosition.scrollTop
     menu.scrollLeft = scrollPosition.scrollLeft
   }
@@ -72,7 +70,6 @@ function updatePage (body) {
 
 const menuKey = "scroll:menu"
 function storeScrollPosition (e) {
-  console.log("storing scroll position")
   const menu = getMenu()
   if (!menu) { return }
 
