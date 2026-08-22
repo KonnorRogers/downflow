@@ -48,3 +48,21 @@ test("Should properly handle form scopes", async () => {
   assert.equal(form.querySelector("span").textContent, "foo");
 });
 
+
+test("Should properly handle form scopes in the value", async () => {
+  const application = start();
+  const form = await fixture(
+    html`<form>
+      <input name="foo" />
+      <span flow-text="$form.foo"></span>
+    </form>`,
+  );
+
+  assert.equal(form.querySelector("span").textContent, "");
+
+  form.querySelector("input").focus();
+  await sendKeys({ type: "foo" });
+
+  assert.equal(form.querySelector("input").value, "foo");
+  assert.equal(form.querySelector("span").textContent, "foo");
+});
