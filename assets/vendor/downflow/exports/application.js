@@ -25,6 +25,29 @@ function dig(obj, ...args) {
   return current;
 }
 
+/**
+ * If there are still more keys to walk, and the current key is undefined, make it an object.
+ * `dig_p` after `mkdir_p` ;)
+ * @param {Object} obj
+ * @param {...any} args
+ */
+function dig_p(obj, ...args) {
+  let current = obj;
+  for (const key of args) {
+    if (current == null) { return null }
+
+    // @ts-expect-error
+    if (current[key] == null) {
+      // @ts-expect-error
+      current[key] = {}
+    }
+
+    // @ts-expect-error
+    current = current[key];
+  }
+  return current;
+}
+
 export class Application {
   /**
    * Starts the registry and listens.
@@ -135,6 +158,44 @@ export class Application {
     };
 
     /**
+     * Always returns a string. If no text binding found, returns null.
+     * @param {Element} el
+     * @returns {string | null}
+     */
+    this.parseTextBinding = (el) => {
+      const binding = this.getTextBinding(el);
+
+      if (!binding) {
+        return null;
+      }
+
+      /**
+        * @type {string[]}
+        */
+      const filters = []
+      let key = binding.trim()
+      binding.split("|").forEach((str, index) => {
+        if (index === 0) {
+          key = str.trim()
+        } else {
+          filters.push(str)
+        }
+      })
+
+      let value = this.resolveValue(el, key);
+      filters.forEach((key) => {
+        // @ts-expect-error
+        const callback = this.filters[key.trim()]
+        if (typeof callback === "function") {
+          value = callback(value)
+          return
+        }
+      })
+
+      return value == null ? "" : String(value);
+    }
+
+    /**
      * The attribute to use for finding actions. Defaults to "flow-action".
      * @type {(node: Element) => string | null | undefined}
      */
@@ -192,10 +253,46 @@ export class Application {
       [`[0-9]`]: /[0-9]/,
     };
 
+    /**
+     * @type {Record<string, (el: Element) => unknown>}
+     */
+    this.twoWayBindingSchema = {
+      "input[type='checkbox']": (element) => {
+        return /** @type {HTMLInputElement} */ (element).checked
+      },
+      "input[type='radio']": (element) => {
+        const elements = /** @type {HTMLInputElement} */ (element).form?.elements;
+
+        if (!elements) {
+          return null;
+        }
+
+        return (
+          /** @type {HTMLInputElement} */ (
+            Array.from(elements).find((el) => {
+              return (
+                /** @type {HTMLInputElement} */ (el).name === /** @type {HTMLInputElement} */(element).name &&
+                /** @type {HTMLInputElement} */ (el).checked === true
+              );
+            })
+          )?.value ?? null
+        );
+      },
+      input: (element) => {
+        return /** @type {HTMLInputElement} */ (element).value
+      },
+      select: /** @param {Element} el */ (el) => {
+        const element = /** @type {HTMLSelectElement} */ (el);
+        return Array.from(element.selectedOptions, (o) => o.value);
+      },
+      default: (element) => {
+        return /** @type {HTMLInputElement} */ (element).value
+      }
+    }
+
     this._contextRef = ref({});
 
     this.forms = document.forms;
-    this.stores = {};
 
     this.effectScheduler = new EffectScheduler((fn) => this.flushChanges(fn));
 
@@ -217,18 +314,46 @@ export class Application {
       if (!target) {
         return;
       }
-      if (!target.name) {
+
+      this.updateBindingsForElement(target)
+    };
+
+    this.filters = {}
+  }
+
+  /**
+   * @param {Element} el
+   */
+  updateBindingsForElement (el) {
+      const bindings = this.parseBindings(el)
+
+      bindings.forEach((binding) => {
+        const context = this.resolveContext(el, binding.contextString)
+        const keys = binding.property.split(".")
+        const finalKey = keys.pop()
+        const obj = dig_p(context, ...keys)
+
+        if (finalKey && obj) {
+          // @ts-expect-error
+          obj[finalKey] = this._readFormControl(el);
+        }
+      })
+
+      // Bindings for `$form`
+      // @ts-expect-error
+      const name = el.name
+      if (!name) {
         return;
       }
 
-      const form = target?.form;
+      // @ts-expect-error
+      const form = el?.form;
 
       if (!form) {
         return;
       }
-      this._stateForForm(target.form)[target.name] =
-        this._readFormControl(target); // reactive WRITE
-    };
+
+      this._stateForForm(form)[name] = this._readFormControl(el); // reactive WRITE
   }
 
   get context() {
@@ -317,39 +442,13 @@ export class Application {
    * @param {Element} el
    */
   _readFormControl(el) {
-    if (el.localName === "input") {
-      const element = /** @type {HTMLInputElement} */ (el);
-      if (element.type === "checkbox") {
-        return element.checked;
-      }
-
-      if (element.type === "radio") {
-        const elements = element.form?.elements;
-
-        if (!elements) {
-          return null;
-        }
-
-        return (
-          /** @type {HTMLInputElement} */ (
-            Array.from(elements).find((el) => {
-              return (
-                /** @type {HTMLInputElement} */ (el).name === element.name &&
-                /** @type {HTMLInputElement} */ (el).checked === true
-              );
-            })
-          )?.value ?? null
-        );
+    for (const [key, fn] of Object.entries(this.twoWayBindingSchema)) {
+      if (el.matches(key)) {
+        return fn(el)
       }
     }
-    if (el.localName === "select") {
-      const element = /** @type {HTMLSelectElement} */ (el);
-      return Array.from(element.selectedOptions, (o) => o.value);
-    }
 
-    // TODO: Add a hook here for people to people to have their own reading logic from a form control.
-
-    return /** @type {HTMLInputElement} */ (el).value;
+    return this.twoWayBindingSchema.default(el);
   }
 
   /**
@@ -469,50 +568,30 @@ export class Application {
 
     key = key.slice(negativeLength);
 
-    let contextStr = this.getClosestContextString(el);
+    /**
+     * @type {string | null}
+     */
+    let contextString = null
 
-    let context =
-      /** @type {Controller["context"] | Application["context"]} */ (
-        this.context
-      );
-
-    const keywords = ["$form", "$context"];
-
-    if (contextStr && !keywords.includes(contextStr)) {
-      let controllerName = contextStr;
-
-      if (!controllerName) {
-        return null;
-      }
-
-      const controller = this.getClosestController(el, controllerName);
-
-      if (!controller) {
-        return null;
-      }
-
-      context = controller.context;
+    if (key.includes("#")) {
+      const splitKeys = key.split(/#/)
+      const controllerName = splitKeys[0]
+      key = splitKeys.slice(1).join("")
+      contextString = controllerName
     }
 
     const keys = key.split(/\./g);
 
-    let value = null;
+    const firstKey = keys[0]
 
-    if (contextStr === "$form") {
-      const formAttr = el.getAttribute("form");
-      const rootNode = /** @type {Element} */ (el.getRootNode() || document);
-      const form = /** @type {HTMLFormElement | null} */ (
-        formAttr
-          ? rootNode.querySelector(`form#${formAttr}`)
-          : el.closest("form")
-      );
-
-      if (form) {
-        value = this._stateForForm(form)[keys.join("")]; // reactive READ -> tracked
-      }
-    } else {
-      value = dig(context, ...keys);
+    if (firstKey === "$form" || firstKey === "$context") {
+      contextString = firstKey
+      keys.shift()
     }
+
+    const context = this.resolveContext(el, contextString)
+
+    let value = dig(context, ...keys);
 
     if (isRef(value)) {
       value = value.value;
@@ -669,6 +748,7 @@ export class Application {
       // Pass 1: walk live tree, upgrade idempotently
       this.walkElements(root, (el) => {
         seen.add(el);
+        this.updateBindingsForElement(el)
         this._reconcileControllers(el); // desired flow-controller names vs connected
         this._reconcileActions(el); // desired action sources vs listener map
         this._reconcileBindings(el); // rebind only if text/attr/prop changed
@@ -1254,13 +1334,16 @@ export class Application {
   _effectText(el) {
     const runner = effect(
       () => {
-        const binding = this.getTextBinding(el);
-        if (!binding) {
-          return;
+        let text = this.parseTextBinding(el)
+
+        /**
+         * Should only be null if no binding found.
+         */
+        if (text == null) { return }
+
+        if (el.textContent !== text) {
+          el.textContent = text;
         }
-        const value = this.resolveValue(el, binding);
-        const text = value == null ? "" : String(value);
-        if (el.textContent !== text) el.textContent = text;
       },
       { scheduler: () => this.effectScheduler.schedule(runner) },
     );
@@ -1280,10 +1363,59 @@ export class Application {
           el.removeAttribute(attr);
           return;
         }
-        el.setAttribute(attr, value);
+        el.setAttribute(attr, String(value));
       },
       { scheduler: () => this.effectScheduler.schedule(runner) },
     );
+  }
+
+  /**
+   * @param {Element} el
+   * @param {string | null | undefined} [contextStr]
+   */
+  resolveContext (el, contextStr) {
+    let context =
+      /** @type {Controller["context"] | Application["context"]} */ (
+        this.context
+      );
+
+    const keywords = ["$form", "$context"];
+
+    if (!contextStr) {
+      contextStr = this.getClosestContextString(el)
+    }
+
+    if (contextStr && !keywords.includes(contextStr)) {
+      let controllerName = contextStr;
+
+      if (!controllerName) {
+        return null;
+      }
+
+      const controller = this.getClosestController(el, controllerName);
+
+      if (!controller) {
+        return null;
+      }
+
+      context = controller.context;
+    }
+
+    if (contextStr === "$form") {
+      const formAttr = el.getAttribute("form");
+      const rootNode = /** @type {Element} */ (el.getRootNode() || document);
+      const form = /** @type {HTMLFormElement | null} */ (
+        formAttr
+          ? rootNode.querySelector(`form#${formAttr}`)
+          : el.closest("form")
+      );
+
+      if (form) {
+        return this._stateForForm(form)
+      }
+    } else {
+      return context
+    }
   }
 
   /**
@@ -1302,8 +1434,50 @@ export class Application {
     );
   }
 
+
+  /**
+   * @param {Element} el
+   */
+  parseBindings (el) {
+    // There are a few ways to define bindings. We can do
+    // - `flow-bind="name"`
+    // - `flow-bind:name`
+    // - `flow-bind:name="my-controller"
+    // - `flow-bind:name="$context"
+    // - `flow-bind="name:$context"`
+    // - `flow-bind="myName:my-controller"`
+    // So we need to be sure we support all the above syntaxes.
+
+    // Start with `flow-bind` attribute. I don't *think* we need to support multiple instances? if we ever do, we can add a `;` delimiter.
+
+    /**
+     * @type {{contextString: string | null | undefined, property: string}[]}
+     */
+    const bindings = []
+
+    const str = el.getAttribute("flow-bind")
+
+    if (str) {
+      const [property, contextString] = str.split(":")
+      bindings.push({property, contextString})
+    }
+
+    // Now we parse the attributes array.
+    ;[...el.attributes].forEach((attr) => {
+      if (attr.name.startsWith("flow-bind:")) {
+        // This covers `flow-bind:foo="$context"` for example.
+        const [_, property] = attr.name.split(":")
+        const contextString = attr.value
+        bindings.push({property, contextString})
+      }
+    })
+
+    return bindings
+  }
+
   /** @param {Element} el */
   _reconcileBindings(el) {
+    // TODO: these should be more like "parseTextBindings", "parseAttributeBindings", "parsePropertyBindings", so that we can support things like `@click=""`, `flow-bind:foo`, etc.
     const text = this.getTextBinding(el) ?? "";
     const attr = this.getAttributeBinding(el) ?? "";
     const prop = this.getPropertyBinding(el) ?? "";
@@ -1319,8 +1493,8 @@ export class Application {
 
     let signature = `${context}||${text}||${attr}||${prop}`;
 
-    // resolve the *instance* the string points at, and fold its id in.
-    // keywords ($form/$context) don't resolve to a controller — id stays "".
+    // resolve the controller *instance* the string points at in case the underlying controller changes.
+    // keywords ($form/$context) don't resolve to a controller, so they stay as a blank stirng.
     let controllerId = "";
     if (context && context !== "$form" && context !== "$context") {
       const controller = this.getClosestController(el, context);
@@ -1369,7 +1543,8 @@ export class Application {
   _idForController(controller) {
     let id = this._controllerIds.get(controller);
     if (id == null) {
-      id = ++this._controllerSequentialId;
+      this._controllerSequentialId++;
+      id = this._controllerSequentialId;
       this._controllerIds.set(controller, id);
     }
     return id;

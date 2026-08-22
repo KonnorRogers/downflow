@@ -1,10 +1,10 @@
-import { DriveShaft } from "driveshaft";
+// import { DriveShaft } from "driveshaft";
 import { Application, Controller } from "downflow";
 import { ScrollSpyController } from "./scroll_spy_controller.js";
 // pagefind
 import "/assets/vendor/pagefind/ui/npm_dist/mjs/component-ui.mjs";
-const driveShaft = new DriveShaft()
-driveShaft.start();
+// const driveShaft = new DriveShaft()
+// driveShaft.start();
 const application = new Application()
 application.context = window?.application?.context || {};
 window.application = application
@@ -48,9 +48,12 @@ function getMenu(root = document) {
 function updateMenu(root = document) {
   const menu = getMenu(root)
   if (!menu) { return }
-  const scrollPosition = window.scrollPositions?.menu
+  let scrollPosition = sessionStorage.getItem(menuKey)
+  console.log({scrollPosition})
 
   if (scrollPosition) {
+    scrollPosition = JSON.parse(scrollPosition)
+    console.log({scrollPosition})
     menu.scrollTop = scrollPosition.scrollTop
     menu.scrollLeft = scrollPosition.scrollLeft
   }
@@ -63,20 +66,29 @@ function updatePage (body) {
   if (currentPage && newPage) {
     driveShaft.replacer.syncAttributes(currentPage, newPage)
   }
+  newPage.view = "desktop"
 }
 
-document.addEventListener("driveshaft:navigation-start", (e) => {
-  window.scrollPositions ||= {}
+
+const menuKey = "scroll:menu"
+function storeScrollPosition (e) {
+  console.log("storing scroll position")
   const menu = getMenu()
   if (!menu) { return }
+
   const scrollPosition = {
     scrollTop: menu.scrollTop,
     scrollLeft: menu.scrollLeft
   }
-  window.scrollPositions.menu = scrollPosition
+  sessionStorage.setItem(menuKey, JSON.stringify(scrollPosition))
+}
+
+
+;["navigate", "pagehide", "driveshaft:navigation-start"].forEach((eventName) => {
+  window.addEventListener(eventName, storeScrollPosition)
 })
 
-document.addEventListener("driveshaft:before-replace", (e) => {
+function handleBodySwap (e) {
   const newBody = e.newBody
 
   // close any modals
@@ -97,9 +109,11 @@ document.addEventListener("driveshaft:before-replace", (e) => {
 
   const { light, dark, mode } = application.context.color
   application.reconcile()
-})
+}
 
-document.addEventListener("driveshaft:after-replace", (e) => {
+document.addEventListener("driveshaft:before-replace", handleBodySwap)
+
+function restoreScrollPosition (e) {
   const currentPage = document.querySelector("wa-page")
 
   updateMenu()
@@ -111,6 +125,10 @@ document.addEventListener("driveshaft:after-replace", (e) => {
       })
     }, 50)
   })
+}
+
+;["pageshow", "DOMContentLoaded", "driveshaft:after-replace"].forEach((eventName) => {
+  window.addEventListener(eventName, restoreScrollPosition)
 })
 
 setTimeout(() => document.documentElement.classList.add("js-loaded"), 50);

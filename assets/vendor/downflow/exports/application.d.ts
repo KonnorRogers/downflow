@@ -83,6 +83,12 @@ export class Application {
      */
     getTextBinding: (node: Element) => string | null | undefined;
     /**
+     * Always returns a string. If no text binding found, returns null.
+     * @param {Element} el
+     * @returns {string | null}
+     */
+    parseTextBinding: (el: Element) => string | null;
+    /**
      * The attribute to use for finding actions. Defaults to "flow-action".
      * @type {(node: Element) => string | null | undefined}
      */
@@ -111,9 +117,12 @@ export class Application {
      * @type {Record<string, string | RegExp>}
      */
     keymapSchema: Record<string, string | RegExp>;
+    /**
+     * @type {Record<string, (el: Element) => unknown>}
+     */
+    twoWayBindingSchema: Record<string, (el: Element) => unknown>;
     _contextRef: import("@vue/reactivity").Ref<{}, {}>;
     forms: HTMLCollectionOf<HTMLFormElement>;
-    stores: {};
     effectScheduler: EffectScheduler;
     _bindingScopes: Map<any, any>;
     _formState: WeakMap<WeakKey, any>;
@@ -125,6 +134,11 @@ export class Application {
      * @param {Event} e
      */
     eventUpdateContext: (e: Event) => void;
+    filters: {};
+    /**
+     * @param {Element} el
+     */
+    updateBindingsForElement(el: Element): void;
     set context(ctx: {});
     get context(): {};
     /**
@@ -148,7 +162,7 @@ export class Application {
     /**
      * @param {Element} el
      */
-    _readFormControl(el: Element): string | boolean | string[] | null;
+    _readFormControl(el: Element): unknown;
     /**
      * Search upwards from current node to find closest controller for a given name.
      * @param {Element} root
@@ -178,7 +192,7 @@ export class Application {
      * @param {Element} el
      * @param {string | null} key
      */
-    resolveValue(el: Element, key: string | null): any;
+    resolveValue(el: Element, key: string | null): Object | null | undefined;
     /**
      * Starts the registry and listens.
      * @param {RegistryOptions} options
@@ -315,8 +329,20 @@ export class Application {
     _effectAttributes(el: Element): void;
     /**
      * @param {Element} el
+     * @param {string | null | undefined} [contextStr]
+     */
+    resolveContext(el: Element, contextStr?: string | null | undefined): any;
+    /**
+     * @param {Element} el
      */
     _effectProperties(el: Element): void;
+    /**
+     * @param {Element} el
+     */
+    parseBindings(el: Element): {
+        contextString: string | null | undefined;
+        property: string;
+    }[];
     /** @param {Element} el */
     _reconcileBindings(el: Element): void;
     /** @param {Element} el */
