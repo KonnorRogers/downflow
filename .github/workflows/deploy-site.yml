@@ -50,10 +50,6 @@ jobs:
           id: deploy-preview
           message: "Starting deployment of preview ⏳..."
 
-      - name: Set domain
-        # If you're using the default github pages url, use this instead:
-        run: echo "DOMAIN=${{ github.actor }}.github.io" >> $GITHUB_ENV
-
       # 7.0.1
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
@@ -66,22 +62,25 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Set production base URL
+      - name: Compute base path
+        # DOMAIN uses the repo owner, not the actor, so a PR from a fork still
+        # points at konnorrogers.github.io instead of the contributor's own pages.
+        # BASE_PATH is what the site is actually served under: /downflow for a
+        # production deploy, /downflow/pull/<number> for a PR preview.
         run: |
-          echo "URL=https://${{ env.DOMAIN }}" >> $GITHUB_ENV
-          echo "BASE_PATH=/${{ github.event.repository.name }}" >> $GITHUB_ENV
-
-      - name: Set base_path for preview if PR
-        if: github.ref != 'refs/heads/main'
-        run: echo "BASE_PATH=/${{ github.event.repository.name }}/${{ env.PR_PATH }}" >> $GITHUB_ENV
-
-      - name: Set base_url
-        run: echo "BASE_URL=$URL/$BASE_PATH" >> $GITHUB_ENV
+          DOMAIN="${{ github.repository_owner }}.github.io"
+          BASE_PATH="/${{ github.event.repository.name }}"
+          if [ "${{ github.ref }}" != "refs/heads/main" ]; then
+            BASE_PATH="$BASE_PATH/${{ env.PR_PATH }}"
+          fi
+          echo "DOMAIN=$DOMAIN" >> $GITHUB_ENV
+          echo "BASE_PATH=$BASE_PATH" >> $GITHUB_ENV
+          echo "URL=https://$DOMAIN$BASE_PATH/" >> $GITHUB_ENV
 
       - name: Build website
         run: |
           npm run build
-          npm run build:docs
+          npm run build:docs -- --pathprefix="$BASE_PATH/"
 
       - name: Set username + email
         run: |
@@ -92,7 +91,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-          npx gh-pages --remove "*(!(pull))" -d ./_site --dotfiles -b gh-pages -u "github-actions-bot <support+actions@github.com>"
+          npx gh-pages --remove "{!(pull),!(pull)/**}" -d ./_site --dotfiles --nojekyll -b gh-pages -u "github-actions-bot <support+actions@github.com>"
 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -101,7 +100,7 @@ jobs:
         if: github.ref != 'refs/heads/main'
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-          npx gh-pages -d ./_site --dotfiles --dest "${{ env.PR_PATH }}" -b gh-pages -u "github-actions-bot <support+actions@github.com>"
+          npx gh-pages -d ./_site --dotfiles --nojekyll --dest "${{ env.PR_PATH }}" -b gh-pages -u "github-actions-bot <support+actions@github.com>"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -113,4 +112,5 @@ jobs:
           repository: ${{ github.repository }}
           number: ${{ github.event.number }}
           id: deploy-preview
-          message: "A preview of ${{ github.event.after }} is uploaded and can be seen here:\n\n ✨ ${{ env.BASE_URL }} ✨\n\nChanges may take a few minutes to propagate. Since this is a preview of production, content with `draft: true` will not be rendered. The source is here: https://github.com/${{ github.repository }}/tree/gh-pages/${{ env.PR_PATH }}/"
+          message: "A preview of ${{ github.event.after }} is uploaded and can be seen here:\n\n ✨ ${{ env.URL }} ✨\n\nChanges may take a few minutes to propagate. Since this is a preview of production, content with `draft: true` will not be rendered. The source is here: https://github.com/${{ github.repository }}/tree/gh-pages/${{ env.PR_PATH }}/"
+
