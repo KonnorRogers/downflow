@@ -23,28 +23,4 @@
       </ol>
     </wa-details>
   {%- endfor -%}
-
-  {%- for docCategory in docCategories(collections.docs) -%}
-    <wa-details open summary="{{ docCategory | titleize }}">
-      <ol
-        {% if category == docCategory %}
-          aria-current="true"
-        {% endif %}
-        style="list-style: none;"
-      >
-        {%- for doc in getCollectionForCategory(docCategory, collections.docs) -%}
-          <li>
-            <a
-              href="{{ doc.url }}"
-              {% if doc.url == page.url %}
-                aria-current="page"
-              {% endif %}
-            >
-              {{ doc.data.title }}
-            </a>
-          </li>
-        {%- endfor -%}
-      </ol>
-    </wa-details>
-  {%- endfor -%}
 </aside>
