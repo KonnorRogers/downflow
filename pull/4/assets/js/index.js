@@ -114,13 +114,15 @@ function restoreScrollPosition (e) {
   const currentPage = document.querySelector("wa-page")
 
   updateMenu()
-  currentPage.updateComplete.then(() => {
-    setTimeout(() => {
-      requestAnimationFrame(() => {
-        updateMenu()
-        document.documentElement.classList.add("js-loaded");
-      })
-    }, 50)
+  customElements.whenDefined("wa-page").then(() => {
+    currentPage.updateComplete.then(() => {
+      setTimeout(() => {
+        requestAnimationFrame(() => {
+          updateMenu()
+          document.documentElement.classList.add("js-loaded");
+        })
+      }, 50)
+    })
   })
 }
 
