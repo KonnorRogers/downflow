@@ -1,85 +1,3 @@
-// import { Controller } from "downflow"
-
-// export class ScrollSpyController extends Controller {
-//   static controllerName = "scroll-spy"
-
-//   connectedCallback () {
-//     const scrollMarginTop = getComputedStyle(this.element).getPropertyValue("scroll-margin-top")
-//     this.observer = new IntersectionObserver(this.handleIntersect, {
-//       rootMargin: `${scrollMarginTop} 0px 0px 0px` ,
-//       threshold: 0.2,
-//     });
-
-//     this.linkMap = new WeakMap();
-//     this.visibleSet = new WeakSet();
-
-//     this.observeLinks()
-//     this.updateActiveLinks()
-
-//     this.selector = ["1","2","3","4","5","6"].map((str) => "h" + str + "[id]").join(",")
-//     document.querySelectorAll(this.selector).forEach((header) => {
-//       this.observer.observe(header);
-//     });
-
-//     this.observeLinks()
-//     this.updateActiveLinks()
-//   }
-
-//   disconnect () {
-//     this.observer.disconnect()
-//   }
-
-//   get links () {
-//     return [...document.querySelectorAll('#table-of-contents ol a')];
-//   }
-
-//   handleIntersect = (entries) => {
-//     entries.forEach(entry => {
-//       // Remember which targets are visible
-//       if (entry.isIntersecting) {
-//         this.visibleSet.add(entry.target);
-//       } else {
-//         this.visibleSet.delete(entry.target);
-//       }
-//     });
-
-//     this.updateActiveLinks();
-//   }
-
-//   updateActiveLinks = () => {
-//     const links = this.links;
-//     // Find the first visible target and activate the respective link
-//     links.find(link => {
-//       const target = this.linkMap.get(link);
-
-//       if (target && this.visibleSet.has(target)) {
-//         links.forEach(el => {
-//           if (el === link) {
-//             el.setAttribute('aria-current', "true")
-//           } else {
-//             el.removeAttribute("aria-current")
-//           }
-//         });
-//         return true;
-//       }
-
-//       return false;
-//     });
-//   }
-
-//   observeLinks = () => {
-//     this.links.forEach(link => {
-//       const hash = link.hash.slice(1);
-//       const target = hash ? document.querySelector(`main #${hash}`) : null;
-
-//       if (target) {
-//         this.linkMap.set(link, target);
-//         this.observer.observe(target);
-//       }
-//     });
-//   }
-// }
-
 import { Controller } from "downflow"
 
 export class ScrollSpyController extends Controller {
@@ -96,7 +14,7 @@ export class ScrollSpyController extends Controller {
     this.frame = null
     window.addEventListener("scroll", this.requestUpdate, { passive: true })
     window.addEventListener("resize", this.requestUpdate, { passive: true })
-    this.update()
+    this.requestUpdate()
   }
 
   disconnectedCallback () {

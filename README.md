@@ -4,6 +4,10 @@ Reactive templating in a way that doesn't drive a steamroller through the DOM
 
 ## WIP: Come back later
 
+## Documentation
+
+<https://konnorrogers.github.io/downflow>
+
 ## Inspiration
 
 <https://bsky.app/profile/lea.verou.me/post/3lx34db4osc23>
@@ -34,13 +38,11 @@ So here's downflow's counter.
 
   application.context = {
     count: 0,
-  };
-  application.functions = {
     increment() {
-      application.context.count++;
+      this.count++;
     },
     decrement() {
-      application.context.count--;
+      this.count--;
     },
   };
 </script>
@@ -73,7 +75,7 @@ We can also disconnect the form and reference it by its id, similar to form cont
 <form id="my-form">
   <label>
     <div>Give us your name!</div>
-    <input flow-context="$form" name="name" />
+    <input name="name" />
   </label>
 </form>
 
@@ -111,63 +113,37 @@ Similar to attributes, we can also bind properties.
 
 ### Implemented
 
-- `flow-controller="<controller_name>"` - mixins (Stimulus Controllers)
+- `flow-controller="<controller_name>"` - attaches a controller, same idea as a Stimulus controller
 - `flow-action="<event>"` - events
 - `flow-text="<state>"` - sets `element.textContent`
 - `flow-prop="<property>:<value>"` - sets a given property
 - `flow-attr="<attribute>:<value>"` - sets a given attribute
+- `flow-target="<controller_name>.<target_name>"` - names an element so a controller can find it
+- `flow-bind="<state>"` - writes a form control's value straight into your state, live
 
 #### State
 
-There are 3 different places "state" can come from and is defined with `flow-context`.
+There are 3 places "state" can come from, and it's picked with `flow-context`.
 
-We have `$form` and `<controller-name>`
+We have `$form`, `$context`, and `<controller-name>`.
 
-- `$form` is either the form with `id` on the element. IE: `<div flow-context="$form" id="my-form">` would look for `<form id="my-form"`. If no form attribute is on the element, the closest `<form>` element is used.
-- `flow-context="<controller_name>"` will find the closest `flow-controller` requires a prefix of the controller you plan to use. IE: `<div flow-context="hello" flow-text="foo">` would pull `state.foo` from your instance of a `HelloController`.
+- `$form` is the closest `<form>` ancestor, or a form pointed at by a `form="<id>"` attribute. IE: `<div form="my-form" flow-context="$form">` looks for `<form id="my-form">`.
+- `$context` is always `application.context`, no matter what's closer.
+- `flow-context="<controller_name>"` finds the closest ancestor with that name in its `flow-controller` attribute, and reads that controller's own `context`. IE: `<div flow-context="hello" flow-text="foo">` pulls `foo` from your instance of `HelloController`.
 
 ```js
-import { Controller }
+import { Controller } from "downflow";
+
 class HelloController extends Controller {
-    initialize () {
-        this.context = {
-            foo: "bar" // <-- used by `flow-text="hello#state.foo"`
-                                                       //   ^ controller name. Will use the closest controller parent defined in the DOM.
-        }
-    }
+  static controllerName = "hello";
+
+  initialize() {
+    this.context = {
+      foo: "bar", // <-- read by `flow-text="foo"` under `flow-context="hello"`,
+      //             or directly, from anywhere, with `flow-text="hello#foo"`
+    };
+  }
 }
-```
-
-#### Reactivity
-
-```js
-import { Application, Controller } from "downflow";
-
-const application = Application.start();
-
-application.context = {
-  count: 0,
-};
-```
-
-```html
-<form>
-  <input name="email" />
-  <span
-    >Your email is: <output flow-context="$form" flow-text="email"></output
-  ></span>
-</form>
-<!-- Live reactivity from the host "form" -->
-
-<!-- this also works -->
-<form id="foo">
-  <input name="email" />
-</form>
-
-<span>
-  Your email is:
-  <output form="foo" flow-context="$form" flow-text="email"></output>
-</span>
 ```
 
 ### Not implemented

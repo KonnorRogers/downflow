@@ -2,19 +2,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Downflow</title>
 
-<script type="importmap">
-  {
-    "imports": {
-      "downflow": "/assets/vendor/downflow/exports/application.js",
-      "downflow/": "/assets/vendor/downflow/",
-      "driveshaft": "/assets/vendor/driveshaft/exports/driveshaft.js",
-      "@vue/reactivity": "/assets/vendor/vue/reactivity/dist/reactivity.esm-browser.js",
-      "@vue/reactivity/": "/assets/vendor/vue/reactivity/",
-      "pagefind/": "/assets/vendor/pagefind/"
-    }
-  }
-</script>
-
 <style>
   .content { max-width: 1000px; margin: 0 auto; }
 
@@ -23,27 +10,7 @@
   }
 </style>
 
-{# Fonts #}
-<link rel="stylesheet" href="{{ "/assets/fonts/iosevka/iosevka.css" | url }}">
-<link rel="stylesheet" href="{{ "/assets/fonts/pathway-gothic-one/pathway-gothic-one.css" | url }}">
-
 {# Layers #}
-<link href="{{ "/assets/vendor/webawesome/dist-cdn/styles/layers.css" | url }}" rel="stylesheet">
-{# Add our own layers. #}
-<link rel="stylesheet" href="{{ "/assets/css/layers.css" | url }}">
-
-{# Utility classes #}
-<link href="{{ "/assets/vendor/webawesome/dist-cdn/styles/utilities.css" | url }}" rel="stylesheet">
-{# Style native elements #}
-<link href="{{ "/assets/vendor/webawesome/dist-cdn/styles/native.css" | url }}" rel="stylesheet">
-
-{# Themes #}
-<link href="{{ "/assets/vendor/webawesome/dist-cdn/styles/themes/default.css" | url }}" rel="stylesheet">
-<link rel="stylesheet" href="{{ "/assets/css/theme.css" | url }}">
-
-{# Overrides #}
-<link rel="stylesheet" href="{{ "/assets/css/overrides/pagefind.css" | url }}">
-
 <script type="module" src="{{ "/assets/vendor/webawesome/dist-cdn/webawesome.ssr-loader.js" | url }}"></script>
 
 {% include "color-switcher-js.njk" %}
@@ -52,5 +19,5 @@
   {% include "styles.css" %}
 </style>
 
-
-<script type="module" src="/assets/js/index.js"></script>
+<script type="module" src="{{ "/assets/js/bundle.js" | url }}"></script>
+<link rel="stylesheet" href="{{ "/assets/js/bundle.css" | url }}">

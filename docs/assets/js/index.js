@@ -1,8 +1,9 @@
+import "../css/index.css"
 // import { DriveShaft } from "driveshaft";
 import { Application, Controller } from "downflow";
 import { ScrollSpyController } from "./scroll_spy_controller.js";
 // pagefind
-import "/assets/vendor/pagefind/ui/npm_dist/mjs/component-ui.mjs";
+import '@pagefind/component-ui';
 // const driveShaft = new DriveShaft()
 // driveShaft.start();
 const application = new Application()
@@ -49,11 +50,9 @@ function updateMenu(root = document) {
   const menu = getMenu(root)
   if (!menu) { return }
   let scrollPosition = sessionStorage.getItem(menuKey)
-  console.log({scrollPosition})
 
   if (scrollPosition) {
     scrollPosition = JSON.parse(scrollPosition)
-    console.log({scrollPosition})
     menu.scrollTop = scrollPosition.scrollTop
     menu.scrollLeft = scrollPosition.scrollLeft
   }
@@ -72,7 +71,6 @@ function updatePage (body) {
 
 const menuKey = "scroll:menu"
 function storeScrollPosition (e) {
-  console.log("storing scroll position")
   const menu = getMenu()
   if (!menu) { return }
 
@@ -117,13 +115,15 @@ function restoreScrollPosition (e) {
   const currentPage = document.querySelector("wa-page")
 
   updateMenu()
-  currentPage.updateComplete.then(() => {
-    setTimeout(() => {
-      requestAnimationFrame(() => {
-        updateMenu()
-        document.documentElement.classList.add("js-loaded");
-      })
-    }, 50)
+  customElements.whenDefined("wa-page").then(() => {
+    currentPage.updateComplete.then(() => {
+      setTimeout(() => {
+        requestAnimationFrame(() => {
+          updateMenu()
+          document.documentElement.classList.add("js-loaded");
+        })
+      }, 50)
+    })
   })
 }
 
