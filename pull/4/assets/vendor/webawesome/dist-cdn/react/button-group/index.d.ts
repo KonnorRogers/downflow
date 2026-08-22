@@ -1,0 +1,14 @@
+import Component from '../../components/button-group/button-group.js';
+/**
+ * @summary Button groups combine related buttons into a single visual unit. Use them for toolbars, segmented controls,
+ *  or any set of actions that belong together.
+ * @documentation https://webawesome.com/docs/components/button-group
+ * @status stable
+ * @since 2.0
+ *
+ * @slot - One or more `<wa-button>` elements to display in the button group.
+ *
+ * @csspart base - The component's base wrapper.
+ */
+declare const reactWrapper: import("@lit/react").ReactWebComponent<Component, {}>;
+export default reactWrapper;
