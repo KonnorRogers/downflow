@@ -90,6 +90,10 @@
     &::part(menu) {
       border: none;
     }
+
+    & [data-toggle-nav] {
+      display: none;
+    }
   }
 
   .header {

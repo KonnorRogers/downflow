@@ -3061,6 +3061,9 @@
     &::part(menu) {
       border: none;
     }
+    & [data-toggle-nav] {
+      display: none;
+    }
   }
   .header {
     max-width: 1800px;
