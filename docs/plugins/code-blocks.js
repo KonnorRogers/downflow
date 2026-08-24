@@ -25,6 +25,7 @@ export function codeBlocks () {
 
         // Add a copy button
         const lang = el.getAttribute("data-lang")
+
         el.replaceWith(`
           <div class="code-block">
             <div class="code-block-actions">

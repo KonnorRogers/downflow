@@ -1,4 +1,7 @@
-<h2 slot="navigation-header" style="margin: 0;"><a href="{{ "/" | url }}">Downflow</a></h2>
+<h2 slot="navigation-header" style="margin: 0;">
+  {% include "logo.njk" %}
+</h2>
+
 <aside slot="navigation">
   {%- for docCategory in docCategories(collections.docs) -%}
     <wa-details open summary="{{ docCategory | titleize }}">

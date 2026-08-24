@@ -1,6 +1,6 @@
 # `downflow`
 
-Reactive templating in a way that doesn't drive a steamroller through the DOM
+Reactive DOM updates in a way that doesn't drive a steamroller through the DOM
 
 ## WIP: Come back later
 

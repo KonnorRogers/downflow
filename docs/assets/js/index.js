@@ -4,12 +4,26 @@ import { Application, Controller } from "downflow";
 import { ScrollSpyController } from "./scroll_spy_controller.js";
 // pagefind
 import '@pagefind/component-ui';
+import { getInstanceManager } from '@pagefind/component-ui';
 // const driveShaft = new DriveShaft()
 // driveShaft.start();
 const application = new Application()
 application.context = window?.application?.context || {};
 window.application = application
 application.start()
+
+
+class QuickSearchButton extends HTMLElement {
+  constructor() {
+    super()
+    const instance = window.PagefindComponents.getInstanceManager().getInstance('default');
+    instance.registerUtility(this, 'modal-trigger');
+    this.addEventListener('click', () => instance.getUtilities('modal')[0]?.open());
+  }
+  handleModalClose() { this.buttonEl?.focus(); }
+}
+
+customElements.define('quick-search-button', QuickSearchButton);
 
 class ColorSwitcherController extends Controller {
   static controllerName = "color-switcher"

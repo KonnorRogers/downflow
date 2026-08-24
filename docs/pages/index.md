@@ -3,26 +3,27 @@ layout: default.njk
 title: Downflow
 ---
 
-<style>
-.flow {
-  color: var(--wa-color-neutral-50);
-  text-decoration: underline wavy;
-  color: var(--wa-color-brand-50);
-  background: none;
-  text-underline-offset: 4px; /* pushes the squiggle down a bit */
-  padding: 0;
-  font-family: var(--wa-font-family-body);
-}
-</style>
-
 <div class="hero">
-    <h1>Let your state <mark class="flow">flow</mark></h1>
-    <p>Downflow adds live behavior to server rendered HTML. No build step. No virtual DOM. No new template language. No <code>eval</code>, so it won't fight your Content Security Policy.</p>
+  <img class="pixel" width="64" height="64" src="/assets/images/water-dude.png" style="height: 30vh; width: auto; margin: 0 auto; margin-top: var(--wa-space-4xl);">
+  <h1>Let your state <mark class="emphasis">flow</mark></h1>
+  <p class="wa-font-size-xl">Reactive DOM updates that don't drive a steamroller through your DOM.</p>
 </div>
+
+<br>
+
+
+<div style="display: grid; place-content: center;">
+  <wa-button class="call-to-action" href="/docs/introduction/getting-started/" size="l" variant="brand" appearance="filled">
+    Get Started
+    <wa-icon name="arrow-right" slot="end"></wa-icon>
+  </wa-button>
+  </div>
+
+<!--
 
 ## Install
 
-```
+```shell
 npm install downflow
 ```
 
@@ -65,3 +66,4 @@ Head to [Getting Started]({{ "/docs/introduction/getting-started/" | url }}) to 
 ---
 
 This whole site runs on downflow. Every live example on these pages, down to the color switcher in the header, is the library rendering itself.
+-->

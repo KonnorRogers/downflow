@@ -2,7 +2,7 @@ You've got a server rendering HTML. You've got some state. You want a button tha
 
 ## Install
 
-```
+```shell
 npm install downflow
 ```
 

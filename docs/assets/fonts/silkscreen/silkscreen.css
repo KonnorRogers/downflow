@@ -1,0 +1,17 @@
+/** Pixel font! */
+@font-face {
+  font-family: "Silkscreen";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./silkscreen-regular.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: 'Silkscreen';
+	font-display: swap;
+	font-weight: 700;
+	font-stretch: normal;
+	font-style: normal;
+	src: url('./silkscreen-bold.ttf') format('truetype');
+}

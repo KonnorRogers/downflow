@@ -162,6 +162,9 @@ export default async function (eleventyConfig) {
   eleventyConfig.addGlobalData("layout", "default.njk");
   eleventyConfig.ignores.add("**/.keep");
   eleventyConfig.addFilter("titleize", titleize)
+  eleventyConfig.addFilter("stripExtension", (str) => {
+    return str.split(/\./)[0]
+  })
   eleventyConfig.addPlugin(shikiPlugin({ theme: "nord" }));
   eleventyConfig.addPlugin(codeBlocks())
   eleventyConfig.addPlugin(tableOfContents())

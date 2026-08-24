@@ -6,9 +6,14 @@
     preload
   ></pagefind-config>
 
-  <pagefind-modal-trigger
-    placeholder="Search docs..."
-  ></pagefind-modal-trigger>
+  <quick-search-button style="display: block;">
+    <wa-tooltip for="search-trigger">
+      Search this site (CMD+K)
+    </wa-tooltip>
+    <wa-button id="search-trigger" appearance="plain">
+      <wa-icon style="font-size: 1.5em; color: light-dark(black, var(--wa-color-brand));" name="magnifying-glass"></wa-icon>
+    </wa-button>
+  </quick-search-button>
 
   <pagefind-modal>
     <pagefind-modal-header>

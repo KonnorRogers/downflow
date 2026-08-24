@@ -31,6 +31,10 @@ export function jsBundlePlugin(options = {}) {
         format: "esm",
         target: "es2017",
         outfile: path.join(directories.output, outputPath),
+        loader: {
+          '.ttf': 'file',
+          '.woff2': 'file',
+        },
         // Passthrough-copied vendor files (pagefind-ui, etc.) live only in
         // the built output, not next to the source - keep these as runtime
         // relative imports instead of trying to resolve/inline them.
