@@ -1,12 +1,11 @@
 import "../css/index.css"
-// import { DriveShaft } from "driveshaft";
+import { DriveShaft } from "driveshaft";
 import { Application, Controller } from "downflow";
 import { ScrollSpyController } from "./scroll_spy_controller.js";
 // pagefind
 import '@pagefind/component-ui';
-import { getInstanceManager } from '@pagefind/component-ui';
-// const driveShaft = new DriveShaft()
-// driveShaft.start();
+const driveShaft = new DriveShaft()
+driveShaft.start();
 const application = new Application()
 application.context = window?.application?.context || {};
 window.application = application
