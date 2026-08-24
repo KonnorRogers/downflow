@@ -6,10 +6,10 @@ title: Downflow
 <div class="hero">
   <img
     class="pixel"
-    width="64"
-    height="64"
+    width="256"
+    height="256"
     src="{{ "/assets/images/water-dude.png" | url }}"
-    style="height: 30vh; width: auto; margin: 0 auto; margin-top: var(--wa-space-4xl);"
+    style="width: auto; margin: 0 auto; margin-top: var(--wa-space-4xl);"
   >
   <h1>Let your state <mark class="emphasis">flow</mark></h1>
   <p class="wa-font-size-xl">Reactive DOM updates that don't drive a steamroller through your DOM.</p>
