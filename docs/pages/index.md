@@ -19,7 +19,7 @@ title: Downflow
 
 
 <div style="display: grid; place-content: center;">
-  <wa-button class="call-to-action" href="/docs/introduction/getting-started/" size="l" variant="brand" appearance="filled">
+  <wa-button class="call-to-action" href="{{ "/docs/introduction/getting-started/" | url }} size="l" variant="brand" appearance="filled">
     Get Started
     <wa-icon name="arrow-right" slot="end"></wa-icon>
   </wa-button>

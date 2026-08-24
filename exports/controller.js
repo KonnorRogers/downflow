@@ -1,4 +1,4 @@
-import { ref, isRef, reactive } from "@vue/reactivity";
+import { ref, isRef } from "@vue/reactivity";
 
 /**
  * The base class for creating oil controllers.
