@@ -1,8 +1,6 @@
 /* docs/assets/css/layers.css */
 @layer theme, overrides {
 }
-; {
-}
 @layer wa-native, wa-base, wa-utilities, wa-color-palette, wa-color-variant, wa-theme, wa-theme-dimension, wa-theme-overrides, wa-base;
 
 /* node_modules/@awesome.me/webawesome/dist/styles/utilities/fouce.css */
@@ -2961,21 +2959,58 @@
   }
 }
 
+/* docs/assets/fonts/silkscreen/silkscreen.css */
+@font-face {
+  font-family: "Silkscreen";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./silkscreen-regular-6X6PS3GE.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Silkscreen";
+  font-display: swap;
+  font-weight: 700;
+  font-stretch: normal;
+  font-style: normal;
+  src: url("./silkscreen-bold-OHTIHJ4M.ttf") format("truetype");
+}
+
+/* docs/assets/fonts/pathway-gothic-one/pathway-gothic-one.css */
+@font-face {
+  font-family: "Pathway Gothic One";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./pathway-gothic-one-ULJLA3NW.woff2") format("woff2");
+}
+
 /* docs/assets/css/theme.css */
 @layer theme {
   :root {
-    --wa-font-family-body: "Iosevka Web", sans-serif;
-    --wa-font-family-longform: var(--wa-font-family-body);
-    --wa-font-family-code: var(--wa-font-family-body);
-    --wa-font-family-heading: "Pathway Gothic One", sans-serif;
+    --body-font: "Iosevka Web", sans-serif;
+    --mono-font: "Iosevka Web", monospace;
+    --pixel-font: "Silkscreen", var(--mono-font);
+    --heading-font: "Pathway Gothic One", sans-serif;
+    --wa-font-family-body: var(--body-font);
+    --wa-font-family-longform: var(--body-font);
+    --wa-font-family-code: var(--mono-font);
+    --wa-font-family-heading: var(--heading-font);
     --wa-border-radius-scale: 0;
-    --wa-color-brand: light-dark(hsl(202deg, 62%, 28.2%), #81A1C1);
+    --wa-color-brand-light: hsl(202deg, 62%, 28.2%);
+    --wa-color-brand-dark: #81A1C1;
+    --wa-color-brand: light-dark(var(--wa-color-brand-light), var(--wa-color-brand-dark));
     --wa-color-accent: light-dark(black, #8FBCBB);
     --wa-color-brand-50: var(--wa-color-brand);
     --wa-color-brand-60: hsl(202deg, 52%, 35.2%);
     --wa-color-neutral-50: var(--wa-color-accent);
     --wa-color-surface-border: light-dark(black, var(--wa-color-brand));
     --wa-color-surface-border: light-dark(black, var(--wa-color-brand));
+    --wa-color-brand-fill-normal: var(--wa-color-brand-light);
+    --wa-color-brand-on-normal: white;
+    &.wa-dark {
+      --wa-color-surface-default: #0B1523;
+    }
     font-size: 110%;
     --border-width: 4px;
     --border-color: var(--wa-color-surface-border);
@@ -3022,8 +3057,23 @@
       padding: 0px;
     }
   }
+  wa-page.layout-default {
+    &::part(menu) {
+      border: none;
+    }
+  }
+  .header {
+    max-width: 1800px;
+    margin: 0 auto;
+    padding-inline-start: clamp(16px, 3vw, 32px);
+    display: flex;
+    align-items: baseline;
+  }
+  wa-page::part(drawer__header-actions) {
+    align-self: center;
+  }
   @media screen and (min-width: 1200px) {
-    wa-page {
+    wa-page:not(.layout-default) {
       --menu-width: 275px;
       --main-width: 1fr;
       --aside-width: 275px;
@@ -3046,7 +3096,7 @@
     align-items: center;
     border: var(--border);
     position: relative;
-    --size: 2rem;
+    --size: 44px;
     &:focus-within {
       outline: var(--outline);
       outline-offset: var(--outline-offset);
@@ -3080,7 +3130,7 @@
       color: light-dark(var(--wa-color-neutral-80), var(--wa-color-neutral-30));
       transition: color 0.25s ease;
     }
-    & li:has([aria-current]:not(aria-current="false")) {
+    & li:has([aria-current]:not([aria-current=false])) {
       color: var(--inverted-text-color);
     }
     input {
@@ -3099,6 +3149,8 @@
     padding-block: var(--wa-space-xs);
   }
   .code-block {
+    font-family: var(--pixel-font);
+    font-weight: 400;
     display: grid;
     grid-template-rows: minmax(0, auto) minmax(0, 1fr);
     border: var(--border);
@@ -3130,10 +3182,25 @@
       color: var(--wa-color-text-quiet);
     }
   }
+  .call-to-action {
+    transform: translateY(0%);
+    transition: transform 0.2s ease-in-out;
+    & wa-icon {
+      transition: transform 0.2s ease-in-out;
+      transform-origin: left;
+      transform: scale(1);
+    }
+    &:hover {
+      transform: translateY(-5px);
+      & wa-icon {
+        transform: scale(1.25) translateX(-6.75%);
+      }
+    }
+  }
   .pagination-next {
     text-align: end;
   }
-  wa-page > [slot~=navigation] {
+  .layout-doc > [slot~=navigation] {
     ol > li {
       padding: var(--wa-space-2xs);
       padding-inline-start: var(--wa-space-m);
@@ -3232,7 +3299,56 @@
     margin-bottom: var(--wa-space-2xl);
   }
   .content {
+    --padding: var(--wa-space-2xl);
+    padding: var(--padding);
     padding-top: 0;
+    margin: 0;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  wa-icon {
+    padding-bottom: 0.125em;
+  }
+  .emphasis {
+    text-decoration: underline wavy;
+    color: var(--wa-color-brand-light);
+    text-underline-offset: 4px;
+    font-family: var(--pixel-font);
+    font-weight: 400;
+    padding-top: 0;
+    background: var(--wa-color-warning-90);
+  }
+  .logo {
+    font-family: var(--pixel-font);
+    font-size: 24px;
+    letter-spacing: .02em;
+    color: light-dark(black, white);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    font-smooth: antialiased;
+  }
+  .logo-start {
+    text-decoration: dotted;
+  }
+  .logo-end {
+    text-decoration: dotted;
+    color: var(--wa-color-brand);
+  }
+  .hero {
+    display: grid;
+    place-content: center;
+    text-align: center;
+  }
+  :is(.language-shell, .language-sh, .language-zsh, .language-bash, .language-fish)::before {
+    content: "$";
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    padding-inline-end: .45em;
+    color: var(--wa-color-neutral-80);
+  }
+  .pixel {
+    image-rendering: pixelated;
   }
 }
 
@@ -3286,22 +3402,27 @@
       display: flex;
       flex-wrap: nowrap;
       align-items: center;
+      padding: 0.2rem 0.5rem;
+      color: var(--wa-color-brand-on-normal);
+      background-color: var(--wa-color-brand);
       gap: 4px;
+      font-family: var(--mono-font);
+      font-size: var(--wa-font-size-smaller);
+      font-weight: var(--wa-font-weight-code);
+    }
+    .pf-trigger-key:first-child {
+      font-size: 20px;
+    }
+    .pf-trigger-btn {
+      gap: 1rem;
+      padding: 0;
+      padding-inline-start: 4px;
+      padding-inline-end: 8px;
     }
     .pf-trigger-key {
       display: inline-flex;
       justify-content: center;
       align-items: center;
-      width: 2em;
-      height: 2em;
-      padding: 0.125em 0.25em;
-      font-family: var(--wa-font-family-code);
-      font-size: var(--wa-font-size-smaller);
-      font-weight: var(--wa-font-weight-code);
-      gap: 0.5em;
-      border: 2px solid var(--border-color);
-      border-radius: var(--wa-border-radius-s);
-      box-shadow: 0 0.125em 0 0 color-mix(in oklab, currentColor, transparent 50%);
       wa-icon {
         vertical-align: -2px;
       }

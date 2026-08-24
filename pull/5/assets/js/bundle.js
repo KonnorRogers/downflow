@@ -10127,6 +10127,22 @@ var _a;
 application.context = ((_a = window == null ? void 0 : window.application) == null ? void 0 : _a.context) || {};
 window.application = application;
 application.start();
+var QuickSearchButton = class extends HTMLElement {
+  constructor() {
+    super();
+    const instance = window.PagefindComponents.getInstanceManager().getInstance("default");
+    instance.registerUtility(this, "modal-trigger");
+    this.addEventListener("click", () => {
+      var _a2;
+      return (_a2 = instance.getUtilities("modal")[0]) == null ? void 0 : _a2.open();
+    });
+  }
+  handleModalClose() {
+    var _a2;
+    (_a2 = this.buttonEl) == null ? void 0 : _a2.focus();
+  }
+};
+customElements.define("quick-search-button", QuickSearchButton);
 var ColorSwitcherController = class extends Controller {
   constructor() {
     super(...arguments);

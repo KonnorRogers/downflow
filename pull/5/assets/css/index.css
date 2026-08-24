@@ -5,5 +5,8 @@
 @import "@awesome.me/webawesome/dist/styles/native.css";
 @import "@awesome.me/webawesome/dist/styles/themes/default.css";
 
+@import "../fonts/silkscreen/silkscreen.css";
+@import "../fonts/pathway-gothic-one/pathway-gothic-one.css";
+@import "../fonts/pathway-gothic-one/pathway-gothic-one.css";
 @import "./theme.css";
 @import "../css/overrides/pagefind.css";
