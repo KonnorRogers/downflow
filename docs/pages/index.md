@@ -9,9 +9,9 @@ title: Downflow
     width="256"
     height="256"
     src="{{ "/assets/images/water-dude.png" | url }}"
-    style="width: auto; margin: 0 auto; margin-top: var(--wa-space-4xl);"
+    style="width: auto; margin: 0 auto; margin-top: var(--wa-space-xl);"
   >
-  <h1>Let your state <mark class="emphasis">flow</mark></h1>
+  <h1 style="margin-top: 0;">Let your state <mark class="emphasis">flow</mark></h1>
   <p class="wa-font-size-xl">Reactive DOM updates that don't drive a steamroller through your DOM.</p>
 </div>
 
@@ -19,7 +19,7 @@ title: Downflow
 
 
 <div style="display: grid; place-content: center;">
-  <wa-button class="call-to-action" href="{{ "/docs/introduction/getting-started/" | url }} size="l" variant="brand" appearance="filled">
+  <wa-button class="call-to-action" href="{{ "/docs/introduction/getting-started/" | url }}" size="l" variant="brand" appearance="filled">
     Get Started
     <wa-icon name="arrow-right" slot="end"></wa-icon>
   </wa-button>
