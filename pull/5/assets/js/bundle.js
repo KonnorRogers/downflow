@@ -3706,7 +3706,6 @@ var Application = class {
       const [property, contextString] = str.split(":");
       bindings.push({ property, contextString });
     }
-    ;
     [...el.attributes].forEach((attr) => {
       if (attr.name.startsWith("flow-bind:")) {
         const [_, property] = attr.name.split(":");
