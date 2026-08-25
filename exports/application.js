@@ -34,12 +34,14 @@ function dig(obj, ...args) {
 function dig_p(obj, ...args) {
   let current = obj;
   for (const key of args) {
-    if (current == null) { return null }
+    if (current == null) {
+      return null;
+    }
 
     // @ts-expect-error
     if (current[key] == null) {
       // @ts-expect-error
-      current[key] = {}
+      current[key] = {};
     }
 
     // @ts-expect-error
@@ -170,30 +172,30 @@ export class Application {
       }
 
       /**
-        * @type {string[]}
-        */
-      const filters = []
-      let key = binding.trim()
+       * @type {string[]}
+       */
+      const filters = [];
+      let key = binding.trim();
       binding.split("|").forEach((str, index) => {
         if (index === 0) {
-          key = str.trim()
+          key = str.trim();
         } else {
-          filters.push(str)
+          filters.push(str);
         }
-      })
+      });
 
       let value = this.resolveValue(el, key);
       filters.forEach((key) => {
         // @ts-expect-error
-        const callback = this.filters[key.trim()]
+        const callback = this.filters[key.trim()];
         if (typeof callback === "function") {
-          value = callback(value)
-          return
+          value = callback(value);
+          return;
         }
-      })
+      });
 
       return value == null ? "" : String(value);
-    }
+    };
 
     /**
      * The attribute to use for finding actions. Defaults to "flow-action".
@@ -258,10 +260,11 @@ export class Application {
      */
     this.twoWayBindingSchema = {
       "input[type='checkbox']": (element) => {
-        return /** @type {HTMLInputElement} */ (element).checked
+        return /** @type {HTMLInputElement} */ (element).checked;
       },
       "input[type='radio']": (element) => {
-        const elements = /** @type {HTMLInputElement} */ (element).form?.elements;
+        const elements = /** @type {HTMLInputElement} */ (element).form
+          ?.elements;
 
         if (!elements) {
           return null;
@@ -271,7 +274,8 @@ export class Application {
           /** @type {HTMLInputElement} */ (
             Array.from(elements).find((el) => {
               return (
-                /** @type {HTMLInputElement} */ (el).name === /** @type {HTMLInputElement} */(element).name &&
+                /** @type {HTMLInputElement} */ (el).name ===
+                  /** @type {HTMLInputElement} */ (element).name &&
                 /** @type {HTMLInputElement} */ (el).checked === true
               );
             })
@@ -279,16 +283,16 @@ export class Application {
         );
       },
       input: (element) => {
-        return /** @type {HTMLInputElement} */ (element).value
+        return /** @type {HTMLInputElement} */ (element).value;
       },
       select: /** @param {Element} el */ (el) => {
         const element = /** @type {HTMLSelectElement} */ (el);
         return Array.from(element.selectedOptions, (o) => o.value);
       },
       default: (element) => {
-        return /** @type {HTMLInputElement} */ (element).value
-      }
-    }
+        return /** @type {HTMLInputElement} */ (element).value;
+      },
+    };
 
     this._contextRef = ref({});
 
@@ -315,45 +319,45 @@ export class Application {
         return;
       }
 
-      this.updateBindingsForElement(target)
+      this.updateBindingsForElement(target);
     };
 
-    this.filters = {}
+    this.filters = {};
   }
 
   /**
    * @param {Element} el
    */
-  updateBindingsForElement (el) {
-      const bindings = this.parseBindings(el)
+  updateBindingsForElement(el) {
+    const bindings = this.parseBindings(el);
 
-      bindings.forEach((binding) => {
-        const context = this.resolveContext(el, binding.contextString)
-        const keys = binding.property.split(".")
-        const finalKey = keys.pop()
-        const obj = dig_p(context, ...keys)
+    bindings.forEach((binding) => {
+      const context = this.resolveContext(el, binding.contextString);
+      const keys = binding.property.split(".");
+      const finalKey = keys.pop();
+      const obj = dig_p(context, ...keys);
 
-        if (finalKey && obj) {
-          // @ts-expect-error
-          obj[finalKey] = this._readFormControl(el);
-        }
-      })
-
-      // Bindings for `$form`
-      // @ts-expect-error
-      const name = el.name
-      if (!name) {
-        return;
+      if (finalKey && obj) {
+        // @ts-expect-error
+        obj[finalKey] = this._readFormControl(el);
       }
+    });
 
-      // @ts-expect-error
-      const form = el?.form;
+    // Bindings for `$form`
+    // @ts-expect-error
+    const name = el.name;
+    if (!name) {
+      return;
+    }
 
-      if (!form) {
-        return;
-      }
+    // @ts-expect-error
+    const form = el?.form;
 
-      this._stateForForm(form)[name] = this._readFormControl(el); // reactive WRITE
+    if (!form) {
+      return;
+    }
+
+    this._stateForForm(form)[name] = this._readFormControl(el); // reactive WRITE
   }
 
   get context() {
@@ -444,7 +448,7 @@ export class Application {
   _readFormControl(el) {
     for (const [key, fn] of Object.entries(this.twoWayBindingSchema)) {
       if (el.matches(key)) {
-        return fn(el)
+        return fn(el);
       }
     }
 
@@ -571,25 +575,25 @@ export class Application {
     /**
      * @type {string | null}
      */
-    let contextString = null
+    let contextString = null;
 
     if (key.includes("#")) {
-      const splitKeys = key.split(/#/)
-      const controllerName = splitKeys[0]
-      key = splitKeys.slice(1).join("")
-      contextString = controllerName
+      const splitKeys = key.split(/#/);
+      const controllerName = splitKeys[0];
+      key = splitKeys.slice(1).join("");
+      contextString = controllerName;
     }
 
     const keys = key.split(/\./g);
 
-    const firstKey = keys[0]
+    const firstKey = keys[0];
 
     if (firstKey === "$form" || firstKey === "$context") {
-      contextString = firstKey
-      keys.shift()
+      contextString = firstKey;
+      keys.shift();
     }
 
-    const context = this.resolveContext(el, contextString)
+    const context = this.resolveContext(el, contextString);
 
     let value = dig(context, ...keys);
 
@@ -748,7 +752,7 @@ export class Application {
       // Pass 1: walk live tree, upgrade idempotently
       this.walkElements(root, (el) => {
         seen.add(el);
-        this.updateBindingsForElement(el)
+        this.updateBindingsForElement(el);
         this._reconcileControllers(el); // desired flow-controller names vs connected
         this._reconcileActions(el); // desired action sources vs listener map
         this._reconcileBindings(el); // rebind only if text/attr/prop changed
@@ -1334,12 +1338,14 @@ export class Application {
   _effectText(el) {
     const runner = effect(
       () => {
-        let text = this.parseTextBinding(el)
+        let text = this.parseTextBinding(el);
 
         /**
          * Should only be null if no binding found.
          */
-        if (text == null) { return }
+        if (text == null) {
+          return;
+        }
 
         if (el.textContent !== text) {
           el.textContent = text;
@@ -1373,7 +1379,7 @@ export class Application {
    * @param {Element} el
    * @param {string | null | undefined} [contextStr]
    */
-  resolveContext (el, contextStr) {
+  resolveContext(el, contextStr) {
     let context =
       /** @type {Controller["context"] | Application["context"]} */ (
         this.context
@@ -1382,7 +1388,7 @@ export class Application {
     const keywords = ["$form", "$context"];
 
     if (!contextStr) {
-      contextStr = this.getClosestContextString(el)
+      contextStr = this.getClosestContextString(el);
     }
 
     if (contextStr && !keywords.includes(contextStr)) {
@@ -1411,10 +1417,10 @@ export class Application {
       );
 
       if (form) {
-        return this._stateForForm(form)
+        return this._stateForForm(form);
       }
     } else {
-      return context
+      return context;
     }
   }
 
@@ -1434,11 +1440,10 @@ export class Application {
     );
   }
 
-
   /**
    * @param {Element} el
    */
-  parseBindings (el) {
+  parseBindings(el) {
     // There are a few ways to define bindings. We can do
     // - `flow-bind="name"`
     // - `flow-bind:name`
@@ -1453,26 +1458,26 @@ export class Application {
     /**
      * @type {{contextString: string | null | undefined, property: string}[]}
      */
-    const bindings = []
+    const bindings = [];
 
-    const str = el.getAttribute("flow-bind")
+    const str = el.getAttribute("flow-bind");
 
     if (str) {
-      const [property, contextString] = str.split(":")
-      bindings.push({property, contextString})
+      const [property, contextString] = str.split(":");
+      bindings.push({ property, contextString });
     }
 
     // Now we parse the attributes array.
-    ;[...el.attributes].forEach((attr) => {
+    [...el.attributes].forEach((attr) => {
       if (attr.name.startsWith("flow-bind:")) {
         // This covers `flow-bind:foo="$context"` for example.
-        const [_, property] = attr.name.split(":")
-        const contextString = attr.value
-        bindings.push({property, contextString})
+        const [_, property] = attr.name.split(":");
+        const contextString = attr.value;
+        bindings.push({ property, contextString });
       }
-    })
+    });
 
-    return bindings
+    return bindings;
   }
 
   /** @param {Element} el */

@@ -48,7 +48,6 @@ test("Should properly handle form scopes", async () => {
   assert.equal(form.querySelector("span").textContent, "foo");
 });
 
-
 test("Should properly handle form scopes in the value", async () => {
   const application = start();
   const form = await fixture(
@@ -70,8 +69,8 @@ test("Should properly handle form scopes in the value", async () => {
 test("Should properly handle busting using $context", async () => {
   const application = start();
   application.context = {
-    foo: "BIZZY"
-  }
+    foo: "BIZZY",
+  };
   const form = await fixture(
     html`<form>
       <input name="foo" />

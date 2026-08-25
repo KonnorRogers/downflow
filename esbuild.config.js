@@ -47,7 +47,6 @@ const bundleDir = path.join(process.cwd(), "bundles");
     outfile: path.join(bundleDir, "all.js"),
   };
 
-
   const configs = [cdnConfig, allConfig];
 
   if (watchMode) {
