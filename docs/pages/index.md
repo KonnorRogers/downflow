@@ -23,7 +23,63 @@ title: Downflow
     Get Started
     <wa-icon name="arrow-right" slot="end"></wa-icon>
   </wa-button>
-  </div>
+</div>
+
+<style>
+.animated-pipes {
+  height: calc(32px * 12);
+  width: 100%;
+}
+
+.pipe-down {
+  width: 16px;        /* the visible art within each cell */
+  height: 16px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  transform: translateZ(1px);
+  will-change: transform;
+  zoom: 4;
+  animation: frame-by-frame 2s steps(var(--frames)) infinite;
+  margin-top: -0.25px;
+}
+
+.pipe-down {
+  --frame-offset-y: 0px;
+  --frame-gap: 256px;      /* stride between frames on the sheet */
+  --frames: 16;
+  background-image: url('{{ "/assets/images/water-tubes.png" | url }}');
+}
+
+.pipe-corner {
+  --frame-gap: 256px;      /* stride between frames on the sheet */
+  --frames: 6;
+  background-image: url('{{ "/assets/images/water-tubes.png" | url }}');
+}
+
+@keyframes frame-by-frame {
+  to {
+    background-position: calc(var(--frames) * -1 * var(--frame-gap)) 0;
+  }
+}
+
+.pipe-node {
+  display: inline-block;
+  padding: 1rem;
+  border: 2px solid light-dark(black, white);
+}
+</style>
+
+
+<div class="animated-pipes">
+  <div class="pipe-node">State</div>
+  <div class="pipe-down"></div>
+  <div class="pipe-down"></div>
+  <div class="pipe-down"></div>
+  <div class="pipe-node">Node</div>
+</div>
+
 
 <!--
 
