@@ -40,7 +40,7 @@ title: Downflow
 
   transform: translateZ(1px);
   will-change: transform;
-  zoom: 4;
+  zoom: 8;
   animation: frame-by-frame 2s steps(var(--frames)) infinite;
   margin-top: -0.25px;
 
@@ -58,10 +58,10 @@ title: Downflow
 
 
 .pipe-corner-bottom-right {
-  --frames: 4;
+  --frames: 2;
   --frame-offset-y: -48px;
   background-image: url('{{ "/assets/images/water-tubes.png" | url }}');
-  animation: frame-by-frame 1.8s steps(var(--frames)) infinite;
+  animation: frame-by-frame 0.300s steps(var(--frames)) infinite;
 }
 
 .pipe-horizontal {
@@ -91,18 +91,18 @@ title: Downflow
 </style>
 
 
-<div class="animated-pipes">
-  <div class="pipe-node">State</div>
-  <div class="pipe pipe-down"></div>
-  <div class="pipe pipe-down"></div>
-  <div class="pipe pipe-down"></div>
-  <div class="pipe-node">Node</div>
+<!-- <div class="animated-pipes"> -->
+<!--   <div class="pipe-node">State</div> -->
+<!--   <div class="pipe pipe-down"></div> -->
+<!--   <div class="pipe pipe-down"></div> -->
+<!--   <div class="pipe pipe-down"></div> -->
+<!--   <div class="pipe-node">Node</div> -->
 
-  <div style="display: flex;">
-    <div class="pipe pipe-corner-bottom-right"></div>
-    <div class="pipe pipe-horizontal"></div>
-  </div>
-</div>
+<!--   <div style="display: flex;"> -->
+<!--     <div class="pipe pipe-corner-bottom-right"></div> -->
+<!--     <div class="pipe pipe-horizontal"></div> -->
+<!--   </div> -->
+<!-- </div> -->
 
 
 <!--
