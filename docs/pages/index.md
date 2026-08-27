@@ -31,36 +31,55 @@ title: Downflow
   width: 100%;
 }
 
-.pipe-down {
+.pipe {
+  --frame-offset-y: 0px;
+  --frame-offset-x: 0px;
+  --frame-gap: 256px;      /* stride between frames on the sheet */
   width: 16px;        /* the visible art within each cell */
   height: 16px;
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  image-rendering: crisp-edges;
-  image-rendering: pixelated;
+
   transform: translateZ(1px);
   will-change: transform;
   zoom: 4;
   animation: frame-by-frame 2s steps(var(--frames)) infinite;
   margin-top: -0.25px;
+
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-image: url('{{ "/assets/images/water-tubes.png" | url }}');
+  background-position: var(--frame-offset-x) calc(-1 * var(--frame-offset-y));
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
 
 .pipe-down {
-  --frame-offset-y: 0px;
-  --frame-gap: 256px;      /* stride between frames on the sheet */
   --frames: 16;
-  background-image: url('{{ "/assets/images/water-tubes.png" | url }}');
 }
 
-.pipe-corner {
-  --frame-gap: 256px;      /* stride between frames on the sheet */
-  --frames: 6;
+
+.pipe-corner-bottom-right {
+  --frames: 10;
+  --frame-offset-y: -48px;
   background-image: url('{{ "/assets/images/water-tubes.png" | url }}');
+  animation: frame-by-frame 1.8s steps(var(--frames)) infinite;
 }
+
+.pipe-horizontal {
+  --frames: 16;
+  transform: rotate(270deg);
+}
+
 
 @keyframes frame-by-frame {
+  from {
+    background-position:
+      var(--frame-offset-x)
+      var(--frame-offset-y);
+  }
   to {
-    background-position: calc(var(--frames) * -1 * var(--frame-gap)) 0;
+    background-position:
+      calc(var(--frame-offset-x) - var(--frames) * var(--frame-gap))
+      var(--frame-offset-y);
   }
 }
 
@@ -74,10 +93,15 @@ title: Downflow
 
 <div class="animated-pipes">
   <div class="pipe-node">State</div>
-  <div class="pipe-down"></div>
-  <div class="pipe-down"></div>
-  <div class="pipe-down"></div>
+  <div class="pipe pipe-down"></div>
+  <div class="pipe pipe-down"></div>
+  <div class="pipe pipe-down"></div>
   <div class="pipe-node">Node</div>
+
+  <div style="display: flex;">
+    <div class="pipe pipe-corner-bottom-right"></div>
+    <div class="pipe pipe-horizontal"></div>
+  </div>
 </div>
 
 
