@@ -58,7 +58,7 @@ title: Downflow
 
 
 .pipe-corner-bottom-right {
-  --frames: 10;
+  --frames: 4;
   --frame-offset-y: -48px;
   background-image: url('{{ "/assets/images/water-tubes.png" | url }}');
   animation: frame-by-frame 1.8s steps(var(--frames)) infinite;

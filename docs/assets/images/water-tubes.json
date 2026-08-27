@@ -140,8 +140,8 @@
   ],
   "layers": [
    { "name": "laye", "opacity": 255, "blendMode": "normal" },
-   { "name": "corner", "opacity": 255, "blendMode": "normal" },
-   { "name": "corner-highlights", "opacity": 255, "blendMode": "normal" }
+   { "name": "corner-highlights", "opacity": 255, "blendMode": "normal" },
+   { "name": "corner", "opacity": 255, "blendMode": "normal" }
   ],
   "slices": [
   ]
