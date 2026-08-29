@@ -5,6 +5,15 @@
       <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Downflow</title>
+<script type="importmap">
+  {
+    "imports": {
+      "downflow": "/downflow/pull/5/assets/downflow.js"
+    }
+  }
+</script>
+
+<link rel="icon" type="image/png" href="/assets/images/water-dude.png">
 
 
 <script type="module" src="/downflow/pull/5/assets/vendor/webawesome/dist-cdn/webawesome.ssr-loader.js"></script>
@@ -12,8 +21,31 @@
 
 <script>
   ;(() => {
+
+    function toPackageManager(str) {
+      if (!str) { return "npm" }
+
+      const allowedPackageManagers = [
+        "npm",
+        "yarn",
+        "pnpm"
+      ]
+
+      if (!allowedPackageManagers.includes(str)) {
+        str = "npm"
+      }
+
+      return str
+    }
+
     window.application ||= {}
     window.application.context = {
+      packageManager: toPackageManager(sessionStorage.getItem("packageManager")),
+      setPackageManager (e) {
+        let packageManager = toPackageManager(e.detail?.name)
+        sessionStorage.setItem("packageManager", packageManager)
+        window.application.context.packageManager = packageManager
+      },
       color: {
         mode: null,
         light: false,
@@ -3639,7 +3671,7 @@ wa-page::part(menu) {
     <!--/lit-part--></template>
       
         <div slot="header" class="header">
-  <div style="display: flex; gap: 0.5em; align-items: center;">
+  <div style="display: flex; gap: 0.5em; align-items: baseline;">
     <wa-button    appearance="plain" data-toggle-nav style="margin-bottom: -0.5lh;" did-ssr variant="neutral" size="m"><template shadowroot="open" shadowrootmode="open" shadowrootdelegatesfocus><style>
   :host {
     box-sizing: border-box;
@@ -4999,6 +5031,8 @@ wa-page::part(menu) {
     <span class="logo-start">Down</span><span class="logo-end">flow</span>
   </span>
 </a>
+
+  <span class="wa-body-s" style="font-family: var(--pixel-font);">0.0.2</span>
 
   </div>
 
@@ -8428,7 +8462,7 @@ wa-page::part(menu) {
 
       <div slot="aside"></div>
 
-      <main class="content prose">
+      <main class="content prose wa-cloak">
         
         
         <div class="hero">
@@ -8442,7 +8476,501 @@ wa-page::part(menu) {
   <p class="wa-font-size-xl">Reactive DOM updates that don't drive a steamroller through your DOM.</p>
 </div>
 <br>
-<div style="display: grid; place-content: center;">
+<div style="display: grid; place-content: center; grid-auto-flow: column; gap: var(--wa-space-m);">
+  <wa-button      class="call-to-action" href="/downflow/pull/5/docs/references/why-downflow/" size="l" variant="neutral" appearance="outlined" did-ssr><template shadowroot="open" shadowrootmode="open" shadowrootdelegatesfocus><style>
+  :host {
+    box-sizing: border-box;
+  }
+
+  :host *,
+  :host *::before,
+  :host *::after {
+    box-sizing: inherit;
+  }
+
+  [hidden],
+  :host([hidden]) {
+    display: none !important;
+  }
+
+  @layer wa-component {
+    :host {
+      display: inline-block;
+
+      /* Workaround because Chrome doesn't like :host(:has()) below
+       * https://issues.chromium.org/issues/40062355
+       * Firefox doesn't like this nested rule, so both are needed */
+      &:has(wa-badge) {
+        position: relative;
+      }
+    }
+
+    /* Apply relative positioning only when needed to position wa-badge
+     * This avoids creating a new stacking context for every button */
+    :host(:has(wa-badge)) {
+      position: relative;
+    }
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    white-space: nowrap;
+    vertical-align: middle;
+    transition-property: background, border, box-shadow, color, opacity, transform;
+    transition-duration: var(--wa-transition-fast);
+    transition-timing-function: var(--wa-transition-easing);
+    transform-origin: center;
+    cursor: pointer;
+    padding: 0 var(--wa-form-control-padding-inline);
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: var(--wa-font-weight-action);
+    height: var(--wa-form-control-height);
+    width: 100%;
+
+    background-color: var(--wa-color-fill-loud, var(--wa-color-neutral-fill-loud));
+
+    border-color: transparent;
+    color: var(--wa-color-on-loud, var(--wa-color-neutral-on-loud));
+    border-start-start-radius: var(--_button-start-start-radius, var(--wa-form-control-border-radius));
+    border-start-end-radius: var(--_button-start-end-radius, var(--wa-form-control-border-radius));
+    border-end-start-radius: var(--_button-end-start-radius, var(--wa-form-control-border-radius));
+    border-end-end-radius: var(--_button-end-end-radius, var(--wa-form-control-border-radius));
+    border-style: var(--wa-form-control-border-style);
+    border-width: var(--wa-form-control-border-width);
+  }
+
+  /* Hover and active transforms */
+  .button:not(.disabled):not(.loading) {
+    @media (hover: hover) {
+      &:hover {
+        transform: var(--wa-button-transform-hover);
+      }
+    }
+    &:active {
+      transform: var(--wa-button-transform-active);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      &:hover,
+      &:active {
+        transform: none;
+      }
+    }
+  }
+
+  /* Appearance modifiers */
+  :host([appearance='plain']) {
+    /* Indentation overrides for grouping */
+    margin-inline-start: var(--_button-horizontal-indent);
+    margin-block-start: var(--_button-vertical-indent);
+
+    .button {
+      color: var(--wa-color-on-quiet, var(--wa-color-neutral-on-quiet));
+      background-color: transparent;
+      border-color: transparent;
+    }
+    @media (hover: hover) {
+      .button:not(.disabled):not(.loading):hover {
+        color: var(--wa-color-on-quiet, var(--wa-color-neutral-on-quiet));
+        background-color: var(--wa-color-fill-quiet, var(--wa-color-neutral-fill-quiet));
+      }
+    }
+    .button:not(.disabled):not(.loading):active {
+      color: var(--wa-color-on-quiet, var(--wa-color-neutral-on-quiet));
+      background-color: color-mix(
+        in oklab,
+        var(--wa-color-fill-quiet, var(--wa-color-neutral-fill-quiet)),
+        var(--wa-color-mix-active)
+      );
+    }
+  }
+
+  :host([appearance='outlined']) {
+    /* Indentation overrides for grouping outlined */
+    margin-inline-start: var(--_button-horizontal-indent-outlined);
+    margin-block-start: var(--_button-vertical-indent-outlined);
+
+    .button {
+      color: var(--wa-color-on-quiet, var(--wa-color-neutral-on-quiet));
+      background-color: transparent;
+      border-color: var(--wa-color-border-loud, var(--wa-color-neutral-border-loud));
+    }
+    @media (hover: hover) {
+      .button:not(.disabled):not(.loading):hover {
+        color: var(--wa-color-on-quiet, var(--wa-color-neutral-on-quiet));
+        background-color: var(--wa-color-fill-quiet, var(--wa-color-neutral-fill-quiet));
+      }
+    }
+    .button:not(.disabled):not(.loading):active {
+      color: var(--wa-color-on-quiet, var(--wa-color-neutral-on-quiet));
+      background-color: color-mix(
+        in oklab,
+        var(--wa-color-fill-quiet, var(--wa-color-neutral-fill-quiet)),
+        var(--wa-color-mix-active)
+      );
+    }
+  }
+
+  :host([appearance='filled']) {
+    /* Indentation overrides for grouping */
+    margin-inline-start: var(--_button-horizontal-indent);
+    margin-block-start: var(--_button-vertical-indent);
+
+    .button {
+      color: var(--wa-color-on-normal, var(--wa-color-neutral-on-normal));
+      background-color: var(--wa-color-fill-normal, var(--wa-color-neutral-fill-normal));
+      border-color: transparent;
+    }
+    @media (hover: hover) {
+      .button:not(.disabled):not(.loading):hover {
+        color: var(--wa-color-on-normal, var(--wa-color-neutral-on-normal));
+        background-color: color-mix(
+          in oklab,
+          var(--wa-color-fill-normal, var(--wa-color-neutral-fill-normal)),
+          var(--wa-color-mix-hover)
+        );
+      }
+    }
+    .button:not(.disabled):not(.loading):active {
+      color: var(--wa-color-on-normal, var(--wa-color-neutral-on-normal));
+      background-color: color-mix(
+        in oklab,
+        var(--wa-color-fill-normal, var(--wa-color-neutral-fill-normal)),
+        var(--wa-color-mix-active)
+      );
+    }
+  }
+
+  :host([appearance='filled-outlined']) {
+    /* Indentation overrides for grouping outlined */
+    margin-inline-start: var(--_button-horizontal-indent-outlined);
+    margin-block-start: var(--_button-vertical-indent-outlined);
+
+    .button {
+      color: var(--wa-color-on-normal, var(--wa-color-neutral-on-normal));
+      background-color: var(--wa-color-fill-normal, var(--wa-color-neutral-fill-normal));
+      border-color: var(--wa-color-border-normal, var(--wa-color-neutral-border-normal));
+    }
+    @media (hover: hover) {
+      .button:not(.disabled):not(.loading):hover {
+        color: var(--wa-color-on-normal, var(--wa-color-neutral-on-normal));
+        background-color: color-mix(
+          in oklab,
+          var(--wa-color-fill-normal, var(--wa-color-neutral-fill-normal)),
+          var(--wa-color-mix-hover)
+        );
+      }
+    }
+    .button:not(.disabled):not(.loading):active {
+      color: var(--wa-color-on-normal, var(--wa-color-neutral-on-normal));
+      background-color: color-mix(
+        in oklab,
+        var(--wa-color-fill-normal, var(--wa-color-neutral-fill-normal)),
+        var(--wa-color-mix-active)
+      );
+    }
+  }
+
+  :host([appearance='accent']) {
+    /* Indentation overrides for grouping */
+    margin-inline-start: var(--_button-horizontal-indent);
+    margin-block-start: var(--_button-vertical-indent);
+
+    .button {
+      color: var(--wa-color-on-loud, var(--wa-color-neutral-on-loud));
+      background-color: var(--wa-color-fill-loud, var(--wa-color-neutral-fill-loud));
+      border-color: transparent;
+    }
+    @media (hover: hover) {
+      .button:not(.disabled):not(.loading):hover {
+        background-color: color-mix(
+          in oklab,
+          var(--wa-color-fill-loud, var(--wa-color-neutral-fill-loud)),
+          var(--wa-color-mix-hover)
+        );
+      }
+    }
+    .button:not(.disabled):not(.loading):active {
+      background-color: color-mix(
+        in oklab,
+        var(--wa-color-fill-loud, var(--wa-color-neutral-fill-loud)),
+        var(--wa-color-mix-active)
+      );
+    }
+  }
+
+  /* Focus states */
+  .button:focus {
+    outline: none;
+  }
+
+  .button:focus-visible {
+    outline: var(--wa-focus-ring);
+    outline-offset: var(--wa-focus-ring-offset);
+  }
+
+  /* Disabled state */
+  :host([disabled]) {
+    opacity: 0.5;
+    cursor: not-allowed;
+
+    /* When disabled, prevent mouse events from bubbling up from children */
+    .button {
+      pointer-events: none;
+    }
+  }
+
+  /* Keep it last so Safari doesn't stop parsing this block */
+  .button::-moz-focus-inner {
+    border: 0;
+  }
+
+  /* Icon buttons */
+  .button.is-icon-button {
+    outline-offset: 2px;
+    width: var(--wa-form-control-height);
+    aspect-ratio: 1;
+  }
+
+  /* Icon buttons with a caret need to grow to fit both the icon and the caret */
+  .button.is-icon-button.caret {
+    width: auto;
+    aspect-ratio: auto;
+    min-width: var(--wa-form-control-height);
+  }
+
+  /* Pill modifier */
+  :host([pill]) .button {
+    border-start-start-radius: var(--_button-start-start-radius, var(--wa-border-radius-pill));
+    border-start-end-radius: var(--_button-start-end-radius, var(--wa-border-radius-pill));
+    border-end-start-radius: var(--_button-end-start-radius, var(--wa-border-radius-pill));
+    border-end-end-radius: var(--_button-end-end-radius, var(--wa-border-radius-pill));
+  }
+
+  /*
+   * Label
+   */
+
+  .start,
+  .end {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+  }
+
+  .label {
+    display: inline-block;
+  }
+
+  .is-icon-button .label {
+    display: flex;
+    justify-content: center;
+  }
+
+  .label::slotted(wa-icon) {
+    align-self: center;
+  }
+
+  /*
+   * Caret modifier
+   */
+
+  wa-icon[part='caret'] {
+    display: flex;
+    align-self: center;
+    align-items: center;
+
+    &::part(svg) {
+      width: 0.875em;
+      height: 0.875em;
+    }
+
+    .button:has(&) .end {
+      display: none;
+    }
+  }
+
+  /*
+   * Loading modifier
+   */
+
+  .loading {
+    position: relative;
+    cursor: wait;
+
+    .start,
+    .label,
+    .end,
+    .caret {
+      visibility: hidden;
+    }
+
+    wa-spinner {
+      --indicator-color: currentColor;
+      --track-color: color-mix(in oklab, currentColor, transparent 90%);
+
+      position: absolute;
+      font-size: 1em;
+      height: 1em;
+      width: 1em;
+      top: calc(50% - 0.5em);
+      left: calc(50% - 0.5em);
+    }
+  }
+
+  /*
+   * Badges
+   */
+
+  .button ::slotted(wa-badge) {
+    border-color: var(--wa-color-surface-default);
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 0;
+    translate: 50% -50%;
+    pointer-events: none;
+  }
+
+  :host(:dir(rtl)) ::slotted(wa-badge) {
+    translate: -50% -50%;
+  }
+
+  /*
+  * Button spacing
+  */
+
+  slot[name='start']::slotted(*) {
+    margin-inline-end: 0.75em;
+  }
+
+  slot[name='end']::slotted(*),
+  .button:not(.visually-hidden-label) [part='caret'] {
+    margin-inline-start: 0.75em;
+  }
+
+  :where(:root),
+  .wa-neutral,
+  :host([variant='neutral']) {
+    --wa-color-fill-loud: var(--wa-color-neutral-fill-loud);
+    --wa-color-fill-normal: var(--wa-color-neutral-fill-normal);
+    --wa-color-fill-quiet: var(--wa-color-neutral-fill-quiet);
+    --wa-color-border-loud: var(--wa-color-neutral-border-loud);
+    --wa-color-border-normal: var(--wa-color-neutral-border-normal);
+    --wa-color-border-quiet: var(--wa-color-neutral-border-quiet);
+    --wa-color-on-loud: var(--wa-color-neutral-on-loud);
+    --wa-color-on-normal: var(--wa-color-neutral-on-normal);
+    --wa-color-on-quiet: var(--wa-color-neutral-on-quiet);
+  }
+
+  .wa-brand,
+  :host([variant='brand']) {
+    --wa-color-fill-loud: var(--wa-color-brand-fill-loud);
+    --wa-color-fill-normal: var(--wa-color-brand-fill-normal);
+    --wa-color-fill-quiet: var(--wa-color-brand-fill-quiet);
+    --wa-color-border-loud: var(--wa-color-brand-border-loud);
+    --wa-color-border-normal: var(--wa-color-brand-border-normal);
+    --wa-color-border-quiet: var(--wa-color-brand-border-quiet);
+    --wa-color-on-loud: var(--wa-color-brand-on-loud);
+    --wa-color-on-normal: var(--wa-color-brand-on-normal);
+    --wa-color-on-quiet: var(--wa-color-brand-on-quiet);
+  }
+
+  .wa-success,
+  :host([variant='success']) {
+    --wa-color-fill-loud: var(--wa-color-success-fill-loud);
+    --wa-color-fill-normal: var(--wa-color-success-fill-normal);
+    --wa-color-fill-quiet: var(--wa-color-success-fill-quiet);
+    --wa-color-border-loud: var(--wa-color-success-border-loud);
+    --wa-color-border-normal: var(--wa-color-success-border-normal);
+    --wa-color-border-quiet: var(--wa-color-success-border-quiet);
+    --wa-color-on-loud: var(--wa-color-success-on-loud);
+    --wa-color-on-normal: var(--wa-color-success-on-normal);
+    --wa-color-on-quiet: var(--wa-color-success-on-quiet);
+  }
+
+  .wa-warning,
+  :host([variant='warning']) {
+    --wa-color-fill-loud: var(--wa-color-warning-fill-loud);
+    --wa-color-fill-normal: var(--wa-color-warning-fill-normal);
+    --wa-color-fill-quiet: var(--wa-color-warning-fill-quiet);
+    --wa-color-border-loud: var(--wa-color-warning-border-loud);
+    --wa-color-border-normal: var(--wa-color-warning-border-normal);
+    --wa-color-border-quiet: var(--wa-color-warning-border-quiet);
+    --wa-color-on-loud: var(--wa-color-warning-on-loud);
+    --wa-color-on-normal: var(--wa-color-warning-on-normal);
+    --wa-color-on-quiet: var(--wa-color-warning-on-quiet);
+  }
+
+  .wa-danger,
+  :host([variant='danger']) {
+    --wa-color-fill-loud: var(--wa-color-danger-fill-loud);
+    --wa-color-fill-normal: var(--wa-color-danger-fill-normal);
+    --wa-color-fill-quiet: var(--wa-color-danger-fill-quiet);
+    --wa-color-border-loud: var(--wa-color-danger-border-loud);
+    --wa-color-border-normal: var(--wa-color-danger-border-normal);
+    --wa-color-border-quiet: var(--wa-color-danger-border-quiet);
+    --wa-color-on-loud: var(--wa-color-danger-on-loud);
+    --wa-color-on-normal: var(--wa-color-danger-on-normal);
+    --wa-color-on-quiet: var(--wa-color-danger-on-quiet);
+  }
+
+  :host([size='xs']) {
+    font-size: var(--wa-font-size-xs);
+  }
+
+  :host([size='s']),
+  :host([size='small']) {
+    font-size: var(--wa-font-size-s);
+  }
+
+  :host([size='m']),
+  :host([size='medium']) {
+    font-size: var(--wa-font-size-m);
+  }
+
+  :host([size='l']),
+  :host([size='large']) {
+    font-size: var(--wa-font-size-l);
+  }
+
+  :host([size='xl']) {
+    font-size: var(--wa-font-size-xl);
+  }
+</style><!--lit-part jJOoO3uKgSc=-->
+      <!--lit-node 0--><a
+        part="base"
+        class=" button "
+        
+        
+        title=""
+        
+        
+        href="/downflow/pull/5/docs/references/why-downflow/"
+        
+        
+        
+        
+        
+        tabindex="0"
+        
+        
+      >
+        <slot name="start" part="start" class="start"></slot>
+        <!--lit-node 2--><slot part="label" class="label" ></slot>
+        <slot name="end" part="end" class="end"></slot>
+        <!--lit-part--><!--/lit-part-->
+        <!--lit-part--><!--/lit-part-->
+      </a>
+    <!--/lit-part--></template>
+    Why Downflow?
+  </wa-button>
   <wa-button      class="call-to-action" href="/downflow/pull/5/docs/introduction/getting-started/" size="l" variant="brand" appearance="filled" did-ssr><template shadowroot="open" shadowrootmode="open" shadowrootdelegatesfocus><style>
   :host {
     box-sizing: border-box;
@@ -9799,81 +10327,6 @@ wa-page::part(menu) {
 </style><!--lit-part k1u2U0gqOxA=--><svg part="svg" width="16" height="16" viewBox="0 0 16 16"></svg><!--/lit-part--></template></wa-icon>
   </wa-button>
 </div>
-<style>
-.animated-pipes {
-  height: calc(32px * 12);
-  width: 100%;
-}
-
-.pipe {
-  --frame-offset-y: 0px;
-  --frame-offset-x: 0px;
-  --frame-gap: 256px;      /* stride between frames on the sheet */
-  width: 16px;        /* the visible art within each cell */
-  height: 16px;
-
-  transform: translateZ(1px);
-  will-change: transform;
-  zoom: 8;
-  animation: frame-by-frame 2s steps(var(--frames)) infinite;
-  margin-top: -0.25px;
-
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  background-image: url('/downflow/pull/5/assets/images/water-tubes.png');
-  background-position: var(--frame-offset-x) calc(-1 * var(--frame-offset-y));
-  image-rendering: crisp-edges;
-  image-rendering: pixelated;
-}
-
-.pipe-down {
-  --frames: 16;
-}
-
-
-.pipe-corner-bottom-right {
-  --frames: 2;
-  --frame-offset-y: -48px;
-  background-image: url('/downflow/pull/5/assets/images/water-tubes.png');
-  animation: frame-by-frame 0.300s steps(var(--frames)) infinite;
-}
-
-.pipe-horizontal {
-  --frames: 16;
-  transform: rotate(270deg);
-}
-
-
-@keyframes frame-by-frame {
-  from {
-    background-position:
-      var(--frame-offset-x)
-      var(--frame-offset-y);
-  }
-  to {
-    background-position:
-      calc(var(--frame-offset-x) - var(--frames) * var(--frame-gap))
-      var(--frame-offset-y);
-  }
-}
-
-.pipe-node {
-  display: inline-block;
-  padding: 1rem;
-  border: 2px solid light-dark(black, white);
-}
-</style>
-
-
-
-
-
-
-
-
-
-
-
 
 
       </main>

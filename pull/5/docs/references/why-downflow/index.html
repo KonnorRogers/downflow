@@ -5,6 +5,15 @@
       <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Downflow</title>
+<script type="importmap">
+  {
+    "imports": {
+      "downflow": "/downflow/pull/5/assets/downflow.js"
+    }
+  }
+</script>
+
+<link rel="icon" type="image/png" href="/assets/images/water-dude.png">
 
 
 <script type="module" src="/downflow/pull/5/assets/vendor/webawesome/dist-cdn/webawesome.ssr-loader.js"></script>
@@ -12,8 +21,31 @@
 
 <script>
   ;(() => {
+
+    function toPackageManager(str) {
+      if (!str) { return "npm" }
+
+      const allowedPackageManagers = [
+        "npm",
+        "yarn",
+        "pnpm"
+      ]
+
+      if (!allowedPackageManagers.includes(str)) {
+        str = "npm"
+      }
+
+      return str
+    }
+
     window.application ||= {}
     window.application.context = {
+      packageManager: toPackageManager(sessionStorage.getItem("packageManager")),
+      setPackageManager (e) {
+        let packageManager = toPackageManager(e.detail?.name)
+        sessionStorage.setItem("packageManager", packageManager)
+        window.application.context.packageManager = packageManager
+      },
       color: {
         mode: null,
         light: false,
@@ -3639,7 +3671,7 @@ wa-page::part(menu) {
     <!--/lit-part--></template>
       
         <div slot="header" class="header">
-  <div style="display: flex; gap: 0.5em; align-items: center;">
+  <div style="display: flex; gap: 0.5em; align-items: baseline;">
     <wa-button    appearance="plain" data-toggle-nav style="margin-bottom: -0.5lh;" did-ssr variant="neutral" size="m"><template shadowroot="open" shadowrootmode="open" shadowrootdelegatesfocus><style>
   :host {
     box-sizing: border-box;
@@ -4999,6 +5031,8 @@ wa-page::part(menu) {
     <span class="logo-start">Down</span><span class="logo-end">flow</span>
   </span>
 </a>
+
+  <span class="wa-body-s" style="font-family: var(--pixel-font);">0.0.2</span>
 
   </div>
 
@@ -8431,6 +8465,8 @@ wa-page::part(menu) {
   </span>
 </a>
 
+  <span class="wa-body-s" style="font-family: var(--pixel-font);">0.0.2</span>
+
 </h2>
 
 <aside slot="navigation"><wa-details   open summary="Introduction" did-ssr appearance="outlined" icon-placement="end"><template shadowroot="open" shadowrootmode="open"><style>
@@ -10326,22 +10362,12 @@ wa-page::part(menu) {
       </details>
     <!--/lit-part--></template>
       <ol         
-          aria-current="true"
-        
         style="list-style: none;"
       ><li>
             <a               href="/downflow/pull/5/docs/introduction/getting-started/"
               
             >
               Getting Started
-            </a>
-          </li><li>
-            <a               href="/downflow/pull/5/docs/introduction/why-not-something/"
-              
-                aria-current="page"
-              
-            >
-              Why not use something that already exists?
             </a>
           </li></ol>
     </wa-details><wa-details   open summary="Learn" did-ssr appearance="outlined" icon-placement="end"><template shadowroot="open" shadowrootmode="open"><style>
@@ -14212,71 +14238,162 @@ wa-page::part(menu) {
               Binding Values
             </a>
           </li></ol>
-    </wa-details></aside>
+    </wa-details><wa-details   open summary="References" did-ssr appearance="outlined" icon-placement="end"><template shadowroot="open" shadowrootmode="open"><style>
+  :host {
+    box-sizing: border-box;
+  }
 
+  :host *,
+  :host *::before,
+  :host *::after {
+    box-sizing: inherit;
+  }
 
+  [hidden],
+  :host([hidden]) {
+    display: none !important;
+  }
 
-      <div slot="aside">
-  <div flow-controller="scroll-spy" id="table-of-contents"><h2 style="font-size: 100%; margin-block: var(--wa-space-s);"><a href="#why-not-use-something-that-already-exists">Why not use something that already exists?</a></h2><ol>
-<li><span data-level="0"><a href="#alpine">Alpine</a></span>
-</li>
-<li><span data-level="0"><a href="#stimulus">Stimulus</a></span>
-</li>
-<li><span data-level="0"><a href="#petite-vue">petite-vue</a></span>
-</li>
-<li><span data-level="0"><a href="#htmx">htmx</a></span>
-</li>
-<li><span data-level="0"><a href="#datastar">DataStar</a></span>
-</li>
-<li><span data-level="0"><a href="#content-security-policies-csp">Content Security Policies (CSP)</a></span>
-</li>
-</ol></div>
-</div>
+  :host {
+    --spacing: var(--wa-space-m);
+    --show-duration: var(--wa-transition-normal);
+    --hide-duration: var(--wa-transition-normal);
 
-      <main class="content prose">
-        
-  <h1 class="page-heading" id="why-not-use-something-that-already-exists">Why not use something that already exists?</h1>
+    display: block;
+  }
 
-        <p>Fair question! Let's talk about why I personally did not find other libraries to be what I wanted.</p>
-<p>I'm going to give a quick overview of why I personally did not find other libraries fit my needs, and you may just say, &quot;Konnor, you're dumb.&quot; And that is fair, and I would probably agree.</p>
-<h2 id="alpine">Alpine</h2>
-<p>Alpine, while you can write components in JS, <em>feels</em> like it moves so much logic into HTML, almost to the point of being a new language. I like the ideas and concepts behind Alpine, but something about it has never clicked. I don't like inlining JS and using JS in HTML strings. I am comfortable writing JS, and writing my JS inside of HTML attributes just feels wrong.</p>
-<h2 id="stimulus">Stimulus</h2>
-<p>Stimulus is nice, and is a large inspiration behind the creation of this library. But Stimulus has some things I don't particularly love. Mainly, there's no real concept of &quot;state&quot; or &quot;rendering&quot;. You can add it, but everything requires a Controller, for better or worse. Stimulus has no concept of &quot;common&quot; operations, things like setting the <code>textContent</code> of an element, rendering a list, reading from shared state, etc. Stimulus is heavily decoupled, which you might think is great, but I felt it could use a little extra power to handle common use cases.</p>
-<h2 id="petite-vue">petite-vue</h2>
-<p>Petite Vue partially served as inspiration for downflow. It has a lot of interesting ideas and similarities to what I wanted. The key problem I found is that declaring a reactive data object per component before you can bind anything tedious, and I also did not feel the handlebars like syntax of using:
-<code>{{ }}</code>
-was compatible with server rendered views without having to write the same markup twice, which I had no interest in. I wanted a frontend library where I could &quot;enhance&quot; server rendered views, not have to write them twice.</p>
-<h2 id="htmx">htmx</h2>
-<p>htmx is a different paradigm. Downflow is mainly intended for &quot;frontend&quot; state. If you have a server, and the html / data can come from there, then htmx is a much stronger fit for you.</p>
-<h2 id="datastar">DataStar</h2>
-<p>DataStar is interesting, as it does a lot of things similar to <code>downflow</code>. It uses signals for backing state, it handles common use cases, etc. Similar to htmx, DataStar is largely centered around backend-driven state over a SSE (Server Sent Event) connection. The thing that is hard for me with DataStar is it has a very big DSL, almost to the point of dissuading you from writing JavaScript. DataStar solves this by giving you a very large number of attributes to pick from to solve your problem. Downflow encourages you to write controllers for places where you need extra control.</p>
-<h2 id="content-security-policies-csp">Content Security Policies (CSP)</h2>
-<p>Finally, let's address the elephant in the room. Content Security Policies. CSP for short.</p>
-<p>Almost every library I listed above (besides Stimulus) has an issue with CSP in some form.</p>
-<p>The majority of apps with a dedicated security team will have strict CSPs. CSPs don't fully protect you from XSS and other nastiness, but they do reduce the blast radius. I won't talk about what settings you should have for your CSP, purely because that is a much longer essay, and frankly, I'm not sure I would do it justice.</p>
-<p>Regardless, you have probably tried to use Alpine, or htmx, or DataStar, or any other library in your company's app and hit the issue of &quot;X violates your Content Security Policy.&quot; You're just looking to do some simple DOM manipulation, not have to schedule a meeting with your security team about why they should relax the CSPs for the application.</p>
-<p>This is why <code>downflow</code> doesn't support constructs like <code>flow-context=&quot;{ foo: &quot;bar&quot; }&quot;</code> for defining contexts, because inevitably, you will hit Content Security Policy (CSP) issues because it needs to be evaluated with using either <code>new Function()</code> or using <code>eval()</code>, which most of the above libraries do, and requires a CSP that allows <code>unsafe-eval</code>.</p>
-<p>See:</p>
-<ul>
-<li>DataStar - <a href="https://data-star.dev/reference/security#content-security-policy">https://data-star.dev/reference/security#content-security-policy</a></li>
-<li>petite-vue - <a href="https://github.com/vuejs/petite-vue#security-and-csp">https://github.com/vuejs/petite-vue#security-and-csp</a></li>
-<li>Alpine - <a href="https://alpinejs.dev/advanced/csp">https://alpinejs.dev/advanced/csp</a> - (uses a specific CSP build which is a ~1000 line parser, and not all syntax is supported like <code>x-html</code> for example. <a href="https://github.com/alpinejs/alpine/blob/main/packages/csp/src/directives/x-html.js">https://github.com/alpinejs/alpine/blob/main/packages/csp/src/directives/x-html.js</a> )</li>
-<li>htmx - <a href="https://htmx.org/essays/web-security-basics-with-htmx/">https://htmx.org/essays/web-security-basics-with-htmx/</a></li>
-</ul>
-<p>This is not to say <code>downflow</code> is 100% safe and security focused and will protect you from Cross Site Scripting Attacks (XSS). That is simply not true. It is also not the intent of <code>downflow</code> or why it was created. Downflow was created to avoid modifying your CSP, not to protect you from XSS.</p>
-<p>Downflow resolves bindings by property lookup, not by evaluating expressions, so it needs no <code>unsafe-eval</code> in your CSP. However, things like component rendering, attributes like <code>flow-action</code> can still be used to exfiltrate data, and as such, untrusted input should always be sanitized.</p>
+  details {
+    display: block;
+    overflow-anchor: none;
+    border: var(--wa-panel-border-width) var(--wa-color-surface-border) var(--wa-panel-border-style);
+    background-color: var(--wa-color-surface-default);
+    border-radius: var(--wa-panel-border-radius);
+    color: var(--wa-color-text-normal);
 
-      </main>
+    /* Print styles */
+    @media print {
+      background: none;
+      border: solid var(--wa-border-width-s) var(--wa-color-surface-border);
 
-      <footer slot="main-footer" style="display: block;">
-        
-  
+      summary {
+        list-style: none;
+      }
+    }
+  }
 
-<div class="pagination">
-  
-    <a href="/downflow/pull/5/docs/introduction/getting-started/" class="pagination-link pagination-previous">
-      <small><wa-icon  name="arrow-left" style="--rotate-angle: 0deg;" did-ssr library="default" rotate="0"><template shadowroot="open" shadowrootmode="open"><style>
+  /* Appearance modifiers */
+  :host([appearance='plain']) details {
+    background-color: transparent;
+    border-color: transparent;
+    border-radius: 0;
+  }
+
+  :host([appearance='outlined']) details {
+    background-color: var(--wa-color-surface-default);
+    border-color: var(--wa-color-surface-border);
+  }
+
+  :host([appearance='filled']) details {
+    background-color: var(--wa-color-neutral-fill-quiet);
+    border-color: transparent;
+  }
+
+  :host([appearance='filled-outlined']) details {
+    background-color: var(--wa-color-neutral-fill-quiet);
+    border-color: var(--wa-color-neutral-border-quiet);
+  }
+
+  :host([disabled]) details {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing);
+    padding: var(--spacing); /* Add padding here */
+    border-radius: calc(var(--wa-panel-border-radius) - var(--wa-panel-border-width));
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: pointer;
+
+    &::marker,
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-visible {
+      outline: var(--wa-focus-ring);
+      outline-offset: calc(var(--wa-panel-border-width) + var(--wa-focus-ring-offset));
+    }
+  }
+
+  :host([open]) summary {
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+  }
+
+  /* 'Start' icon placement */
+  :host([icon-placement='start']) summary {
+    flex-direction: row-reverse;
+    justify-content: start;
+  }
+
+  [part~='icon'] {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    color: var(--wa-color-text-quiet);
+    transition: rotate var(--wa-transition-normal) var(--wa-transition-easing);
+  }
+
+  :host([open]) [part~='icon'] {
+    rotate: 90deg;
+  }
+
+  :host([open]:dir(rtl)) [part~='icon'] {
+    rotate: -90deg;
+  }
+
+  :host([open]) slot[name='expand-icon'],
+  :host(:not([open])) slot[name='collapse-icon'] {
+    display: none;
+  }
+
+  .body.animating {
+    overflow: hidden;
+  }
+
+  .content {
+    display: block;
+    box-sizing: border-box; /* Ensure contents don't overflow */
+    padding-block-start: var(--spacing);
+    padding-inline: var(--spacing); /* Add horizontal padding */
+    padding-block-end: var(--spacing); /* Add bottom padding */
+  }
+</style><!--lit-part 72Ud/H4A4xs=-->
+      <details part="base">
+        <!--lit-node 1--><summary
+          part="header"
+          role="button"
+          aria-expanded="true"
+          aria-controls="content"
+          aria-disabled="false"
+          tabindex="0"
+          
+          
+        >
+          <slot name="summary" part="summary"><!--lit-part-->References<!--/lit-part--></slot>
+
+          <span part="icon">
+            <slot name="expand-icon">
+              <!--lit-node 6--><wa-icon    library="system" variant="solid" name="chevron-right" style="--rotate-angle: 0deg;" did-ssr rotate="0" defer-hydration><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -15136,10 +15253,970 @@ was compatible with server rendered views without having to write the same marku
   }
 
   /* #endregion */
-</style><!--lit-part k1u2U0gqOxA=--><svg part="svg" width="16" height="16" viewBox="0 0 16 16"></svg><!--/lit-part--></template></wa-icon> Previous Page</small>
-      <br>
-      <span>Getting Started</span>
-    </a>
+</style><!--lit-part k1u2U0gqOxA=--><svg part="svg" width="16" height="16" viewBox="0 0 16 16"></svg><!--/lit-part--></template></wa-icon>
+            </slot>
+            <slot name="collapse-icon">
+              <!--lit-node 8--><wa-icon    library="system" variant="solid" name="chevron-right" style="--rotate-angle: 0deg;" did-ssr rotate="0" defer-hydration><template shadowroot="open" shadowrootmode="open"><style>
+  :host {
+    box-sizing: border-box;
+  }
+
+  :host *,
+  :host *::before,
+  :host *::after {
+    box-sizing: inherit;
+  }
+
+  [hidden],
+  :host([hidden]) {
+    display: none !important;
+  }
+
+  :host {
+    --primary-color: currentColor;
+    --primary-opacity: 1;
+    --secondary-color: currentColor;
+    --secondary-opacity: 0.4;
+    --rotate-angle: 0deg;
+
+    box-sizing: content-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: -0.125em;
+  }
+
+  /* #region Canvas — the box the icon is centered within (mirrors Font Awesome's icon canvas). Orthogonal to font-size. */
+
+  /* Fixed width (default): 1.25em × 1em (20 × 16px) */
+  :host(:not([canvas])),
+  :host([canvas='fixed']) {
+    width: 1.25em;
+    height: 1em;
+    min-width: 1.25em; /* <-- this is what Safari respects for intrinsic */
+    min-height: 1em;
+  }
+
+  /* Auto: hug the icon's width. `auto-width` is the deprecated alias for canvas="auto". */
+  :host([canvas='auto']),
+  :host([auto-width]:not([canvas])) {
+    width: auto;
+    height: 1em;
+  }
+
+  /* Square: 1.25em × 1.25em (20 × 20px) */
+  :host([canvas='square']) {
+    width: 1.25em;
+    height: 1.25em;
+    min-width: 1.25em;
+    min-height: 1.25em;
+  }
+
+  /* Roomy: 1.5em × 1.5em (24 × 24px) */
+  :host([canvas='roomy']) {
+    width: 1.5em;
+    height: 1.5em;
+    min-width: 1.5em;
+    min-height: 1.5em;
+  }
+
+  /* #endregion */
+
+  svg {
+    fill: currentColor;
+    height: 1em;
+    overflow: visible;
+    width: auto;
+
+    /* Duotone colors with path-specific opacity fallback */
+    path[data-duotone-primary] {
+      color: var(--primary-color);
+      opacity: var(--path-opacity, var(--primary-opacity));
+    }
+
+    path[data-duotone-secondary] {
+      color: var(--secondary-color);
+      opacity: var(--path-opacity, var(--secondary-opacity));
+    }
+  }
+
+  /* Rotation */
+  :host([rotate]) {
+    transform: rotate(var(--rotate-angle, 0deg));
+  }
+
+  /* Flipping */
+  :host([flip='x']) {
+    transform: scaleX(-1);
+  }
+  :host([flip='y']) {
+    transform: scaleY(-1);
+  }
+  :host([flip='both']) {
+    transform: scale(-1, -1);
+  }
+
+  /* Rotation and Flipping combined */
+  :host([rotate][flip='x']) {
+    transform: rotate(var(--rotate-angle, 0deg)) scaleX(-1);
+  }
+  :host([rotate][flip='y']) {
+    transform: rotate(var(--rotate-angle, 0deg)) scaleY(-1);
+  }
+  :host([rotate][flip='both']) {
+    transform: rotate(var(--rotate-angle, 0deg)) scale(-1, -1);
+  }
+
+  /* #region Animations — ported from Font Awesome 7.3 (--fa-* props mapped to wa-icon's --* names) */
+
+  :host([animation='beat']) {
+    animation-name: beat;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='bounce']) {
+    animation-name: bounce;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, cubic-bezier(0.28, 0.84, 0.42, 1));
+  }
+
+  :host([animation='fade']) {
+    animation-name: fade;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='beat-fade']) {
+    animation-name: beat-fade;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='flip']) {
+    animation-name: flip;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1.5s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='flip-360']) {
+    animation-name: flip-360;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='shake']) {
+    animation-name: shake;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 0.75s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='spin']) {
+    animation-name: spin;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 2s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='spin-pulse']) {
+    animation-name: spin;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, steps(8));
+  }
+
+  /* spin-reverse is FA's reverse modifier expressed as a standalone value; reverse any spin via --animation-direction: reverse */
+  :host([animation='spin-reverse']) {
+    animation-name: spin;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, reverse);
+    animation-duration: var(--animation-duration, 2s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='spin-snap']) {
+    animation-name: spin-snap;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 3s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='spin-snap-4']) {
+    animation-name: spin-snap-4;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 2.4s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='spin-snap-8']) {
+    animation-name: spin-snap-8;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 4s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='buzz']) {
+    animation-name: buzz;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 0.6s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='wag']) {
+    animation-name: wag;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 0.9s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-out);
+    transform-origin: bottom center;
+  }
+
+  :host([animation='float']) {
+    animation-name: float;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 3s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+    will-change: transform;
+  }
+
+  :host([animation='swing']) {
+    animation-name: swing;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1.2s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-out);
+    transform-origin: top center;
+  }
+
+  :host([animation='jello']) {
+    animation-name: jello;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 0.9s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-out);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :host([animation='beat']),
+    :host([animation='bounce']),
+    :host([animation='fade']),
+    :host([animation='beat-fade']),
+    :host([animation='flip']),
+    :host([animation='flip-360']),
+    :host([animation='shake']),
+    :host([animation='spin']),
+    :host([animation='spin-pulse']),
+    :host([animation='spin-reverse']),
+    :host([animation='spin-snap']),
+    :host([animation='spin-snap-4']),
+    :host([animation='spin-snap-8']),
+    :host([animation='buzz']),
+    :host([animation='wag']),
+    :host([animation='float']),
+    :host([animation='swing']),
+    :host([animation='jello']) {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  /* #endregion */
+
+  /* #region Keyframes — ported verbatim from Font Awesome 7.3 */
+
+  @keyframes beat {
+    0% {
+      transform: scale(1);
+    }
+    25% {
+      transform: scale(calc(1.25 * var(--beat-scale, 1.25)));
+    }
+    45% {
+      transform: scale(calc(1.22 * var(--beat-scale, 1.22)));
+    }
+    65% {
+      transform: scale(calc(1.25 * var(--beat-scale, 1.25)));
+    }
+    90% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes bounce {
+    0% {
+      transform: scale(1, 1) translateY(0);
+      /* No fallback by design (ported from FA 7.3): the first segment uses the user's --animation-timing or the CSS
+         initial ease, while the explicit cubic-beziers on later stops drive the bounce physics. */
+      animation-timing-function: var(--animation-timing);
+    }
+    14% {
+      transform: scale(var(--bounce-start-scale-x, 1.06), var(--bounce-start-scale-y, 0.94))
+        translateY(var(--bounce-anticipation, 3px));
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 0.33);
+    }
+    32% {
+      transform: scale(var(--bounce-jump-scale-x, 0.94), var(--bounce-jump-scale-y, 1.12))
+        translateY(calc(-1 * var(--bounce-height, 0.5em)));
+      animation-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+    }
+    52% {
+      transform: scale(1, 1) translateY(calc(-1 * var(--bounce-height, 0.5em) * 1.1));
+      animation-timing-function: cubic-bezier(0.5, 0, 1, 0.5);
+    }
+    70% {
+      transform: scale(var(--bounce-land-scale-x, 1.06), var(--bounce-land-scale-y, 0.92)) translateY(0);
+      animation-timing-function: cubic-bezier(0.33, 0.33, 0.66, 1);
+    }
+    85% {
+      transform: scale(0.98, 1.04) translateY(calc(-2px * var(--bounce-rebound, 1)));
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 1);
+    }
+    100% {
+      transform: scale(1, 1) translateY(0);
+    }
+  }
+
+  @keyframes fade {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.4, 1);
+    }
+    40% {
+      opacity: var(--fade-opacity, 0.4);
+      transform: scale(0.98);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes beat-fade {
+    0% {
+      opacity: var(--beat-fade-opacity, 0.4);
+      transform: scale(1);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.4, 1);
+    }
+    25% {
+      opacity: calc(var(--beat-fade-opacity, 0.4) + 0.4);
+      transform: scale(var(--beat-fade-scale, 1.28));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    45% {
+      opacity: 1;
+      transform: scale(var(--beat-fade-scale, 1.25));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    65% {
+      opacity: calc(var(--beat-fade-opacity, 0.4) + 0.4);
+      transform: scale(var(--beat-fade-scale, 1.28));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    100% {
+      opacity: var(--beat-fade-opacity, 0.4);
+      transform: scale(1);
+    }
+  }
+
+  @keyframes flip {
+    0% {
+      transform: perspective(2em) scale(1) rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), 0deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.4, 1);
+    }
+    8% {
+      transform: perspective(2em) scale(var(--flip-anticipation-scale, 0.95))
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), 0deg);
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 0.33);
+    }
+    35% {
+      transform: perspective(2em) scale(1)
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), calc(var(--flip-angle, -360deg) * 0.6));
+      animation-timing-function: linear;
+    }
+    65% {
+      transform: perspective(2em) scale(1)
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), calc(var(--flip-angle, -360deg) * 0.5));
+      animation-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+    }
+    92% {
+      transform: perspective(2em) scale(1)
+        rotate3d(
+          var(--flip-x, 0),
+          var(--flip-y, 1),
+          var(--flip-z, 0),
+          calc(var(--flip-angle, -360deg) * var(--flip-overshoot, 1.04))
+        );
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 1);
+    }
+    100% {
+      transform: perspective(2em) scale(1)
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), var(--flip-angle, -360deg));
+    }
+  }
+
+  @keyframes flip-360 {
+    0% {
+      transform: perspective(2em) scale(1) rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), 0deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.4, 1);
+    }
+    8% {
+      transform: perspective(2em) scale(var(--flip-anticipation-scale, 0.95))
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), 0deg);
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 0.33);
+    }
+    50% {
+      transform: perspective(2em) scale(1)
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), calc(var(--flip-angle, -360deg) * 0.6));
+      animation-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+    }
+    80% {
+      transform: perspective(2em) scale(1)
+        rotate3d(
+          var(--flip-x, 0),
+          var(--flip-y, 1),
+          var(--flip-z, 0),
+          calc(var(--flip-angle, -360deg) * var(--flip-overshoot, 1.04))
+        );
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 1);
+    }
+    100% {
+      transform: perspective(2em) scale(1)
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), var(--flip-angle, -360deg));
+    }
+  }
+
+  @keyframes shake {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1);
+    }
+    8% {
+      transform: rotate(35deg) translateX(1px);
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    20% {
+      transform: rotate(-22deg) translateX(-1px);
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    35% {
+      transform: rotate(15deg) translateX(1px);
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    50% {
+      transform: rotate(-9deg);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    65% {
+      transform: rotate(5deg);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    78% {
+      transform: rotate(-3deg);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    90% {
+      transform: rotate(1deg);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin-snap {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    12% {
+      transform: rotate(60deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    16.67% {
+      transform: rotate(60deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    28.67% {
+      transform: rotate(120deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    33.33% {
+      transform: rotate(120deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    45.33% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    62% {
+      transform: rotate(240deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    66.67% {
+      transform: rotate(240deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    78.67% {
+      transform: rotate(300deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    83.33% {
+      transform: rotate(300deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    95.33% {
+      transform: rotate(360deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin-snap-4 {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    15% {
+      transform: rotate(90deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    25% {
+      transform: rotate(90deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    40% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    65% {
+      transform: rotate(270deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    75% {
+      transform: rotate(270deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    90% {
+      transform: rotate(360deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin-snap-8 {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    9% {
+      transform: rotate(45deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    12.5% {
+      transform: rotate(45deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    21.5% {
+      transform: rotate(90deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    25% {
+      transform: rotate(90deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    34% {
+      transform: rotate(135deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    37.5% {
+      transform: rotate(135deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    46.5% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    59% {
+      transform: rotate(225deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    62.5% {
+      transform: rotate(225deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    71.5% {
+      transform: rotate(270deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    75% {
+      transform: rotate(270deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    84% {
+      transform: rotate(315deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    87.5% {
+      transform: rotate(315deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    96.5% {
+      transform: rotate(360deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes buzz {
+    0% {
+      transform: translateX(0) rotate(0deg);
+      animation-timing-function: cubic-bezier(0.1, 0, 0.9, 1);
+    }
+    5% {
+      transform: translateX(var(--buzz-distance, 4px)) rotate(0.5deg);
+    }
+    10% {
+      transform: translateX(calc(-1 * var(--buzz-distance, 4px))) rotate(-0.5deg);
+    }
+    15% {
+      transform: translateX(var(--buzz-distance, 4px)) rotate(0.3deg);
+    }
+    20% {
+      transform: translateX(calc(-1 * var(--buzz-distance, 4px))) rotate(-0.3deg);
+    }
+    25% {
+      transform: translateX(calc(var(--buzz-distance, 4px) * 0.7)) rotate(0.2deg);
+    }
+    30% {
+      transform: translateX(calc(-1 * var(--buzz-distance, 4px) * 0.7)) rotate(-0.2deg);
+    }
+    35% {
+      transform: translateX(calc(var(--buzz-distance, 4px) * 0.4)) rotate(0.1deg);
+    }
+    40% {
+      transform: translateX(0) rotate(0deg);
+    }
+    100% {
+      transform: translateX(0) rotate(0deg);
+    }
+  }
+
+  @keyframes wag {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.6, 1);
+    }
+    12% {
+      transform: rotate(var(--wag-angle, 12deg));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    24% {
+      transform: rotate(2deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.6, 1);
+    }
+    36% {
+      transform: rotate(calc(var(--wag-angle, 12deg) * 0.85));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    48% {
+      transform: rotate(1deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.6, 1);
+    }
+    58% {
+      transform: rotate(calc(var(--wag-angle, 12deg) * 0.6));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    68% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(0) translateX(0) rotate(0deg)
+        scale(var(--float-squash-x, 1.02), var(--float-squash-y, 0.98));
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 0.33);
+    }
+    15% {
+      transform: translateY(calc(-0.4 * var(--float-height, 6px))) translateX(var(--float-drift, 1px))
+        rotate(var(--float-tilt, 1deg)) scale(1, 1);
+      animation-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+    }
+    35% {
+      transform: translateY(calc(-1 * var(--float-height, 6px))) translateX(0) rotate(0deg)
+        scale(var(--float-stretch-x, 0.98), var(--float-stretch-y, 1.03));
+      animation-timing-function: cubic-bezier(0.5, 0, 0.5, 0);
+    }
+    50% {
+      transform: translateY(calc(-0.92 * var(--float-height, 6px))) translateX(calc(-0.5 * var(--float-drift, 1px)))
+        rotate(calc(-0.5 * var(--float-tilt, 1deg))) scale(0.995, 1.01);
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 0.33);
+    }
+    70% {
+      transform: translateY(calc(-0.3 * var(--float-height, 6px))) translateX(calc(-1 * var(--float-drift, 1px)))
+        rotate(calc(-1 * var(--float-tilt, 1deg))) scale(1, 1);
+      animation-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+    }
+    90% {
+      transform: translateY(calc(0.05 * var(--float-height, 6px))) translateX(0) rotate(0deg)
+        scale(var(--float-squash-x, 1.02), var(--float-squash-y, 0.98));
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 1);
+    }
+    100% {
+      transform: translateY(0) translateX(0) rotate(0deg)
+        scale(var(--float-squash-x, 1.02), var(--float-squash-y, 0.98));
+    }
+  }
+
+  @keyframes swing {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1);
+    }
+    8% {
+      transform: rotate(var(--swing-angle, 22deg));
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    18% {
+      transform: rotate(calc(-1 * var(--swing-angle, 22deg) * 0.85));
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    28% {
+      transform: rotate(calc(var(--swing-angle, 22deg) * 0.65));
+      animation-timing-function: cubic-bezier(0.35, 0, 0.65, 1);
+    }
+    38% {
+      transform: rotate(calc(-1 * var(--swing-angle, 22deg) * 0.45));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    48% {
+      transform: rotate(calc(var(--swing-angle, 22deg) * 0.25));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    56% {
+      transform: rotate(calc(-1 * var(--swing-angle, 22deg) * 0.1));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    64% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+
+  @keyframes jello {
+    0% {
+      transform: scale(1, 1);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1);
+    }
+    12% {
+      transform: scale(var(--jello-scale-x, 1.15), calc(2 - var(--jello-scale-x, 1.15)));
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    24% {
+      transform: scale(calc(2 - var(--jello-scale-y, 1.12)), var(--jello-scale-y, 1.12));
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    36% {
+      transform: scale(
+        calc(1 + (var(--jello-scale-x, 1.15) - 1) * 0.5),
+        calc(2 - (1 + (var(--jello-scale-x, 1.15) - 1) * 0.5))
+      );
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    48% {
+      transform: scale(
+        calc(2 - (1 + (var(--jello-scale-y, 1.12) - 1) * 0.3)),
+        calc(1 + (var(--jello-scale-y, 1.12) - 1) * 0.3)
+      );
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    58% {
+      transform: scale(1.02, 0.98);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    68% {
+      transform: scale(1, 1);
+    }
+    100% {
+      transform: scale(1, 1);
+    }
+  }
+
+  /* #endregion */
+</style><!--lit-part k1u2U0gqOxA=--><svg part="svg" width="16" height="16" viewBox="0 0 16 16"></svg><!--/lit-part--></template></wa-icon>
+            </slot>
+          </span>
+        </summary>
+
+        <!--lit-node 9--><div
+          class=" body "
+          role="region"
+          aria-labelledby="header"
+        >
+          <slot part="content" id="content" class="content"></slot>
+        </div>
+      </details>
+    <!--/lit-part--></template>
+      <ol         
+          aria-current="true"
+        
+        style="list-style: none;"
+      ><li>
+            <a               href="/downflow/pull/5/docs/references/why-downflow/"
+              
+                aria-current="page"
+              
+            >
+              Why Downflow
+            </a>
+          </li></ol>
+    </wa-details></aside>
+
+
+
+      <div slot="aside">
+  <div flow-controller="scroll-spy" id="table-of-contents"><h2 style="font-size: 100%; margin-block: var(--wa-space-s);"><a href="#why-downflow">Why Downflow</a></h2><ol>
+<li><span data-level="0"><a href="#what-is-downflow">What is Downflow?</a></span>
+</li>
+<li><span data-level="0"><a href="#why-not-use-another-existing-library">Why not use another existing library?</a></span>
+<ol>
+<li><span data-level="1"><a href="#datastar">DataStar</a></span>
+</li>
+<li><span data-level="1"><a href="#alpine">Alpine</a></span>
+</li>
+<li><span data-level="1"><a href="#stimulus">Stimulus</a></span>
+</li>
+<li><span data-level="1"><a href="#petite-vue">petite-vue</a></span>
+</li>
+<li><span data-level="1"><a href="#htmx">htmx</a></span>
+</li>
+</ol></li>
+<li><span data-level="0"><a href="#content-security-policies-csp">Content Security Policies (CSP)</a></span>
+</li>
+</ol></div>
+</div>
+
+      <main class="content prose wa-cloak">
+        
+  <h1 class="page-heading" id="why-downflow"><a href="#why-downflow">#</a> Why Downflow</h1>
+
+        <p>Downflow is a library primarily focused on common operations (setting <code>#textContent</code>, reading from shared reactive state, listening to events, etc.)</p>
+<p>Downflow's supported attributes aren't meant to cover every single possible scenario, and where its common operations are not enough, you can write custom controllers. Controllers are essentially &quot;mixins&quot; that attach to your DOM nodes via a <code>MutationObserver</code> and have an API similar to Web Components.</p>
+<h2 id="what-is-downflow"><a href="#what-is-downflow">#</a> What is Downflow?</h2>
+<p>Downflow is some amalgamation between Alpine and Stimulus (if you're familiar). Its like Alpine in that it has reactivity and common operations built in, and like Stimulus in that it supports writing controllers for your DOM nodes.</p>
+<p>Downflow doesn't want you to write all your JavaScript in HTML attributes, instead, you define you define your state in JavaScript, and then interact with the state via attributes.</p>
+<h2 id="why-not-use-another-existing-library"><a href="#why-not-use-another-existing-library">#</a> Why not use another existing library?</h2>
+<p>There are plenty of other solid libraries that do similar things to Downflow. Some of those include DataStar, htmx, Stimulus, petite-vue, Alpine, and im sure countless other libraries. Its possible I'm delusional and there is already better and more streamlined libraries for the use cases of Downflow. I'll try to describe some of the pain points I had with other similar libraries and why Downflow was built.</p>
+<h3 id="datastar"><a href="#datastar">#</a> DataStar</h3>
+<p>DataStar is interesting, as it does a lot of things similar to <code>downflow</code>. It uses signals for backing state, it handles common use cases, etc. Similar to htmx, DataStar is largely centered around backend-driven state over a SSE (Server Sent Event) connection. The thing that is hard for me with DataStar is it has a very big DSL. Its daunting every time I look at datastar. Do I want an effect? A signal? A computed? The other thing is it feels like datastar tries to do <em>everything possible</em> without writing JavaScript, whereas I am quite comfortable writing JavaScript when I want a little more control, and is where Downflow differs. Downflow encourages writing <code>Controllers</code> as an escape hatch when you need additional control.</p>
+<h3 id="alpine"><a href="#alpine">#</a> Alpine</h3>
+<p>Alpine, while you can write components in JS, <em>feels</em> like it moves so much logic into HTML, almost to the point of being a new language. I like the ideas and concepts behind Alpine, but something about it has never clicked. I don't like inlining JS and using JS in HTML strings. I am comfortable writing JS, and writing my JS inside of HTML attributes just feels wrong.</p>
+<h3 id="stimulus"><a href="#stimulus">#</a> Stimulus</h3>
+<p>Stimulus is nice, and is a large inspiration behind the creation of this library. But Stimulus has some things I don't particularly love. Mainly, there's no real concept of &quot;state&quot; or &quot;rendering&quot;. You can add it, but everything requires a Controller, for better or worse. Stimulus has no concept of &quot;common&quot; operations, things like setting the <code>textContent</code> of an element, reading from shared state, etc. Stimulus is heavily decoupled, which you might think is great, but I felt it could use a little extra power to handle common use cases. Writing a controller for everything quickly gets annoying for things you have down hundreds of times.</p>
+<h3 id="petite-vue"><a href="#petite-vue">#</a> petite-vue</h3>
+<p>Petite Vue partially served as inspiration for downflow. It has a lot of interesting ideas and similarities to what I wanted. The key problem I found is that declaring a reactive data object per component before you can bind anything tedious, and I also did not feel the handlebars like syntax of using:
+<code>{{ }}</code>
+was compatible with server rendered views without having to write the same markup twice, which I had no interest in. I wanted a frontend library where I could &quot;enhance&quot; server rendered views, not have to write them twice.</p>
+<h3 id="htmx"><a href="#htmx">#</a> htmx</h3>
+<p>htmx is a different paradigm. Downflow is mainly intended for &quot;frontend&quot; state. If you have a server, and the html / data can come from there, then htmx is a much stronger fit for you.</p>
+<h2 id="content-security-policies-csp"><a href="#content-security-policies-csp">#</a> Content Security Policies (CSP)</h2>
+<p>Finally, let's address the elephant in the room. Content Security Policies. CSP for short.</p>
+<p>Almost every library I listed above (besides Stimulus) has an issue with CSP in some form.</p>
+<p>The majority of apps with a dedicated security team will have strict CSPs. CSPs don't fully protect you from XSS and other nastiness, but they do reduce the blast radius. I won't talk about what settings you should have for your CSP, purely because that is a much longer essay, and frankly, I'm not sure I would do it justice.</p>
+<p>Regardless, you have probably tried to use Alpine, or htmx, or DataStar, or any other library in your company's app and hit the issue of &quot;X violates your Content Security Policy.&quot; You're just looking to do some simple DOM manipulation, not have to schedule a meeting with your security team about why they should relax the CSPs for the application.</p>
+<p>This is why <code>downflow</code> doesn't support constructs like <code>flow-context=&quot;{ foo: &quot;bar&quot; }&quot;</code> for defining contexts, because inevitably, you will hit Content Security Policy (CSP) issues because it needs to be evaluated with using either <code>new Function()</code> or using <code>eval()</code>, which most of the above libraries do, and requires a CSP that allows <code>unsafe-eval</code>.</p>
+<p>See:</p>
+<ul>
+<li>DataStar - <a href="https://data-star.dev/reference/security#content-security-policy">https://data-star.dev/reference/security#content-security-policy</a></li>
+<li>petite-vue - <a href="https://github.com/vuejs/petite-vue#security-and-csp">https://github.com/vuejs/petite-vue#security-and-csp</a></li>
+<li>Alpine - <a href="https://alpinejs.dev/advanced/csp">https://alpinejs.dev/advanced/csp</a> - (uses a specific CSP build which is a ~1000 line parser, and not all syntax is supported like <code>x-html</code> for example. <a href="https://github.com/alpinejs/alpine/blob/main/packages/csp/src/directives/x-html.js">https://github.com/alpinejs/alpine/blob/main/packages/csp/src/directives/x-html.js</a> )</li>
+<li>htmx - <a href="https://htmx.org/essays/web-security-basics-with-htmx/">https://htmx.org/essays/web-security-basics-with-htmx/</a></li>
+</ul>
+<p>This is not to say <code>downflow</code> is 100% safe and security focused and will protect you from Cross Site Scripting Attacks (XSS). That is simply not true. It is also not the intent of <code>downflow</code> or why it was created. Downflow was created to avoid modifying your CSP, not to protect you from XSS.</p>
+<p>Downflow resolves bindings by property lookup, not by evaluating expressions, so it needs no <code>unsafe-eval</code> in your CSP. However, things like component rendering, attributes like <code>flow-action</code> can still be used to exfiltrate data, and as such, untrusted input should always be sanitized.</p>
+
+      </main>
+
+      <footer slot="main-footer" style="display: block;">
+        
+  
+
+<div class="pagination">
+  
+    <div></div>
   
 
   
