@@ -56,8 +56,33 @@
     color: var(--link-color);
   }
 
-  pre {
-    font-size: 110%;
+  wa-tab-group.npm-block {
+    border: var(--border);
+    position: relative;
+    .code-block {
+      margin: 0;
+      border: none;
+    }
+    .code-block-actions {
+      position: absolute;
+      top: 0; left: 0;
+      padding: 0;
+      padding-top: 4px;
+      transform: translateX(4px);
+      width: 100%;
+      pointer-events: none;
+
+      & .code-block-lang {
+        visibility: hidden;
+      }
+
+      & .code-block-copy {
+        pointer-events: all;
+      }
+    }
+    & > wa-tab-panel::part(base) {
+      padding: 0;
+    }
   }
 
   wa-page {
@@ -364,8 +389,11 @@
     }
   }
 
-  h1,h2,h3,h4,h5,h6 {
+  h1 {
     margin-top: var(--wa-space-5xl);
+  }
+  h2,h3,h4,h5,h6 {
+    margin-top: var(--wa-space-3xl);
   }
 
   .code-block {
@@ -430,5 +458,28 @@
 
   .pixel {
     image-rendering: pixelated;
+  }
+
+  wa-tab-group {
+    /* --track-width: 4px; */
+    /* --indicator-color: var(--wa-color-brand); */
+  }
+
+  wa-tab {
+    /* border: 4px solid transparent; */
+    font-family: var(--pixel-font);
+    &::part(base) {
+      padding: var(--wa-space-xs) var(--wa-space-m);
+    }
+  }
+
+  wa-tab[active] {
+    /* border: 4px dotted var(--wa-color-brand); */
+    color: light-dark(var(--wa-color-neutral-95), var(--wa-color-neutral-10));
+    background: var(--wa-color-brand);
+  }
+
+  wa-tab-panel::part(base) {
+    /* padding-top: 4px;  */
   }
 }

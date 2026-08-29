@@ -1,65 +1,38 @@
-You've got a server rendering HTML. You've got some state. You want a button that increments a number, or a span that echoes what someone typed into a form, without reaching for a framework. That's what downflow is for.
-
 ## Install
 
-```shell
-npm install downflow
-```
+{% npm "npm install downflow" %}
 
-Downflow ships as plain ES modules. No bundler, no build step. Drop a `<script type="module">` on the page and import it.
+### Using a CDN
 
-## Start the app
+If you prefer to use a CDN like `jsdelivr`, downflow bundles everything into a single file at `bundles/all.js`.
 
 ```html
 <script type="module">
-  import { Application } from "downflow";
-
-  const application = Application.start();
+  import { Controller, Application } from 'https://cdn.jsdelivr.net/npm/downflow@{{ version }}/+esm'
+  const application = Application.start()
 </script>
 ```
 
-`Application.start()` creates an app and turns it on. From this point downflow watches your page. Add a `flow-*` attribute anywhere, even later, even inside content you swap in after a fetch, and downflow picks it up.
-
-## Give it some state
-
-State lives on `application.context`. It's a plain object.
+## Start the app
 
 ```js
-application.context = {
-  count: 0,
-};
+import { Application } from "downflow";
+
+const application = Application.start();
 ```
 
-## Put a value on the page
+Downflow will now start watching your page via a `MutationObserver` and any `flow-*` attributes added will be automatically upgraded.
 
-`flow-text` sets an element's text to a value from your state.
+## Adding state
 
-```html
-<span flow-text="count">0</span>
-```
+State lives on `application.context`. Under the hood, it is a deeply reactive proxy object using `@vue/reactivity`. This is *generally* an implementation detail, but useful to know if you are using a library that compares object equality.
 
-The `0` inside the span is just a placeholder for anyone reading the raw HTML. Downflow overwrites it as soon as it runs.
+## The canonical counter
 
-## Wire up an event
+<wa-tab-group>
 
-`flow-action` attaches an event listener and calls a function when it fires. Write the function straight on your context, and reference it with `#`.
-
-```js
-application.context = {
-  count: 0,
-  increment() {
-    this.count++;
-  },
-};
-```
-
-```html
-<button flow-action="click#increment">+</button>
-```
-
-`this` inside `increment` is `application.context`, so `this.count++` updates the same state your `flow-text` is reading.
-
-## Put it together
+<wa-tab name="code">Code</wa-tab>
+<wa-tab-panel name="code">
 
 ```html
 <script type="module">
@@ -70,10 +43,10 @@ application.context = {
   application.context = {
     count: 0,
     increment() {
-      this.count++;
+      application.context.count++;
     },
     decrement() {
-      this.count--;
+      application.context.count--;
     },
   };
 </script>
@@ -85,7 +58,12 @@ application.context = {
 </div>
 ```
 
-Click a button. The span updates. No render function, no virtual DOM diff, no template to compile. Downflow just keeps the attribute and the state in sync.
+</wa-tab-panel>
+
+
+
+
+</wa-tab-group>
 
 ## Reading from a form, live
 

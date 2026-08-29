@@ -7,7 +7,8 @@ import '@pagefind/component-ui';
 const driveShaft = new DriveShaft()
 driveShaft.start();
 const application = new Application()
-application.context = window?.application?.context || {};
+
+application.context = window?.application?.context
 window.application = application
 application.start()
 
@@ -145,3 +146,22 @@ function restoreScrollPosition (e) {
 })
 
 setTimeout(() => document.documentElement.classList.add("js-loaded"), 50);
+
+const els = new Set()
+const tags = new Set()
+document.querySelectorAll("*").forEach((el) => {
+  if (el.localName.startsWith("wa-")) {
+    els.add(el)
+    tags.add(el.localName)
+  }
+})
+
+const withTimeout = (promise, ms = 100) =>
+  Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), ms))]);
+
+;(async () => {
+  await Promise.allSettled([...tags].map((tag) => withTimeout(customElements.whenDefined(tag))));
+  await Promise.allSettled([...els].map((el) => withTimeout(el.updateComplete)));
+
+  document.querySelector("main").classList.remove("wa-cloak")
+})();

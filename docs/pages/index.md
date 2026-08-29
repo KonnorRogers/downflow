@@ -18,92 +18,15 @@ title: Downflow
 <br>
 
 
-<div style="display: grid; place-content: center;">
+<div style="display: grid; place-content: center; grid-auto-flow: column; gap: var(--wa-space-m);">
+  <wa-button class="call-to-action" href="{{ "/docs/references/why-downflow/" | url }}" size="l" variant="neutral" appearance="outlined">
+    Why Downflow?
+  </wa-button>
   <wa-button class="call-to-action" href="{{ "/docs/introduction/getting-started/" | url }}" size="l" variant="brand" appearance="filled">
     Get Started
     <wa-icon name="arrow-right" slot="end"></wa-icon>
   </wa-button>
 </div>
-
-<style>
-.animated-pipes {
-  height: calc(32px * 12);
-  width: 100%;
-}
-
-.pipe {
-  --frame-offset-y: 0px;
-  --frame-offset-x: 0px;
-  --frame-gap: 256px;      /* stride between frames on the sheet */
-  width: 16px;        /* the visible art within each cell */
-  height: 16px;
-
-  transform: translateZ(1px);
-  will-change: transform;
-  zoom: 4;
-  animation: frame-by-frame 2s steps(var(--frames)) infinite;
-  margin-top: -0.25px;
-
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  background-image: url('{{ "/assets/images/water-tubes.png" | url }}');
-  background-position: var(--frame-offset-x) calc(-1 * var(--frame-offset-y));
-  image-rendering: crisp-edges;
-  image-rendering: pixelated;
-}
-
-.pipe-down {
-  --frames: 16;
-}
-
-
-.pipe-corner-bottom-right {
-  --frames: 4;
-  --frame-offset-y: -48px;
-  background-image: url('{{ "/assets/images/water-tubes.png" | url }}');
-  animation: frame-by-frame 1.8s steps(var(--frames)) infinite;
-}
-
-.pipe-horizontal {
-  --frames: 16;
-  transform: rotate(270deg);
-}
-
-
-@keyframes frame-by-frame {
-  from {
-    background-position:
-      var(--frame-offset-x)
-      var(--frame-offset-y);
-  }
-  to {
-    background-position:
-      calc(var(--frame-offset-x) - var(--frames) * var(--frame-gap))
-      var(--frame-offset-y);
-  }
-}
-
-.pipe-node {
-  display: inline-block;
-  padding: 1rem;
-  border: 2px solid light-dark(black, white);
-}
-</style>
-
-
-<div class="animated-pipes">
-  <div class="pipe-node">State</div>
-  <div class="pipe pipe-down"></div>
-  <div class="pipe pipe-down"></div>
-  <div class="pipe pipe-down"></div>
-  <div class="pipe-node">Node</div>
-
-  <div style="display: flex;">
-    <div class="pipe pipe-corner-bottom-right"></div>
-    <div class="pipe pipe-horizontal"></div>
-  </div>
-</div>
-
 
 <!--
 

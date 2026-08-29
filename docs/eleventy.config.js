@@ -1,4 +1,6 @@
 // eleventy.config.js
+import { version } from "../internal/version.js"
+
 import litPlugin from '@lit-labs/eleventy-plugin-lit';
 import * as fs from 'node:fs';
 import * as path from "node:path"
@@ -19,6 +21,8 @@ const webawesomeComponentsDir = path.join(webawesomeDir, 'dist', 'components');
 const webawesomeComponents = fs.readdirSync(webawesomeComponentsDir).map(componentName => {
   return path.join(webawesomeComponentsDir, componentName, componentName + '.js');
 });
+
+const downflowBundle = path.join(root, 'bundles', 'all.js');
 
 export const config = {
   markdownTemplateEngine: 'njk',
@@ -96,6 +100,7 @@ export default async function (eleventyConfig) {
   const passthroughCopy = {
     [assetsDir]: "assets",
     [webawesomeDir]: 'assets/vendor/webawesome',
+    [downflowBundle]: 'assets/downflow.js'
   }
 
   eleventyConfig.addPassthroughCopy(passthroughCopy);
@@ -156,15 +161,48 @@ export default async function (eleventyConfig) {
     return sortedCategories
   }
 
+  eleventyConfig.addGlobalData("version", version)
   eleventyConfig.addGlobalData("docCategories", () => docCategories)
   eleventyConfig.addGlobalData("getCollectionForCategory", () => getCollectionForCategory);
-
   eleventyConfig.addGlobalData("layout", "default.njk");
   eleventyConfig.ignores.add("**/.keep");
+
+  // Filters
   eleventyConfig.addFilter("titleize", titleize)
   eleventyConfig.addFilter("stripExtension", (str) => {
     return str.split(/\./)[0]
   })
+  let md;
+  eleventyConfig.amendLibrary("md", (lib) => { md = lib; });
+
+  const shell = (code) => md.render("```shell\n" + code + "\n```").trim();
+
+  function getMatch(content) {
+    if (content.match(/^npm install/)) {
+      const str = content.split(/^npm install/)[1];
+      return { pnpm: "pnpm add" + str, yarn: "yarn add" + str };
+    }
+    return null;
+  }
+  const toPNPM = (c) => getMatch(c)?.pnpm ?? c;
+  const toYarn  = (c) => getMatch(c)?.yarn ?? c;
+
+  eleventyConfig.addShortcode("npm", function (content) {
+    return [
+      `<wa-tab-group class="npm-block" active="npm" flow-prop="active:packageManager" flow-action="wa-tab-show#setPackageManager">`,
+      `<wa-tab panel="npm">npm</wa-tab>`,
+      `<wa-tab panel="pnpm">pnpm</wa-tab>`,
+      `<wa-tab panel="yarn">yarn</wa-tab>`,
+      `<wa-tab-panel name="npm">${shell(content)}</wa-tab-panel>`,
+      `<wa-tab-panel name="pnpm">${shell(toPNPM(content))}</wa-tab-panel>`,
+      `<wa-tab-panel name="yarn">${shell(toYarn(content))}</wa-tab-panel>`,
+      `</wa-tab-group>`,
+    ].join("\n");
+  });
+
+  // eleventyConfig.addShortcode("npmTabs", npmTabs);
+
+  // Plugins
   eleventyConfig.addPlugin(shikiPlugin({ theme: "nord" }));
   eleventyConfig.addPlugin(codeBlocks())
   eleventyConfig.addPlugin(tableOfContents())
