@@ -1,0 +1,106 @@
+/*
+ * Overrides for `@shikijs/twoslash/style-rich.css`.
+ *
+ * NOT wrapped in `@layer`: style-rich.css declares its `--twoslash-*` defaults
+ * on an unlayered `:root`, and unlayered rules always beat layered ones. This
+ * file has to stay unlayered (and be imported after it) to win.
+ */
+
+:root {
+  /* Code blocks are always rendered with shiki's `nord` theme, regardless of
+     the page's light/dark mode, so these are pinned to the nord palette. */
+  --twoslash-popup-bg: #3b4252;
+  --twoslash-popup-color: #d8dee9;
+  --twoslash-popup-shadow: rgb(0 0 0 / 0.4) 0 2px 10px;
+  --twoslash-border-color: #4c566a;
+  --twoslash-underline-color: #88c0d0;
+  --twoslash-cursor-color: #88c0d0;
+
+  --twoslash-docs-color: #aebacf;
+  --twoslash-docs-font: var(--body-font);
+  --twoslash-code-font: var(--mono-font);
+
+  --twoslash-matched-color: #eceff4;
+  --twoslash-unmatched-color: #7b88a1;
+
+  --twoslash-highlighted-border: #ebcb8b50;
+  --twoslash-highlighted-bg: #ebcb8b20;
+
+  --twoslash-error-color: #bf616a;
+  --twoslash-error-bg: #bf616a20;
+  --twoslash-warn-color: #ebcb8b;
+  --twoslash-warn-bg: #ebcb8b20;
+
+  --twoslash-tag-color: #81a1c1;
+  --twoslash-tag-bg: #81a1c120;
+  --twoslash-tag-annotate-color: #a3be8c;
+  --twoslash-tag-annotate-bg: #a3be8c20;
+}
+
+/*
+ * Popups are absolutely positioned, and webawesome's `native.css` gives every
+ * `pre` an `overflow-x: auto`, which would clip them. Only twoslash blocks opt
+ * out of scrolling; plain code blocks keep it.
+ */
+pre.twoslash {
+  overflow: visible;
+}
+
+/* The `.code-block` wrapper's border must not clip escaping popups either. */
+.code-block:has(pre.twoslash) {
+  overflow: visible;
+}
+
+/*
+ * Popups are positioned against the token they annotate, so a long signature
+ * near the right edge would otherwise run off the content column. Cap the width
+ * and let it wrap instead.
+ */
+pre.twoslash {
+  position: relative;
+}
+
+.twoslash .twoslash-hover {
+  /* Anchor popups to the block rather than the token -- see below. */
+  position: static;
+}
+
+.twoslash .twoslash-popup-container {
+  /* Upstream anchors each popup to the token it annotates, so a wide signature
+     on a token near the right edge runs off the content column. Making the
+     `<pre>` the containing block and pinning `left: 0` starts every popup at the
+     block's left edge instead; the vertical position still comes from the
+     token's static position, so it stays on the right line. */
+  left: 0;
+  width: max-content;
+  max-width: 100%;
+}
+
+/* The arrow pointed at the token, which is no longer where the popup starts. */
+.twoslash .twoslash-popup-arrow {
+  display: none;
+}
+
+.twoslash .twoslash-popup-code {
+  white-space: pre-wrap;
+}
+
+/*
+ * `.code-block` sets the pixel display font on the whole block. Popups are
+ * prose + code, so hand them back the readable fonts.
+ */
+.twoslash .twoslash-popup-container,
+.twoslash-completion-list {
+  font-family: var(--mono-font);
+  font-size: var(--wa-font-size-smaller);
+  text-align: start;
+}
+
+.twoslash .twoslash-popup-docs {
+  font-family: var(--twoslash-docs-font);
+}
+
+/* Error / query / tag lines shouldn't inherit the block's letter-spacing. */
+.twoslash .twoslash-meta-line {
+  font-family: var(--mono-font);
+}
