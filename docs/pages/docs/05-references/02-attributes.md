@@ -88,7 +88,7 @@ By default, `flow-text`, `flow-attr`, and `flow-prop` read from `application.con
 </div>
 ```
 
-## Breaking out of the current context
+### Breaking out of the current context
 
 Sometimes you want one binding to ignore the `flow-context` around it. Prefix the key instead of changing the attribute:
 
@@ -101,6 +101,40 @@ Sometimes you want one binding to ignore the `flow-context` around it. Prefix th
 ```
 
 `$form.key` and `$context.key` work the same way for reaching the form or the app root. `controllerName#key` reaches straight into a named controller.
+
+## flow-controller
+
+Creates a new instance of a registered controller.
+
+```html
+<div flow-controller="counter"></div>
+```
+
+## flow-target
+
+Registers a target for a registered controller.
+
+```html
+<div flow-controller="counter">
+    <output flow-target="counter.output"></output>
+</div>
+```
+
+## flow-action
+
+```html
+<div flow-action="click#doThing">
+</div>
+```
+
+Calls `doThing()` on the nearest context.
+
+```html
+<div flow-action="click->foo#doThing">
+</div>
+```
+
+Calls `doThing()` on the closest registered `foo` controller instance
 
 ## Negation
 

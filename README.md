@@ -2,8 +2,6 @@
 
 Reactive DOM updates in a way that doesn't drive a steamroller through the DOM
 
-## WIP: Come back later
-
 ## Documentation
 
 <https://konnorrogers.github.io/downflow>
@@ -120,58 +118,6 @@ Similar to attributes, we can also bind properties.
 - `flow-attr="<attribute>:<value>"` - sets a given attribute
 - `flow-target="<controller_name>.<target_name>"` - names an element so a controller can find it
 - `flow-bind="<state>"` - writes a form control's value straight into your state, live
-
-#### State
-
-There are 3 places "state" can come from, and it's picked with `flow-context`.
-
-We have `$form`, `$context`, and `<controller-name>`.
-
-- `$form` is the closest `<form>` ancestor, or a form pointed at by a `form="<id>"` attribute. IE: `<div form="my-form" flow-context="$form">` looks for `<form id="my-form">`.
-- `$context` is always `application.context`, no matter what's closer.
-- `flow-context="<controller_name>"` finds the closest ancestor with that name in its `flow-controller` attribute, and reads that controller's own `context`. IE: `<div flow-context="hello" flow-text="foo">` pulls `foo` from your instance of `HelloController`.
-
-```js
-import { Controller } from "downflow";
-
-class HelloController extends Controller {
-  static controllerName = "hello";
-
-  initialize() {
-    this.context = {
-      foo: "bar", // <-- read by `flow-text="foo"` under `flow-context="hello"`,
-      //             or directly, from anywhere, with `flow-text="hello#foo"`
-    };
-  }
-}
-```
-
-### Not implemented
-
-Right now the main feature I think is missing is "component"" rendering. This is a rough idea of what I think it would look like.
-
-- `flow-component="<name>"` - "stamps" a component for re-rendering.
-- `flow-render="<component-name>"` - Renders a component with a given name
-- `flow-for="<item> in <items>"` - Renders a list of items
-
-```html
-<template flow-component="bar">
-  <div id="$this.id">
-    <!-- # automatically inherits the "scope" of whatever is passed to the component. So this would be "post.id", "post.comment", "post.url" etc. -->
-    <span flow-text="$this.comment"></span>
-    <form flow-prop:action="$this.url">
-      <textarea></textarea>
-      <button>Leave a reply</button>
-    </form>
-  </div>
-</template>
-
-<div
-  flow-for="post in my-controller#posts"
-  flow-render="bar"
-  flow-key="id"
-></div>
-```
 
 Coming Soon™️
 
