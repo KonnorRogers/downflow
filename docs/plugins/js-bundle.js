@@ -21,6 +21,7 @@ export function jsBundlePlugin(options = {}) {
 
   const entryPoints = {
     "index": path.join(jsDir, "index.js"),
+    "downflow": path.join(jsDir, "downflow.js"),
     "fonts": path.join(jsDir, "fonts.js"),
   }
   const outputPath = options.outputPath || path.join("assets", "bundles");
@@ -33,6 +34,7 @@ export function jsBundlePlugin(options = {}) {
         entryPoints: entryPoints,
         sourcemap: true,
         bundle: true,
+        splitting: true,
         format: "esm",
         target: "es2017",
         outdir: path.join(directories.output, outputPath),
@@ -40,9 +42,9 @@ export function jsBundlePlugin(options = {}) {
           '.ttf': 'file',
           '.woff2': 'file',
         },
-        external: [
-          "downflow"
-        ]
+        // external: [
+        //   "downflow"
+        // ]
       });
     });
   };

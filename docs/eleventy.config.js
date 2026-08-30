@@ -23,8 +23,6 @@ const webawesomeComponents = fs.readdirSync(webawesomeComponentsDir).map(compone
   return path.join(webawesomeComponentsDir, componentName, componentName + '.js');
 });
 
-const downflowBundle = path.join(root, 'bundles', 'all.js');
-
 export const config = {
   markdownTemplateEngine: 'njk',
   htmlTemplateEngine: 'njk',
@@ -101,7 +99,6 @@ export default async function (eleventyConfig) {
   const passthroughCopy = {
     [assetsDir]: "assets",
     [webawesomeDir]: 'assets/vendor/webawesome',
-    [downflowBundle]: 'assets/downflow.js'
   }
 
   eleventyConfig.addPassthroughCopy(passthroughCopy);
