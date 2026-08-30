@@ -162,6 +162,8 @@ export default async function (eleventyConfig) {
     return sortedCategories
   }
 
+
+  // eleventyConfig.dataFilterSelectors.add("*");
   eleventyConfig.addGlobalData("version", version)
   eleventyConfig.addGlobalData("docCategories", () => docCategories)
   eleventyConfig.addGlobalData("getCollectionForCategory", () => getCollectionForCategory);
@@ -180,8 +182,10 @@ export default async function (eleventyConfig) {
 
   function getMatch(content) {
     if (content.match(/^npm install/)) {
-      const str = content.split(/^npm install/)[1];
-      return { pnpm: "pnpm add" + str, yarn: "yarn add" + str };
+      const lines = content.split(/\n/)
+      const pnpm = lines.map((str) => str.replaceAll(/^npm install/g, "pnpm add")).join("\n");
+      const yarn = lines.map((str) => str.replaceAll(/^npm install/g, "yarn add")).join("\n");
+      return { pnpm, yarn };
     }
     return null;
   }

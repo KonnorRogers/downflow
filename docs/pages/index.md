@@ -20,7 +20,7 @@ title: Downflow
 <br>
 
 
-<div style="display: grid; place-content: center; grid-auto-flow: column; gap: var(--wa-space-m);">
+<div style="display: grid; place-content: center; grid-template-columns: repeat(auto-fit, minmax(200px, auto)); gap: var(--wa-space-m);">
   <wa-button class="call-to-action" href="{{ "/docs/references/why-downflow/" | url }}" size="l" variant="neutral" appearance="outlined">
     Why Downflow?
   </wa-button>

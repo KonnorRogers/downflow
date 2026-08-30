@@ -1,8 +1,12 @@
 <h2 slot="navigation-header" style="margin: 0;">
   {% include "logo.njk" %}
+  <span class="wa-body-s" style="font-family: var(--pixel-font);">{{ version }}</span>
 </h2>
 
 <aside slot="navigation">
+  <div class="color-switch-mobile" style="align-self: center;">
+    {% include "color-switcher.njk" %}
+  </div>
   {%- for docCategory in docCategories(collections.docs) -%}
     <wa-details open summary="{{ docCategory | titleize }}">
       <ol

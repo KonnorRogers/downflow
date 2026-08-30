@@ -4,11 +4,18 @@
       <wa-icon name="hamburger"></wa-icon>
     </wa-button>
     {% include "logo.njk" %}
+    <span class="wa-body-s wa-desktop-only" style="font-family: var(--pixel-font);">{{ version }}</span>
+  </div>
+
+  <div class="desktop-only" style="display: flex; gap: 2rem; align-items: center; margin-inline-start: auto;">
+    {% for category in docCategories(collections.docs) %}
+      <a href="/docs/{{ category }}">{{ category | titleize }}</a>
+    {% endfor %}
   </div>
 
   <div style="display: flex; gap: 1em; align-items: center;">
+
     {% include "pagefind.njk" %}
-    {% include "color-switcher.njk" %}
   </div>
 </div>
 

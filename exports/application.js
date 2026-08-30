@@ -1430,8 +1430,9 @@ export class Application {
         const propertyText = this.getPropertyBinding(el);
         if (!propertyText) return;
         const [prop, key] = propertyText.split(":");
+        const value = this.resolveValue(el, key);
         // @ts-expect-error
-        el[prop] = this.resolveValue(el, key);
+        el[prop] = value
       },
       { scheduler: () => this.effectScheduler.schedule(runner) },
     );
