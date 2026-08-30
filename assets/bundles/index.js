@@ -1,7 +1,7 @@
 import {
   Application,
   Controller
-} from "./chunk-OFMP7KYP.js";
+} from "./chunk-KRDW3VBQ.js";
 import {
   __objRest,
   __publicField,
