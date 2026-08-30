@@ -12,25 +12,30 @@ const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
  * @param {string} [options.outputPath] - output path, relative to the eleventy output dir
  */
 export function jsBundlePlugin(options = {}) {
-  const entryPoint = path.join(
+  const jsDir = path.join(
     __dirname,
     "..",
     "assets",
     "js",
-    options.entryPoint || "index.js",
-  );
-  const outputPath = options.outputPath || path.join("assets", "js", "bundle.js");
+  )
+
+  const entryPoints = {
+    "index": path.join(jsDir, "index.js"),
+    "fonts": path.join(jsDir, "fonts.js"),
+  }
+  const outputPath = options.outputPath || path.join("assets", "bundles");
 
   return function (eleventyConfig) {
     eleventyConfig.addWatchTarget(path.join(__dirname, "..", "assets", "js"));
 
     eleventyConfig.on("eleventy.after", async function ({ directories }) {
       await esbuild.build({
-        entryPoints: [entryPoint],
+        entryPoints: entryPoints,
+        sourcemap: true,
         bundle: true,
         format: "esm",
         target: "es2017",
-        outfile: path.join(directories.output, outputPath),
+        outdir: path.join(directories.output, outputPath),
         loader: {
           '.ttf': 'file',
           '.woff2': 'file',

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-  {%- from "macros.njk" import frame -%}
   <head>
     {% block head %}
       {% include "head.njk" %}
@@ -17,7 +16,7 @@
 
       <div slot="aside">{% block aside %}{% endblock %}</div>
 
-      <main class="content prose wa-cloak">
+      <main class="content prose">
         {% block heading %}
         {% endblock %}
         {{ content | safe }}

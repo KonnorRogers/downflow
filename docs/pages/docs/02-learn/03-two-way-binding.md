@@ -10,10 +10,21 @@ Every keystroke writes to `application.context.name`.
 
 `flow-bind` only writes. Pair it with `flow-text` to show the value back.
 
+{% set html %}
+<div style="display: grid; gap: 2rem;">
+  <label>
+    Give us your name
+    <input flow-bind="name">
+  </label>
+  <p>Hello, <span flow-text="name"></span></p>
+</div>
+{% endset %}
+
 ```html
-<input flow-bind="name">
-<p flow-text="name"></p>
+{{ html | trim | safe }}
 ```
+
+{{ frame(html) }}
 
 ## Nested keys
 
@@ -27,7 +38,7 @@ Writes to `application.context.address.city`, creating `application.context.addr
 
 ## The attribute form
 
-`flow-bind:name` does the same thing as `flow-bind="name"`. Pick whichever reads better.
+`flow-bind:name` is an alias for `flow-bind="name"`.
 
 Do note, if one of the properties you want to bind to has an uppercase, then you need to use `flow-bind="name"` because HTML attributes are always read as lower cased by the parser.
 

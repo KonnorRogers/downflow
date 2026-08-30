@@ -12,6 +12,7 @@ import { jsBundlePlugin } from './plugins/js-bundle.js';
 import { titleize } from './helpers.js';
 import { codeBlocks } from './plugins/code-blocks.js';
 import { tableOfContents } from './plugins/table-of-contents.js';
+import clean from "eleventy-plugin-clean";
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -200,9 +201,15 @@ export default async function (eleventyConfig) {
     ].join("\n");
   });
 
+	eleventyConfig.addPreprocessor("macro-inject", ".njk,.md,.html", (data, content) => {
+		return `{%- from "macros.njk" import frame -%}\n` + content;
+	});
+
+
   // eleventyConfig.addShortcode("npmTabs", npmTabs);
 
   // Plugins
+  eleventyConfig.addPlugin(clean);
   eleventyConfig.addPlugin(shikiPlugin({ theme: "nord" }));
   eleventyConfig.addPlugin(codeBlocks())
   eleventyConfig.addPlugin(tableOfContents())
