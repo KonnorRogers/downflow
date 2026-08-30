@@ -57,7 +57,7 @@ application.register(ColorSwitcherController)
 application.register(ScrollSpyController)
 
 function getMenu(root = document) {
-  return root.querySelector("wa-page").shadowRoot.querySelector("[part~='menu']")
+  return root?.querySelector("wa-page")?.shadowRoot?.querySelector("[part~='menu']")
 }
 
 function updateMenu(root = document) {
@@ -143,25 +143,28 @@ function restoreScrollPosition (e) {
 
 ;["pageshow", "DOMContentLoaded", "driveshaft:after-replace"].forEach((eventName) => {
   window.addEventListener(eventName, restoreScrollPosition)
+  removeCloak()
 })
 
 setTimeout(() => document.documentElement.classList.add("js-loaded"), 50);
 
-const els = new Set()
-const tags = new Set()
-document.querySelectorAll("*").forEach((el) => {
-  if (el.localName.startsWith("wa-")) {
-    els.add(el)
-    tags.add(el.localName)
-  }
-})
+function withTimeout (promise, ms = 100) {
+  return Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), ms))]);
+}
 
-const withTimeout = (promise, ms = 100) =>
-  Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), ms))]);
+async function removeCloak () {
+  const els = new Set()
+  const tags = new Set()
+  document.querySelectorAll("*").forEach((el) => {
+    if (el.localName.startsWith("wa-")) {
+      els.add(el)
+      tags.add(el.localName)
+    }
+  })
 
-;(async () => {
   await Promise.allSettled([...tags].map((tag) => withTimeout(customElements.whenDefined(tag))));
   await Promise.allSettled([...els].map((el) => withTimeout(el.updateComplete)));
+  document.querySelector("main")?.classList?.remove?.("wa-cloak")
+}
 
-  document.querySelector("main").classList.remove("wa-cloak")
-})();
+removeCloak()

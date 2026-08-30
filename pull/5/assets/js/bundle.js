@@ -7762,7 +7762,8 @@ __publicField(ColorSwitcherController, "controllerName", "color-switcher");
 application.register(ColorSwitcherController);
 application.register(ScrollSpyController);
 function getMenu(root = document) {
-  return root.querySelector("wa-page").shadowRoot.querySelector("[part~='menu']");
+  var _a2, _b;
+  return (_b = (_a2 = root == null ? void 0 : root.querySelector("wa-page")) == null ? void 0 : _a2.shadowRoot) == null ? void 0 : _b.querySelector("[part~='menu']");
 }
 function updateMenu(root = document) {
   const menu = getMenu(root);
@@ -7830,19 +7831,24 @@ function restoreScrollPosition(e) {
 }
 ["pageshow", "DOMContentLoaded", "driveshaft:after-replace"].forEach((eventName) => {
   window.addEventListener(eventName, restoreScrollPosition);
+  removeCloak();
 });
 setTimeout(() => document.documentElement.classList.add("js-loaded"), 50);
-var els = /* @__PURE__ */ new Set();
-var tags = /* @__PURE__ */ new Set();
-document.querySelectorAll("*").forEach((el) => {
-  if (el.localName.startsWith("wa-")) {
-    els.add(el);
-    tags.add(el.localName);
-  }
-});
-var withTimeout = (promise, ms = 100) => Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), ms))]);
-(async () => {
+function withTimeout(promise, ms = 100) {
+  return Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), ms))]);
+}
+async function removeCloak() {
+  var _a2, _b, _c;
+  const els = /* @__PURE__ */ new Set();
+  const tags = /* @__PURE__ */ new Set();
+  document.querySelectorAll("*").forEach((el) => {
+    if (el.localName.startsWith("wa-")) {
+      els.add(el);
+      tags.add(el.localName);
+    }
+  });
   await Promise.allSettled([...tags].map((tag) => withTimeout(customElements.whenDefined(tag))));
   await Promise.allSettled([...els].map((el) => withTimeout(el.updateComplete)));
-  document.querySelector("main").classList.remove("wa-cloak");
-})();
+  (_c = (_b = (_a2 = document.querySelector("main")) == null ? void 0 : _a2.classList) == null ? void 0 : _b.remove) == null ? void 0 : _c.call(_b, "wa-cloak");
+}
+removeCloak();

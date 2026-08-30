@@ -56,9 +56,10 @@
     color: var(--link-color);
   }
 
-  wa-tab-group.npm-block {
+  wa-tab-group {
     border: var(--border);
     position: relative;
+
     .code-block {
       margin: 0;
       border: none;
@@ -481,5 +482,20 @@
 
   wa-tab-panel::part(base) {
     /* padding-top: 4px;  */
+  }
+
+  .side-by-side {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
+    gap: 1rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    & > * {
+      margin: 0;
+    }
+  }
+
+  wa-zoomable-frame {
+    border: var(--border);
   }
 }
