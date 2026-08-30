@@ -1432,7 +1432,7 @@ export class Application {
         const [prop, key] = propertyText.split(":");
         const value = this.resolveValue(el, key);
         // @ts-expect-error
-        el[prop] = value
+        el[prop] = value;
       },
       { scheduler: () => this.effectScheduler.schedule(runner) },
     );
