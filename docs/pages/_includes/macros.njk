@@ -3,7 +3,12 @@
 <!DOCTYPE html><html><head>{% include "head.njk" %}</head><body style="display: grid; place-content: center;">{{ html | safe }}</body></html>
 {% endset %}
 
+<div style="position: relative;">
 <wa-zoomable-frame with-theme-sync srcdoc="{{ frameDoc | forceescape | replace("\r", "") | replace("\n", "&#10;") }}">
 </wa-zoomable-frame>
+  <div style="position: absolute; top: 0; left: 100%; transform: translate(-100%, 0%); padding: 8px;">
+    <wa-button size="s"><wa-icon name="rotate-right" label="Reload"></wa-icon></wa-button>
+  </div>
+</div>
 
 {% endmacro %}

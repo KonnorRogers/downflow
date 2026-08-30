@@ -12,6 +12,7 @@ import { jsBundlePlugin } from './plugins/js-bundle.js';
 import { titleize } from './helpers.js';
 import { codeBlocks } from './plugins/code-blocks.js';
 import { tableOfContents } from './plugins/table-of-contents.js';
+import clean from "eleventy-plugin-clean";
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -161,6 +162,8 @@ export default async function (eleventyConfig) {
     return sortedCategories
   }
 
+
+  // eleventyConfig.dataFilterSelectors.add("*");
   eleventyConfig.addGlobalData("version", version)
   eleventyConfig.addGlobalData("docCategories", () => docCategories)
   eleventyConfig.addGlobalData("getCollectionForCategory", () => getCollectionForCategory);
@@ -179,8 +182,10 @@ export default async function (eleventyConfig) {
 
   function getMatch(content) {
     if (content.match(/^npm install/)) {
-      const str = content.split(/^npm install/)[1];
-      return { pnpm: "pnpm add" + str, yarn: "yarn add" + str };
+      const lines = content.split(/\n/)
+      const pnpm = lines.map((str) => str.replaceAll(/^npm install/g, "pnpm add")).join("\n");
+      const yarn = lines.map((str) => str.replaceAll(/^npm install/g, "yarn add")).join("\n");
+      return { pnpm, yarn };
     }
     return null;
   }
@@ -200,9 +205,15 @@ export default async function (eleventyConfig) {
     ].join("\n");
   });
 
+	eleventyConfig.addPreprocessor("macro-inject", ".njk,.md,.html", (data, content) => {
+		return `{%- from "macros.njk" import frame -%}\n` + content;
+	});
+
+
   // eleventyConfig.addShortcode("npmTabs", npmTabs);
 
   // Plugins
+  eleventyConfig.addPlugin(clean);
   eleventyConfig.addPlugin(shikiPlugin({ theme: "nord" }));
   eleventyConfig.addPlugin(codeBlocks())
   eleventyConfig.addPlugin(tableOfContents())

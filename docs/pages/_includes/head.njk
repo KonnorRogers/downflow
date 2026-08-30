@@ -1,5 +1,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="{{ description or "Let your state flow" }}"></meta>
 <title>Downflow</title>
 <script type="importmap">
   {
@@ -9,17 +10,16 @@
   }
 </script>
 
+<link rel="preconnect" href="https://ka-f.fontawesome.com">
+
 <link rel="icon" type="image/png" href="/assets/images/water-dude.png">
-
-{# Layers #}
-<script type="module" src="{{ "/assets/vendor/webawesome/dist-cdn/webawesome.ssr-loader.js" | url }}"></script>
-
 
 <style>
   {% include "styles.css" %}
 </style>
 
-<script type="module" src="{{ "/assets/js/bundle.js" | url }}"></script>
-<link rel="stylesheet" href="{{ "/assets/js/bundle.css" | url }}">
+<script type="module" src="{{ "/assets/bundles/index.js" | url }}"></script>
+<link rel="stylesheet" href="{{ "/assets/bundles/index.css" | url }}">
+<link rel="stylesheet" href="{{ "/assets/bundles/fonts.css" | url }}">
 
 {% include "color-switcher-js.njk" %}

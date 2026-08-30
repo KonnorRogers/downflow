@@ -81,6 +81,7 @@
     "chalk": "^6.0.0",
     "downflow": "file:.",
     "driveshaft": "^0.1.0",
+    "eleventy-plugin-clean": "^2.0.1",
     "esbuild": "^0.23.0",
     "fdir": "^6.3.0",
     "gh-pages": "^6.1.1",

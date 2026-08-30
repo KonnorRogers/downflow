@@ -1,5 +1,3 @@
-{%- from "macros.njk" import frame -%}
-
 ## Install
 
 {% npm "npm install downflow" %}
