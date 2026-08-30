@@ -2,9 +2,12 @@
 
 ---
 
+
 Downflow is a library primarily focused on common operations (setting `#textContent`, reading from shared reactive state, listening to events, etc.)
 
 Downflow's supported attributes aren't meant to cover every single possible scenario, and where its common operations are not enough, you can write custom controllers. Controllers are essentially "mixins" that attach to your DOM nodes via a `MutationObserver` and have an API similar to Web Components.
+
+If you want the "philosophical reason" for why Downflow was created, checkout the [Inspiration](/docs/references/inspiration) for more on the philosphy of Downflow.
 
 ## What is Downflow?
 
