@@ -1,8 +1,31 @@
 {# needs to be inline script #}
 <script>
   ;(() => {
+
+    function toPackageManager(str) {
+      if (!str) { return "npm" }
+
+      const allowedPackageManagers = [
+        "npm",
+        "yarn",
+        "pnpm"
+      ]
+
+      if (!allowedPackageManagers.includes(str)) {
+        str = "npm"
+      }
+
+      return str
+    }
+
     window.application ||= {}
     window.application.context = {
+      packageManager: toPackageManager(sessionStorage.getItem("packageManager")),
+      setPackageManager (e) {
+        let packageManager = toPackageManager(e.detail?.name)
+        sessionStorage.setItem("packageManager", packageManager)
+        window.application.context.packageManager = packageManager
+      },
       color: {
         mode: null,
         light: false,

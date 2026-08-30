@@ -1,4 +1,4 @@
-import { ref, isRef, reactive } from "@vue/reactivity";
+import { ref, isRef } from "@vue/reactivity";
 
 /**
  * The base class for creating oil controllers.
@@ -95,6 +95,7 @@ export class Controller {
   }
 
   /**
+   * Finds the closest form element.
    * @returns {HTMLFormElement | null}
    */
   get form() {

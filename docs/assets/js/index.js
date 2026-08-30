@@ -1,14 +1,29 @@
-// import { DriveShaft } from "driveshaft";
+import "../css/index.css"
 import { Application, Controller } from "downflow";
 import { ScrollSpyController } from "./scroll_spy_controller.js";
 // pagefind
-import "/assets/vendor/pagefind/ui/npm_dist/mjs/component-ui.mjs";
+import '@pagefind/component-ui';
+// import { DriveShaft } from "driveshaft";
 // const driveShaft = new DriveShaft()
 // driveShaft.start();
 const application = new Application()
-application.context = window?.application?.context || {};
+
+application.context = window?.application?.context
 window.application = application
 application.start()
+
+
+class QuickSearchButton extends HTMLElement {
+  constructor() {
+    super()
+    const instance = window.PagefindComponents.getInstanceManager().getInstance('default');
+    instance.registerUtility(this, 'modal-trigger');
+    this.addEventListener('click', () => instance.getUtilities('modal')[0]?.open());
+  }
+  handleModalClose() { this.buttonEl?.focus(); }
+}
+
+customElements.define('quick-search-button', QuickSearchButton);
 
 class ColorSwitcherController extends Controller {
   static controllerName = "color-switcher"
@@ -42,18 +57,16 @@ application.register(ColorSwitcherController)
 application.register(ScrollSpyController)
 
 function getMenu(root = document) {
-  return root.querySelector("wa-page").shadowRoot.querySelector("[part~='menu']")
+  return root?.querySelector("wa-page")?.shadowRoot?.querySelector("[part~='menu']")
 }
 
 function updateMenu(root = document) {
   const menu = getMenu(root)
   if (!menu) { return }
   let scrollPosition = sessionStorage.getItem(menuKey)
-  console.log({scrollPosition})
 
   if (scrollPosition) {
     scrollPosition = JSON.parse(scrollPosition)
-    console.log({scrollPosition})
     menu.scrollTop = scrollPosition.scrollTop
     menu.scrollLeft = scrollPosition.scrollLeft
   }
@@ -72,7 +85,6 @@ function updatePage (body) {
 
 const menuKey = "scroll:menu"
 function storeScrollPosition (e) {
-  console.log("storing scroll position")
   const menu = getMenu()
   if (!menu) { return }
 
@@ -117,18 +129,42 @@ function restoreScrollPosition (e) {
   const currentPage = document.querySelector("wa-page")
 
   updateMenu()
-  currentPage.updateComplete.then(() => {
-    setTimeout(() => {
-      requestAnimationFrame(() => {
-        updateMenu()
-        document.documentElement.classList.add("js-loaded");
-      })
-    }, 50)
+  customElements.whenDefined("wa-page").then(() => {
+    currentPage.updateComplete.then(() => {
+      setTimeout(() => {
+        requestAnimationFrame(() => {
+          updateMenu()
+          document.documentElement.classList.add("js-loaded");
+        })
+      }, 50)
+    })
   })
 }
 
 ;["pageshow", "DOMContentLoaded", "driveshaft:after-replace"].forEach((eventName) => {
   window.addEventListener(eventName, restoreScrollPosition)
+  removeCloak()
 })
 
 setTimeout(() => document.documentElement.classList.add("js-loaded"), 50);
+
+function withTimeout (promise, ms = 100) {
+  return Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), ms))]);
+}
+
+async function removeCloak () {
+  const els = new Set()
+  const tags = new Set()
+  document.querySelectorAll("*").forEach((el) => {
+    if (el.localName.startsWith("wa-")) {
+      els.add(el)
+      tags.add(el.localName)
+    }
+  })
+
+  await Promise.allSettled([...tags].map((tag) => withTimeout(customElements.whenDefined(tag))));
+  await Promise.allSettled([...els].map((el) => withTimeout(el.updateComplete)));
+  document.querySelector("main")?.classList?.remove?.("wa-cloak")
+}
+
+removeCloak()

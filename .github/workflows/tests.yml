@@ -31,3 +31,5 @@ jobs:
         run: npm run build
       - name: Test
         run: npm run test
+      - name: Preview Package
+        run: npm exec pkg-pr-new publish

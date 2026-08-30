@@ -1,5 +1,9 @@
 {% extends "default.njk" %}
 
+{% block navigation %}
+  {% include "sidebar.njk" %}
+{% endblock %}
+
 {% block heading %}
   <h1 class="page-heading">{{ title }}</h1>
 {% endblock %}

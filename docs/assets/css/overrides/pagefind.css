@@ -54,7 +54,24 @@
       display: flex;
       flex-wrap: nowrap;
       align-items: center;
+      padding: 0.2rem 0.5rem;
+      color: var(--wa-color-brand-on-normal);
+      background-color: var(--wa-color-brand);
       gap: 4px;
+      font-family: var(--mono-font);
+      font-size: var(--wa-font-size-smaller);
+      font-weight: var(--wa-font-weight-code);
+    }
+
+    .pf-trigger-key:first-child {
+      font-size: 20px;
+    }
+
+    .pf-trigger-btn {
+      gap: 1rem;
+      padding: 0;
+      padding-inline-start: 4px;
+      padding-inline-end: 8px;
     }
 
     /* kbd: https://github.com/shoelace-style/webawesome/blob/f8a109817d94626caae20146c3ba8f961ece1bcf/packages/webawesome/src/styles/native.css#L263-L277 */
@@ -62,23 +79,12 @@
       display: inline-flex;
       justify-content: center;
       align-items: center;
-      width: 2em;
-      height: 2em;
-      padding: 0.125em 0.25em;
-
-      font-family: var(--wa-font-family-code);
-      font-size: var(--wa-font-size-smaller);
-      font-weight: var(--wa-font-weight-code);
-      gap: 0.5em;
-
-      border: 2px solid var(--border-color);
-      border-radius: var(--wa-border-radius-s);
-      box-shadow: 0 0.125em 0 0 color-mix(in oklab, currentColor, transparent 50%);
 
       wa-icon {
         vertical-align: -2px;
       }
     }
+
 
 
     .pf-input-clear {

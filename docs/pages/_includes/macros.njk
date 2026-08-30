@@ -1,0 +1,9 @@
+{% macro frame(html) %}
+{% set frameDoc %}
+<!DOCTYPE html><html><head>{% include "head.njk" %}</head><body style="display: grid; place-content: center;">{{ html | safe }}</body></html>
+{% endset %}
+
+<wa-zoomable-frame with-theme-sync srcdoc="{{ frameDoc | forceescape | replace("\r", "") | replace("\n", "&#10;") }}">
+</wa-zoomable-frame>
+
+{% endmacro %}

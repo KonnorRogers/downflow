@@ -4,7 +4,7 @@ import * as path from "node:path"
 export function pagefindPlugin(options) {
   const pageFindPath = options?.outputPath || path.join("assets", "search", "pagefind")
 
-  const pageFindOptions = options?.pageFindOptions
+  const pageFindOptions = options?.pageFindOptions || {}
 
   return async function (eleventyConfig) {
     // Create a Pagefind search index to work with

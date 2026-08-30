@@ -3,6 +3,7 @@ import { createHighlighter } from 'shiki'
 const highlighter = await createHighlighter({
   themes: [],
   langs: [
+    "shell"
     // "html",
     // "javascript"
   ],
@@ -17,6 +18,7 @@ export function shikiPlugin(options) {
     eleventyConfig.amendLibrary('md', (mdLib) => {
       markdownLibrary = mdLib
     });
+
 
     const loaded = new Set(highlighter.getLoadedLanguages())
 

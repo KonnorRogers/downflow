@@ -15,6 +15,10 @@ export function tableOfContents () {
         }
       })
 
+      if (!doc) {
+        throw Error(`Unable to parse HTML for ${this.page.inputPath}`)
+      }
+
       /**
        * Build a flat tree of h2's
        */
@@ -82,6 +86,8 @@ export function tableOfContents () {
           href: `#${el.id}`,
           children: [],
         }
+
+        el.prepend(`<a href="#${el.id}">#</a> `)
 
         currentHeadingLevel = headingLevel
 

@@ -1,4 +1,6 @@
 // eleventy.config.js
+import { version } from "../internal/version.js"
+
 import litPlugin from '@lit-labs/eleventy-plugin-lit';
 import * as fs from 'node:fs';
 import * as path from "node:path"
@@ -6,6 +8,7 @@ import * as path from "node:path"
 import * as url from 'url';
 import { shikiPlugin } from './plugins/shiki.js';
 import { pagefindPlugin } from './plugins/pagefind.js';
+import { jsBundlePlugin } from './plugins/js-bundle.js';
 import { titleize } from './helpers.js';
 import { codeBlocks } from './plugins/code-blocks.js';
 import { tableOfContents } from './plugins/table-of-contents.js';
@@ -19,16 +22,7 @@ const webawesomeComponents = fs.readdirSync(webawesomeComponentsDir).map(compone
   return path.join(webawesomeComponentsDir, componentName, componentName + '.js');
 });
 
-const vueReactivityDir = path.join(root, 'node_modules/@vue/reactivity');
-const pagefindUiDir = path.join(root, 'node_modules/@pagefind/component-ui');
-let driveshaftDir = path.join(root, 'node_modules/driveshaft')
-driveshaftDir = path.join(path.resolve(root, '..'), 'driveshaft')
-// const vueReactivityFiles = fs.readdirSync(vueReacti, {recursive: true})
-
-const flowStateDirectories = [
-  'exports',
-  'internal'
-]
+const downflowBundle = path.join(root, 'bundles', 'all.js');
 
 export const config = {
   markdownTemplateEngine: 'njk',
@@ -106,21 +100,10 @@ export default async function (eleventyConfig) {
   const passthroughCopy = {
     [assetsDir]: "assets",
     [webawesomeDir]: 'assets/vendor/webawesome',
-    [vueReactivityDir]: 'assets/vendor/vue/reactivity',
-    [pagefindUiDir]: 'assets/vendor/pagefind/ui',
-    [driveshaftDir]: 'assets/vendor/driveshaft'
+    [downflowBundle]: 'assets/downflow.js'
   }
 
   eleventyConfig.addPassthroughCopy(passthroughCopy);
-
-  flowStateDirectories.forEach((dir) => {
-    const resolvedDir = path.join(root, dir)
-    eleventyConfig.addPassthroughCopy({
-      [resolvedDir]: path.join('assets/vendor/downflow', dir),
-    })
-
-    eleventyConfig.addWatchTarget(resolvedDir)
-  })
 
   const docFileGlob = eleventyConfig.directories.input.replace(/^.\//, "") + "docs/**/*.*"
 
@@ -178,12 +161,48 @@ export default async function (eleventyConfig) {
     return sortedCategories
   }
 
+  eleventyConfig.addGlobalData("version", version)
   eleventyConfig.addGlobalData("docCategories", () => docCategories)
   eleventyConfig.addGlobalData("getCollectionForCategory", () => getCollectionForCategory);
-
   eleventyConfig.addGlobalData("layout", "default.njk");
   eleventyConfig.ignores.add("**/.keep");
+
+  // Filters
   eleventyConfig.addFilter("titleize", titleize)
+  eleventyConfig.addFilter("stripExtension", (str) => {
+    return str.split(/\./)[0]
+  })
+  let markdownLibrary;
+  eleventyConfig.amendLibrary("md", (lib) => { markdownLibrary = lib; });
+
+  const shell = (code) => markdownLibrary.render("```shell\n" + code + "\n```").trim();
+
+  function getMatch(content) {
+    if (content.match(/^npm install/)) {
+      const str = content.split(/^npm install/)[1];
+      return { pnpm: "pnpm add" + str, yarn: "yarn add" + str };
+    }
+    return null;
+  }
+  const toPNPM = (c) => getMatch(c)?.pnpm ?? c;
+  const toYarn  = (c) => getMatch(c)?.yarn ?? c;
+
+  eleventyConfig.addShortcode("npm", function (content) {
+    return [
+      `<wa-tab-group class="npm-block" active="npm" flow-prop="active:packageManager" flow-action="wa-tab-show#setPackageManager">`,
+      `<wa-tab panel="npm">npm</wa-tab>`,
+      `<wa-tab panel="pnpm">pnpm</wa-tab>`,
+      `<wa-tab panel="yarn">yarn</wa-tab>`,
+      `<wa-tab-panel name="npm">${shell(content)}</wa-tab-panel>`,
+      `<wa-tab-panel name="pnpm">${shell(toPNPM(content))}</wa-tab-panel>`,
+      `<wa-tab-panel name="yarn">${shell(toYarn(content))}</wa-tab-panel>`,
+      `</wa-tab-group>`,
+    ].join("\n");
+  });
+
+  // eleventyConfig.addShortcode("npmTabs", npmTabs);
+
+  // Plugins
   eleventyConfig.addPlugin(shikiPlugin({ theme: "nord" }));
   eleventyConfig.addPlugin(codeBlocks())
   eleventyConfig.addPlugin(tableOfContents())
@@ -192,6 +211,7 @@ export default async function (eleventyConfig) {
       rootSelector: "main",
     }
   }))
+  eleventyConfig.addPlugin(jsBundlePlugin())
 
 
   // Make sure lit plugin comes *after* any transform blocks. Make this last.

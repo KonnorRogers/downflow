@@ -89,6 +89,7 @@
     "handlebars": "^4.7.9",
     "node-html-parser": "^9.0.1",
     "pagefind": "^1.5.2",
+    "pkg-pr-new": "^0.0.88",
     "playwright": "^1.44.1",
     "plop": "^4.0.1",
     "prettier": "^3.3.3",

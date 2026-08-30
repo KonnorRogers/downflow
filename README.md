@@ -1,8 +1,10 @@
 # `downflow`
 
-Reactive templating in a way that doesn't drive a steamroller through the DOM
+Reactive DOM updates in a way that doesn't drive a steamroller through the DOM
 
-## WIP: Come back later
+## Documentation
+
+<https://konnorrogers.github.io/downflow>
 
 ## Inspiration
 
@@ -34,13 +36,11 @@ So here's downflow's counter.
 
   application.context = {
     count: 0,
-  };
-  application.functions = {
     increment() {
-      application.context.count++;
+      this.count++;
     },
     decrement() {
-      application.context.count--;
+      this.count--;
     },
   };
 </script>
@@ -73,7 +73,7 @@ We can also disconnect the form and reference it by its id, similar to form cont
 <form id="my-form">
   <label>
     <div>Give us your name!</div>
-    <input flow-context="$form" name="name" />
+    <input name="name" />
   </label>
 </form>
 
@@ -111,91 +111,13 @@ Similar to attributes, we can also bind properties.
 
 ### Implemented
 
-- `flow-controller="<controller_name>"` - mixins (Stimulus Controllers)
+- `flow-controller="<controller_name>"` - attaches a controller, same idea as a Stimulus controller
 - `flow-action="<event>"` - events
 - `flow-text="<state>"` - sets `element.textContent`
 - `flow-prop="<property>:<value>"` - sets a given property
 - `flow-attr="<attribute>:<value>"` - sets a given attribute
-
-#### State
-
-There are 3 different places "state" can come from and is defined with `flow-context`.
-
-We have `$form` and `<controller-name>`
-
-- `$form` is either the form with `id` on the element. IE: `<div flow-context="$form" id="my-form">` would look for `<form id="my-form"`. If no form attribute is on the element, the closest `<form>` element is used.
-- `flow-context="<controller_name>"` will find the closest `flow-controller` requires a prefix of the controller you plan to use. IE: `<div flow-context="hello" flow-text="foo">` would pull `state.foo` from your instance of a `HelloController`.
-
-```js
-import { Controller }
-class HelloController extends Controller {
-    initialize () {
-        this.context = {
-            foo: "bar" // <-- used by `flow-text="hello#state.foo"`
-                                                       //   ^ controller name. Will use the closest controller parent defined in the DOM.
-        }
-    }
-}
-```
-
-#### Reactivity
-
-```js
-import { Application, Controller } from "downflow";
-
-const application = Application.start();
-
-application.context = {
-  count: 0,
-};
-```
-
-```html
-<form>
-  <input name="email" />
-  <span
-    >Your email is: <output flow-context="$form" flow-text="email"></output
-  ></span>
-</form>
-<!-- Live reactivity from the host "form" -->
-
-<!-- this also works -->
-<form id="foo">
-  <input name="email" />
-</form>
-
-<span>
-  Your email is:
-  <output form="foo" flow-context="$form" flow-text="email"></output>
-</span>
-```
-
-### Not implemented
-
-Right now the main feature I think is missing is "component"" rendering. This is a rough idea of what I think it would look like.
-
-- `flow-component="<name>"` - "stamps" a component for re-rendering.
-- `flow-render="<component-name>"` - Renders a component with a given name
-- `flow-for="<item> in <items>"` - Renders a list of items
-
-```html
-<template flow-component="bar">
-  <div id="$this.id">
-    <!-- # automatically inherits the "scope" of whatever is passed to the component. So this would be "post.id", "post.comment", "post.url" etc. -->
-    <span flow-text="$this.comment"></span>
-    <form flow-prop:action="$this.url">
-      <textarea></textarea>
-      <button>Leave a reply</button>
-    </form>
-  </div>
-</template>
-
-<div
-  flow-for="post in my-controller#posts"
-  flow-render="bar"
-  flow-key="id"
-></div>
-```
+- `flow-target="<controller_name>.<target_name>"` - names an element so a controller can find it
+- `flow-bind="<state>"` - writes a form control's value straight into your state, live
 
 Coming Soon™️
 

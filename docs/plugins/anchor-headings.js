@@ -1,0 +1,2 @@
+export function anchorHeadings (doc) {
+}
