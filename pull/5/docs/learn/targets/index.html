@@ -14218,13 +14218,13 @@ wa-page::part(menu) {
 
       <div slot="aside">
   <div flow-controller="scroll-spy" id="table-of-contents"><h2 style="font-size: 100%; margin-block: var(--wa-space-s);"><a href="#targets">Targets</a></h2><ol>
-<li><span data-level="0"><a href="#declare-one">Declare one</a></span>
+<li><span data-level="0"><a href="#declaring-a-target">Declaring a target</a></span>
 </li>
 <li><span data-level="0"><a href="#mark-it-in-html">Mark it in HTML</a></span>
 </li>
 <li><span data-level="0"><a href="#multiple-controllers-one-element">Multiple controllers, one element</a></span>
 </li>
-<li><span data-level="0"><a href="#connect-and-disconnect">Connect and disconnect</a></span>
+<li><span data-level="0"><a href="#lifecycle-of-targets">Lifecycle of targets</a></span>
 </li>
 <li><span data-level="0"><a href="#nesting">Nesting</a></span>
 </li>
@@ -14235,14 +14235,18 @@ wa-page::part(menu) {
         
   <h1 class="page-heading" id="targets"><a href="#targets">#</a> Targets</h1>
 
-        <p>Targets are how a controller finds its own elements without reaching for <code>querySelector</code>.</p>
-<h2 id="declare-one"><a href="#declare-one">#</a> Declare one</h2>
+        <p>Targets are how a controller finds its own elements without reaching for <code>querySelector</code>. Targets require two parts:</p>
+<p><code>static targets = []</code> as an array of strings on the controller, and then set on an element via <code>flow-target=&quot;&lt;controller-name&gt;.&lt;target-name&gt;&quot;</code></p>
+<p>An element can have multiple targets as long as they are all space separated. A controller can also have multiple targets.</p>
+<h2 id="declaring-a-target"><a href="#declaring-a-target">#</a> Declaring a target</h2>
+<p>To declare a target, set the static field to <code>static targets = [&quot;&lt;target-name&gt;&quot;]</code></p>
+<p>In this case, we'll make an <code>output</code> target.</p>
 
           <div class="code-block">
             <div class="code-block-actions">
               <div class="code-block-lang">js</div>
               <div class="code-block-copy">
-                <wa-copy-button  from="code-block-5cf8d285-bcc5-48-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
+                <wa-copy-button  from="code-block-cdaf50b9-9d9f-49-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -16966,7 +16970,7 @@ wa-page::part(menu) {
     <!--/lit-part--></template></wa-copy-button>
               </div>
             </div>
-            <pre class="shiki nord language-js" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="js" id="code-block-5cf8d285-bcc5-48"><code id="code-block-5cf8d285-bcc5-48-inner"><span class="line"><span style="color:#81A1C1">import</span><span style="color:#ECEFF4"> {</span><span style="color:#8FBCBB"> Controller</span><span style="color:#ECEFF4"> }</span><span style="color:#81A1C1"> from</span><span style="color:#ECEFF4"> "</span><span style="color:#A3BE8C">downflow</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">;</span></span>
+            <pre class="shiki nord language-js" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="js" id="code-block-cdaf50b9-9d9f-49"><code id="code-block-cdaf50b9-9d9f-49-inner"><span class="line"><span style="color:#81A1C1">import</span><span style="color:#ECEFF4"> {</span><span style="color:#8FBCBB"> Controller</span><span style="color:#ECEFF4"> }</span><span style="color:#81A1C1"> from</span><span style="color:#ECEFF4"> "</span><span style="color:#A3BE8C">downflow</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">;</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#81A1C1">class</span><span style="color:#8FBCBB"> HelloController</span><span style="color:#81A1C1"> extends</span><span style="color:#8FBCBB;font-weight:bold"> Controller</span><span style="color:#ECEFF4"> {</span></span>
 <span class="line"><span style="color:#81A1C1">  static</span><span style="color:#D8DEE9FF"> controllerName </span><span style="color:#81A1C1">=</span><span style="color:#ECEFF4"> "</span><span style="color:#A3BE8C">hello</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">;</span></span>
@@ -16986,7 +16990,7 @@ wa-page::part(menu) {
             <div class="code-block-actions">
               <div class="code-block-lang">html</div>
               <div class="code-block-copy">
-                <wa-copy-button  from="code-block-f664afef-b6c6-43-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
+                <wa-copy-button  from="code-block-bf3bf0b9-2a7b-45-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -19710,7 +19714,7 @@ wa-page::part(menu) {
     <!--/lit-part--></template></wa-copy-button>
               </div>
             </div>
-            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-f664afef-b6c6-43"><code id="code-block-f664afef-b6c6-43-inner"><span class="line"><span style="color:#81A1C1">&#x3C;form</span><span style="color:#8FBCBB"> flow-controller</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">hello</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
+            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-bf3bf0b9-2a7b-45"><code id="code-block-bf3bf0b9-2a7b-45-inner"><span class="line"><span style="color:#81A1C1">&#x3C;form</span><span style="color:#8FBCBB"> flow-controller</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">hello</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
 <span class="line"><span style="color:#81A1C1">  &#x3C;button</span><span style="color:#8FBCBB"> type</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">button</span><span style="color:#ECEFF4">"</span><span style="color:#8FBCBB"> flow-action</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">click->hello#greet</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span><span style="color:#D8DEE9FF">Greet</span><span style="color:#81A1C1">&#x3C;/button></span></span>
 <span class="line"><span style="color:#81A1C1">  &#x3C;div</span><span style="color:#8FBCBB"> flow-target</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">hello.output</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">>&#x3C;/div></span></span>
 <span class="line"><span style="color:#81A1C1">&#x3C;/form></span></span>
@@ -19721,7 +19725,7 @@ wa-page::part(menu) {
 <ul>
 <li><code>this.outputTarget</code>: the first matching element, or <code>null</code> if there isn't one.</li>
 <li><code>this.outputTargets</code>: every matching element, as an array.</li>
-<li><code>this.hasOutputTarget</code>: <code>true</code> or <code>false</code>.</li>
+<li><code>this.hasOutputTarget</code>: <code>true</code> or <code>false</code>, based on whether or not there are any targets detected.</li>
 </ul>
 <h2 id="multiple-controllers-one-element"><a href="#multiple-controllers-one-element">#</a> Multiple controllers, one element</h2>
 <p><code>flow-target</code> accepts a space separated list, so one element can serve several controllers at once.</p>
@@ -19730,7 +19734,7 @@ wa-page::part(menu) {
             <div class="code-block-actions">
               <div class="code-block-lang">html</div>
               <div class="code-block-copy">
-                <wa-copy-button  from="code-block-d8fabbc9-fe70-4a-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
+                <wa-copy-button  from="code-block-43f9d9dd-eb88-45-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -22454,20 +22458,20 @@ wa-page::part(menu) {
     <!--/lit-part--></template></wa-copy-button>
               </div>
             </div>
-            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-d8fabbc9-fe70-4a"><code id="code-block-d8fabbc9-fe70-4a-inner"><span class="line"><span style="color:#81A1C1">&#x3C;div</span><span style="color:#8FBCBB"> flow-controller</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">example-1 example-2</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
+            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-43f9d9dd-eb88-45"><code id="code-block-43f9d9dd-eb88-45-inner"><span class="line"><span style="color:#81A1C1">&#x3C;div</span><span style="color:#8FBCBB"> flow-controller</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">example-1 example-2</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
 <span class="line"><span style="color:#81A1C1">  &#x3C;div</span><span style="color:#8FBCBB"> flow-target</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">example-1.item example-2.item</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span><span style="color:#D8DEE9FF">Item 1</span><span style="color:#81A1C1">&#x3C;/div></span></span>
 <span class="line"><span style="color:#81A1C1">&#x3C;/div></span></span>
 <span class="line"></span></code></pre>
           </div>
         
-<h2 id="connect-and-disconnect"><a href="#connect-and-disconnect">#</a> Connect and disconnect</h2>
+<h2 id="lifecycle-of-targets"><a href="#lifecycle-of-targets">#</a> Lifecycle of targets</h2>
 <p>When a matching element shows up, downflow calls <code>&lt;name&gt;TargetConnected</code>. When it disappears or the attribute changes, it calls <code>&lt;name&gt;TargetDisconnected</code>.</p>
 
           <div class="code-block">
             <div class="code-block-actions">
               <div class="code-block-lang">js</div>
               <div class="code-block-copy">
-                <wa-copy-button  from="code-block-829b8541-0fd9-4f-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
+                <wa-copy-button  from="code-block-a4d0db56-de12-4c-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -25191,7 +25195,7 @@ wa-page::part(menu) {
     <!--/lit-part--></template></wa-copy-button>
               </div>
             </div>
-            <pre class="shiki nord language-js" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="js" id="code-block-829b8541-0fd9-4f"><code id="code-block-829b8541-0fd9-4f-inner"><span class="line"><span style="color:#81A1C1">class</span><span style="color:#8FBCBB"> ListController</span><span style="color:#81A1C1"> extends</span><span style="color:#8FBCBB;font-weight:bold"> Controller</span><span style="color:#ECEFF4"> {</span></span>
+            <pre class="shiki nord language-js" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="js" id="code-block-a4d0db56-de12-4c"><code id="code-block-a4d0db56-de12-4c-inner"><span class="line"><span style="color:#81A1C1">class</span><span style="color:#8FBCBB"> ListController</span><span style="color:#81A1C1"> extends</span><span style="color:#8FBCBB;font-weight:bold"> Controller</span><span style="color:#ECEFF4"> {</span></span>
 <span class="line"><span style="color:#81A1C1">  static</span><span style="color:#D8DEE9FF"> targets </span><span style="color:#81A1C1">=</span><span style="color:#D8DEE9FF"> [</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">item</span><span style="color:#ECEFF4">"</span><span style="color:#D8DEE9FF">]</span><span style="color:#81A1C1">;</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#88C0D0">  itemTargetConnected</span><span style="color:#ECEFF4">(</span><span style="color:#D8DEE9">element</span><span style="color:#ECEFF4">)</span><span style="color:#ECEFF4"> {</span></span>
@@ -25212,7 +25216,7 @@ wa-page::part(menu) {
             <div class="code-block-actions">
               <div class="code-block-lang">html</div>
               <div class="code-block-copy">
-                <wa-copy-button  from="code-block-84186ca3-a672-4e-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
+                <wa-copy-button  from="code-block-14945ad9-5169-4e-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -27936,7 +27940,7 @@ wa-page::part(menu) {
     <!--/lit-part--></template></wa-copy-button>
               </div>
             </div>
-            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-84186ca3-a672-4e"><code id="code-block-84186ca3-a672-4e-inner"><span class="line"><span style="color:#81A1C1">&#x3C;div</span><span style="color:#8FBCBB"> flow-controller</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">example</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
+            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-14945ad9-5169-4e"><code id="code-block-14945ad9-5169-4e-inner"><span class="line"><span style="color:#81A1C1">&#x3C;div</span><span style="color:#8FBCBB"> flow-controller</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">example</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
 <span class="line"><span style="color:#81A1C1">  &#x3C;div</span><span style="color:#8FBCBB"> flow-target</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">example.item</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span><span style="color:#D8DEE9FF">Counted by the outer controller</span><span style="color:#81A1C1">&#x3C;/div></span></span>
 <span class="line"><span style="color:#81A1C1">  &#x3C;div</span><span style="color:#8FBCBB"> flow-controller</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">example</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
 <span class="line"><span style="color:#81A1C1">    &#x3C;div</span><span style="color:#8FBCBB"> flow-target</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">example.item</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span><span style="color:#D8DEE9FF">Counted by the inner controller only</span><span style="color:#81A1C1">&#x3C;/div></span></span>
