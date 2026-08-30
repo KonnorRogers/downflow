@@ -1,9 +1,17 @@
 ---
 ---
 
-Targets are how a controller finds its own elements without reaching for `querySelector`.
+Targets are how a controller finds its own elements without reaching for `querySelector`. Targets require two parts:
 
-## Declare one
+`static targets = []` as an array of strings on the controller, and then set on an element via `flow-target="<controller-name>.<target-name>"`
+
+An element can have multiple targets as long as they are all space separated. A controller can also have multiple targets.
+
+## Declaring a target
+
+To declare a target, set the static field to `static targets = ["<target-name>"]`
+
+In this case, we'll make an `output` target.
 
 ```js
 import { Controller } from "downflow";
@@ -33,7 +41,7 @@ Declaring `static targets = ["output"]` gives you three things on the controller
 
 - `this.outputTarget`: the first matching element, or `null` if there isn't one.
 - `this.outputTargets`: every matching element, as an array.
-- `this.hasOutputTarget`: `true` or `false`.
+- `this.hasOutputTarget`: `true` or `false`, based on whether or not there are any targets detected.
 
 ## Multiple controllers, one element
 
@@ -45,7 +53,7 @@ Declaring `static targets = ["output"]` gives you three things on the controller
 </div>
 ```
 
-## Connect and disconnect
+## Lifecycle of targets
 
 When a matching element shows up, downflow calls `<name>TargetConnected`. When it disappears or the attribute changes, it calls `<name>TargetDisconnected`.
 
