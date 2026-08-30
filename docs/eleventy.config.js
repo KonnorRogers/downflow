@@ -172,10 +172,10 @@ export default async function (eleventyConfig) {
   eleventyConfig.addFilter("stripExtension", (str) => {
     return str.split(/\./)[0]
   })
-  let md;
-  eleventyConfig.amendLibrary("md", (lib) => { md = lib; });
+  let markdownLibrary;
+  eleventyConfig.amendLibrary("md", (lib) => { markdownLibrary = lib; });
 
-  const shell = (code) => md.render("```shell\n" + code + "\n```").trim();
+  const shell = (code) => markdownLibrary.render("```shell\n" + code + "\n```").trim();
 
   function getMatch(content) {
     if (content.match(/^npm install/)) {

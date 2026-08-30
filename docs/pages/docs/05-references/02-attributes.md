@@ -1,4 +1,5 @@
-Three attributes put state on the page: `flow-text`, `flow-attr`, and `flow-prop`. A fourth, `flow-context`, decides which state they read from. This page covers all four.
+---
+---
 
 ## flow-text
 
@@ -8,9 +9,29 @@ Sets an element's `textContent`.
 <span flow-text="count">0</span>
 ```
 
+### Filters
+
+`flow-text` (and only `flow-text`) can pipe its value through a named filter before it hits the page. See [Filters]({{ "/docs/learn/filters/" | url }}).
+
+```html
+<script type="module">
+    import { Application } from "downflow"
+    const application = Appliation.start()
+    application.context = {
+        name: "Moto"
+    }
+    application.filters = {
+        displayName (value) {
+            return `Hello, ${value}`
+        }
+    }
+</script>
+<span flow-text="name | displayName"></span>
+```
+
 ## flow-attr
 
-Sets a DOM attribute. The value is `attribute:key`.
+Sets a DOM attribute on an element. The value is `attribute:key`.
 
 ```html
 <input flow-attr="value:foo">
@@ -40,9 +61,9 @@ Any of the three accept a dotted path.
 
 Downflow walks `user`, then `name`. If a step along the way is missing, you get an empty binding, not an error.
 
-## Where the value comes from: flow-context
+## flow-context
 
-By default, `flow-text`, `flow-attr`, and `flow-prop` read from `application.context`. Add `flow-context` to read from somewhere else instead.
+By default, `flow-text`, `flow-attr`, and `flow-prop` read from `application.context`. Use `flow-context` to read from somewhere else instead. `flow-context` will apply to all children of that element.
 
 ```html
 <div flow-controller="counter">
@@ -67,7 +88,7 @@ By default, `flow-text`, `flow-attr`, and `flow-prop` read from `application.con
 </div>
 ```
 
-## Reaching past the ambient context
+## Breaking out of the current context
 
 Sometimes you want one binding to ignore the `flow-context` around it. Prefix the key instead of changing the attribute:
 
@@ -89,27 +110,3 @@ A key can start with `!` to flip a boolean. Stack them if you really want to (`!
 <div flow-attr="hidden:!isOpen"></div>
 ```
 
-## Filters
-
-`flow-text` (and only `flow-text`) can pipe its value through a named filter before it hits the page. See [Filters]({{ "/docs/learn/filters/" | url }}).
-
-```html
-<span flow-text="name | displayName"></span>
-```
-
-## Try it
-
-```html
-<script type="module">
-  window.application.context = {
-    ...window.application.context,
-    foo: "bar",
-  };
-</script>
-
-<div>
-  <input flow-attr="value:foo">
-  <br>
-  <input flow-prop="value:foo">
-</div>
-```

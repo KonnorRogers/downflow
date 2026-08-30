@@ -1,3 +1,6 @@
+---
+---
+
 Targets are how a controller finds its own elements without reaching for `querySelector`.
 
 ## Declare one

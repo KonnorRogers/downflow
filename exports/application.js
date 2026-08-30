@@ -1145,7 +1145,7 @@ export class Application {
         // The controller may not always be at the element level. We need to search for its closest parent controller, we use closest on the target *IN CASE* the controller is defined on the current element.
         controller = self.getClosestController(element, controllerName);
       } else {
-        controller = self.context;
+        controller = self.resolveContext(element);
       }
 
       // This will need to check the keymapSchema to see if it should fire.

@@ -1,3 +1,6 @@
+---
+---
+
 A filter transforms a value on its way to the page. Register one on `application.filters`, then pipe a `flow-text` key through it with `|`.
 
 ```js

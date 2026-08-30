@@ -95,6 +95,7 @@ export class Controller {
   }
 
   /**
+   * Finds the closest form element.
    * @returns {HTMLFormElement | null}
    */
   get form() {

@@ -4,7 +4,7 @@ Every named input already has live state behind it. `$form` is how you read it.
 <form>
   <label>
     <div>Give us your name!</div>
-    <input name="name" />
+    <input name="name">
   </label>
   Your name is: <span flow-context="$form" flow-text="name"></span>
 </form>
@@ -20,7 +20,7 @@ Type into the input and the span updates as you go. No JavaScript, no `flow-bind
 <form id="my-form">
   <label>
     <div>Give us your name!</div>
-    <input name="name" />
+    <input name="name">
   </label>
 </form>
 
@@ -36,7 +36,7 @@ You can skip `flow-context="$form"` entirely and prefix the key instead. Useful 
 
 ```html
 <form>
-  <input name="email" />
+  <input name="email">
   <span>Your email is: <output flow-text="$form.email"></output></span>
 </form>
 ```
