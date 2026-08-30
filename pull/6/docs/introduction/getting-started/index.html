@@ -219,7 +219,7 @@ wa-page::part(menu) {
   </head>
   <body>
     
-    <wa-page   class="layout-doc" mobile-breakpoint="1170" did-ssr view="desktop" navigation-placement="start"><template shadowroot="open" shadowrootmode="open"><style>
+    <wa-page   class="layout-doc" mobile-breakpoint="1200" did-ssr view="desktop" navigation-placement="start"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -516,10 +516,10 @@ wa-page::part(menu) {
       </a>
 
       <!-- unsafeHTML needed for SSR until this is solved: https://github.com/lit/lit/issues/4696 -->
-      <!--lit-part ZXQ/8aYTzww=-->
+      <!--lit-part 4ldAuqWE/DA=-->
         <style id="mobile-styles">
           
-  @media screen and (width < 1170px) {
+  @media screen and (width < 1200px) {
     [part~='navigation'] {
       display: none;
     }
@@ -5033,11 +5033,21 @@ wa-page::part(menu) {
   </span>
 </a>
 
-  <span class="wa-body-s" style="font-family: var(--pixel-font);">1.0.0</span>
+    <span class="wa-body-s wa-desktop-only" style="font-family: var(--pixel-font);">1.0.0</span>
+  </div>
 
+  <div class="desktop-only" style="display: flex; gap: 2rem; align-items: center; margin-inline-start: auto;">
+    
+      <a href="/docs/introduction">Introduction</a>
+    
+      <a href="/docs/learn">Learn</a>
+    
+      <a href="/docs/references">References</a>
+    
   </div>
 
   <div style="display: flex; gap: 1em; align-items: center;">
+
     <div class="pagefind">
   <pagefind-config     base-url="/downflow/pull/6/"
     bundle-path="/downflow/pull/6/assets/search/pagefind/"
@@ -6678,6 +6688,7 @@ wa-page::part(menu) {
 
   /* #endregion */
 </style><!--lit-part k1u2U0gqOxA=--><svg part="svg" width="16" height="16" viewBox="0 0 16 16"></svg><!--/lit-part--></template></wa-icon>
+      
     </wa-button>
   </quick-search-button>
 
@@ -6705,6 +6716,24 @@ wa-page::part(menu) {
   </pagefind-modal>
 </div>
 
+  </div>
+</div>
+
+
+      
+      
+  <h2 slot="navigation-header" style="margin: 0;">
+  <a class="wa-heading-2xl" href="/downflow/pull/6/">
+  <span class="logo">
+    <span class="logo-start">Down</span><span class="logo-end">flow</span>
+  </span>
+</a>
+
+  <span class="wa-body-s" style="font-family: var(--pixel-font);">1.0.0</span>
+</h2>
+
+<aside slot="navigation">
+  <div class="color-switch-mobile" style="align-self: center;">
     <div class="color-switcher" flow-controller="color-switcher">
   <label class="light-label">
     <wa-icon  name="sun" style="--rotate-angle: 0deg;" did-ssr library="default" rotate="0"><template shadowroot="open" shadowrootmode="open"><style>
@@ -8459,24 +8488,7 @@ wa-page::part(menu) {
   </label>
 </div>
 
-  </div>
-</div>
-
-
-      
-      
-  <h2 slot="navigation-header" style="margin: 0;">
-  <a class="wa-heading-2xl" href="/downflow/pull/6/">
-  <span class="logo">
-    <span class="logo-start">Down</span><span class="logo-end">flow</span>
-  </span>
-</a>
-
-  <span class="wa-body-s" style="font-family: var(--pixel-font);">1.0.0</span>
-
-</h2>
-
-<aside slot="navigation"><wa-details   open summary="Introduction" did-ssr appearance="outlined" icon-placement="end"><template shadowroot="open" shadowrootmode="open"><style>
+  </div><wa-details   open summary="Introduction" did-ssr appearance="outlined" icon-placement="end"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -14798,7 +14810,7 @@ wa-page::part(menu) {
             <div class="code-block-actions">
               <div class="code-block-lang">shell</div>
               <div class="code-block-copy">
-                <wa-copy-button  from="code-block-4be6a6ef-0107-46-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
+                <wa-copy-button  from="code-block-64b1c032-4520-40-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -17522,7 +17534,7 @@ wa-page::part(menu) {
     <!--/lit-part--></template></wa-copy-button>
               </div>
             </div>
-            <pre class="shiki nord language-shell" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="shell" id="code-block-4be6a6ef-0107-46"><code id="code-block-4be6a6ef-0107-46-inner"><span class="line"><span style="color:#88C0D0">npm</span><span style="color:#A3BE8C"> install</span><span style="color:#A3BE8C"> downflow</span></span>
+            <pre class="shiki nord language-shell" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="shell" id="code-block-64b1c032-4520-40"><code id="code-block-64b1c032-4520-40-inner"><span class="line"><span style="color:#88C0D0">npm</span><span style="color:#A3BE8C"> install</span><span style="color:#A3BE8C"> downflow</span></span>
 <span class="line"></span></code></pre>
           </div>
         </wa-tab-panel>
@@ -17566,7 +17578,7 @@ wa-page::part(menu) {
             <div class="code-block-actions">
               <div class="code-block-lang">shell</div>
               <div class="code-block-copy">
-                <wa-copy-button  from="code-block-de0a9d98-201e-44-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
+                <wa-copy-button  from="code-block-8d46941c-7ba8-4b-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -20290,7 +20302,7 @@ wa-page::part(menu) {
     <!--/lit-part--></template></wa-copy-button>
               </div>
             </div>
-            <pre class="shiki nord language-shell" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="shell" id="code-block-de0a9d98-201e-44"><code id="code-block-de0a9d98-201e-44-inner"><span class="line"><span style="color:#88C0D0">pnpm</span><span style="color:#A3BE8C"> add</span><span style="color:#A3BE8C"> downflow</span></span>
+            <pre class="shiki nord language-shell" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="shell" id="code-block-8d46941c-7ba8-4b"><code id="code-block-8d46941c-7ba8-4b-inner"><span class="line"><span style="color:#88C0D0">pnpm</span><span style="color:#A3BE8C"> add</span><span style="color:#A3BE8C"> downflow</span></span>
 <span class="line"></span></code></pre>
           </div>
         </wa-tab-panel>
@@ -20334,7 +20346,7 @@ wa-page::part(menu) {
             <div class="code-block-actions">
               <div class="code-block-lang">shell</div>
               <div class="code-block-copy">
-                <wa-copy-button  from="code-block-5c63eda7-f3a5-48-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
+                <wa-copy-button  from="code-block-8ba2d399-3f6c-4b-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -23058,7 +23070,7 @@ wa-page::part(menu) {
     <!--/lit-part--></template></wa-copy-button>
               </div>
             </div>
-            <pre class="shiki nord language-shell" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="shell" id="code-block-5c63eda7-f3a5-48"><code id="code-block-5c63eda7-f3a5-48-inner"><span class="line"><span style="color:#88C0D0">yarn</span><span style="color:#A3BE8C"> add</span><span style="color:#A3BE8C"> downflow</span></span>
+            <pre class="shiki nord language-shell" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="shell" id="code-block-8ba2d399-3f6c-4b"><code id="code-block-8ba2d399-3f6c-4b-inner"><span class="line"><span style="color:#88C0D0">yarn</span><span style="color:#A3BE8C"> add</span><span style="color:#A3BE8C"> downflow</span></span>
 <span class="line"></span></code></pre>
           </div>
         </wa-tab-panel>
@@ -23070,7 +23082,7 @@ wa-page::part(menu) {
             <div class="code-block-actions">
               <div class="code-block-lang">html</div>
               <div class="code-block-copy">
-                <wa-copy-button  from="code-block-36445939-dc1e-49-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
+                <wa-copy-button  from="code-block-f26a1ff2-4394-47-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -25794,7 +25806,7 @@ wa-page::part(menu) {
     <!--/lit-part--></template></wa-copy-button>
               </div>
             </div>
-            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-36445939-dc1e-49"><code id="code-block-36445939-dc1e-49-inner"><span class="line"><span style="color:#81A1C1">&#x3C;script</span><span style="color:#8FBCBB"> type</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">module</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
+            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-f26a1ff2-4394-47"><code id="code-block-f26a1ff2-4394-47-inner"><span class="line"><span style="color:#81A1C1">&#x3C;script</span><span style="color:#8FBCBB"> type</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">module</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
 <span class="line"><span style="color:#81A1C1">  import</span><span style="color:#ECEFF4"> {</span><span style="color:#8FBCBB"> Controller</span><span style="color:#ECEFF4">,</span><span style="color:#8FBCBB"> Application</span><span style="color:#ECEFF4"> }</span><span style="color:#81A1C1"> from</span><span style="color:#ECEFF4"> '</span><span style="color:#A3BE8C">https://cdn.jsdelivr.net/npm/downflow@1.0.0/bundles/all.js/+esm</span><span style="color:#ECEFF4">'</span></span>
 <span class="line"><span style="color:#81A1C1">  const</span><span style="color:#D8DEE9"> application</span><span style="color:#81A1C1"> =</span><span style="color:#D8DEE9"> Application</span><span style="color:#ECEFF4">.</span><span style="color:#88C0D0">start</span><span style="color:#D8DEE9FF">()</span></span>
 <span class="line"><span style="color:#81A1C1">&#x3C;/script></span></span>
@@ -25807,7 +25819,7 @@ wa-page::part(menu) {
             <div class="code-block-actions">
               <div class="code-block-lang">js</div>
               <div class="code-block-copy">
-                <wa-copy-button  from="code-block-8285edfb-3999-4c-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
+                <wa-copy-button  from="code-block-c74ca5e7-302d-4a-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -28531,7 +28543,7 @@ wa-page::part(menu) {
     <!--/lit-part--></template></wa-copy-button>
               </div>
             </div>
-            <pre class="shiki nord language-js" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="js" id="code-block-8285edfb-3999-4c"><code id="code-block-8285edfb-3999-4c-inner"><span class="line"><span style="color:#81A1C1">import</span><span style="color:#ECEFF4"> {</span><span style="color:#8FBCBB"> Application</span><span style="color:#ECEFF4"> }</span><span style="color:#81A1C1"> from</span><span style="color:#ECEFF4"> "</span><span style="color:#A3BE8C">downflow</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">;</span></span>
+            <pre class="shiki nord language-js" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="js" id="code-block-c74ca5e7-302d-4a"><code id="code-block-c74ca5e7-302d-4a-inner"><span class="line"><span style="color:#81A1C1">import</span><span style="color:#ECEFF4"> {</span><span style="color:#8FBCBB"> Application</span><span style="color:#ECEFF4"> }</span><span style="color:#81A1C1"> from</span><span style="color:#ECEFF4"> "</span><span style="color:#A3BE8C">downflow</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">;</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#81A1C1">const</span><span style="color:#D8DEE9"> application</span><span style="color:#81A1C1"> =</span><span style="color:#D8DEE9"> Application</span><span style="color:#ECEFF4">.</span><span style="color:#88C0D0">start</span><span style="color:#D8DEE9FF">()</span><span style="color:#81A1C1">;</span></span>
 <span class="line"></span></code></pre>
@@ -32238,7 +32250,7 @@ wa-page::part(menu) {
             <div class="code-block-actions">
               <div class="code-block-lang">html</div>
               <div class="code-block-copy">
-                <wa-copy-button  from="code-block-5009cf2b-1c3a-4a-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
+                <wa-copy-button  from="code-block-817ed1c5-187f-40-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -34962,7 +34974,7 @@ wa-page::part(menu) {
     <!--/lit-part--></template></wa-copy-button>
               </div>
             </div>
-            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-5009cf2b-1c3a-4a"><code id="code-block-5009cf2b-1c3a-4a-inner"><span class="line"><span style="color:#81A1C1">&#x3C;script</span><span style="color:#8FBCBB"> type</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">module</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
+            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-817ed1c5-187f-40"><code id="code-block-817ed1c5-187f-40-inner"><span class="line"><span style="color:#81A1C1">&#x3C;script</span><span style="color:#8FBCBB"> type</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">module</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
 <span class="line"><span style="color:#81A1C1">  import</span><span style="color:#ECEFF4"> {</span><span style="color:#8FBCBB"> Application</span><span style="color:#ECEFF4"> }</span><span style="color:#81A1C1"> from</span><span style="color:#ECEFF4"> "</span><span style="color:#A3BE8C">downflow</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">;</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#81A1C1">  const</span><span style="color:#D8DEE9"> application</span><span style="color:#81A1C1"> =</span><span style="color:#D8DEE9"> Application</span><span style="color:#ECEFF4">.</span><span style="color:#88C0D0">start</span><span style="color:#D8DEE9FF">()</span><span style="color:#81A1C1">;</span></span>
