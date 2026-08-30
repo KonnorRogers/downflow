@@ -2959,32 +2959,6 @@
   }
 }
 
-/* docs/assets/fonts/silkscreen/silkscreen.css */
-@font-face {
-  font-family: "Silkscreen";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("./silkscreen-regular-6X6PS3GE.ttf") format("truetype");
-}
-@font-face {
-  font-family: "Silkscreen";
-  font-display: swap;
-  font-weight: 700;
-  font-stretch: normal;
-  font-style: normal;
-  src: url("./silkscreen-bold-OHTIHJ4M.ttf") format("truetype");
-}
-
-/* docs/assets/fonts/pathway-gothic-one/pathway-gothic-one.css */
-@font-face {
-  font-family: "Pathway Gothic One";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("./pathway-gothic-one-ULJLA3NW.woff2") format("woff2");
-}
-
 /* docs/assets/css/theme.css */
 @layer theme {
   :root {
@@ -3011,7 +2985,7 @@
     &.wa-dark {
       --wa-color-surface-default: #0B1523;
     }
-    font-size: 110%;
+    font-size: 120%;
     --border-width: 4px;
     --border-color: var(--wa-color-surface-border);
     --border-color-muted: light-dark(var(--wa-color-neutral-90), var(--wa-color-neutral-20));
@@ -3033,12 +3007,15 @@
   a {
     color: var(--link-color);
   }
+  pre {
+    font-size: 110%;
+  }
   wa-tab-group {
     border: var(--border);
     position: relative;
     .code-block {
       margin: 0;
-      border: none;
+      border: 0px solid transparent;
     }
     .code-block-actions {
       position: absolute;
@@ -3046,7 +3023,7 @@
       left: 0;
       padding: 0;
       padding-top: 4px;
-      transform: translateX(4px);
+      transform: translateX(4px) translateY(140%);
       width: 100%;
       pointer-events: none;
       & .code-block-lang {
@@ -3054,6 +3031,12 @@
       }
       & .code-block-copy {
         pointer-events: all;
+        & wa-copy-button {
+          color: var(--wa-color-neutral-80);
+          &::part(button):hover {
+            background: var(--wa-color-neutral-10);
+          }
+        }
       }
     }
     & > wa-tab-panel::part(base) {
@@ -3098,6 +3081,19 @@
   }
   wa-page::part(drawer__header-actions) {
     align-self: center;
+  }
+  wa-page {
+    & > [slot~=navigation-header] {
+      display: grid;
+      grid-auto-flow: column;
+      place-content: start;
+      align-items: baseline;
+    }
+  }
+  @media screen and (max-width: 1200px) {
+    .desktop-only {
+      display: none !important;
+    }
   }
   @media screen and (min-width: 1200px) {
     wa-page:not(.layout-default) {
@@ -3368,7 +3364,7 @@
     place-content: center;
     text-align: center;
   }
-  :is(.language-shell, .language-sh, .language-zsh, .language-bash, .language-fish)::before {
+  :is(.language-shell, .language-sh, .language-zsh, .language-bash, .language-fish) .line:not(:empty)::before {
     content: "$";
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -3570,3 +3566,4 @@
 }
 
 /* docs/assets/css/index.css */
+/*# sourceMappingURL=index.css.map */

@@ -29,7 +29,7 @@
       --wa-color-surface-default: #0B1523;
     }
 
-    font-size: 110%;
+    font-size: 120%;
 
     --border-width: 4px;
     --border-color: var(--wa-color-surface-border);
@@ -56,20 +56,25 @@
     color: var(--link-color);
   }
 
+  pre {
+    font-size: 110%;
+  }
+
   wa-tab-group {
     border: var(--border);
     position: relative;
 
     .code-block {
       margin: 0;
-      border: none;
+      border: 0px solid transparent;
     }
+
     .code-block-actions {
       position: absolute;
       top: 0; left: 0;
       padding: 0;
       padding-top: 4px;
-      transform: translateX(4px);
+      transform: translateX(4px) translateY(140%);
       width: 100%;
       pointer-events: none;
 
@@ -79,7 +84,16 @@
 
       & .code-block-copy {
         pointer-events: all;
+
+        & wa-copy-button {
+          color: var(--wa-color-neutral-80);
+
+          &::part(button):hover {
+            background: var(--wa-color-neutral-10);
+          }
+        }
       }
+
     }
     & > wa-tab-panel::part(base) {
       padding: 0;
@@ -132,6 +146,33 @@
 
   wa-page::part(drawer__header-actions) {
     align-self: center;
+  }
+
+  wa-page {
+    & > [slot~="navigation-header"] {
+      display: grid;
+      grid-auto-flow: column;
+      place-content: start;
+      align-items: baseline;
+    }
+  }
+
+  /* @media screen and (max-width: 450px) { */
+  /*   .color-switcher-desktop { */
+  /*     display: none; */
+  /*   } */
+  /* } */
+
+  /* @media screen and (min-width: 450px) { */
+  /*   .color-switcher-mobile { */
+  /*     display: none; */
+  /*   } */
+  /* } */
+
+  @media screen and (max-width: 1200px) {
+    .desktop-only {
+      display: none !important;
+    }
   }
 
   @media screen and (min-width: 1200px) {
@@ -448,7 +489,7 @@
     text-align: center;
   }
 
-  :is(.language-shell, .language-sh, .language-zsh, .language-bash, .language-fish)::before {
+  :is(.language-shell, .language-sh, .language-zsh, .language-bash, .language-fish) .line:not(:empty)::before {
     content: "$";
     -webkit-user-select: none;
     -moz-user-select: none;

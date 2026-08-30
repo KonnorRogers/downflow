@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en">
+  <head>
     
       <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Let your state flow">
 <title>Downflow</title>
 <script type="importmap">
   {
@@ -12,11 +14,9 @@
   }
 </script>
 
+<link rel="preconnect" href="https://ka-f.fontawesome.com">
+
 <link rel="icon" type="image/png" href="/assets/images/water-dude.png">
-
-
-<script type="module" src="/downflow/assets/vendor/webawesome/dist-cdn/webawesome.ssr-loader.js"></script>
-
 
 <style>
   @view-transition {
@@ -106,8 +106,9 @@ wa-page::part(menu) {
 
 </style>
 
-<script type="module" src="/downflow/assets/js/bundle.js"></script>
-<link rel="stylesheet" href="/downflow/assets/js/bundle.css">
+<script type="module" src="/downflow/assets/bundles/index.js"></script>
+<link rel="stylesheet" href="/downflow/assets/bundles/index.css">
+<link rel="stylesheet" href="/downflow/assets/bundles/fonts.css">
 
 
 <script>
@@ -218,7 +219,7 @@ wa-page::part(menu) {
   </head>
   <body>
     
-    <wa-page   class="layout-doc" mobile-breakpoint="1170" did-ssr view="desktop" navigation-placement="start"><template shadowroot="open" shadowrootmode="open"><style>
+    <wa-page   class="layout-doc" mobile-breakpoint="1200" did-ssr view="desktop" navigation-placement="start"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -515,10 +516,10 @@ wa-page::part(menu) {
       </a>
 
       <!-- unsafeHTML needed for SSR until this is solved: https://github.com/lit/lit/issues/4696 -->
-      <!--lit-part ZXQ/8aYTzww=-->
+      <!--lit-part 4ldAuqWE/DA=-->
         <style id="mobile-styles">
           
-  @media screen and (width < 1170px) {
+  @media screen and (width < 1200px) {
     [part~='navigation'] {
       display: none;
     }
@@ -5032,11 +5033,21 @@ wa-page::part(menu) {
   </span>
 </a>
 
-  <span class="wa-body-s" style="font-family: var(--pixel-font);">1.0.0</span>
+    <span class="wa-body-s wa-desktop-only" style="font-family: var(--pixel-font);">1.0.0</span>
+  </div>
 
+  <div class="desktop-only" style="display: flex; gap: 2rem; align-items: center; margin-inline-start: auto;">
+    
+      <a href="/docs/introduction">Introduction</a>
+    
+      <a href="/docs/learn">Learn</a>
+    
+      <a href="/docs/references">References</a>
+    
   </div>
 
   <div style="display: flex; gap: 1em; align-items: center;">
+
     <div class="pagefind">
   <pagefind-config     base-url="/downflow/"
     bundle-path="/downflow/assets/search/pagefind/"
@@ -5812,7 +5823,11 @@ wa-page::part(menu) {
         <!--lit-part--><!--/lit-part-->
       </button>
     <!--/lit-part--></template>
-      <wa-icon   style="font-size: 1.5em; color: light-dark(black, var(--wa-color-brand));; --rotate-angle: 0deg;" name="magnifying-glass" did-ssr library="default" rotate="0"><template shadowroot="open" shadowrootmode="open"><style>
+      <wa-icon         
+        
+        
+       style="font-size: 1.5em;
+        color: light-dark(black, var(--wa-color-brand));; --rotate-angle: 0deg;" name="magnifying-glass" label="Search" did-ssr library="default" rotate="0"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -6673,6 +6688,7 @@ wa-page::part(menu) {
 
   /* #endregion */
 </style><!--lit-part k1u2U0gqOxA=--><svg part="svg" width="16" height="16" viewBox="0 0 16 16"></svg><!--/lit-part--></template></wa-icon>
+      
     </wa-button>
   </quick-search-button>
 
@@ -6700,6 +6716,24 @@ wa-page::part(menu) {
   </pagefind-modal>
 </div>
 
+  </div>
+</div>
+
+
+      
+      
+  <h2 slot="navigation-header" style="margin: 0;">
+  <a class="wa-heading-2xl" href="/downflow/">
+  <span class="logo">
+    <span class="logo-start">Down</span><span class="logo-end">flow</span>
+  </span>
+</a>
+
+  <span class="wa-body-s" style="font-family: var(--pixel-font);">1.0.0</span>
+</h2>
+
+<aside slot="navigation">
+  <div class="color-switch-mobile" style="align-self: center;">
     <div class="color-switcher" flow-controller="color-switcher">
   <label class="light-label">
     <wa-icon  name="sun" style="--rotate-angle: 0deg;" did-ssr library="default" rotate="0"><template shadowroot="open" shadowrootmode="open"><style>
@@ -7572,6 +7606,7 @@ wa-page::part(menu) {
         change->#color.switchMode
       "
     >
+    <span class="wa-visually-hidden">Switch to light mode</span>
   </label>
 
   <label class="dark-label">
@@ -8449,27 +8484,11 @@ wa-page::part(menu) {
         change->#color.switchMode
       "
     >
+    <span class="wa-visually-hidden">Switch to dark mode</span>
   </label>
 </div>
 
-  </div>
-</div>
-
-
-      
-      
-  <h2 slot="navigation-header" style="margin: 0;">
-  <a class="wa-heading-2xl" href="/downflow/">
-  <span class="logo">
-    <span class="logo-start">Down</span><span class="logo-end">flow</span>
-  </span>
-</a>
-
-  <span class="wa-body-s" style="font-family: var(--pixel-font);">1.0.0</span>
-
-</h2>
-
-<aside slot="navigation"><wa-details   open summary="Introduction" did-ssr appearance="outlined" icon-placement="end"><template shadowroot="open" shadowrootmode="open"><style>
+  </div><wa-details   open summary="Introduction" did-ssr appearance="outlined" icon-placement="end"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -14237,7 +14256,7 @@ wa-page::part(menu) {
 </ol></div>
 </div>
 
-      <main class="content prose wa-cloak">
+      <main class="content prose">
         
   <h1 class="page-heading" id="two-way-binding"><a href="#two-way-binding">#</a> Two Way Binding</h1>
 
@@ -14247,7 +14266,7 @@ wa-page::part(menu) {
             <div class="code-block-actions">
               <div class="code-block-lang">html</div>
               <div class="code-block-copy">
-                <wa-copy-button  from="code-block-edd42497-eb5b-40-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
+                <wa-copy-button  from="code-block-273f20c7-13c2-44-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -16971,7 +16990,7 @@ wa-page::part(menu) {
     <!--/lit-part--></template></wa-copy-button>
               </div>
             </div>
-            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-edd42497-eb5b-40"><code id="code-block-edd42497-eb5b-40-inner"><span class="line"><span style="color:#81A1C1">&#x3C;input</span><span style="color:#8FBCBB"> flow-bind</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">name</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
+            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-273f20c7-13c2-44"><code id="code-block-273f20c7-13c2-44-inner"><span class="line"><span style="color:#81A1C1">&#x3C;input</span><span style="color:#8FBCBB"> flow-bind</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">name</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
 <span class="line"></span></code></pre>
           </div>
         
@@ -16983,7 +17002,7 @@ wa-page::part(menu) {
             <div class="code-block-actions">
               <div class="code-block-lang">html</div>
               <div class="code-block-copy">
-                <wa-copy-button  from="code-block-6135d84b-00ca-4c-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
+                <wa-copy-button  from="code-block-7c5bb0bf-e066-48-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -19707,11 +19726,3678 @@ wa-page::part(menu) {
     <!--/lit-part--></template></wa-copy-button>
               </div>
             </div>
-            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-6135d84b-00ca-4c"><code id="code-block-6135d84b-00ca-4c-inner"><span class="line"><span style="color:#81A1C1">&#x3C;input</span><span style="color:#8FBCBB"> flow-bind</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">name</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
-<span class="line"><span style="color:#81A1C1">&#x3C;p</span><span style="color:#8FBCBB"> flow-text</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">name</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">>&#x3C;/p></span></span>
+            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-7c5bb0bf-e066-48"><code id="code-block-7c5bb0bf-e066-48-inner"><span class="line"><span style="color:#81A1C1">&#x3C;div</span><span style="color:#8FBCBB"> style</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">display: grid; gap: 2rem;</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
+<span class="line"><span style="color:#81A1C1">  &#x3C;label></span></span>
+<span class="line"><span style="color:#D8DEE9FF">    Give us your name</span></span>
+<span class="line"><span style="color:#81A1C1">    &#x3C;input</span><span style="color:#8FBCBB"> flow-bind</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">name</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
+<span class="line"><span style="color:#81A1C1">  &#x3C;/label></span></span>
+<span class="line"><span style="color:#81A1C1">  &#x3C;p></span><span style="color:#D8DEE9FF">Hello, </span><span style="color:#81A1C1">&#x3C;span</span><span style="color:#8FBCBB"> flow-text</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">name</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">>&#x3C;/span>&#x3C;/p></span></span>
+<span class="line"><span style="color:#81A1C1">&#x3C;/div></span></span>
 <span class="line"></span></code></pre>
           </div>
         
+<div style="position: relative;">
+<wa-zoomable-frame   with-theme-sync srcdoc="
+&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;description&quot; content=&quot;Let your state flow&quot;&gt;&lt;/meta&gt;
+&lt;title&gt;Downflow&lt;/title&gt;
+&lt;script type=&quot;importmap&quot;&gt;
+  {
+    &quot;imports&quot;: {
+      &quot;downflow&quot;: &quot;/downflow/assets/downflow.js&quot;
+    }
+  }
+&lt;/script&gt;
+
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://ka-f.fontawesome.com&quot;&gt;
+
+&lt;link rel=&quot;icon&quot; type=&quot;image/png&quot; href=&quot;/assets/images/water-dude.png&quot;&gt;
+
+&lt;style&gt;
+  @view-transition {
+  navigation: auto;
+}
+
+@keyframes move-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes move-in {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes swap-out {
+  0% {
+    opacity: 1;
+    z-index: 1;
+  }
+
+  99% {
+    opacity: 1;
+    z-index: 1;
+  }
+
+  100% {
+    opacity: 0;
+    z-index: -1;
+  }
+}
+
+@keyframes swap-in {
+  0% {
+    opacity: 0;
+    z-index: -1;
+  }
+
+  99% {
+    opacity: 0;
+    z-index: -1;
+  }
+
+  100% {
+    opacity: 1;
+    z-index: 0;
+  }
+}
+
+/** Not wrapped in prefers-reduced-motion because its just to reduce scrollbar jank. */
+::view-transition-old(root) {
+  mix-blend-mode: normal;
+  animation: 0.1s ease-in both swap-out;
+}
+
+/* render new immediately, fade the old out on top — no translucent dip */
+::view-transition-new(root) {
+  mix-blend-mode: normal;
+  animation: 0.1s ease-in both swap-in;
+}
+
+::view-transition-image-pair(root) { isolation: auto; }
+
+main {
+  view-transition-name: main;
+}
+
+wa-page::part(menu) {
+  view-transition-name: sidebar;
+}
+
+@media not (prefers-reduced-motion: reduce) {
+}
+
+&lt;/style&gt;
+
+&lt;script type=&quot;module&quot; src=&quot;/downflow/assets/bundles/index.js&quot;&gt;&lt;/script&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;/downflow/assets/bundles/index.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;/downflow/assets/bundles/fonts.css&quot;&gt;
+
+
+&lt;script&gt;
+  ;(() =&gt; {
+
+    function toPackageManager(str) {
+      if (!str) { return &quot;npm&quot; }
+
+      const allowedPackageManagers = [
+        &quot;npm&quot;,
+        &quot;yarn&quot;,
+        &quot;pnpm&quot;
+      ]
+
+      if (!allowedPackageManagers.includes(str)) {
+        str = &quot;npm&quot;
+      }
+
+      return str
+    }
+
+    window.application ||= {}
+    window.application.context = {
+      packageManager: toPackageManager(sessionStorage.getItem(&quot;packageManager&quot;)),
+      setPackageManager (e) {
+        let packageManager = toPackageManager(e.detail?.name)
+        sessionStorage.setItem(&quot;packageManager&quot;, packageManager)
+        window.application.context.packageManager = packageManager
+      },
+      color: {
+        mode: null,
+        light: false,
+        dark: false,
+        sessionKey: &quot;color-mode&quot;,
+        switchMode (e) {
+          const target = e.target
+          if (!target) { return }
+
+          const context = window.application.context.color
+
+          let mode = target.value
+
+          if (e.type === &quot;change&quot;) {
+            context.setMode(mode)
+            context.storeMode(mode)
+            return
+          }
+
+          const clickedMode = mode
+          const currentMode = context.mode
+          if (clickedMode === currentMode) {
+            mode = clickedMode === &quot;dark&quot; ? &quot;light&quot; : &quot;dark&quot;
+            context.setMode(mode)
+            context.storeMode(mode)
+          }
+        },
+        toggleMode () {
+          const color = window.application.context.color
+          let mode = color.mode
+          if (mode === &quot;dark&quot;) {
+            mode = &quot;light&quot;
+          } else {
+            mode = &quot;dark&quot;
+          }
+
+          color.setMode(mode)
+          color.storeMode(mode)
+        },
+        prefersDarkMode() {
+          return window.matchMedia(&#39;(prefers-color-scheme: dark)&#39;).matches;
+        },
+        setMode (mode) {
+          document.documentElement.classList.toggle(&quot;wa-dark&quot;, mode === &quot;dark&quot;)
+          const color = window.application.context.color
+          color.mode = mode
+          color.light = mode === &quot;light&quot;
+          color.dark = mode === &quot;dark&quot;
+        },
+        storeMode (mode) {
+           globalThis.sessionStorage.setItem(window.application.context.color.sessionKey, mode)
+        },
+        getMode (mode) {
+           return globalThis.sessionStorage.getItem(window.application.context.color.sessionKey)
+        },
+        setInitialMode () {
+          const color = window.application.context.color
+          color.light = false
+          color.dark = false
+          color.mode = null
+
+          let mode = color.getMode()
+
+          if (!mode) {
+            mode = color.prefersDarkMode() ? &quot;dark&quot; : &quot;light&quot;
+          }
+          color.setMode(mode)
+        }
+      }
+    }
+
+    window.application.context.color.setInitialMode()
+  })();
+&lt;/script&gt;
+
+
+&lt;/head&gt;&lt;body style=&quot;display: grid; place-content: center;&quot;&gt;
+&lt;div style=&quot;display: grid; gap: 2rem;&quot;&gt;
+  &lt;label&gt;
+    Give us your name
+    &lt;input flow-bind=&quot;name&quot;&gt;
+  &lt;/label&gt;
+  &lt;p&gt;Hello, &lt;span flow-text=&quot;name&quot;&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/body&gt;&lt;/html&gt;
+" style="--zoom: 1;" did-ssr zoom="1"><template shadowroot="open" shadowrootmode="open"><style>
+  :host {
+    box-sizing: border-box;
+  }
+
+  :host *,
+  :host *::before,
+  :host *::after {
+    box-sizing: inherit;
+  }
+
+  [hidden],
+  :host([hidden]) {
+    display: none !important;
+  }
+
+  :host {
+    display: block;
+    position: relative;
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    overflow: hidden;
+    border-radius: var(--wa-border-radius-m);
+  }
+
+  #frame-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(100% / var(--zoom));
+    height: calc(100% / var(--zoom));
+    transform: scale(var(--zoom));
+    transform-origin: 0 0;
+  }
+
+  #iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: inherit;
+    /* Prevent the iframe from being selected, e.g. by a double click. Doesn't affect selection withing the iframe. */
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  #controls {
+    display: flex;
+    position: absolute;
+    bottom: 0.5em;
+    align-items: center;
+    font-weight: var(--wa-font-weight-semibold);
+    padding: 0.25em 0.5em;
+    gap: 0.5em;
+    border-radius: var(--wa-border-radius-s);
+    background: #000b;
+    color: white;
+    font-size: min(12px, 0.75em);
+    user-select: none;
+    -webkit-user-select: none;
+
+    &:dir(ltr) {
+      right: 0.5em;
+    }
+
+    &:dir(rtl) {
+      left: 0.5em;
+    }
+
+    button {
+      display: flex;
+      align-items: center;
+      padding: 0.25em;
+      border: none;
+      background: none;
+      color: inherit;
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+      }
+
+      &:focus-visible {
+        outline: var(--wa-focus-ring);
+        outline-offset: var(--wa-focus-ring-offset);
+      }
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+    }
+
+    span {
+      min-width: 4.5ch; /* extra space so numbers don't shift */
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+    }
+  }
+</style><!--lit-part aoR0E7YuVgc=-->
+      <div id="frame-container">
+        <!--lit-node 1--><iframe
+          id="iframe"
+          part="iframe"
+          
+          
+          loading="eager"
+          referrerpolicy=""
+          
+          
+          srcdoc="
+&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;description&quot; content=&quot;Let your state flow&quot;&gt;&lt;/meta&gt;
+&lt;title&gt;Downflow&lt;/title&gt;
+&lt;script type=&quot;importmap&quot;&gt;
+  {
+    &quot;imports&quot;: {
+      &quot;downflow&quot;: &quot;/downflow/assets/downflow.js&quot;
+    }
+  }
+&lt;/script&gt;
+
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://ka-f.fontawesome.com&quot;&gt;
+
+&lt;link rel=&quot;icon&quot; type=&quot;image/png&quot; href=&quot;/assets/images/water-dude.png&quot;&gt;
+
+&lt;style&gt;
+  @view-transition {
+  navigation: auto;
+}
+
+@keyframes move-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes move-in {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes swap-out {
+  0% {
+    opacity: 1;
+    z-index: 1;
+  }
+
+  99% {
+    opacity: 1;
+    z-index: 1;
+  }
+
+  100% {
+    opacity: 0;
+    z-index: -1;
+  }
+}
+
+@keyframes swap-in {
+  0% {
+    opacity: 0;
+    z-index: -1;
+  }
+
+  99% {
+    opacity: 0;
+    z-index: -1;
+  }
+
+  100% {
+    opacity: 1;
+    z-index: 0;
+  }
+}
+
+/** Not wrapped in prefers-reduced-motion because its just to reduce scrollbar jank. */
+::view-transition-old(root) {
+  mix-blend-mode: normal;
+  animation: 0.1s ease-in both swap-out;
+}
+
+/* render new immediately, fade the old out on top — no translucent dip */
+::view-transition-new(root) {
+  mix-blend-mode: normal;
+  animation: 0.1s ease-in both swap-in;
+}
+
+::view-transition-image-pair(root) { isolation: auto; }
+
+main {
+  view-transition-name: main;
+}
+
+wa-page::part(menu) {
+  view-transition-name: sidebar;
+}
+
+@media not (prefers-reduced-motion: reduce) {
+}
+
+&lt;/style&gt;
+
+&lt;script type=&quot;module&quot; src=&quot;/downflow/assets/bundles/index.js&quot;&gt;&lt;/script&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;/downflow/assets/bundles/index.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;/downflow/assets/bundles/fonts.css&quot;&gt;
+
+
+&lt;script&gt;
+  ;(() =&gt; {
+
+    function toPackageManager(str) {
+      if (!str) { return &quot;npm&quot; }
+
+      const allowedPackageManagers = [
+        &quot;npm&quot;,
+        &quot;yarn&quot;,
+        &quot;pnpm&quot;
+      ]
+
+      if (!allowedPackageManagers.includes(str)) {
+        str = &quot;npm&quot;
+      }
+
+      return str
+    }
+
+    window.application ||= {}
+    window.application.context = {
+      packageManager: toPackageManager(sessionStorage.getItem(&quot;packageManager&quot;)),
+      setPackageManager (e) {
+        let packageManager = toPackageManager(e.detail?.name)
+        sessionStorage.setItem(&quot;packageManager&quot;, packageManager)
+        window.application.context.packageManager = packageManager
+      },
+      color: {
+        mode: null,
+        light: false,
+        dark: false,
+        sessionKey: &quot;color-mode&quot;,
+        switchMode (e) {
+          const target = e.target
+          if (!target) { return }
+
+          const context = window.application.context.color
+
+          let mode = target.value
+
+          if (e.type === &quot;change&quot;) {
+            context.setMode(mode)
+            context.storeMode(mode)
+            return
+          }
+
+          const clickedMode = mode
+          const currentMode = context.mode
+          if (clickedMode === currentMode) {
+            mode = clickedMode === &quot;dark&quot; ? &quot;light&quot; : &quot;dark&quot;
+            context.setMode(mode)
+            context.storeMode(mode)
+          }
+        },
+        toggleMode () {
+          const color = window.application.context.color
+          let mode = color.mode
+          if (mode === &quot;dark&quot;) {
+            mode = &quot;light&quot;
+          } else {
+            mode = &quot;dark&quot;
+          }
+
+          color.setMode(mode)
+          color.storeMode(mode)
+        },
+        prefersDarkMode() {
+          return window.matchMedia(&#39;(prefers-color-scheme: dark)&#39;).matches;
+        },
+        setMode (mode) {
+          document.documentElement.classList.toggle(&quot;wa-dark&quot;, mode === &quot;dark&quot;)
+          const color = window.application.context.color
+          color.mode = mode
+          color.light = mode === &quot;light&quot;
+          color.dark = mode === &quot;dark&quot;
+        },
+        storeMode (mode) {
+           globalThis.sessionStorage.setItem(window.application.context.color.sessionKey, mode)
+        },
+        getMode (mode) {
+           return globalThis.sessionStorage.getItem(window.application.context.color.sessionKey)
+        },
+        setInitialMode () {
+          const color = window.application.context.color
+          color.light = false
+          color.dark = false
+          color.mode = null
+
+          let mode = color.getMode()
+
+          if (!mode) {
+            mode = color.prefersDarkMode() ? &quot;dark&quot; : &quot;light&quot;
+          }
+          color.setMode(mode)
+        }
+      }
+    }
+
+    window.application.context.color.setInitialMode()
+  })();
+&lt;/script&gt;
+
+
+&lt;/head&gt;&lt;body style=&quot;display: grid; place-content: center;&quot;&gt;
+&lt;div style=&quot;display: grid; gap: 2rem;&quot;&gt;
+  &lt;label&gt;
+    Give us your name
+    &lt;input flow-bind=&quot;name&quot;&gt;
+  &lt;/label&gt;
+  &lt;p&gt;Hello, &lt;span flow-text=&quot;name&quot;&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/body&gt;&lt;/html&gt;
+"
+          
+          
+        ></iframe>
+      </div>
+
+      <!--lit-part GJT3PJ1907M=-->
+            <div id="controls" part="controls">
+              <!--lit-node 1--><button
+                part="zoom-out-button"
+                aria-label="Zoom out"
+                
+                
+              >
+                <slot name="zoom-out-icon">
+                  <!--lit-node 3--><wa-icon   name="minus" label="Zoom out" style="--rotate-angle: 0deg;" did-ssr library="default" rotate="0" defer-hydration><template shadowroot="open" shadowrootmode="open"><style>
+  :host {
+    box-sizing: border-box;
+  }
+
+  :host *,
+  :host *::before,
+  :host *::after {
+    box-sizing: inherit;
+  }
+
+  [hidden],
+  :host([hidden]) {
+    display: none !important;
+  }
+
+  :host {
+    --primary-color: currentColor;
+    --primary-opacity: 1;
+    --secondary-color: currentColor;
+    --secondary-opacity: 0.4;
+    --rotate-angle: 0deg;
+
+    box-sizing: content-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: -0.125em;
+  }
+
+  /* #region Canvas — the box the icon is centered within (mirrors Font Awesome's icon canvas). Orthogonal to font-size. */
+
+  /* Fixed width (default): 1.25em × 1em (20 × 16px) */
+  :host(:not([canvas])),
+  :host([canvas='fixed']) {
+    width: 1.25em;
+    height: 1em;
+    min-width: 1.25em; /* <-- this is what Safari respects for intrinsic */
+    min-height: 1em;
+  }
+
+  /* Auto: hug the icon's width. `auto-width` is the deprecated alias for canvas="auto". */
+  :host([canvas='auto']),
+  :host([auto-width]:not([canvas])) {
+    width: auto;
+    height: 1em;
+  }
+
+  /* Square: 1.25em × 1.25em (20 × 20px) */
+  :host([canvas='square']) {
+    width: 1.25em;
+    height: 1.25em;
+    min-width: 1.25em;
+    min-height: 1.25em;
+  }
+
+  /* Roomy: 1.5em × 1.5em (24 × 24px) */
+  :host([canvas='roomy']) {
+    width: 1.5em;
+    height: 1.5em;
+    min-width: 1.5em;
+    min-height: 1.5em;
+  }
+
+  /* #endregion */
+
+  svg {
+    fill: currentColor;
+    height: 1em;
+    overflow: visible;
+    width: auto;
+
+    /* Duotone colors with path-specific opacity fallback */
+    path[data-duotone-primary] {
+      color: var(--primary-color);
+      opacity: var(--path-opacity, var(--primary-opacity));
+    }
+
+    path[data-duotone-secondary] {
+      color: var(--secondary-color);
+      opacity: var(--path-opacity, var(--secondary-opacity));
+    }
+  }
+
+  /* Rotation */
+  :host([rotate]) {
+    transform: rotate(var(--rotate-angle, 0deg));
+  }
+
+  /* Flipping */
+  :host([flip='x']) {
+    transform: scaleX(-1);
+  }
+  :host([flip='y']) {
+    transform: scaleY(-1);
+  }
+  :host([flip='both']) {
+    transform: scale(-1, -1);
+  }
+
+  /* Rotation and Flipping combined */
+  :host([rotate][flip='x']) {
+    transform: rotate(var(--rotate-angle, 0deg)) scaleX(-1);
+  }
+  :host([rotate][flip='y']) {
+    transform: rotate(var(--rotate-angle, 0deg)) scaleY(-1);
+  }
+  :host([rotate][flip='both']) {
+    transform: rotate(var(--rotate-angle, 0deg)) scale(-1, -1);
+  }
+
+  /* #region Animations — ported from Font Awesome 7.3 (--fa-* props mapped to wa-icon's --* names) */
+
+  :host([animation='beat']) {
+    animation-name: beat;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='bounce']) {
+    animation-name: bounce;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, cubic-bezier(0.28, 0.84, 0.42, 1));
+  }
+
+  :host([animation='fade']) {
+    animation-name: fade;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='beat-fade']) {
+    animation-name: beat-fade;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='flip']) {
+    animation-name: flip;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1.5s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='flip-360']) {
+    animation-name: flip-360;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='shake']) {
+    animation-name: shake;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 0.75s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='spin']) {
+    animation-name: spin;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 2s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='spin-pulse']) {
+    animation-name: spin;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, steps(8));
+  }
+
+  /* spin-reverse is FA's reverse modifier expressed as a standalone value; reverse any spin via --animation-direction: reverse */
+  :host([animation='spin-reverse']) {
+    animation-name: spin;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, reverse);
+    animation-duration: var(--animation-duration, 2s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='spin-snap']) {
+    animation-name: spin-snap;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 3s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='spin-snap-4']) {
+    animation-name: spin-snap-4;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 2.4s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='spin-snap-8']) {
+    animation-name: spin-snap-8;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 4s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='buzz']) {
+    animation-name: buzz;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 0.6s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='wag']) {
+    animation-name: wag;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 0.9s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-out);
+    transform-origin: bottom center;
+  }
+
+  :host([animation='float']) {
+    animation-name: float;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 3s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+    will-change: transform;
+  }
+
+  :host([animation='swing']) {
+    animation-name: swing;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1.2s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-out);
+    transform-origin: top center;
+  }
+
+  :host([animation='jello']) {
+    animation-name: jello;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 0.9s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-out);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :host([animation='beat']),
+    :host([animation='bounce']),
+    :host([animation='fade']),
+    :host([animation='beat-fade']),
+    :host([animation='flip']),
+    :host([animation='flip-360']),
+    :host([animation='shake']),
+    :host([animation='spin']),
+    :host([animation='spin-pulse']),
+    :host([animation='spin-reverse']),
+    :host([animation='spin-snap']),
+    :host([animation='spin-snap-4']),
+    :host([animation='spin-snap-8']),
+    :host([animation='buzz']),
+    :host([animation='wag']),
+    :host([animation='float']),
+    :host([animation='swing']),
+    :host([animation='jello']) {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  /* #endregion */
+
+  /* #region Keyframes — ported verbatim from Font Awesome 7.3 */
+
+  @keyframes beat {
+    0% {
+      transform: scale(1);
+    }
+    25% {
+      transform: scale(calc(1.25 * var(--beat-scale, 1.25)));
+    }
+    45% {
+      transform: scale(calc(1.22 * var(--beat-scale, 1.22)));
+    }
+    65% {
+      transform: scale(calc(1.25 * var(--beat-scale, 1.25)));
+    }
+    90% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes bounce {
+    0% {
+      transform: scale(1, 1) translateY(0);
+      /* No fallback by design (ported from FA 7.3): the first segment uses the user's --animation-timing or the CSS
+         initial ease, while the explicit cubic-beziers on later stops drive the bounce physics. */
+      animation-timing-function: var(--animation-timing);
+    }
+    14% {
+      transform: scale(var(--bounce-start-scale-x, 1.06), var(--bounce-start-scale-y, 0.94))
+        translateY(var(--bounce-anticipation, 3px));
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 0.33);
+    }
+    32% {
+      transform: scale(var(--bounce-jump-scale-x, 0.94), var(--bounce-jump-scale-y, 1.12))
+        translateY(calc(-1 * var(--bounce-height, 0.5em)));
+      animation-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+    }
+    52% {
+      transform: scale(1, 1) translateY(calc(-1 * var(--bounce-height, 0.5em) * 1.1));
+      animation-timing-function: cubic-bezier(0.5, 0, 1, 0.5);
+    }
+    70% {
+      transform: scale(var(--bounce-land-scale-x, 1.06), var(--bounce-land-scale-y, 0.92)) translateY(0);
+      animation-timing-function: cubic-bezier(0.33, 0.33, 0.66, 1);
+    }
+    85% {
+      transform: scale(0.98, 1.04) translateY(calc(-2px * var(--bounce-rebound, 1)));
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 1);
+    }
+    100% {
+      transform: scale(1, 1) translateY(0);
+    }
+  }
+
+  @keyframes fade {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.4, 1);
+    }
+    40% {
+      opacity: var(--fade-opacity, 0.4);
+      transform: scale(0.98);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes beat-fade {
+    0% {
+      opacity: var(--beat-fade-opacity, 0.4);
+      transform: scale(1);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.4, 1);
+    }
+    25% {
+      opacity: calc(var(--beat-fade-opacity, 0.4) + 0.4);
+      transform: scale(var(--beat-fade-scale, 1.28));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    45% {
+      opacity: 1;
+      transform: scale(var(--beat-fade-scale, 1.25));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    65% {
+      opacity: calc(var(--beat-fade-opacity, 0.4) + 0.4);
+      transform: scale(var(--beat-fade-scale, 1.28));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    100% {
+      opacity: var(--beat-fade-opacity, 0.4);
+      transform: scale(1);
+    }
+  }
+
+  @keyframes flip {
+    0% {
+      transform: perspective(2em) scale(1) rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), 0deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.4, 1);
+    }
+    8% {
+      transform: perspective(2em) scale(var(--flip-anticipation-scale, 0.95))
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), 0deg);
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 0.33);
+    }
+    35% {
+      transform: perspective(2em) scale(1)
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), calc(var(--flip-angle, -360deg) * 0.6));
+      animation-timing-function: linear;
+    }
+    65% {
+      transform: perspective(2em) scale(1)
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), calc(var(--flip-angle, -360deg) * 0.5));
+      animation-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+    }
+    92% {
+      transform: perspective(2em) scale(1)
+        rotate3d(
+          var(--flip-x, 0),
+          var(--flip-y, 1),
+          var(--flip-z, 0),
+          calc(var(--flip-angle, -360deg) * var(--flip-overshoot, 1.04))
+        );
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 1);
+    }
+    100% {
+      transform: perspective(2em) scale(1)
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), var(--flip-angle, -360deg));
+    }
+  }
+
+  @keyframes flip-360 {
+    0% {
+      transform: perspective(2em) scale(1) rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), 0deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.4, 1);
+    }
+    8% {
+      transform: perspective(2em) scale(var(--flip-anticipation-scale, 0.95))
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), 0deg);
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 0.33);
+    }
+    50% {
+      transform: perspective(2em) scale(1)
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), calc(var(--flip-angle, -360deg) * 0.6));
+      animation-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+    }
+    80% {
+      transform: perspective(2em) scale(1)
+        rotate3d(
+          var(--flip-x, 0),
+          var(--flip-y, 1),
+          var(--flip-z, 0),
+          calc(var(--flip-angle, -360deg) * var(--flip-overshoot, 1.04))
+        );
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 1);
+    }
+    100% {
+      transform: perspective(2em) scale(1)
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), var(--flip-angle, -360deg));
+    }
+  }
+
+  @keyframes shake {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1);
+    }
+    8% {
+      transform: rotate(35deg) translateX(1px);
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    20% {
+      transform: rotate(-22deg) translateX(-1px);
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    35% {
+      transform: rotate(15deg) translateX(1px);
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    50% {
+      transform: rotate(-9deg);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    65% {
+      transform: rotate(5deg);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    78% {
+      transform: rotate(-3deg);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    90% {
+      transform: rotate(1deg);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin-snap {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    12% {
+      transform: rotate(60deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    16.67% {
+      transform: rotate(60deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    28.67% {
+      transform: rotate(120deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    33.33% {
+      transform: rotate(120deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    45.33% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    62% {
+      transform: rotate(240deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    66.67% {
+      transform: rotate(240deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    78.67% {
+      transform: rotate(300deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    83.33% {
+      transform: rotate(300deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    95.33% {
+      transform: rotate(360deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin-snap-4 {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    15% {
+      transform: rotate(90deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    25% {
+      transform: rotate(90deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    40% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    65% {
+      transform: rotate(270deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    75% {
+      transform: rotate(270deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    90% {
+      transform: rotate(360deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin-snap-8 {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    9% {
+      transform: rotate(45deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    12.5% {
+      transform: rotate(45deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    21.5% {
+      transform: rotate(90deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    25% {
+      transform: rotate(90deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    34% {
+      transform: rotate(135deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    37.5% {
+      transform: rotate(135deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    46.5% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    59% {
+      transform: rotate(225deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    62.5% {
+      transform: rotate(225deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    71.5% {
+      transform: rotate(270deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    75% {
+      transform: rotate(270deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    84% {
+      transform: rotate(315deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    87.5% {
+      transform: rotate(315deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    96.5% {
+      transform: rotate(360deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes buzz {
+    0% {
+      transform: translateX(0) rotate(0deg);
+      animation-timing-function: cubic-bezier(0.1, 0, 0.9, 1);
+    }
+    5% {
+      transform: translateX(var(--buzz-distance, 4px)) rotate(0.5deg);
+    }
+    10% {
+      transform: translateX(calc(-1 * var(--buzz-distance, 4px))) rotate(-0.5deg);
+    }
+    15% {
+      transform: translateX(var(--buzz-distance, 4px)) rotate(0.3deg);
+    }
+    20% {
+      transform: translateX(calc(-1 * var(--buzz-distance, 4px))) rotate(-0.3deg);
+    }
+    25% {
+      transform: translateX(calc(var(--buzz-distance, 4px) * 0.7)) rotate(0.2deg);
+    }
+    30% {
+      transform: translateX(calc(-1 * var(--buzz-distance, 4px) * 0.7)) rotate(-0.2deg);
+    }
+    35% {
+      transform: translateX(calc(var(--buzz-distance, 4px) * 0.4)) rotate(0.1deg);
+    }
+    40% {
+      transform: translateX(0) rotate(0deg);
+    }
+    100% {
+      transform: translateX(0) rotate(0deg);
+    }
+  }
+
+  @keyframes wag {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.6, 1);
+    }
+    12% {
+      transform: rotate(var(--wag-angle, 12deg));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    24% {
+      transform: rotate(2deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.6, 1);
+    }
+    36% {
+      transform: rotate(calc(var(--wag-angle, 12deg) * 0.85));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    48% {
+      transform: rotate(1deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.6, 1);
+    }
+    58% {
+      transform: rotate(calc(var(--wag-angle, 12deg) * 0.6));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    68% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(0) translateX(0) rotate(0deg)
+        scale(var(--float-squash-x, 1.02), var(--float-squash-y, 0.98));
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 0.33);
+    }
+    15% {
+      transform: translateY(calc(-0.4 * var(--float-height, 6px))) translateX(var(--float-drift, 1px))
+        rotate(var(--float-tilt, 1deg)) scale(1, 1);
+      animation-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+    }
+    35% {
+      transform: translateY(calc(-1 * var(--float-height, 6px))) translateX(0) rotate(0deg)
+        scale(var(--float-stretch-x, 0.98), var(--float-stretch-y, 1.03));
+      animation-timing-function: cubic-bezier(0.5, 0, 0.5, 0);
+    }
+    50% {
+      transform: translateY(calc(-0.92 * var(--float-height, 6px))) translateX(calc(-0.5 * var(--float-drift, 1px)))
+        rotate(calc(-0.5 * var(--float-tilt, 1deg))) scale(0.995, 1.01);
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 0.33);
+    }
+    70% {
+      transform: translateY(calc(-0.3 * var(--float-height, 6px))) translateX(calc(-1 * var(--float-drift, 1px)))
+        rotate(calc(-1 * var(--float-tilt, 1deg))) scale(1, 1);
+      animation-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+    }
+    90% {
+      transform: translateY(calc(0.05 * var(--float-height, 6px))) translateX(0) rotate(0deg)
+        scale(var(--float-squash-x, 1.02), var(--float-squash-y, 0.98));
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 1);
+    }
+    100% {
+      transform: translateY(0) translateX(0) rotate(0deg)
+        scale(var(--float-squash-x, 1.02), var(--float-squash-y, 0.98));
+    }
+  }
+
+  @keyframes swing {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1);
+    }
+    8% {
+      transform: rotate(var(--swing-angle, 22deg));
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    18% {
+      transform: rotate(calc(-1 * var(--swing-angle, 22deg) * 0.85));
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    28% {
+      transform: rotate(calc(var(--swing-angle, 22deg) * 0.65));
+      animation-timing-function: cubic-bezier(0.35, 0, 0.65, 1);
+    }
+    38% {
+      transform: rotate(calc(-1 * var(--swing-angle, 22deg) * 0.45));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    48% {
+      transform: rotate(calc(var(--swing-angle, 22deg) * 0.25));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    56% {
+      transform: rotate(calc(-1 * var(--swing-angle, 22deg) * 0.1));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    64% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+
+  @keyframes jello {
+    0% {
+      transform: scale(1, 1);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1);
+    }
+    12% {
+      transform: scale(var(--jello-scale-x, 1.15), calc(2 - var(--jello-scale-x, 1.15)));
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    24% {
+      transform: scale(calc(2 - var(--jello-scale-y, 1.12)), var(--jello-scale-y, 1.12));
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    36% {
+      transform: scale(
+        calc(1 + (var(--jello-scale-x, 1.15) - 1) * 0.5),
+        calc(2 - (1 + (var(--jello-scale-x, 1.15) - 1) * 0.5))
+      );
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    48% {
+      transform: scale(
+        calc(2 - (1 + (var(--jello-scale-y, 1.12) - 1) * 0.3)),
+        calc(1 + (var(--jello-scale-y, 1.12) - 1) * 0.3)
+      );
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    58% {
+      transform: scale(1.02, 0.98);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    68% {
+      transform: scale(1, 1);
+    }
+    100% {
+      transform: scale(1, 1);
+    }
+  }
+
+  /* #endregion */
+</style><!--lit-part k1u2U0gqOxA=--><svg part="svg" width="16" height="16" viewBox="0 0 16 16"></svg><!--/lit-part--></template></wa-icon>
+                </slot>
+              </button>
+              <span><!--lit-part-->100%<!--/lit-part--></span>
+              <!--lit-node 6--><button
+                part="zoom-in-button"
+                aria-label="Zoom in"
+                
+                
+              >
+                <slot name="zoom-in-icon">
+                  <!--lit-node 8--><wa-icon   name="plus" label="Zoom in" style="--rotate-angle: 0deg;" did-ssr library="default" rotate="0" defer-hydration><template shadowroot="open" shadowrootmode="open"><style>
+  :host {
+    box-sizing: border-box;
+  }
+
+  :host *,
+  :host *::before,
+  :host *::after {
+    box-sizing: inherit;
+  }
+
+  [hidden],
+  :host([hidden]) {
+    display: none !important;
+  }
+
+  :host {
+    --primary-color: currentColor;
+    --primary-opacity: 1;
+    --secondary-color: currentColor;
+    --secondary-opacity: 0.4;
+    --rotate-angle: 0deg;
+
+    box-sizing: content-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: -0.125em;
+  }
+
+  /* #region Canvas — the box the icon is centered within (mirrors Font Awesome's icon canvas). Orthogonal to font-size. */
+
+  /* Fixed width (default): 1.25em × 1em (20 × 16px) */
+  :host(:not([canvas])),
+  :host([canvas='fixed']) {
+    width: 1.25em;
+    height: 1em;
+    min-width: 1.25em; /* <-- this is what Safari respects for intrinsic */
+    min-height: 1em;
+  }
+
+  /* Auto: hug the icon's width. `auto-width` is the deprecated alias for canvas="auto". */
+  :host([canvas='auto']),
+  :host([auto-width]:not([canvas])) {
+    width: auto;
+    height: 1em;
+  }
+
+  /* Square: 1.25em × 1.25em (20 × 20px) */
+  :host([canvas='square']) {
+    width: 1.25em;
+    height: 1.25em;
+    min-width: 1.25em;
+    min-height: 1.25em;
+  }
+
+  /* Roomy: 1.5em × 1.5em (24 × 24px) */
+  :host([canvas='roomy']) {
+    width: 1.5em;
+    height: 1.5em;
+    min-width: 1.5em;
+    min-height: 1.5em;
+  }
+
+  /* #endregion */
+
+  svg {
+    fill: currentColor;
+    height: 1em;
+    overflow: visible;
+    width: auto;
+
+    /* Duotone colors with path-specific opacity fallback */
+    path[data-duotone-primary] {
+      color: var(--primary-color);
+      opacity: var(--path-opacity, var(--primary-opacity));
+    }
+
+    path[data-duotone-secondary] {
+      color: var(--secondary-color);
+      opacity: var(--path-opacity, var(--secondary-opacity));
+    }
+  }
+
+  /* Rotation */
+  :host([rotate]) {
+    transform: rotate(var(--rotate-angle, 0deg));
+  }
+
+  /* Flipping */
+  :host([flip='x']) {
+    transform: scaleX(-1);
+  }
+  :host([flip='y']) {
+    transform: scaleY(-1);
+  }
+  :host([flip='both']) {
+    transform: scale(-1, -1);
+  }
+
+  /* Rotation and Flipping combined */
+  :host([rotate][flip='x']) {
+    transform: rotate(var(--rotate-angle, 0deg)) scaleX(-1);
+  }
+  :host([rotate][flip='y']) {
+    transform: rotate(var(--rotate-angle, 0deg)) scaleY(-1);
+  }
+  :host([rotate][flip='both']) {
+    transform: rotate(var(--rotate-angle, 0deg)) scale(-1, -1);
+  }
+
+  /* #region Animations — ported from Font Awesome 7.3 (--fa-* props mapped to wa-icon's --* names) */
+
+  :host([animation='beat']) {
+    animation-name: beat;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='bounce']) {
+    animation-name: bounce;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, cubic-bezier(0.28, 0.84, 0.42, 1));
+  }
+
+  :host([animation='fade']) {
+    animation-name: fade;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='beat-fade']) {
+    animation-name: beat-fade;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='flip']) {
+    animation-name: flip;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1.5s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='flip-360']) {
+    animation-name: flip-360;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='shake']) {
+    animation-name: shake;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 0.75s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='spin']) {
+    animation-name: spin;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 2s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='spin-pulse']) {
+    animation-name: spin;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, steps(8));
+  }
+
+  /* spin-reverse is FA's reverse modifier expressed as a standalone value; reverse any spin via --animation-direction: reverse */
+  :host([animation='spin-reverse']) {
+    animation-name: spin;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, reverse);
+    animation-duration: var(--animation-duration, 2s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='spin-snap']) {
+    animation-name: spin-snap;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 3s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='spin-snap-4']) {
+    animation-name: spin-snap-4;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 2.4s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='spin-snap-8']) {
+    animation-name: spin-snap-8;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 4s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='buzz']) {
+    animation-name: buzz;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 0.6s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='wag']) {
+    animation-name: wag;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 0.9s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-out);
+    transform-origin: bottom center;
+  }
+
+  :host([animation='float']) {
+    animation-name: float;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 3s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+    will-change: transform;
+  }
+
+  :host([animation='swing']) {
+    animation-name: swing;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1.2s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-out);
+    transform-origin: top center;
+  }
+
+  :host([animation='jello']) {
+    animation-name: jello;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 0.9s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-out);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :host([animation='beat']),
+    :host([animation='bounce']),
+    :host([animation='fade']),
+    :host([animation='beat-fade']),
+    :host([animation='flip']),
+    :host([animation='flip-360']),
+    :host([animation='shake']),
+    :host([animation='spin']),
+    :host([animation='spin-pulse']),
+    :host([animation='spin-reverse']),
+    :host([animation='spin-snap']),
+    :host([animation='spin-snap-4']),
+    :host([animation='spin-snap-8']),
+    :host([animation='buzz']),
+    :host([animation='wag']),
+    :host([animation='float']),
+    :host([animation='swing']),
+    :host([animation='jello']) {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  /* #endregion */
+
+  /* #region Keyframes — ported verbatim from Font Awesome 7.3 */
+
+  @keyframes beat {
+    0% {
+      transform: scale(1);
+    }
+    25% {
+      transform: scale(calc(1.25 * var(--beat-scale, 1.25)));
+    }
+    45% {
+      transform: scale(calc(1.22 * var(--beat-scale, 1.22)));
+    }
+    65% {
+      transform: scale(calc(1.25 * var(--beat-scale, 1.25)));
+    }
+    90% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes bounce {
+    0% {
+      transform: scale(1, 1) translateY(0);
+      /* No fallback by design (ported from FA 7.3): the first segment uses the user's --animation-timing or the CSS
+         initial ease, while the explicit cubic-beziers on later stops drive the bounce physics. */
+      animation-timing-function: var(--animation-timing);
+    }
+    14% {
+      transform: scale(var(--bounce-start-scale-x, 1.06), var(--bounce-start-scale-y, 0.94))
+        translateY(var(--bounce-anticipation, 3px));
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 0.33);
+    }
+    32% {
+      transform: scale(var(--bounce-jump-scale-x, 0.94), var(--bounce-jump-scale-y, 1.12))
+        translateY(calc(-1 * var(--bounce-height, 0.5em)));
+      animation-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+    }
+    52% {
+      transform: scale(1, 1) translateY(calc(-1 * var(--bounce-height, 0.5em) * 1.1));
+      animation-timing-function: cubic-bezier(0.5, 0, 1, 0.5);
+    }
+    70% {
+      transform: scale(var(--bounce-land-scale-x, 1.06), var(--bounce-land-scale-y, 0.92)) translateY(0);
+      animation-timing-function: cubic-bezier(0.33, 0.33, 0.66, 1);
+    }
+    85% {
+      transform: scale(0.98, 1.04) translateY(calc(-2px * var(--bounce-rebound, 1)));
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 1);
+    }
+    100% {
+      transform: scale(1, 1) translateY(0);
+    }
+  }
+
+  @keyframes fade {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.4, 1);
+    }
+    40% {
+      opacity: var(--fade-opacity, 0.4);
+      transform: scale(0.98);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes beat-fade {
+    0% {
+      opacity: var(--beat-fade-opacity, 0.4);
+      transform: scale(1);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.4, 1);
+    }
+    25% {
+      opacity: calc(var(--beat-fade-opacity, 0.4) + 0.4);
+      transform: scale(var(--beat-fade-scale, 1.28));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    45% {
+      opacity: 1;
+      transform: scale(var(--beat-fade-scale, 1.25));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    65% {
+      opacity: calc(var(--beat-fade-opacity, 0.4) + 0.4);
+      transform: scale(var(--beat-fade-scale, 1.28));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    100% {
+      opacity: var(--beat-fade-opacity, 0.4);
+      transform: scale(1);
+    }
+  }
+
+  @keyframes flip {
+    0% {
+      transform: perspective(2em) scale(1) rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), 0deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.4, 1);
+    }
+    8% {
+      transform: perspective(2em) scale(var(--flip-anticipation-scale, 0.95))
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), 0deg);
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 0.33);
+    }
+    35% {
+      transform: perspective(2em) scale(1)
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), calc(var(--flip-angle, -360deg) * 0.6));
+      animation-timing-function: linear;
+    }
+    65% {
+      transform: perspective(2em) scale(1)
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), calc(var(--flip-angle, -360deg) * 0.5));
+      animation-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+    }
+    92% {
+      transform: perspective(2em) scale(1)
+        rotate3d(
+          var(--flip-x, 0),
+          var(--flip-y, 1),
+          var(--flip-z, 0),
+          calc(var(--flip-angle, -360deg) * var(--flip-overshoot, 1.04))
+        );
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 1);
+    }
+    100% {
+      transform: perspective(2em) scale(1)
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), var(--flip-angle, -360deg));
+    }
+  }
+
+  @keyframes flip-360 {
+    0% {
+      transform: perspective(2em) scale(1) rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), 0deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.4, 1);
+    }
+    8% {
+      transform: perspective(2em) scale(var(--flip-anticipation-scale, 0.95))
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), 0deg);
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 0.33);
+    }
+    50% {
+      transform: perspective(2em) scale(1)
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), calc(var(--flip-angle, -360deg) * 0.6));
+      animation-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+    }
+    80% {
+      transform: perspective(2em) scale(1)
+        rotate3d(
+          var(--flip-x, 0),
+          var(--flip-y, 1),
+          var(--flip-z, 0),
+          calc(var(--flip-angle, -360deg) * var(--flip-overshoot, 1.04))
+        );
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 1);
+    }
+    100% {
+      transform: perspective(2em) scale(1)
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), var(--flip-angle, -360deg));
+    }
+  }
+
+  @keyframes shake {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1);
+    }
+    8% {
+      transform: rotate(35deg) translateX(1px);
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    20% {
+      transform: rotate(-22deg) translateX(-1px);
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    35% {
+      transform: rotate(15deg) translateX(1px);
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    50% {
+      transform: rotate(-9deg);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    65% {
+      transform: rotate(5deg);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    78% {
+      transform: rotate(-3deg);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    90% {
+      transform: rotate(1deg);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin-snap {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    12% {
+      transform: rotate(60deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    16.67% {
+      transform: rotate(60deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    28.67% {
+      transform: rotate(120deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    33.33% {
+      transform: rotate(120deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    45.33% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    62% {
+      transform: rotate(240deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    66.67% {
+      transform: rotate(240deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    78.67% {
+      transform: rotate(300deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    83.33% {
+      transform: rotate(300deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    95.33% {
+      transform: rotate(360deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin-snap-4 {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    15% {
+      transform: rotate(90deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    25% {
+      transform: rotate(90deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    40% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    65% {
+      transform: rotate(270deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    75% {
+      transform: rotate(270deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    90% {
+      transform: rotate(360deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin-snap-8 {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    9% {
+      transform: rotate(45deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    12.5% {
+      transform: rotate(45deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    21.5% {
+      transform: rotate(90deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    25% {
+      transform: rotate(90deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    34% {
+      transform: rotate(135deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    37.5% {
+      transform: rotate(135deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    46.5% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    59% {
+      transform: rotate(225deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    62.5% {
+      transform: rotate(225deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    71.5% {
+      transform: rotate(270deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    75% {
+      transform: rotate(270deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    84% {
+      transform: rotate(315deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    87.5% {
+      transform: rotate(315deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    96.5% {
+      transform: rotate(360deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes buzz {
+    0% {
+      transform: translateX(0) rotate(0deg);
+      animation-timing-function: cubic-bezier(0.1, 0, 0.9, 1);
+    }
+    5% {
+      transform: translateX(var(--buzz-distance, 4px)) rotate(0.5deg);
+    }
+    10% {
+      transform: translateX(calc(-1 * var(--buzz-distance, 4px))) rotate(-0.5deg);
+    }
+    15% {
+      transform: translateX(var(--buzz-distance, 4px)) rotate(0.3deg);
+    }
+    20% {
+      transform: translateX(calc(-1 * var(--buzz-distance, 4px))) rotate(-0.3deg);
+    }
+    25% {
+      transform: translateX(calc(var(--buzz-distance, 4px) * 0.7)) rotate(0.2deg);
+    }
+    30% {
+      transform: translateX(calc(-1 * var(--buzz-distance, 4px) * 0.7)) rotate(-0.2deg);
+    }
+    35% {
+      transform: translateX(calc(var(--buzz-distance, 4px) * 0.4)) rotate(0.1deg);
+    }
+    40% {
+      transform: translateX(0) rotate(0deg);
+    }
+    100% {
+      transform: translateX(0) rotate(0deg);
+    }
+  }
+
+  @keyframes wag {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.6, 1);
+    }
+    12% {
+      transform: rotate(var(--wag-angle, 12deg));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    24% {
+      transform: rotate(2deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.6, 1);
+    }
+    36% {
+      transform: rotate(calc(var(--wag-angle, 12deg) * 0.85));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    48% {
+      transform: rotate(1deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.6, 1);
+    }
+    58% {
+      transform: rotate(calc(var(--wag-angle, 12deg) * 0.6));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    68% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(0) translateX(0) rotate(0deg)
+        scale(var(--float-squash-x, 1.02), var(--float-squash-y, 0.98));
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 0.33);
+    }
+    15% {
+      transform: translateY(calc(-0.4 * var(--float-height, 6px))) translateX(var(--float-drift, 1px))
+        rotate(var(--float-tilt, 1deg)) scale(1, 1);
+      animation-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+    }
+    35% {
+      transform: translateY(calc(-1 * var(--float-height, 6px))) translateX(0) rotate(0deg)
+        scale(var(--float-stretch-x, 0.98), var(--float-stretch-y, 1.03));
+      animation-timing-function: cubic-bezier(0.5, 0, 0.5, 0);
+    }
+    50% {
+      transform: translateY(calc(-0.92 * var(--float-height, 6px))) translateX(calc(-0.5 * var(--float-drift, 1px)))
+        rotate(calc(-0.5 * var(--float-tilt, 1deg))) scale(0.995, 1.01);
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 0.33);
+    }
+    70% {
+      transform: translateY(calc(-0.3 * var(--float-height, 6px))) translateX(calc(-1 * var(--float-drift, 1px)))
+        rotate(calc(-1 * var(--float-tilt, 1deg))) scale(1, 1);
+      animation-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+    }
+    90% {
+      transform: translateY(calc(0.05 * var(--float-height, 6px))) translateX(0) rotate(0deg)
+        scale(var(--float-squash-x, 1.02), var(--float-squash-y, 0.98));
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 1);
+    }
+    100% {
+      transform: translateY(0) translateX(0) rotate(0deg)
+        scale(var(--float-squash-x, 1.02), var(--float-squash-y, 0.98));
+    }
+  }
+
+  @keyframes swing {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1);
+    }
+    8% {
+      transform: rotate(var(--swing-angle, 22deg));
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    18% {
+      transform: rotate(calc(-1 * var(--swing-angle, 22deg) * 0.85));
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    28% {
+      transform: rotate(calc(var(--swing-angle, 22deg) * 0.65));
+      animation-timing-function: cubic-bezier(0.35, 0, 0.65, 1);
+    }
+    38% {
+      transform: rotate(calc(-1 * var(--swing-angle, 22deg) * 0.45));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    48% {
+      transform: rotate(calc(var(--swing-angle, 22deg) * 0.25));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    56% {
+      transform: rotate(calc(-1 * var(--swing-angle, 22deg) * 0.1));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    64% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+
+  @keyframes jello {
+    0% {
+      transform: scale(1, 1);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1);
+    }
+    12% {
+      transform: scale(var(--jello-scale-x, 1.15), calc(2 - var(--jello-scale-x, 1.15)));
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    24% {
+      transform: scale(calc(2 - var(--jello-scale-y, 1.12)), var(--jello-scale-y, 1.12));
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    36% {
+      transform: scale(
+        calc(1 + (var(--jello-scale-x, 1.15) - 1) * 0.5),
+        calc(2 - (1 + (var(--jello-scale-x, 1.15) - 1) * 0.5))
+      );
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    48% {
+      transform: scale(
+        calc(2 - (1 + (var(--jello-scale-y, 1.12) - 1) * 0.3)),
+        calc(1 + (var(--jello-scale-y, 1.12) - 1) * 0.3)
+      );
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    58% {
+      transform: scale(1.02, 0.98);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    68% {
+      transform: scale(1, 1);
+    }
+    100% {
+      transform: scale(1, 1);
+    }
+  }
+
+  /* #endregion */
+</style><!--lit-part k1u2U0gqOxA=--><svg part="svg" width="16" height="16" viewBox="0 0 16 16"></svg><!--/lit-part--></template></wa-icon>
+                </slot>
+              </button>
+            </div>
+          <!--/lit-part-->
+    <!--/lit-part--></template>
+</wa-zoomable-frame>
+  <div style="position: absolute; top: 0; left: 100%; transform: translate(-100%, 0%); padding: 8px;">
+    <wa-button  size="s" did-ssr variant="neutral" appearance="accent"><template shadowroot="open" shadowrootmode="open" shadowrootdelegatesfocus><style>
+  :host {
+    box-sizing: border-box;
+  }
+
+  :host *,
+  :host *::before,
+  :host *::after {
+    box-sizing: inherit;
+  }
+
+  [hidden],
+  :host([hidden]) {
+    display: none !important;
+  }
+
+  @layer wa-component {
+    :host {
+      display: inline-block;
+
+      /* Workaround because Chrome doesn't like :host(:has()) below
+       * https://issues.chromium.org/issues/40062355
+       * Firefox doesn't like this nested rule, so both are needed */
+      &:has(wa-badge) {
+        position: relative;
+      }
+    }
+
+    /* Apply relative positioning only when needed to position wa-badge
+     * This avoids creating a new stacking context for every button */
+    :host(:has(wa-badge)) {
+      position: relative;
+    }
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    white-space: nowrap;
+    vertical-align: middle;
+    transition-property: background, border, box-shadow, color, opacity, transform;
+    transition-duration: var(--wa-transition-fast);
+    transition-timing-function: var(--wa-transition-easing);
+    transform-origin: center;
+    cursor: pointer;
+    padding: 0 var(--wa-form-control-padding-inline);
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: var(--wa-font-weight-action);
+    height: var(--wa-form-control-height);
+    width: 100%;
+
+    background-color: var(--wa-color-fill-loud, var(--wa-color-neutral-fill-loud));
+
+    border-color: transparent;
+    color: var(--wa-color-on-loud, var(--wa-color-neutral-on-loud));
+    border-start-start-radius: var(--_button-start-start-radius, var(--wa-form-control-border-radius));
+    border-start-end-radius: var(--_button-start-end-radius, var(--wa-form-control-border-radius));
+    border-end-start-radius: var(--_button-end-start-radius, var(--wa-form-control-border-radius));
+    border-end-end-radius: var(--_button-end-end-radius, var(--wa-form-control-border-radius));
+    border-style: var(--wa-form-control-border-style);
+    border-width: var(--wa-form-control-border-width);
+  }
+
+  /* Hover and active transforms */
+  .button:not(.disabled):not(.loading) {
+    @media (hover: hover) {
+      &:hover {
+        transform: var(--wa-button-transform-hover);
+      }
+    }
+    &:active {
+      transform: var(--wa-button-transform-active);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      &:hover,
+      &:active {
+        transform: none;
+      }
+    }
+  }
+
+  /* Appearance modifiers */
+  :host([appearance='plain']) {
+    /* Indentation overrides for grouping */
+    margin-inline-start: var(--_button-horizontal-indent);
+    margin-block-start: var(--_button-vertical-indent);
+
+    .button {
+      color: var(--wa-color-on-quiet, var(--wa-color-neutral-on-quiet));
+      background-color: transparent;
+      border-color: transparent;
+    }
+    @media (hover: hover) {
+      .button:not(.disabled):not(.loading):hover {
+        color: var(--wa-color-on-quiet, var(--wa-color-neutral-on-quiet));
+        background-color: var(--wa-color-fill-quiet, var(--wa-color-neutral-fill-quiet));
+      }
+    }
+    .button:not(.disabled):not(.loading):active {
+      color: var(--wa-color-on-quiet, var(--wa-color-neutral-on-quiet));
+      background-color: color-mix(
+        in oklab,
+        var(--wa-color-fill-quiet, var(--wa-color-neutral-fill-quiet)),
+        var(--wa-color-mix-active)
+      );
+    }
+  }
+
+  :host([appearance='outlined']) {
+    /* Indentation overrides for grouping outlined */
+    margin-inline-start: var(--_button-horizontal-indent-outlined);
+    margin-block-start: var(--_button-vertical-indent-outlined);
+
+    .button {
+      color: var(--wa-color-on-quiet, var(--wa-color-neutral-on-quiet));
+      background-color: transparent;
+      border-color: var(--wa-color-border-loud, var(--wa-color-neutral-border-loud));
+    }
+    @media (hover: hover) {
+      .button:not(.disabled):not(.loading):hover {
+        color: var(--wa-color-on-quiet, var(--wa-color-neutral-on-quiet));
+        background-color: var(--wa-color-fill-quiet, var(--wa-color-neutral-fill-quiet));
+      }
+    }
+    .button:not(.disabled):not(.loading):active {
+      color: var(--wa-color-on-quiet, var(--wa-color-neutral-on-quiet));
+      background-color: color-mix(
+        in oklab,
+        var(--wa-color-fill-quiet, var(--wa-color-neutral-fill-quiet)),
+        var(--wa-color-mix-active)
+      );
+    }
+  }
+
+  :host([appearance='filled']) {
+    /* Indentation overrides for grouping */
+    margin-inline-start: var(--_button-horizontal-indent);
+    margin-block-start: var(--_button-vertical-indent);
+
+    .button {
+      color: var(--wa-color-on-normal, var(--wa-color-neutral-on-normal));
+      background-color: var(--wa-color-fill-normal, var(--wa-color-neutral-fill-normal));
+      border-color: transparent;
+    }
+    @media (hover: hover) {
+      .button:not(.disabled):not(.loading):hover {
+        color: var(--wa-color-on-normal, var(--wa-color-neutral-on-normal));
+        background-color: color-mix(
+          in oklab,
+          var(--wa-color-fill-normal, var(--wa-color-neutral-fill-normal)),
+          var(--wa-color-mix-hover)
+        );
+      }
+    }
+    .button:not(.disabled):not(.loading):active {
+      color: var(--wa-color-on-normal, var(--wa-color-neutral-on-normal));
+      background-color: color-mix(
+        in oklab,
+        var(--wa-color-fill-normal, var(--wa-color-neutral-fill-normal)),
+        var(--wa-color-mix-active)
+      );
+    }
+  }
+
+  :host([appearance='filled-outlined']) {
+    /* Indentation overrides for grouping outlined */
+    margin-inline-start: var(--_button-horizontal-indent-outlined);
+    margin-block-start: var(--_button-vertical-indent-outlined);
+
+    .button {
+      color: var(--wa-color-on-normal, var(--wa-color-neutral-on-normal));
+      background-color: var(--wa-color-fill-normal, var(--wa-color-neutral-fill-normal));
+      border-color: var(--wa-color-border-normal, var(--wa-color-neutral-border-normal));
+    }
+    @media (hover: hover) {
+      .button:not(.disabled):not(.loading):hover {
+        color: var(--wa-color-on-normal, var(--wa-color-neutral-on-normal));
+        background-color: color-mix(
+          in oklab,
+          var(--wa-color-fill-normal, var(--wa-color-neutral-fill-normal)),
+          var(--wa-color-mix-hover)
+        );
+      }
+    }
+    .button:not(.disabled):not(.loading):active {
+      color: var(--wa-color-on-normal, var(--wa-color-neutral-on-normal));
+      background-color: color-mix(
+        in oklab,
+        var(--wa-color-fill-normal, var(--wa-color-neutral-fill-normal)),
+        var(--wa-color-mix-active)
+      );
+    }
+  }
+
+  :host([appearance='accent']) {
+    /* Indentation overrides for grouping */
+    margin-inline-start: var(--_button-horizontal-indent);
+    margin-block-start: var(--_button-vertical-indent);
+
+    .button {
+      color: var(--wa-color-on-loud, var(--wa-color-neutral-on-loud));
+      background-color: var(--wa-color-fill-loud, var(--wa-color-neutral-fill-loud));
+      border-color: transparent;
+    }
+    @media (hover: hover) {
+      .button:not(.disabled):not(.loading):hover {
+        background-color: color-mix(
+          in oklab,
+          var(--wa-color-fill-loud, var(--wa-color-neutral-fill-loud)),
+          var(--wa-color-mix-hover)
+        );
+      }
+    }
+    .button:not(.disabled):not(.loading):active {
+      background-color: color-mix(
+        in oklab,
+        var(--wa-color-fill-loud, var(--wa-color-neutral-fill-loud)),
+        var(--wa-color-mix-active)
+      );
+    }
+  }
+
+  /* Focus states */
+  .button:focus {
+    outline: none;
+  }
+
+  .button:focus-visible {
+    outline: var(--wa-focus-ring);
+    outline-offset: var(--wa-focus-ring-offset);
+  }
+
+  /* Disabled state */
+  :host([disabled]) {
+    opacity: 0.5;
+    cursor: not-allowed;
+
+    /* When disabled, prevent mouse events from bubbling up from children */
+    .button {
+      pointer-events: none;
+    }
+  }
+
+  /* Keep it last so Safari doesn't stop parsing this block */
+  .button::-moz-focus-inner {
+    border: 0;
+  }
+
+  /* Icon buttons */
+  .button.is-icon-button {
+    outline-offset: 2px;
+    width: var(--wa-form-control-height);
+    aspect-ratio: 1;
+  }
+
+  /* Icon buttons with a caret need to grow to fit both the icon and the caret */
+  .button.is-icon-button.caret {
+    width: auto;
+    aspect-ratio: auto;
+    min-width: var(--wa-form-control-height);
+  }
+
+  /* Pill modifier */
+  :host([pill]) .button {
+    border-start-start-radius: var(--_button-start-start-radius, var(--wa-border-radius-pill));
+    border-start-end-radius: var(--_button-start-end-radius, var(--wa-border-radius-pill));
+    border-end-start-radius: var(--_button-end-start-radius, var(--wa-border-radius-pill));
+    border-end-end-radius: var(--_button-end-end-radius, var(--wa-border-radius-pill));
+  }
+
+  /*
+   * Label
+   */
+
+  .start,
+  .end {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+  }
+
+  .label {
+    display: inline-block;
+  }
+
+  .is-icon-button .label {
+    display: flex;
+    justify-content: center;
+  }
+
+  .label::slotted(wa-icon) {
+    align-self: center;
+  }
+
+  /*
+   * Caret modifier
+   */
+
+  wa-icon[part='caret'] {
+    display: flex;
+    align-self: center;
+    align-items: center;
+
+    &::part(svg) {
+      width: 0.875em;
+      height: 0.875em;
+    }
+
+    .button:has(&) .end {
+      display: none;
+    }
+  }
+
+  /*
+   * Loading modifier
+   */
+
+  .loading {
+    position: relative;
+    cursor: wait;
+
+    .start,
+    .label,
+    .end,
+    .caret {
+      visibility: hidden;
+    }
+
+    wa-spinner {
+      --indicator-color: currentColor;
+      --track-color: color-mix(in oklab, currentColor, transparent 90%);
+
+      position: absolute;
+      font-size: 1em;
+      height: 1em;
+      width: 1em;
+      top: calc(50% - 0.5em);
+      left: calc(50% - 0.5em);
+    }
+  }
+
+  /*
+   * Badges
+   */
+
+  .button ::slotted(wa-badge) {
+    border-color: var(--wa-color-surface-default);
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 0;
+    translate: 50% -50%;
+    pointer-events: none;
+  }
+
+  :host(:dir(rtl)) ::slotted(wa-badge) {
+    translate: -50% -50%;
+  }
+
+  /*
+  * Button spacing
+  */
+
+  slot[name='start']::slotted(*) {
+    margin-inline-end: 0.75em;
+  }
+
+  slot[name='end']::slotted(*),
+  .button:not(.visually-hidden-label) [part='caret'] {
+    margin-inline-start: 0.75em;
+  }
+
+  :where(:root),
+  .wa-neutral,
+  :host([variant='neutral']) {
+    --wa-color-fill-loud: var(--wa-color-neutral-fill-loud);
+    --wa-color-fill-normal: var(--wa-color-neutral-fill-normal);
+    --wa-color-fill-quiet: var(--wa-color-neutral-fill-quiet);
+    --wa-color-border-loud: var(--wa-color-neutral-border-loud);
+    --wa-color-border-normal: var(--wa-color-neutral-border-normal);
+    --wa-color-border-quiet: var(--wa-color-neutral-border-quiet);
+    --wa-color-on-loud: var(--wa-color-neutral-on-loud);
+    --wa-color-on-normal: var(--wa-color-neutral-on-normal);
+    --wa-color-on-quiet: var(--wa-color-neutral-on-quiet);
+  }
+
+  .wa-brand,
+  :host([variant='brand']) {
+    --wa-color-fill-loud: var(--wa-color-brand-fill-loud);
+    --wa-color-fill-normal: var(--wa-color-brand-fill-normal);
+    --wa-color-fill-quiet: var(--wa-color-brand-fill-quiet);
+    --wa-color-border-loud: var(--wa-color-brand-border-loud);
+    --wa-color-border-normal: var(--wa-color-brand-border-normal);
+    --wa-color-border-quiet: var(--wa-color-brand-border-quiet);
+    --wa-color-on-loud: var(--wa-color-brand-on-loud);
+    --wa-color-on-normal: var(--wa-color-brand-on-normal);
+    --wa-color-on-quiet: var(--wa-color-brand-on-quiet);
+  }
+
+  .wa-success,
+  :host([variant='success']) {
+    --wa-color-fill-loud: var(--wa-color-success-fill-loud);
+    --wa-color-fill-normal: var(--wa-color-success-fill-normal);
+    --wa-color-fill-quiet: var(--wa-color-success-fill-quiet);
+    --wa-color-border-loud: var(--wa-color-success-border-loud);
+    --wa-color-border-normal: var(--wa-color-success-border-normal);
+    --wa-color-border-quiet: var(--wa-color-success-border-quiet);
+    --wa-color-on-loud: var(--wa-color-success-on-loud);
+    --wa-color-on-normal: var(--wa-color-success-on-normal);
+    --wa-color-on-quiet: var(--wa-color-success-on-quiet);
+  }
+
+  .wa-warning,
+  :host([variant='warning']) {
+    --wa-color-fill-loud: var(--wa-color-warning-fill-loud);
+    --wa-color-fill-normal: var(--wa-color-warning-fill-normal);
+    --wa-color-fill-quiet: var(--wa-color-warning-fill-quiet);
+    --wa-color-border-loud: var(--wa-color-warning-border-loud);
+    --wa-color-border-normal: var(--wa-color-warning-border-normal);
+    --wa-color-border-quiet: var(--wa-color-warning-border-quiet);
+    --wa-color-on-loud: var(--wa-color-warning-on-loud);
+    --wa-color-on-normal: var(--wa-color-warning-on-normal);
+    --wa-color-on-quiet: var(--wa-color-warning-on-quiet);
+  }
+
+  .wa-danger,
+  :host([variant='danger']) {
+    --wa-color-fill-loud: var(--wa-color-danger-fill-loud);
+    --wa-color-fill-normal: var(--wa-color-danger-fill-normal);
+    --wa-color-fill-quiet: var(--wa-color-danger-fill-quiet);
+    --wa-color-border-loud: var(--wa-color-danger-border-loud);
+    --wa-color-border-normal: var(--wa-color-danger-border-normal);
+    --wa-color-border-quiet: var(--wa-color-danger-border-quiet);
+    --wa-color-on-loud: var(--wa-color-danger-on-loud);
+    --wa-color-on-normal: var(--wa-color-danger-on-normal);
+    --wa-color-on-quiet: var(--wa-color-danger-on-quiet);
+  }
+
+  :host([size='xs']) {
+    font-size: var(--wa-font-size-xs);
+  }
+
+  :host([size='s']),
+  :host([size='small']) {
+    font-size: var(--wa-font-size-s);
+  }
+
+  :host([size='m']),
+  :host([size='medium']) {
+    font-size: var(--wa-font-size-m);
+  }
+
+  :host([size='l']),
+  :host([size='large']) {
+    font-size: var(--wa-font-size-l);
+  }
+
+  :host([size='xl']) {
+    font-size: var(--wa-font-size-xl);
+  }
+</style><!--lit-part I9UUijQ6CQw=-->
+      <!--lit-node 0--><button
+        part="base"
+        class=" button "
+        
+        type="button"
+        title=""
+        
+        
+        
+        
+        
+        
+        role="button"
+        
+        tabindex="0"
+        
+        
+      >
+        <slot name="start" part="start" class="start"></slot>
+        <!--lit-node 2--><slot part="label" class="label" ></slot>
+        <slot name="end" part="end" class="end"></slot>
+        <!--lit-part--><!--/lit-part-->
+        <!--lit-part--><!--/lit-part-->
+      </button>
+    <!--/lit-part--></template><wa-icon   name="rotate-right" label="Reload" style="--rotate-angle: 0deg;" did-ssr library="default" rotate="0"><template shadowroot="open" shadowrootmode="open"><style>
+  :host {
+    box-sizing: border-box;
+  }
+
+  :host *,
+  :host *::before,
+  :host *::after {
+    box-sizing: inherit;
+  }
+
+  [hidden],
+  :host([hidden]) {
+    display: none !important;
+  }
+
+  :host {
+    --primary-color: currentColor;
+    --primary-opacity: 1;
+    --secondary-color: currentColor;
+    --secondary-opacity: 0.4;
+    --rotate-angle: 0deg;
+
+    box-sizing: content-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: -0.125em;
+  }
+
+  /* #region Canvas — the box the icon is centered within (mirrors Font Awesome's icon canvas). Orthogonal to font-size. */
+
+  /* Fixed width (default): 1.25em × 1em (20 × 16px) */
+  :host(:not([canvas])),
+  :host([canvas='fixed']) {
+    width: 1.25em;
+    height: 1em;
+    min-width: 1.25em; /* <-- this is what Safari respects for intrinsic */
+    min-height: 1em;
+  }
+
+  /* Auto: hug the icon's width. `auto-width` is the deprecated alias for canvas="auto". */
+  :host([canvas='auto']),
+  :host([auto-width]:not([canvas])) {
+    width: auto;
+    height: 1em;
+  }
+
+  /* Square: 1.25em × 1.25em (20 × 20px) */
+  :host([canvas='square']) {
+    width: 1.25em;
+    height: 1.25em;
+    min-width: 1.25em;
+    min-height: 1.25em;
+  }
+
+  /* Roomy: 1.5em × 1.5em (24 × 24px) */
+  :host([canvas='roomy']) {
+    width: 1.5em;
+    height: 1.5em;
+    min-width: 1.5em;
+    min-height: 1.5em;
+  }
+
+  /* #endregion */
+
+  svg {
+    fill: currentColor;
+    height: 1em;
+    overflow: visible;
+    width: auto;
+
+    /* Duotone colors with path-specific opacity fallback */
+    path[data-duotone-primary] {
+      color: var(--primary-color);
+      opacity: var(--path-opacity, var(--primary-opacity));
+    }
+
+    path[data-duotone-secondary] {
+      color: var(--secondary-color);
+      opacity: var(--path-opacity, var(--secondary-opacity));
+    }
+  }
+
+  /* Rotation */
+  :host([rotate]) {
+    transform: rotate(var(--rotate-angle, 0deg));
+  }
+
+  /* Flipping */
+  :host([flip='x']) {
+    transform: scaleX(-1);
+  }
+  :host([flip='y']) {
+    transform: scaleY(-1);
+  }
+  :host([flip='both']) {
+    transform: scale(-1, -1);
+  }
+
+  /* Rotation and Flipping combined */
+  :host([rotate][flip='x']) {
+    transform: rotate(var(--rotate-angle, 0deg)) scaleX(-1);
+  }
+  :host([rotate][flip='y']) {
+    transform: rotate(var(--rotate-angle, 0deg)) scaleY(-1);
+  }
+  :host([rotate][flip='both']) {
+    transform: rotate(var(--rotate-angle, 0deg)) scale(-1, -1);
+  }
+
+  /* #region Animations — ported from Font Awesome 7.3 (--fa-* props mapped to wa-icon's --* names) */
+
+  :host([animation='beat']) {
+    animation-name: beat;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='bounce']) {
+    animation-name: bounce;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, cubic-bezier(0.28, 0.84, 0.42, 1));
+  }
+
+  :host([animation='fade']) {
+    animation-name: fade;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='beat-fade']) {
+    animation-name: beat-fade;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='flip']) {
+    animation-name: flip;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1.5s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='flip-360']) {
+    animation-name: flip-360;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='shake']) {
+    animation-name: shake;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 0.75s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+  }
+
+  :host([animation='spin']) {
+    animation-name: spin;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 2s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='spin-pulse']) {
+    animation-name: spin;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, steps(8));
+  }
+
+  /* spin-reverse is FA's reverse modifier expressed as a standalone value; reverse any spin via --animation-direction: reverse */
+  :host([animation='spin-reverse']) {
+    animation-name: spin;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, reverse);
+    animation-duration: var(--animation-duration, 2s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='spin-snap']) {
+    animation-name: spin-snap;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 3s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='spin-snap-4']) {
+    animation-name: spin-snap-4;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 2.4s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='spin-snap-8']) {
+    animation-name: spin-snap-8;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 4s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='buzz']) {
+    animation-name: buzz;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 0.6s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, linear);
+  }
+
+  :host([animation='wag']) {
+    animation-name: wag;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 0.9s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-out);
+    transform-origin: bottom center;
+  }
+
+  :host([animation='float']) {
+    animation-name: float;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 3s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-in-out);
+    will-change: transform;
+  }
+
+  :host([animation='swing']) {
+    animation-name: swing;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 1.2s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-out);
+    transform-origin: top center;
+  }
+
+  :host([animation='jello']) {
+    animation-name: jello;
+    animation-delay: var(--animation-delay, 0s);
+    animation-direction: var(--animation-direction, normal);
+    animation-duration: var(--animation-duration, 0.9s);
+    animation-iteration-count: var(--animation-iteration-count, infinite);
+    animation-timing-function: var(--animation-timing, ease-out);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :host([animation='beat']),
+    :host([animation='bounce']),
+    :host([animation='fade']),
+    :host([animation='beat-fade']),
+    :host([animation='flip']),
+    :host([animation='flip-360']),
+    :host([animation='shake']),
+    :host([animation='spin']),
+    :host([animation='spin-pulse']),
+    :host([animation='spin-reverse']),
+    :host([animation='spin-snap']),
+    :host([animation='spin-snap-4']),
+    :host([animation='spin-snap-8']),
+    :host([animation='buzz']),
+    :host([animation='wag']),
+    :host([animation='float']),
+    :host([animation='swing']),
+    :host([animation='jello']) {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  /* #endregion */
+
+  /* #region Keyframes — ported verbatim from Font Awesome 7.3 */
+
+  @keyframes beat {
+    0% {
+      transform: scale(1);
+    }
+    25% {
+      transform: scale(calc(1.25 * var(--beat-scale, 1.25)));
+    }
+    45% {
+      transform: scale(calc(1.22 * var(--beat-scale, 1.22)));
+    }
+    65% {
+      transform: scale(calc(1.25 * var(--beat-scale, 1.25)));
+    }
+    90% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes bounce {
+    0% {
+      transform: scale(1, 1) translateY(0);
+      /* No fallback by design (ported from FA 7.3): the first segment uses the user's --animation-timing or the CSS
+         initial ease, while the explicit cubic-beziers on later stops drive the bounce physics. */
+      animation-timing-function: var(--animation-timing);
+    }
+    14% {
+      transform: scale(var(--bounce-start-scale-x, 1.06), var(--bounce-start-scale-y, 0.94))
+        translateY(var(--bounce-anticipation, 3px));
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 0.33);
+    }
+    32% {
+      transform: scale(var(--bounce-jump-scale-x, 0.94), var(--bounce-jump-scale-y, 1.12))
+        translateY(calc(-1 * var(--bounce-height, 0.5em)));
+      animation-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+    }
+    52% {
+      transform: scale(1, 1) translateY(calc(-1 * var(--bounce-height, 0.5em) * 1.1));
+      animation-timing-function: cubic-bezier(0.5, 0, 1, 0.5);
+    }
+    70% {
+      transform: scale(var(--bounce-land-scale-x, 1.06), var(--bounce-land-scale-y, 0.92)) translateY(0);
+      animation-timing-function: cubic-bezier(0.33, 0.33, 0.66, 1);
+    }
+    85% {
+      transform: scale(0.98, 1.04) translateY(calc(-2px * var(--bounce-rebound, 1)));
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 1);
+    }
+    100% {
+      transform: scale(1, 1) translateY(0);
+    }
+  }
+
+  @keyframes fade {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.4, 1);
+    }
+    40% {
+      opacity: var(--fade-opacity, 0.4);
+      transform: scale(0.98);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes beat-fade {
+    0% {
+      opacity: var(--beat-fade-opacity, 0.4);
+      transform: scale(1);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.4, 1);
+    }
+    25% {
+      opacity: calc(var(--beat-fade-opacity, 0.4) + 0.4);
+      transform: scale(var(--beat-fade-scale, 1.28));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    45% {
+      opacity: 1;
+      transform: scale(var(--beat-fade-scale, 1.25));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    65% {
+      opacity: calc(var(--beat-fade-opacity, 0.4) + 0.4);
+      transform: scale(var(--beat-fade-scale, 1.28));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    100% {
+      opacity: var(--beat-fade-opacity, 0.4);
+      transform: scale(1);
+    }
+  }
+
+  @keyframes flip {
+    0% {
+      transform: perspective(2em) scale(1) rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), 0deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.4, 1);
+    }
+    8% {
+      transform: perspective(2em) scale(var(--flip-anticipation-scale, 0.95))
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), 0deg);
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 0.33);
+    }
+    35% {
+      transform: perspective(2em) scale(1)
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), calc(var(--flip-angle, -360deg) * 0.6));
+      animation-timing-function: linear;
+    }
+    65% {
+      transform: perspective(2em) scale(1)
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), calc(var(--flip-angle, -360deg) * 0.5));
+      animation-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+    }
+    92% {
+      transform: perspective(2em) scale(1)
+        rotate3d(
+          var(--flip-x, 0),
+          var(--flip-y, 1),
+          var(--flip-z, 0),
+          calc(var(--flip-angle, -360deg) * var(--flip-overshoot, 1.04))
+        );
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 1);
+    }
+    100% {
+      transform: perspective(2em) scale(1)
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), var(--flip-angle, -360deg));
+    }
+  }
+
+  @keyframes flip-360 {
+    0% {
+      transform: perspective(2em) scale(1) rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), 0deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.4, 1);
+    }
+    8% {
+      transform: perspective(2em) scale(var(--flip-anticipation-scale, 0.95))
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), 0deg);
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 0.33);
+    }
+    50% {
+      transform: perspective(2em) scale(1)
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), calc(var(--flip-angle, -360deg) * 0.6));
+      animation-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+    }
+    80% {
+      transform: perspective(2em) scale(1)
+        rotate3d(
+          var(--flip-x, 0),
+          var(--flip-y, 1),
+          var(--flip-z, 0),
+          calc(var(--flip-angle, -360deg) * var(--flip-overshoot, 1.04))
+        );
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 1);
+    }
+    100% {
+      transform: perspective(2em) scale(1)
+        rotate3d(var(--flip-x, 0), var(--flip-y, 1), var(--flip-z, 0), var(--flip-angle, -360deg));
+    }
+  }
+
+  @keyframes shake {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1);
+    }
+    8% {
+      transform: rotate(35deg) translateX(1px);
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    20% {
+      transform: rotate(-22deg) translateX(-1px);
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    35% {
+      transform: rotate(15deg) translateX(1px);
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    50% {
+      transform: rotate(-9deg);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    65% {
+      transform: rotate(5deg);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    78% {
+      transform: rotate(-3deg);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    90% {
+      transform: rotate(1deg);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin-snap {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    12% {
+      transform: rotate(60deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    16.67% {
+      transform: rotate(60deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    28.67% {
+      transform: rotate(120deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    33.33% {
+      transform: rotate(120deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    45.33% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    62% {
+      transform: rotate(240deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    66.67% {
+      transform: rotate(240deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    78.67% {
+      transform: rotate(300deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    83.33% {
+      transform: rotate(300deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    95.33% {
+      transform: rotate(360deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin-snap-4 {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    15% {
+      transform: rotate(90deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    25% {
+      transform: rotate(90deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    40% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    65% {
+      transform: rotate(270deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    75% {
+      transform: rotate(270deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    90% {
+      transform: rotate(360deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin-snap-8 {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    9% {
+      transform: rotate(45deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    12.5% {
+      transform: rotate(45deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    21.5% {
+      transform: rotate(90deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    25% {
+      transform: rotate(90deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    34% {
+      transform: rotate(135deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    37.5% {
+      transform: rotate(135deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    46.5% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: rotate(180deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    59% {
+      transform: rotate(225deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    62.5% {
+      transform: rotate(225deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    71.5% {
+      transform: rotate(270deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    75% {
+      transform: rotate(270deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    84% {
+      transform: rotate(315deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    87.5% {
+      transform: rotate(315deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    96.5% {
+      transform: rotate(360deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes buzz {
+    0% {
+      transform: translateX(0) rotate(0deg);
+      animation-timing-function: cubic-bezier(0.1, 0, 0.9, 1);
+    }
+    5% {
+      transform: translateX(var(--buzz-distance, 4px)) rotate(0.5deg);
+    }
+    10% {
+      transform: translateX(calc(-1 * var(--buzz-distance, 4px))) rotate(-0.5deg);
+    }
+    15% {
+      transform: translateX(var(--buzz-distance, 4px)) rotate(0.3deg);
+    }
+    20% {
+      transform: translateX(calc(-1 * var(--buzz-distance, 4px))) rotate(-0.3deg);
+    }
+    25% {
+      transform: translateX(calc(var(--buzz-distance, 4px) * 0.7)) rotate(0.2deg);
+    }
+    30% {
+      transform: translateX(calc(-1 * var(--buzz-distance, 4px) * 0.7)) rotate(-0.2deg);
+    }
+    35% {
+      transform: translateX(calc(var(--buzz-distance, 4px) * 0.4)) rotate(0.1deg);
+    }
+    40% {
+      transform: translateX(0) rotate(0deg);
+    }
+    100% {
+      transform: translateX(0) rotate(0deg);
+    }
+  }
+
+  @keyframes wag {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.6, 1);
+    }
+    12% {
+      transform: rotate(var(--wag-angle, 12deg));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    24% {
+      transform: rotate(2deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.6, 1);
+    }
+    36% {
+      transform: rotate(calc(var(--wag-angle, 12deg) * 0.85));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    48% {
+      transform: rotate(1deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.6, 1);
+    }
+    58% {
+      transform: rotate(calc(var(--wag-angle, 12deg) * 0.6));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    68% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(0) translateX(0) rotate(0deg)
+        scale(var(--float-squash-x, 1.02), var(--float-squash-y, 0.98));
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 0.33);
+    }
+    15% {
+      transform: translateY(calc(-0.4 * var(--float-height, 6px))) translateX(var(--float-drift, 1px))
+        rotate(var(--float-tilt, 1deg)) scale(1, 1);
+      animation-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+    }
+    35% {
+      transform: translateY(calc(-1 * var(--float-height, 6px))) translateX(0) rotate(0deg)
+        scale(var(--float-stretch-x, 0.98), var(--float-stretch-y, 1.03));
+      animation-timing-function: cubic-bezier(0.5, 0, 0.5, 0);
+    }
+    50% {
+      transform: translateY(calc(-0.92 * var(--float-height, 6px))) translateX(calc(-0.5 * var(--float-drift, 1px)))
+        rotate(calc(-0.5 * var(--float-tilt, 1deg))) scale(0.995, 1.01);
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 0.33);
+    }
+    70% {
+      transform: translateY(calc(-0.3 * var(--float-height, 6px))) translateX(calc(-1 * var(--float-drift, 1px)))
+        rotate(calc(-1 * var(--float-tilt, 1deg))) scale(1, 1);
+      animation-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+    }
+    90% {
+      transform: translateY(calc(0.05 * var(--float-height, 6px))) translateX(0) rotate(0deg)
+        scale(var(--float-squash-x, 1.02), var(--float-squash-y, 0.98));
+      animation-timing-function: cubic-bezier(0.33, 0, 0.66, 1);
+    }
+    100% {
+      transform: translateY(0) translateX(0) rotate(0deg)
+        scale(var(--float-squash-x, 1.02), var(--float-squash-y, 0.98));
+    }
+  }
+
+  @keyframes swing {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1);
+    }
+    8% {
+      transform: rotate(var(--swing-angle, 22deg));
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    18% {
+      transform: rotate(calc(-1 * var(--swing-angle, 22deg) * 0.85));
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    28% {
+      transform: rotate(calc(var(--swing-angle, 22deg) * 0.65));
+      animation-timing-function: cubic-bezier(0.35, 0, 0.65, 1);
+    }
+    38% {
+      transform: rotate(calc(-1 * var(--swing-angle, 22deg) * 0.45));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    48% {
+      transform: rotate(calc(var(--swing-angle, 22deg) * 0.25));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    56% {
+      transform: rotate(calc(-1 * var(--swing-angle, 22deg) * 0.1));
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    64% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+
+  @keyframes jello {
+    0% {
+      transform: scale(1, 1);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1);
+    }
+    12% {
+      transform: scale(var(--jello-scale-x, 1.15), calc(2 - var(--jello-scale-x, 1.15)));
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    24% {
+      transform: scale(calc(2 - var(--jello-scale-y, 1.12)), var(--jello-scale-y, 1.12));
+      animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
+    }
+    36% {
+      transform: scale(
+        calc(1 + (var(--jello-scale-x, 1.15) - 1) * 0.5),
+        calc(2 - (1 + (var(--jello-scale-x, 1.15) - 1) * 0.5))
+      );
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    48% {
+      transform: scale(
+        calc(2 - (1 + (var(--jello-scale-y, 1.12) - 1) * 0.3)),
+        calc(1 + (var(--jello-scale-y, 1.12) - 1) * 0.3)
+      );
+      animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    58% {
+      transform: scale(1.02, 0.98);
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    68% {
+      transform: scale(1, 1);
+    }
+    100% {
+      transform: scale(1, 1);
+    }
+  }
+
+  /* #endregion */
+</style><!--lit-part k1u2U0gqOxA=--><svg part="svg" width="16" height="16" viewBox="0 0 16 16"></svg><!--/lit-part--></template></wa-icon></wa-button>
+  </div>
+</div>
 <h2 id="nested-keys"><a href="#nested-keys">#</a> Nested keys</h2>
 <p>Use a dotted path and downflow creates the objects in between as needed.</p>
 
@@ -19719,7 +23405,7 @@ wa-page::part(menu) {
             <div class="code-block-actions">
               <div class="code-block-lang">html</div>
               <div class="code-block-copy">
-                <wa-copy-button  from="code-block-e9bfabfd-3225-4c-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
+                <wa-copy-button  from="code-block-7faa14c8-0aaf-41-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -22443,20 +26129,20 @@ wa-page::part(menu) {
     <!--/lit-part--></template></wa-copy-button>
               </div>
             </div>
-            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-e9bfabfd-3225-4c"><code id="code-block-e9bfabfd-3225-4c-inner"><span class="line"><span style="color:#81A1C1">&#x3C;input</span><span style="color:#8FBCBB"> flow-bind</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">address.city</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
+            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-7faa14c8-0aaf-41"><code id="code-block-7faa14c8-0aaf-41-inner"><span class="line"><span style="color:#81A1C1">&#x3C;input</span><span style="color:#8FBCBB"> flow-bind</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">address.city</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
 <span class="line"></span></code></pre>
           </div>
         
 <p>Writes to <code>application.context.address.city</code>, creating <code>application.context.address</code> first if it isn't there yet.</p>
 <h2 id="the-attribute-form"><a href="#the-attribute-form">#</a> The attribute form</h2>
-<p><code>flow-bind:name</code> does the same thing as <code>flow-bind=&quot;name&quot;</code>. Pick whichever reads better.</p>
+<p><code>flow-bind:name</code> is an alias for <code>flow-bind=&quot;name&quot;</code>.</p>
 <p>Do note, if one of the properties you want to bind to has an uppercase, then you need to use <code>flow-bind=&quot;name&quot;</code> because HTML attributes are always read as lower cased by the parser.</p>
 
           <div class="code-block">
             <div class="code-block-actions">
               <div class="code-block-lang">html</div>
               <div class="code-block-copy">
-                <wa-copy-button  from="code-block-2bfb76b9-b08d-42-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
+                <wa-copy-button  from="code-block-e3d70499-6544-47-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -25180,7 +28866,7 @@ wa-page::part(menu) {
     <!--/lit-part--></template></wa-copy-button>
               </div>
             </div>
-            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-2bfb76b9-b08d-42"><code id="code-block-2bfb76b9-b08d-42-inner"><span class="line"><span style="color:#81A1C1">&#x3C;input</span><span style="color:#8FBCBB"> flow-bind:name</span><span style="color:#81A1C1">></span></span>
+            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-e3d70499-6544-47"><code id="code-block-e3d70499-6544-47-inner"><span class="line"><span style="color:#81A1C1">&#x3C;input</span><span style="color:#8FBCBB"> flow-bind:name</span><span style="color:#81A1C1">></span></span>
 <span class="line"><span style="color:#81A1C1">&#x3C;input</span><span style="color:#8FBCBB"> flow-bind:address.city</span><span style="color:#81A1C1">></span></span>
 <span class="line"></span></code></pre>
           </div>
@@ -25192,7 +28878,7 @@ wa-page::part(menu) {
             <div class="code-block-actions">
               <div class="code-block-lang">html</div>
               <div class="code-block-copy">
-                <wa-copy-button  from="code-block-dedd8387-2ff8-41-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
+                <wa-copy-button  from="code-block-7eb46cf6-648f-42-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -27916,7 +31602,7 @@ wa-page::part(menu) {
     <!--/lit-part--></template></wa-copy-button>
               </div>
             </div>
-            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-dedd8387-2ff8-41"><code id="code-block-dedd8387-2ff8-41-inner"><span class="line"><span style="color:#81A1C1">&#x3C;div</span><span style="color:#8FBCBB"> flow-controller</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">settings</span><span style="color:#ECEFF4">"</span><span style="color:#8FBCBB"> flow-context</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">settings</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
+            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-7eb46cf6-648f-42"><code id="code-block-7eb46cf6-648f-42-inner"><span class="line"><span style="color:#81A1C1">&#x3C;div</span><span style="color:#8FBCBB"> flow-controller</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">settings</span><span style="color:#ECEFF4">"</span><span style="color:#8FBCBB"> flow-context</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">settings</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
 <span class="line"><span style="color:#81A1C1">  &#x3C;input</span><span style="color:#8FBCBB"> flow-bind</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">theme</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
 <span class="line"><span style="color:#81A1C1">&#x3C;/div></span></span>
 <span class="line"></span></code></pre>
@@ -27930,7 +31616,7 @@ wa-page::part(menu) {
             <div class="code-block-actions">
               <div class="code-block-lang">html</div>
               <div class="code-block-copy">
-                <wa-copy-button  from="code-block-da499685-4379-4a-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
+                <wa-copy-button  from="code-block-509efc22-b15a-49-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -30654,7 +34340,7 @@ wa-page::part(menu) {
     <!--/lit-part--></template></wa-copy-button>
               </div>
             </div>
-            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-da499685-4379-4a"><code id="code-block-da499685-4379-4a-inner"><span class="line"><span style="color:#81A1C1">&#x3C;div</span><span style="color:#8FBCBB"> flow-controller</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">settings</span><span style="color:#ECEFF4">"</span><span style="color:#8FBCBB"> flow-context</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">settings</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
+            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-509efc22-b15a-49"><code id="code-block-509efc22-b15a-49-inner"><span class="line"><span style="color:#81A1C1">&#x3C;div</span><span style="color:#8FBCBB"> flow-controller</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">settings</span><span style="color:#ECEFF4">"</span><span style="color:#8FBCBB"> flow-context</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">settings</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
 <span class="line"><span style="color:#616E88">  &#x3C;!-- still goes to settings' context --></span></span>
 <span class="line"><span style="color:#81A1C1">  &#x3C;input</span><span style="color:#8FBCBB"> flow-bind</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">theme</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
 <span class="line"><span style="color:#616E88">  &#x3C;!-- opts out, writes to application.context.theme instead --></span></span>
