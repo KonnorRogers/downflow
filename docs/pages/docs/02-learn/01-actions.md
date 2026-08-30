@@ -58,13 +58,15 @@ Add `.modifier` to a keyboard event to only fire on a specific key.
 <input flow-action="keydown.esc->modal#close">
 ```
 
-Built in names: `enter`, `tab`, `esc`, `space`, `up`, `down`, `left`, `right`, `home`, `end`, `page_up`, `page_down`. A single letter or digit works too, alphanumeric keys also work.
+Built in names: `enter`, `tab`, `esc`, `space`, `up`, `down`, `left`, `right`, `home`, `end`, `page_up`, `page_down`. Alphanumeric keys also work.
 
 Stack modifier keys with `+`. The last one is the key to watch for; the rest must be held down at the same time.
 
 ```html
 <input flow-action="keydown.shift+ctrl+esc->modal#close">
 ```
+
+Means `ctrl+shift` must be held and `esc` must be pressed.
 
 ## Global listeners
 
