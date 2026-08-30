@@ -1195,16 +1195,13 @@ export class Application {
             // @ts-expect-error
             fnString = keys.pop();
 
-            // @ts-expect-error
             context = dig(controller, ...keys);
           }
 
           if (
             typeof context === "object" &&
-            // @ts-expect-error
             typeof context[fnString] === "function"
           ) {
-            // @ts-expect-error
             context[fnString].call(controller, evt);
           }
         }
