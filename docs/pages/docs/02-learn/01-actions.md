@@ -1,6 +1,6 @@
 `flow-action` attaches an event listener and calls a function when it fires.
 
-Drop the controller name and the function is called on `application.context` instead.
+By default, the function is called on `application.context`.
 
 ```html
 <script type="module">
@@ -26,6 +26,8 @@ We haven't discussed controllers too much yet, but controllers are like "mixins"
 
 You can read more about controllers here: <a href="{{ "/learn/controllers" | url }}">Controllers</a>
 
+To call a function on a controller, add `->` and the controller name. Like so:
+
 ```html
 <div flow-controller="counter">
   <button flow-action="click->counter#increment">+</button>
@@ -40,9 +42,13 @@ If you need to opt out of the context, you can do so by doing:
 flow-action="click->$context#doThing"
 ```
 
+There are 2 "keywords" in downflow.
+
+`$context` and `$form`. Everything else is bare names.
+
 ## Nested functions
 
-The function name can be chained, on a controller or on `application.context`.
+The function name can be chained on a controller or on `application.context`.
 
 ```html
 <button flow-action="click#modal.close">Close</button>
