@@ -9,7 +9,7 @@
 
   <div class="desktop-only" style="display: flex; gap: 2rem; align-items: center; margin-inline-start: auto;">
     {% for category in docCategories(collections.docs) %}
-    <a href="{{ "/docs/{{ category }}" | url }}">{{ category | titleize }}</a>
+    <a href="{{ ("/docs/" + category) | url }}">{{ category | titleize }}</a>
     {% endfor %}
   </div>
 
