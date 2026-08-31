@@ -3060,6 +3060,9 @@
       padding-block-end: var(--wa-space-m);
       border-block-end: 2px solid var(--border-color-muted);
     }
+    &::part(drawer__footer) {
+      display: block;
+    }
     &::part(body) {
       padding: 0px;
     }
@@ -3107,7 +3110,13 @@
         border-inline-end: 2px solid var(--border-color-muted);
       }
       & > [slot~=navigation-header] {
-        display: none;
+        padding: 0;
+        margin: 0;
+        height: 0;
+        width: 0;
+        opacity: 0;
+        visibility: hidden;
+        padding: 0;
       }
     }
   }
@@ -3401,6 +3410,12 @@
   }
   wa-zoomable-frame {
     border: var(--border);
+  }
+  .icon-link {
+    color: var(--wa-color-text-quiet);
+    &:is(:hover, :focus) {
+      color: var(--wa-color-text-normal);
+    }
   }
 }
 
