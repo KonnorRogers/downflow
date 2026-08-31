@@ -76,4 +76,4 @@ The above code introduces a few concepts, so we'll walk through them.
 
 - [Actions]({{ "/docs/learn/actions/" | url }}) covers everything `flow-action` can do: key modifiers, `@window`, listener options, and more.
 - [Forms]({{ "/docs/learn/forms/" | url }}) covers the `$form` live binding.
-- [Attributes]({{ "/docs/learn/bindings/" | url }}) covers all attributes available in downflow.
+- [Attributes]({{ "/docs/references/attributes/" | url }}) covers all attributes available in downflow.
