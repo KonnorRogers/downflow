@@ -699,7 +699,7 @@ export class Application {
     }
 
     for (const el of [...this._bindingScopes.keys()]) {
-      this._downgradeBindings(el);
+      this._deleteCachedScopes(el);
     }
 
     this.abortController?.abort("application stopped");
@@ -827,15 +827,15 @@ export class Application {
         this._removeActionsForElement(el);
       }
 
-      const downgradeBindings = [];
+      const deleteCachedScopes = [];
       for (const el of this._bindingScopes.keys()) {
         if (!seen.has(el)) {
-          downgradeBindings.push(el);
+          deleteCachedScopes.push(el);
         }
       }
 
-      for (const el of downgradeBindings) {
-        this._downgradeBindings(el);
+      for (const el of deleteCachedScopes) {
+        this._deleteCachedScopes(el);
       }
 
       // Pass 3: targets, after the controller graph is stable
@@ -1549,6 +1549,10 @@ export class Application {
       }
     }
 
+    if (signature.length === 0) {
+      return null
+    }
+
     const context = this.getClosestContextString(el) ?? "";
 
     // resolve the controller *instance* the string points at in case the underlying controller changes.
@@ -1559,7 +1563,7 @@ export class Application {
       if (controller) {
         controllerId = this._idForController(controller).toString();
         if (controllerId) {
-          signature = signature + `||${controllerId}`;
+          signature = signature + `>> controller >> ${controllerId}`;
         }
       }
     }
@@ -1572,10 +1576,9 @@ export class Application {
     const signature = this._generateSignature(el)
 
     if (!signature) {
-      this._downgradeBindings(el);
+      this._deleteCachedScopes(el);
       return;
     }
-
 
     /**
      * Copy it all into a single string for diff porpoises.
@@ -1584,7 +1587,7 @@ export class Application {
       return;
     }
 
-    this._downgradeBindings(el); // stop the old scope. This doesn't remove anything, this just creates a new effect scope to be able to listen for changes.
+    this._deleteCachedScopes(el); // stop the old scope. This doesn't remove anything, this allows us to create a new effect scope to be able to listen for changes.
 
     const scope = effectScope();
     this.flushChanges(() => {
@@ -1596,8 +1599,11 @@ export class Application {
     this._bindingSignatures.set(el, signature);
   }
 
-  /** @param {Element} el */
-  _downgradeBindings(el) {
+  /**
+    * Deletes stored scopes for an element.
+    * @param {Element} el
+    */
+  _deleteCachedScopes(el) {
     const scope = this._bindingScopes.get(el);
     if (scope) {
       scope.stop();
