@@ -9,4 +9,4 @@ Here's her thread on BlueSky which describes the problem better than I ever coul
 
 <https://bsky.app/profile/lea.verou.me/post/3lx34db4osc23>
 
-![Image of Lea's Bluesky post that is linked above](/assets/images/inspiration.png)
+![Image of Lea's Bluesky post that is linked above]({{ "/assets/images/inspiration.png" | url }})
