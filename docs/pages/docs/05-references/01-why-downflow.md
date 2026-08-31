@@ -13,7 +13,7 @@ If you want a quick run down of why Downflow was created, checkout the <a href="
 
 Downflow is some amalgamation between Alpine and Stimulus (if you're familiar). Its like Alpine in that it has reactivity and common operations built in, and like Stimulus in that it supports writing controllers for your DOM nodes.
 
-Downflow doesn't want you to write all your JavaScript in HTML attributes, instead, you define you define your state in JavaScript, and then interact with the state via attributes.
+Downflow doesn't want you to write all your JavaScript in HTML attributes, instead, you define your state in JavaScript, and then interact with the state via attributes.
 
 ## Why not use another existing library?
 
