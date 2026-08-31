@@ -2917,10 +2917,9 @@ var Application = class {
    * @param {(...args: any[]) => any} callback
    */
   _runEffect(callback) {
-    const runner = effect(
-      callback,
-      { scheduler: () => this.effectScheduler.schedule(runner) }
-    );
+    const runner = effect(callback, {
+      scheduler: () => this.effectScheduler.schedule(runner)
+    });
   }
   /**
    * @param {Element} el
@@ -3007,7 +3006,6 @@ var Application = class {
     if (!propertyText) {
       return;
     }
-    ;
     const [prop, key] = propertyText.split(":");
     const value = this.resolveValue(el, key);
     el[prop] = value;
@@ -3085,9 +3083,9 @@ var Application = class {
     this._bindingSignatures.set(el, signature);
   }
   /**
-    * Deletes stored scopes for an element.
-    * @param {Element} el
-    */
+   * Deletes stored scopes for an element.
+   * @param {Element} el
+   */
   _deleteCachedScopes(el) {
     const scope = this._bindingScopes.get(el);
     if (scope) {
@@ -3130,4 +3128,4 @@ export {
   * @license MIT
   **)
 */
-//# sourceMappingURL=chunk-A4YI4XFT.js.map
+//# sourceMappingURL=chunk-CNMVXYPG.js.map

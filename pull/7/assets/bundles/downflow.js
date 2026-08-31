@@ -1,7 +1,7 @@
 import {
   Application,
   Controller
-} from "./chunk-A4YI4XFT.js";
+} from "./chunk-CNMVXYPG.js";
 import "./chunk-UKNFP365.js";
 export {
   Application,
