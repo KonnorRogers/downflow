@@ -2084,7 +2084,31 @@ var Application = class {
       this.updateBindingsForElement(target);
     };
     this.filters = {};
+    this._effects = [
+      {
+        name: "__downflow__text",
+        run: (el) => this._effectText(el),
+        match(attributeName) {
+          return Boolean(attributeName.match(/flow-text/));
+        }
+      },
+      {
+        name: "__downflow__properties",
+        run: (el) => this._effectProperties(el),
+        match(attributeName) {
+          return Boolean(attributeName.match(/flow-prop/));
+        }
+      },
+      {
+        name: "__downflow__attributes",
+        run: (el) => this._effectAttributes(el),
+        match(attributeName) {
+          return Boolean(attributeName.match(/flow-attr/));
+        }
+      }
+    ];
   }
+  // This function is purposely *not* run as part of an effect.
   /**
    * @param {Element} el
    */
@@ -2125,7 +2149,9 @@ var Application = class {
    */
   flushChanges(fn) {
     var _a, _b;
-    if (this._pauseCount === 0) (_a = this.observer) == null ? void 0 : _a.disconnect();
+    if (this._pauseCount === 0) {
+      (_a = this.observer) == null ? void 0 : _a.disconnect();
+    }
     this._pauseCount++;
     try {
       fn();
@@ -2337,7 +2363,7 @@ var Application = class {
       this._removeActionsForElement(el);
     }
     for (const el of [...this._bindingScopes.keys()]) {
-      this._downgradeBindings(el);
+      this._deleteCachedScopes(el);
     }
     (_b = this.abortController) == null ? void 0 : _b.abort("application stopped");
     this._controllerInstanceMap.clear();
@@ -2426,32 +2452,20 @@ var Application = class {
         this._reconcileActions(el);
         this._reconcileBindings(el);
       });
-      let downgradeElements = [];
-      for (const el of this._controllerInstanceMap.keys()) {
+      for (const el of [...this._controllerInstanceMap.keys()]) {
         if (!seen.has(el)) {
-          downgradeElements.push(el);
+          this._disconnectElement(el);
         }
       }
-      for (const el of downgradeElements) {
-        this._disconnectElement(el);
-      }
-      let removeActions = [];
-      for (const el of this._actionListenerMap.keys()) {
+      for (const el of [...this._actionListenerMap.keys()]) {
         if (!seen.has(el)) {
-          removeActions.push(el);
+          this._removeActionsForElement(el);
         }
       }
-      for (const el of removeActions) {
-        this._removeActionsForElement(el);
-      }
-      const downgradeBindings = [];
-      for (const el of this._bindingScopes.keys()) {
+      for (const el of [...this._bindingScopes.keys()]) {
         if (!seen.has(el)) {
-          downgradeBindings.push(el);
+          this._deleteCachedScopes(el);
         }
-      }
-      for (const el of downgradeBindings) {
-        this._downgradeBindings(el);
       }
       for (const map of this._controllerInstanceMap.values()) {
         for (const controller of map.values()) {
@@ -2549,7 +2563,7 @@ var Application = class {
     return { map, disconnectedControllers: ary };
   }
   /**
-   * Fully destroys the controller — attribute removed or app stopped.
+   * Fully destroys the controller - attribute removed or app stopped.
    * @param {Element} element
    * @param {string} [controllerName]
    */
@@ -2900,40 +2914,48 @@ var Application = class {
     }
   }
   /**
+   * @param {(...args: any[]) => any} callback
+   */
+  _runEffect(callback) {
+    const runner = effect(callback, {
+      scheduler: () => this.effectScheduler.schedule(runner)
+    });
+  }
+  /**
+   * @param {Element} el
+   */
+  _runEffects(el) {
+    this._runEffect(() => {
+      this._effects.forEach((effect2) => {
+        effect2.run(el);
+      });
+    });
+  }
+  /**
    * @param {Element} el
    */
   _effectText(el) {
-    const runner = effect(
-      () => {
-        let text = this.parseTextBinding(el);
-        if (text == null) {
-          return;
-        }
-        if (el.textContent !== text) {
-          el.textContent = text;
-        }
-      },
-      { scheduler: () => this.effectScheduler.schedule(runner) }
-    );
+    let text = this.parseTextBinding(el);
+    if (text == null) {
+      return;
+    }
+    if (el.textContent !== text) {
+      el.textContent = text;
+    }
   }
   /**
    * @param {Element} el
    */
   _effectAttributes(el) {
-    const runner = effect(
-      () => {
-        const attributeText = this.getAttributeBinding(el);
-        if (!attributeText) return;
-        const [attr, key] = attributeText.split(":");
-        const value = this.resolveValue(el, key);
-        if (value == null) {
-          el.removeAttribute(attr);
-          return;
-        }
-        el.setAttribute(attr, String(value));
-      },
-      { scheduler: () => this.effectScheduler.schedule(runner) }
-    );
+    const attributeText = this.getAttributeBinding(el);
+    if (!attributeText) return;
+    const [attr, key] = attributeText.split(":");
+    const value = this.resolveValue(el, key);
+    if (value == null) {
+      el.removeAttribute(attr);
+      return;
+    }
+    el.setAttribute(attr, String(value));
   }
   /**
    * @param {Element} el
@@ -2980,16 +3002,13 @@ var Application = class {
    * @param {Element} el
    */
   _effectProperties(el) {
-    const runner = effect(
-      () => {
-        const propertyText = this.getPropertyBinding(el);
-        if (!propertyText) return;
-        const [prop, key] = propertyText.split(":");
-        const value = this.resolveValue(el, key);
-        el[prop] = value;
-      },
-      { scheduler: () => this.effectScheduler.schedule(runner) }
-    );
+    const propertyText = this.getPropertyBinding(el);
+    if (!propertyText) {
+      return;
+    }
+    const [prop, key] = propertyText.split(":");
+    const value = this.resolveValue(el, key);
+    el[prop] = value;
   }
   /**
    * @param {Element} el
@@ -3010,47 +3029,64 @@ var Application = class {
     });
     return bindings;
   }
-  /** @param {Element} el */
-  _reconcileBindings(el) {
-    var _a, _b, _c, _d;
-    const text = (_a = this.getTextBinding(el)) != null ? _a : "";
-    const attr = (_b = this.getAttributeBinding(el)) != null ? _b : "";
-    const prop = (_c = this.getPropertyBinding(el)) != null ? _c : "";
-    if (!text && !attr && !prop) {
-      if (this._bindingScopes.has(el)) {
-        this._downgradeBindings(el);
+  /**
+   * @param {Element} el
+   */
+  _generateSignature(el) {
+    var _a;
+    let signature = "";
+    for (const attr of el.attributes) {
+      for (const effect2 of this._effects) {
+        if (effect2.match(attr.name)) {
+          if (signature.length > 0) {
+            signature += ">> ";
+          }
+          signature += attr.name + ">> " + attr.value;
+          break;
+        }
       }
-      return;
     }
-    const context = (_d = this.getClosestContextString(el)) != null ? _d : "";
-    let signature = `${context}||${text}||${attr}||${prop}`;
+    if (signature.length === 0) {
+      return null;
+    }
+    const context = (_a = this.getClosestContextString(el)) != null ? _a : "";
     let controllerId = "";
     if (context && context !== "$form" && context !== "$context") {
       const controller = this.getClosestController(el, context);
       if (controller) {
         controllerId = this._idForController(controller).toString();
         if (controllerId) {
-          signature = signature + `||${controllerId}`;
+          signature = signature + `>> controller >> ${controllerId}`;
         }
       }
+    }
+    return signature;
+  }
+  /** @param {Element} el */
+  _reconcileBindings(el) {
+    const signature = this._generateSignature(el);
+    if (!signature) {
+      this._deleteCachedScopes(el);
+      return;
     }
     if (this._bindingSignatures.get(el) === signature) {
       return;
     }
-    this._downgradeBindings(el);
+    this._deleteCachedScopes(el);
     const scope = effectScope();
     this.flushChanges(() => {
       scope.run(() => {
-        if (text) this._effectText(el);
-        if (attr) this._effectAttributes(el);
-        if (prop) this._effectProperties(el);
+        this._runEffects(el);
       });
     });
     this._bindingScopes.set(el, scope);
     this._bindingSignatures.set(el, signature);
   }
-  /** @param {Element} el */
-  _downgradeBindings(el) {
+  /**
+   * Deletes stored scopes for an element.
+   * @param {Element} el
+   */
+  _deleteCachedScopes(el) {
     const scope = this._bindingScopes.get(el);
     if (scope) {
       scope.stop();
@@ -3092,4 +3128,4 @@ export {
   * @license MIT
   **)
 */
-//# sourceMappingURL=chunk-KRDW3VBQ.js.map
+//# sourceMappingURL=chunk-CNMVXYPG.js.map
