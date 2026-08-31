@@ -7,6 +7,13 @@ import { EffectScheduler } from "./effect-scheduler.js";
 export { Controller };
 
 /**
+ * @typedef {Object} EffectPlugin
+ * @property {string} name
+ * @property {(el: Element) => any} run
+ * @property {(attributeName: string) => boolean} match
+ */
+
+/**
  * @typedef {object} RegistryOptions
  * @property {Element | ShadowRoot} [RegistryOptions.rootElement=document.documentElement]
  */
@@ -300,7 +307,11 @@ export class Application {
 
     this.effectScheduler = new EffectScheduler((fn) => this.flushChanges(fn));
 
+    /**
+     * @type {Map<Element, import("@vue/reactivity").EffectScope>}
+     */
     this._bindingScopes = new Map();
+
     this._formState = new WeakMap();
 
     /**
@@ -322,9 +333,40 @@ export class Application {
       this.updateBindingsForElement(target);
     };
 
+    /**
+     * Object of filters. Filters are used to transform values.
+     */
     this.filters = {};
+
+    /**
+     * @type {EffectPlugin[]}
+     */
+    this._effects = [
+      {
+        name: "__downflow__text",
+        run: (el) => this._effectText(el),
+        match(attributeName) {
+          return Boolean(attributeName.match(/flow-text/));
+        },
+      },
+      {
+        name: "__downflow__properties",
+        run: (el) => this._effectProperties(el),
+        match(attributeName) {
+          return Boolean(attributeName.match(/flow-prop/));
+        },
+      },
+      {
+        name: "__downflow__attributes",
+        run: (el) => this._effectAttributes(el),
+        match(attributeName) {
+          return Boolean(attributeName.match(/flow-attr/));
+        },
+      },
+    ];
   }
 
+  // This function is purposely *not* run as part of an effect.
   /**
    * @param {Element} el
    */
@@ -378,8 +420,12 @@ export class Application {
    * @param {() => void} fn
    */
   flushChanges(fn) {
-    if (this._pauseCount === 0) this.observer?.disconnect();
+    if (this._pauseCount === 0) {
+      this.observer?.disconnect();
+    }
+
     this._pauseCount++;
+
     try {
       fn();
     } finally {
@@ -653,7 +699,7 @@ export class Application {
     }
 
     for (const el of [...this._bindingScopes.keys()]) {
-      this._downgradeBindings(el);
+      this._deleteCachedScopes(el);
     }
 
     this.abortController?.abort("application stopped");
@@ -749,50 +795,36 @@ export class Application {
     const seen = new Set();
 
     this.flushChanges(() => {
-      // Pass 1: walk live tree, upgrade idempotently
+      // Walk the DOM. Find any changes and upgrade / downgrade accordingly.
       this.walkElements(root, (el) => {
         seen.add(el);
         this.updateBindingsForElement(el);
         this._reconcileControllers(el); // desired flow-controller names vs connected
         this._reconcileActions(el); // desired action sources vs listener map
-        this._reconcileBindings(el); // rebind only if text/attr/prop changed
+        this._reconcileBindings(el); // rebind only if a binding changed
       });
 
-      // Pass 2: sweep detached elements
-      let downgradeElements = [];
-      for (const el of this._controllerInstanceMap.keys()) {
+      // Find detached elements
+      for (const el of [...this._controllerInstanceMap.keys()]) {
         if (!seen.has(el)) {
-          downgradeElements.push(el);
-        }
-      }
-      for (const el of downgradeElements) {
-        // Don't fully delete this controller so we can re-use it.
-        this._disconnectElement(el);
-      }
-
-      let removeActions = [];
-      for (const el of this._actionListenerMap.keys()) {
-        if (!seen.has(el)) {
-          removeActions.push(el);
+          // Don't fully delete this controller so we can re-use it.
+          this._disconnectElement(el);
         }
       }
 
-      for (const el of removeActions) {
-        this._removeActionsForElement(el);
-      }
-
-      const downgradeBindings = [];
-      for (const el of this._bindingScopes.keys()) {
+      for (const el of [...this._actionListenerMap.keys()]) {
         if (!seen.has(el)) {
-          downgradeBindings.push(el);
+          this._removeActionsForElement(el);
         }
       }
 
-      for (const el of downgradeBindings) {
-        this._downgradeBindings(el);
+      for (const el of [...this._bindingScopes.keys()]) {
+        if (!seen.has(el)) {
+          this._deleteCachedScopes(el);
+        }
       }
 
-      // Pass 3: targets, after the controller graph is stable
+      // Controllers are stable, time to handle targets
       for (const map of this._controllerInstanceMap.values()) {
         for (const controller of map.values()) {
           if (controller.isConnected) {
@@ -802,6 +834,7 @@ export class Application {
       }
     });
   }
+
   /**
    * @param {Element} el
    */
@@ -902,7 +935,7 @@ export class Application {
   }
 
   /**
-   * Fully destroys the controller — attribute removed or app stopped.
+   * Fully destroys the controller - attribute removed or app stopped.
    * @param {Element} element
    * @param {string} [controllerName]
    */
@@ -1330,46 +1363,56 @@ export class Application {
   }
 
   /**
+   * @param {(...args: any[]) => any} callback
+   */
+  _runEffect(callback) {
+    const runner = effect(callback, {
+      scheduler: () => this.effectScheduler.schedule(runner),
+    });
+  }
+
+  /**
+   * @param {Element} el
+   */
+  _runEffects(el) {
+    this._runEffect(() => {
+      this._effects.forEach((effect) => {
+        effect.run(el);
+      });
+    });
+  }
+
+  /**
    * @param {Element} el
    */
   _effectText(el) {
-    const runner = effect(
-      () => {
-        let text = this.parseTextBinding(el);
+    let text = this.parseTextBinding(el);
 
-        /**
-         * Should only be null if no binding found.
-         */
-        if (text == null) {
-          return;
-        }
+    /**
+     * Should only be null if no binding found.
+     */
+    if (text == null) {
+      return;
+    }
 
-        if (el.textContent !== text) {
-          el.textContent = text;
-        }
-      },
-      { scheduler: () => this.effectScheduler.schedule(runner) },
-    );
+    if (el.textContent !== text) {
+      el.textContent = text;
+    }
   }
 
   /**
    * @param {Element} el
    */
   _effectAttributes(el) {
-    const runner = effect(
-      () => {
-        const attributeText = this.getAttributeBinding(el);
-        if (!attributeText) return;
-        const [attr, key] = attributeText.split(":");
-        const value = this.resolveValue(el, key);
-        if (value == null) {
-          el.removeAttribute(attr);
-          return;
-        }
-        el.setAttribute(attr, String(value));
-      },
-      { scheduler: () => this.effectScheduler.schedule(runner) },
-    );
+    const attributeText = this.getAttributeBinding(el);
+    if (!attributeText) return;
+    const [attr, key] = attributeText.split(":");
+    const value = this.resolveValue(el, key);
+    if (value == null) {
+      el.removeAttribute(attr);
+      return;
+    }
+    el.setAttribute(attr, String(value));
   }
 
   /**
@@ -1425,17 +1468,14 @@ export class Application {
    * @param {Element} el
    */
   _effectProperties(el) {
-    const runner = effect(
-      () => {
-        const propertyText = this.getPropertyBinding(el);
-        if (!propertyText) return;
-        const [prop, key] = propertyText.split(":");
-        const value = this.resolveValue(el, key);
-        // @ts-expect-error
-        el[prop] = value;
-      },
-      { scheduler: () => this.effectScheduler.schedule(runner) },
-    );
+    const propertyText = this.getPropertyBinding(el);
+    if (!propertyText) {
+      return;
+    }
+    const [prop, key] = propertyText.split(":");
+    const value = this.resolveValue(el, key);
+    // @ts-expect-error
+    el[prop] = value;
   }
 
   /**
@@ -1478,23 +1518,29 @@ export class Application {
     return bindings;
   }
 
-  /** @param {Element} el */
-  _reconcileBindings(el) {
-    // TODO: these should be more like "parseTextBindings", "parseAttributeBindings", "parsePropertyBindings", so that we can support things like `@click=""`, `flow-bind:foo`, etc.
-    const text = this.getTextBinding(el) ?? "";
-    const attr = this.getAttributeBinding(el) ?? "";
-    const prop = this.getPropertyBinding(el) ?? "";
-
-    if (!text && !attr && !prop) {
-      if (this._bindingScopes.has(el)) {
-        this._downgradeBindings(el);
+  /**
+   * @param {Element} el
+   */
+  _generateSignature(el) {
+    let signature = "";
+    // not sure if this is the best way to "diff" an element, but this allows custom plugins.
+    for (const attr of el.attributes) {
+      for (const effect of this._effects) {
+        if (effect.match(attr.name)) {
+          if (signature.length > 0) {
+            signature += ">> ";
+          }
+          signature += attr.name + ">> " + attr.value;
+          break;
+        }
       }
-      return;
+    }
+
+    if (signature.length === 0) {
+      return null;
     }
 
     const context = this.getClosestContextString(el) ?? "";
-
-    let signature = `${context}||${text}||${attr}||${prop}`;
 
     // resolve the controller *instance* the string points at in case the underlying controller changes.
     // keywords ($form/$context) don't resolve to a controller, so they stay as a blank stirng.
@@ -1504,9 +1550,21 @@ export class Application {
       if (controller) {
         controllerId = this._idForController(controller).toString();
         if (controllerId) {
-          signature = signature + `||${controllerId}`;
+          signature = signature + `>> controller >> ${controllerId}`;
         }
       }
+    }
+
+    return signature;
+  }
+
+  /** @param {Element} el */
+  _reconcileBindings(el) {
+    const signature = this._generateSignature(el);
+
+    if (!signature) {
+      this._deleteCachedScopes(el);
+      return;
     }
 
     /**
@@ -1516,22 +1574,23 @@ export class Application {
       return;
     }
 
-    this._downgradeBindings(el); // stop the old scope
+    this._deleteCachedScopes(el); // stop the old scope. This doesn't remove anything, this allows us to create a new effect scope to be able to listen for changes.
 
     const scope = effectScope();
     this.flushChanges(() => {
       scope.run(() => {
-        if (text) this._effectText(el);
-        if (attr) this._effectAttributes(el);
-        if (prop) this._effectProperties(el);
+        this._runEffects(el);
       });
     });
     this._bindingScopes.set(el, scope);
     this._bindingSignatures.set(el, signature);
   }
 
-  /** @param {Element} el */
-  _downgradeBindings(el) {
+  /**
+   * Deletes stored scopes for an element.
+   * @param {Element} el
+   */
+  _deleteCachedScopes(el) {
     const scope = this._bindingScopes.get(el);
     if (scope) {
       scope.stop();
