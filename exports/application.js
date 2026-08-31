@@ -795,50 +795,36 @@ export class Application {
     const seen = new Set();
 
     this.flushChanges(() => {
-      // Pass 1: walk live tree, upgrade idempotently
+      // Walk the DOM. Find any changes and upgrade / downgrade accordingly.
       this.walkElements(root, (el) => {
         seen.add(el);
         this.updateBindingsForElement(el);
         this._reconcileControllers(el); // desired flow-controller names vs connected
         this._reconcileActions(el); // desired action sources vs listener map
-        this._reconcileBindings(el); // rebind only if text/attr/prop changed
+        this._reconcileBindings(el); // rebind only if a binding changed
       });
 
-      // Pass 2: sweep detached elements
-      let downgradeElements = [];
-      for (const el of this._controllerInstanceMap.keys()) {
+      // Find detached elements
+      for (const el of [...this._controllerInstanceMap.keys()]) {
         if (!seen.has(el)) {
-          downgradeElements.push(el);
-        }
-      }
-      for (const el of downgradeElements) {
-        // Don't fully delete this controller so we can re-use it.
-        this._disconnectElement(el);
-      }
-
-      let removeActions = [];
-      for (const el of this._actionListenerMap.keys()) {
-        if (!seen.has(el)) {
-          removeActions.push(el);
+          // Don't fully delete this controller so we can re-use it.
+          this._disconnectElement(el);
         }
       }
 
-      for (const el of removeActions) {
-        this._removeActionsForElement(el);
-      }
-
-      const deleteCachedScopes = [];
-      for (const el of this._bindingScopes.keys()) {
+      for (const el of [...this._actionListenerMap.keys()]) {
         if (!seen.has(el)) {
-          deleteCachedScopes.push(el);
+          this._removeActionsForElement(el);
         }
       }
 
-      for (const el of deleteCachedScopes) {
-        this._deleteCachedScopes(el);
+      for (const el of [...this._bindingScopes.keys()]) {
+        if (!seen.has(el)) {
+          this._deleteCachedScopes(el);
+        }
       }
 
-      // Pass 3: targets, after the controller graph is stable
+      // Controllers are stable, time to handle targets
       for (const map of this._controllerInstanceMap.values()) {
         for (const controller of map.values()) {
           if (controller.isConnected) {
@@ -848,6 +834,7 @@ export class Application {
       }
     });
   }
+
   /**
    * @param {Element} el
    */
