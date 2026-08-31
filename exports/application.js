@@ -345,25 +345,25 @@ export class Application {
       {
         name: "__downflow__text",
         run: (el) => this._effectText(el),
-        match (attributeName) {
-          return Boolean(attributeName.match(/flow-text/))
-        }
+        match(attributeName) {
+          return Boolean(attributeName.match(/flow-text/));
+        },
       },
       {
         name: "__downflow__properties",
         run: (el) => this._effectProperties(el),
-        match (attributeName) {
-          return Boolean(attributeName.match(/flow-prop/))
-        }
+        match(attributeName) {
+          return Boolean(attributeName.match(/flow-prop/));
+        },
       },
       {
         name: "__downflow__attributes",
         run: (el) => this._effectAttributes(el),
-        match (attributeName) {
-          return Boolean(attributeName.match(/flow-attr/))
-        }
-      }
-    ]
+        match(attributeName) {
+          return Boolean(attributeName.match(/flow-attr/));
+        },
+      },
+    ];
   }
 
   // This function is purposely *not* run as part of an effect.
@@ -1365,22 +1365,21 @@ export class Application {
   /**
    * @param {(...args: any[]) => any} callback
    */
-  _runEffect (callback) {
-    const runner = effect(
-      callback,
-      { scheduler: () => this.effectScheduler.schedule(runner) },
-    );
+  _runEffect(callback) {
+    const runner = effect(callback, {
+      scheduler: () => this.effectScheduler.schedule(runner),
+    });
   }
 
   /**
    * @param {Element} el
    */
-  _runEffects (el) {
+  _runEffects(el) {
     this._runEffect(() => {
       this._effects.forEach((effect) => {
-        effect.run(el)
-      })
-    })
+        effect.run(el);
+      });
+    });
   }
 
   /**
@@ -1390,8 +1389,8 @@ export class Application {
     let text = this.parseTextBinding(el);
 
     /**
-      * Should only be null if no binding found.
-      */
+     * Should only be null if no binding found.
+     */
     if (text == null) {
       return;
     }
@@ -1470,7 +1469,9 @@ export class Application {
    */
   _effectProperties(el) {
     const propertyText = this.getPropertyBinding(el);
-    if (!propertyText) { return };
+    if (!propertyText) {
+      return;
+    }
     const [prop, key] = propertyText.split(":");
     const value = this.resolveValue(el, key);
     // @ts-expect-error
@@ -1517,27 +1518,26 @@ export class Application {
     return bindings;
   }
 
-
   /**
    * @param {Element} el
    */
-  _generateSignature (el) {
-    let signature = ""
+  _generateSignature(el) {
+    let signature = "";
     // not sure if this is the best way to "diff" an element, but this allows custom plugins.
     for (const attr of el.attributes) {
       for (const effect of this._effects) {
         if (effect.match(attr.name)) {
           if (signature.length > 0) {
-            signature += ">> "
+            signature += ">> ";
           }
-          signature += attr.name + ">> " + attr.value
-          break
+          signature += attr.name + ">> " + attr.value;
+          break;
         }
       }
     }
 
     if (signature.length === 0) {
-      return null
+      return null;
     }
 
     const context = this.getClosestContextString(el) ?? "";
@@ -1555,12 +1555,12 @@ export class Application {
       }
     }
 
-    return signature
+    return signature;
   }
 
   /** @param {Element} el */
   _reconcileBindings(el) {
-    const signature = this._generateSignature(el)
+    const signature = this._generateSignature(el);
 
     if (!signature) {
       this._deleteCachedScopes(el);
@@ -1579,7 +1579,7 @@ export class Application {
     const scope = effectScope();
     this.flushChanges(() => {
       scope.run(() => {
-        this._runEffects(el)
+        this._runEffects(el);
       });
     });
     this._bindingScopes.set(el, scope);
@@ -1587,9 +1587,9 @@ export class Application {
   }
 
   /**
-    * Deletes stored scopes for an element.
-    * @param {Element} el
-    */
+   * Deletes stored scopes for an element.
+   * @param {Element} el
+   */
   _deleteCachedScopes(el) {
     const scope = this._bindingScopes.get(el);
     if (scope) {
