@@ -14255,44 +14255,9 @@ wa-page::part(menu) {
           </li></ol>
     </wa-details></aside>
 
-<footer slot="navigation-footer">
-  <wa-divider did-ssr orientation="horizontal"><template shadowroot="open" shadowrootmode="open"><style>
-  :host {
-    box-sizing: border-box;
-  }
-
-  :host *,
-  :host *::before,
-  :host *::after {
-    box-sizing: inherit;
-  }
-
-  [hidden],
-  :host([hidden]) {
-    display: none !important;
-  }
-
-  :host {
-    --color: var(--wa-color-surface-border);
-    --width: var(--wa-border-width-s);
-    --spacing: var(--wa-space-m);
-  }
-
-  :host(:not([orientation='vertical'])) {
-    display: block;
-    border-top: solid var(--width) var(--color);
-    margin: var(--spacing) 0;
-  }
-
-  :host([orientation='vertical']) {
-    display: inline-block;
-    height: 100%;
-    border-inline-start: solid var(--width) var(--color);
-    margin: 0 var(--spacing);
-    min-block-size: 1lh;
-  }
-</style><!--lit-part--><!--/lit-part--></template></wa-divider>
-  <div style="display: flex; justify-content: center;">
+<footer slot="navigation-footer" style="padding: 0; margin-top: auto; border-top: 2px solid var(--border-color-muted);
+;">
+  <div style="display: flex; justify-content: center; padding: var(--wa-space-m);">
     <a class="icon-link" href="https://github.com/konnorrogers/downflow" target="_blank" style="font-size: 36px;">
       <wa-icon   name="github" family="brands" style="--rotate-angle: 0deg;" did-ssr library="default" rotate="0"><template shadowroot="open" shadowrootmode="open"><style>
   :host {

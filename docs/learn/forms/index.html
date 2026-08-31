@@ -14259,44 +14259,9 @@ wa-page::part(menu) {
           </li></ol>
     </wa-details></aside>
 
-<footer slot="navigation-footer">
-  <wa-divider did-ssr orientation="horizontal"><template shadowroot="open" shadowrootmode="open"><style>
-  :host {
-    box-sizing: border-box;
-  }
-
-  :host *,
-  :host *::before,
-  :host *::after {
-    box-sizing: inherit;
-  }
-
-  [hidden],
-  :host([hidden]) {
-    display: none !important;
-  }
-
-  :host {
-    --color: var(--wa-color-surface-border);
-    --width: var(--wa-border-width-s);
-    --spacing: var(--wa-space-m);
-  }
-
-  :host(:not([orientation='vertical'])) {
-    display: block;
-    border-top: solid var(--width) var(--color);
-    margin: var(--spacing) 0;
-  }
-
-  :host([orientation='vertical']) {
-    display: inline-block;
-    height: 100%;
-    border-inline-start: solid var(--width) var(--color);
-    margin: 0 var(--spacing);
-    min-block-size: 1lh;
-  }
-</style><!--lit-part--><!--/lit-part--></template></wa-divider>
-  <div style="display: flex; justify-content: center;">
+<footer slot="navigation-footer" style="padding: 0; margin-top: auto; border-top: 2px solid var(--border-color-muted);
+;">
+  <div style="display: flex; justify-content: center; padding: var(--wa-space-m);">
     <a class="icon-link" href="https://github.com/konnorrogers/downflow" target="_blank" style="font-size: 36px;">
       <wa-icon   name="github" family="brands" style="--rotate-angle: 0deg;" did-ssr library="default" rotate="0"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
@@ -15191,7 +15156,7 @@ wa-page::part(menu) {
             <div class="code-block-actions">
               <div class="code-block-lang">html</div>
               <div class="code-block-copy">
-                <wa-copy-button  from="code-block-1aa592ad-c05a-49-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
+                <wa-copy-button  from="code-block-c8ae60a9-bfa1-49-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -17915,7 +17880,7 @@ wa-page::part(menu) {
     <!--/lit-part--></template></wa-copy-button>
               </div>
             </div>
-            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-1aa592ad-c05a-49"><code id="code-block-1aa592ad-c05a-49-inner"><span class="line"><span style="color:#81A1C1">&#x3C;form></span></span>
+            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-c8ae60a9-bfa1-49"><code id="code-block-c8ae60a9-bfa1-49-inner"><span class="line"><span style="color:#81A1C1">&#x3C;form></span></span>
 <span class="line"><span style="color:#81A1C1">  &#x3C;label></span></span>
 <span class="line"><span style="color:#81A1C1">    &#x3C;div></span><span style="color:#D8DEE9FF">Give us your name!</span><span style="color:#81A1C1">&#x3C;/div></span></span>
 <span class="line"><span style="color:#81A1C1">    &#x3C;input</span><span style="color:#8FBCBB"> name</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">name</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
@@ -17933,7 +17898,7 @@ wa-page::part(menu) {
             <div class="code-block-actions">
               <div class="code-block-lang">html</div>
               <div class="code-block-copy">
-                <wa-copy-button  from="code-block-775f803f-30d2-45-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
+                <wa-copy-button  from="code-block-1f7bdda4-9a1d-46-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -20657,7 +20622,7 @@ wa-page::part(menu) {
     <!--/lit-part--></template></wa-copy-button>
               </div>
             </div>
-            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-775f803f-30d2-45"><code id="code-block-775f803f-30d2-45-inner"><span class="line"><span style="color:#81A1C1">&#x3C;form</span><span style="color:#8FBCBB"> id</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">my-form</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
+            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-1f7bdda4-9a1d-46"><code id="code-block-1f7bdda4-9a1d-46-inner"><span class="line"><span style="color:#81A1C1">&#x3C;form</span><span style="color:#8FBCBB"> id</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">my-form</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
 <span class="line"><span style="color:#81A1C1">  &#x3C;label></span></span>
 <span class="line"><span style="color:#81A1C1">    &#x3C;div></span><span style="color:#D8DEE9FF">Give us your name!</span><span style="color:#81A1C1">&#x3C;/div></span></span>
 <span class="line"><span style="color:#81A1C1">    &#x3C;input</span><span style="color:#8FBCBB"> name</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">name</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
@@ -20678,7 +20643,7 @@ wa-page::part(menu) {
             <div class="code-block-actions">
               <div class="code-block-lang">html</div>
               <div class="code-block-copy">
-                <wa-copy-button  from="code-block-99b76ecb-cd1a-4e-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
+                <wa-copy-button  from="code-block-c85ea69d-7cc5-4d-inner" did-ssr tooltip-placement="top" tooltip="full"><template shadowroot="open" shadowrootmode="open"><style>
   :host {
     box-sizing: border-box;
   }
@@ -23402,7 +23367,7 @@ wa-page::part(menu) {
     <!--/lit-part--></template></wa-copy-button>
               </div>
             </div>
-            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-99b76ecb-cd1a-4e"><code id="code-block-99b76ecb-cd1a-4e-inner"><span class="line"><span style="color:#81A1C1">&#x3C;form></span></span>
+            <pre class="shiki nord language-html" style="background-color:#2e3440ff;color:#d8dee9ff" tabindex="0" data-lang="html" id="code-block-c85ea69d-7cc5-4d"><code id="code-block-c85ea69d-7cc5-4d-inner"><span class="line"><span style="color:#81A1C1">&#x3C;form></span></span>
 <span class="line"><span style="color:#81A1C1">  &#x3C;input</span><span style="color:#8FBCBB"> name</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">email</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">></span></span>
 <span class="line"><span style="color:#81A1C1">  &#x3C;span></span><span style="color:#D8DEE9FF">Your email is: </span><span style="color:#81A1C1">&#x3C;output</span><span style="color:#8FBCBB"> flow-text</span><span style="color:#ECEFF4">=</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">$form.email</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">>&#x3C;/output>&#x3C;/span></span></span>
 <span class="line"><span style="color:#81A1C1">&#x3C;/form></span></span>

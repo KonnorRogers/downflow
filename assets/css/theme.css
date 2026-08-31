@@ -116,9 +116,22 @@
       padding-top: 0;
     }
 
+    &::part(navigation-desktop) {
+      display: flex;
+      flex-direction: column;
+      grid-template-rows: unset;
+      place-content: start;
+      height: 100%;
+    }
+
     &::part(drawer__header) {
       padding-block-end: var(--wa-space-m);
       border-block-end: 2px solid var(--border-color-muted);
+    }
+
+    &::part(drawer__body) {
+      /* https://github.com/shoelace-style/webawesome/issues/2778 needs to be fixed first */
+      /** overflow: unset;  */
     }
 
     &::part(drawer__footer) {
