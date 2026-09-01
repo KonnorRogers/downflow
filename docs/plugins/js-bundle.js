@@ -1,4 +1,5 @@
 import * as path from "node:path";
+import * as fs from "node:fs";
 import * as url from "node:url";
 import esbuild from "esbuild";
 
@@ -27,16 +28,18 @@ export function jsBundlePlugin(options = {}) {
   const outputPath = options.outputPath || path.join("assets", "bundles");
 
   return function (eleventyConfig) {
+    let criticalCSS = "";
     eleventyConfig.addWatchTarget(path.join(__dirname, "..", "assets", "js"));
+    eleventyConfig.addGlobalData("criticalCSS", () => criticalCSS);
 
-    eleventyConfig.on("eleventy.after", async function ({ directories }) {
+    eleventyConfig.on("eleventy.before", async function ({ directories }) {
       await esbuild.build({
         entryPoints: entryPoints,
         sourcemap: true,
         bundle: true,
         splitting: true,
         format: "esm",
-        target: "es2017",
+        target: "es2020",
         outdir: path.join(directories.output, outputPath),
         loader: {
           '.ttf': 'file',
@@ -46,6 +49,9 @@ export function jsBundlePlugin(options = {}) {
         //   "downflow"
         // ]
       });
+
+      const cssFile = path.join(directories.output, outputPath, "index.css")
+      criticalCSS = fs.readFileSync(cssFile, {encoding: "utf8"})
     });
   };
 }

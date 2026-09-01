@@ -19,9 +19,11 @@
 <style>
   {% include "styles.css" %}
 </style>
+<style id="critical-css">
+  {{ criticalCSS | safe }}
+</style>
 
 <script type="module" src="{{ "/assets/bundles/index.js" | url }}"></script>
-<link rel="stylesheet" href="{{ "/assets/bundles/index.css" | url }}">
 <link rel="stylesheet" href="{{ "/assets/bundles/fonts.css" | url }}" media="print" onload="this.media='all'">
 
 {% include "color-switcher-js.njk" %}
