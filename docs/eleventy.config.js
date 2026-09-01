@@ -203,7 +203,7 @@ export default async function (eleventyConfig) {
   });
 
 	eleventyConfig.addPreprocessor("macro-inject", ".njk,.md,.html", (data, content) => {
-		return `{%- from "macros.njk" import frame -%}\n` + content;
+		return `{%- from "macros.njk" import frame with context -%}\n` + content;
 	});
 
 
