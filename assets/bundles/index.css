@@ -2985,7 +2985,7 @@
     &.wa-dark {
       --wa-color-surface-default: #0B1523;
     }
-    font-size: 120%;
+    font-size: 100%;
     --border-width: 4px;
     --border-color: var(--wa-color-surface-border);
     --border-color-muted: light-dark(var(--wa-color-neutral-90), var(--wa-color-neutral-20));

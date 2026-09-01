@@ -3113,7 +3113,7 @@ wa-page::part(menu) {
     &.wa-dark {
       --wa-color-surface-default: #0B1523;
     }
-    font-size: 120%;
+    font-size: 100%;
     --border-width: 4px;
     --border-color: var(--wa-color-surface-border);
     --border-color-muted: light-dark(var(--wa-color-neutral-90), var(--wa-color-neutral-20));
@@ -18740,8 +18740,12 @@ wa-page::part(menu) {
     height="256"
     src="/downflow/assets/images/water-dude.png"
     alt="pixel art image of a water droplet"
-    style="width: auto; margin: 0 auto; margin-top: var(--wa-space-xl);"
+    style="
+      height: 256px; width: 256px;
+      margin: 0 auto; margin-top: var(--wa-space-xl);
+    "
     fetchpriority="high"
+    style=""
   >
   <h1 style="margin-top: 0;">Let your state <mark class="emphasis">flow</mark></h1>
   <p class="wa-font-size-xl">Reactive DOM updates that don't drive a steamroller through your DOM.</p>
