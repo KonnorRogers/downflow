@@ -1,2 +1,2 @@
-import "./chunk-UKNFP365.js";
+import "./chunk-RR3RQRRX.js";
 //# sourceMappingURL=fonts.js.map

@@ -1,14 +1,10 @@
 import {
   Application,
   Controller
-} from "./chunk-CNMVXYPG.js";
+} from "./chunk-IKX6TAZV.js";
 import {
-  __objRest,
-  __publicField,
-  __spreadProps,
-  __spreadValues,
-  __yieldStar
-} from "./chunk-UKNFP365.js";
+  __publicField
+} from "./chunk-RR3RQRRX.js";
 
 // docs/assets/js/scroll_spy_controller.js
 var ScrollSpyController = class extends Controller {
@@ -96,7 +92,7 @@ var l = document;
 var c = () => l.createComment("");
 var a = (t6) => null === t6 || "object" != typeof t6 && "function" != typeof t6;
 var u = Array.isArray;
-var d = (t6) => u(t6) || "function" == typeof (t6 == null ? void 0 : t6[Symbol.iterator]);
+var d = (t6) => u(t6) || "function" == typeof t6?.[Symbol.iterator];
 var f = "[ 	\n\f\r]";
 var v = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g;
 var _ = /-->/g;
@@ -124,7 +120,7 @@ var N = (t6, i9) => {
   for (let i10 = 0; i10 < s5; i10++) {
     const s6 = t6[i10];
     let a4, u5, d5 = -1, f4 = 0;
-    for (; f4 < s6.length && (c6.lastIndex = f4, u5 = c6.exec(s6), null !== u5); ) f4 = c6.lastIndex, c6 === v ? "!--" === u5[1] ? c6 = _ : void 0 !== u5[1] ? c6 = m : void 0 !== u5[2] ? (y.test(u5[2]) && (n7 = RegExp("</" + u5[2], "g")), c6 = p) : void 0 !== u5[3] && (c6 = p) : c6 === p ? ">" === u5[0] ? (c6 = n7 != null ? n7 : v, d5 = -1) : void 0 === u5[1] ? d5 = -2 : (d5 = c6.lastIndex - u5[2].length, a4 = u5[1], c6 = void 0 === u5[3] ? p : '"' === u5[3] ? $ : g) : c6 === $ || c6 === g ? c6 = p : c6 === _ || c6 === m ? c6 = v : (c6 = p, n7 = void 0);
+    for (; f4 < s6.length && (c6.lastIndex = f4, u5 = c6.exec(s6), null !== u5); ) f4 = c6.lastIndex, c6 === v ? "!--" === u5[1] ? c6 = _ : void 0 !== u5[1] ? c6 = m : void 0 !== u5[2] ? (y.test(u5[2]) && (n7 = RegExp("</" + u5[2], "g")), c6 = p) : void 0 !== u5[3] && (c6 = p) : c6 === p ? ">" === u5[0] ? (c6 = n7 ?? v, d5 = -1) : void 0 === u5[1] ? d5 = -2 : (d5 = c6.lastIndex - u5[2].length, a4 = u5[1], c6 = void 0 === u5[3] ? p : '"' === u5[3] ? $ : g) : c6 === $ || c6 === g ? c6 = p : c6 === _ || c6 === m ? c6 = v : (c6 = p, n7 = void 0);
     const x2 = c6 === p && t6[i10 + 1].startsWith("/>") ? " " : "";
     l7 += c6 === v ? s6 + r : d5 >= 0 ? (e10.push(a4), s6.slice(0, d5) + h + s6.slice(d5) + o + x2) : s6 + o + (-2 === d5 ? i10 : x2);
   }
@@ -168,11 +164,10 @@ var S = class _S {
   }
 };
 function M(t6, i9, s5 = t6, e10) {
-  var _a16, _b2, _c;
   if (i9 === E) return i9;
-  let h4 = void 0 !== e10 ? (_a16 = s5._$Co) == null ? void 0 : _a16[e10] : s5._$Cl;
+  let h4 = void 0 !== e10 ? s5._$Co?.[e10] : s5._$Cl;
   const o10 = a(i9) ? void 0 : i9._$litDirective$;
-  return (h4 == null ? void 0 : h4.constructor) !== o10 && ((_b2 = h4 == null ? void 0 : h4._$AO) == null ? void 0 : _b2.call(h4, false), void 0 === o10 ? h4 = void 0 : (h4 = new o10(t6), h4._$AT(t6, s5, e10)), void 0 !== e10 ? ((_c = s5._$Co) != null ? _c : s5._$Co = [])[e10] = h4 : s5._$Cl = h4), void 0 !== h4 && (i9 = M(t6, h4._$AS(t6, i9.values), h4, e10)), i9;
+  return h4?.constructor !== o10 && (h4?._$AO?.(false), void 0 === o10 ? h4 = void 0 : (h4 = new o10(t6), h4._$AT(t6, s5, e10)), void 0 !== e10 ? (s5._$Co ?? (s5._$Co = []))[e10] = h4 : s5._$Cl = h4), void 0 !== h4 && (i9 = M(t6, h4._$AS(t6, i9.values), h4, e10)), i9;
 }
 var R = class {
   constructor(t6, i9) {
@@ -185,8 +180,7 @@ var R = class {
     return this._$AM._$AU;
   }
   u(t6) {
-    var _a16;
-    const { el: { content: i9 }, parts: s5 } = this._$AD, e10 = ((_a16 = t6 == null ? void 0 : t6.creationScope) != null ? _a16 : l).importNode(i9, true);
+    const { el: { content: i9 }, parts: s5 } = this._$AD, e10 = (t6?.creationScope ?? l).importNode(i9, true);
     P.currentNode = e10;
     let h4 = P.nextNode(), o10 = 0, n7 = 0, r9 = s5[0];
     for (; void 0 !== r9; ) {
@@ -194,7 +188,7 @@ var R = class {
         let i10;
         2 === r9.type ? i10 = new k(h4, h4.nextSibling, this, t6) : 1 === r9.type ? i10 = new r9.ctor(h4, r9.name, r9.strings, this, t6) : 6 === r9.type && (i10 = new Z(h4, this, t6)), this._$AV.push(i10), r9 = s5[++n7];
       }
-      o10 !== (r9 == null ? void 0 : r9.index) && (h4 = P.nextNode(), o10++);
+      o10 !== r9?.index && (h4 = P.nextNode(), o10++);
     }
     return P.currentNode = l, e10;
   }
@@ -205,17 +199,15 @@ var R = class {
 };
 var k = class _k {
   get _$AU() {
-    var _a16, _b2;
-    return (_b2 = (_a16 = this._$AM) == null ? void 0 : _a16._$AU) != null ? _b2 : this._$Cv;
+    return this._$AM?._$AU ?? this._$Cv;
   }
   constructor(t6, i9, s5, e10) {
-    var _a16;
-    this.type = 2, this._$AH = A, this._$AN = void 0, this._$AA = t6, this._$AB = i9, this._$AM = s5, this.options = e10, this._$Cv = (_a16 = e10 == null ? void 0 : e10.isConnected) != null ? _a16 : true;
+    this.type = 2, this._$AH = A, this._$AN = void 0, this._$AA = t6, this._$AB = i9, this._$AM = s5, this.options = e10, this._$Cv = e10?.isConnected ?? true;
   }
   get parentNode() {
     let t6 = this._$AA.parentNode;
     const i9 = this._$AM;
-    return void 0 !== i9 && 11 === (t6 == null ? void 0 : t6.nodeType) && (t6 = i9.parentNode), t6;
+    return void 0 !== i9 && 11 === t6?.nodeType && (t6 = i9.parentNode), t6;
   }
   get startNode() {
     return this._$AA;
@@ -236,9 +228,8 @@ var k = class _k {
     this._$AH !== A && a(this._$AH) ? this._$AA.nextSibling.data = t6 : this.T(l.createTextNode(t6)), this._$AH = t6;
   }
   $(t6) {
-    var _a16;
     const { values: i9, _$litType$: s5 } = t6, e10 = "number" == typeof s5 ? this._$AC(t6) : (void 0 === s5.el && (s5.el = S.createElement(V(s5.h, s5.h[0]), this.options)), s5);
-    if (((_a16 = this._$AH) == null ? void 0 : _a16._$AD) === e10) this._$AH.p(i9);
+    if (this._$AH?._$AD === e10) this._$AH.p(i9);
     else {
       const t7 = new R(e10, this), s6 = t7.u(this.options);
       t7.p(i9), this.T(s6), this._$AH = t7;
@@ -256,15 +247,13 @@ var k = class _k {
     e10 < i9.length && (this._$AR(s5 && s5._$AB.nextSibling, e10), i9.length = e10);
   }
   _$AR(t6 = this._$AA.nextSibling, s5) {
-    var _a16;
-    for ((_a16 = this._$AP) == null ? void 0 : _a16.call(this, false, true, s5); t6 !== this._$AB; ) {
+    for (this._$AP?.(false, true, s5); t6 !== this._$AB; ) {
       const s6 = i(t6).nextSibling;
       i(t6).remove(), t6 = s6;
     }
   }
   setConnected(t6) {
-    var _a16;
-    void 0 === this._$AM && (this._$Cv = t6, (_a16 = this._$AP) == null ? void 0 : _a16.call(this, t6));
+    void 0 === this._$AM && (this._$Cv = t6, this._$AP?.(t6));
   }
 };
 var H = class {
@@ -284,12 +273,12 @@ var H = class {
     else {
       const e11 = t6;
       let n7, r9;
-      for (t6 = h4[0], n7 = 0; n7 < h4.length - 1; n7++) r9 = M(this, e11[s5 + n7], i9, n7), r9 === E && (r9 = this._$AH[n7]), o10 || (o10 = !a(r9) || r9 !== this._$AH[n7]), r9 === A ? t6 = A : t6 !== A && (t6 += (r9 != null ? r9 : "") + h4[n7 + 1]), this._$AH[n7] = r9;
+      for (t6 = h4[0], n7 = 0; n7 < h4.length - 1; n7++) r9 = M(this, e11[s5 + n7], i9, n7), r9 === E && (r9 = this._$AH[n7]), o10 || (o10 = !a(r9) || r9 !== this._$AH[n7]), r9 === A ? t6 = A : t6 !== A && (t6 += (r9 ?? "") + h4[n7 + 1]), this._$AH[n7] = r9;
     }
     o10 && !e10 && this.j(t6);
   }
   j(t6) {
-    t6 === A ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, t6 != null ? t6 : "");
+    t6 === A ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, t6 ?? "");
   }
 };
 var I = class extends H {
@@ -313,14 +302,12 @@ var z = class extends H {
     super(t6, i9, s5, e10, h4), this.type = 5;
   }
   _$AI(t6, i9 = this) {
-    var _a16;
-    if ((t6 = (_a16 = M(this, t6, i9, 0)) != null ? _a16 : A) === E) return;
+    if ((t6 = M(this, t6, i9, 0) ?? A) === E) return;
     const s5 = this._$AH, e10 = t6 === A && s5 !== A || t6.capture !== s5.capture || t6.once !== s5.once || t6.passive !== s5.passive, h4 = t6 !== A && (s5 === A || e10);
     e10 && this.element.removeEventListener(this.name, this, s5), h4 && this.element.addEventListener(this.name, this, t6), this._$AH = t6;
   }
   handleEvent(t6) {
-    var _a16, _b2;
-    "function" == typeof this._$AH ? this._$AH.call((_b2 = (_a16 = this.options) == null ? void 0 : _a16.host) != null ? _b2 : this.element, t6) : this._$AH.handleEvent(t6);
+    "function" == typeof this._$AH ? this._$AH.call(this.options?.host ?? this.element, t6) : this._$AH.handleEvent(t6);
   }
 };
 var Z = class {
@@ -336,15 +323,13 @@ var Z = class {
 };
 var j = { M: h, P: o, A: n, C: 1, L: N, R, D: d, V: M, I: k, H, N: L, U: z, B: I, F: Z };
 var B = t.litHtmlPolyfillSupport;
-var _a;
-B == null ? void 0 : B(S, k), ((_a = t.litHtmlVersions) != null ? _a : t.litHtmlVersions = []).push("3.3.3");
+B?.(S, k), (t.litHtmlVersions ?? (t.litHtmlVersions = [])).push("3.3.3");
 var D = (t6, i9, s5) => {
-  var _a16, _b2;
-  const e10 = (_a16 = s5 == null ? void 0 : s5.renderBefore) != null ? _a16 : i9;
+  const e10 = s5?.renderBefore ?? i9;
   let h4 = e10._$litPart$;
   if (void 0 === h4) {
-    const t7 = (_b2 = s5 == null ? void 0 : s5.renderBefore) != null ? _b2 : null;
-    e10._$litPart$ = h4 = new k(i9.insertBefore(c(), t7), t7, void 0, s5 != null ? s5 : {});
+    const t7 = s5?.renderBefore ?? null;
+    e10._$litPart$ = h4 = new k(i9.insertBefore(c(), t7), t7, void 0, s5 ?? {});
   }
   return h4._$AI(t6), h4;
 };
@@ -357,7 +342,7 @@ var i2 = { boundAttributeSuffix: j.M, marker: j.P, markerMatch: j.A, HTML_RESULT
   }
 }, patchDirectiveResolve: (e10, t6) => {
   if (e10.prototype._$AS.name !== t6.name) {
-    r2 != null ? r2 : r2 = e10.prototype._$AS.name;
+    r2 ?? (r2 = e10.prototype._$AS.name);
     for (let i9 = e10.prototype; i9 !== Object.prototype; i9 = Object.getPrototypeOf(i9)) if (i9.hasOwnProperty(r2)) return void (i9[r2] = t6);
     throw Error("Internal error: It is possible that both dev mode and production mode Lit was mixed together during SSR. Please comment on the issue: https://github.com/lit/lit/issues/4527");
   }
@@ -366,7 +351,7 @@ var i2 = { boundAttributeSuffix: j.M, marker: j.P, markerMatch: j.A, HTML_RESULT
 }, getAttributePartCommittedValue: (e10, r9, i9) => {
   let o10 = E;
   return e10.j = (e11) => o10 = e11, e10._$AI(r9, e10, i9), o10;
-}, connectedDisconnectable: (e10) => __spreadProps(__spreadValues({}, e10), { _$AU: true }), resolveDirective: j.V, AttributePart: j.H, PropertyPart: j.B, BooleanAttributePart: j.N, EventPart: j.U, ElementPart: j.F, TemplateInstance: j.R, isIterable: j.D, ChildPart: j.I };
+}, connectedDisconnectable: (e10) => ({ ...e10, _$AU: true }), resolveDirective: j.V, AttributePart: j.H, PropertyPart: j.B, BooleanAttributePart: j.N, EventPart: j.U, ElementPart: j.F, TemplateInstance: j.R, isIterable: j.D, ChildPart: j.I };
 
 // node_modules/lit-html/directive.js
 var t2 = { ATTRIBUTE: 1, CHILD: 2, PROPERTY: 3, BOOLEAN_ATTRIBUTE: 4, EVENT: 5, ELEMENT: 6 };
@@ -391,11 +376,8 @@ var i3 = class {
 // node_modules/lit-html/directive-helpers.js
 var { I: t3 } = j;
 var n2 = (o10) => null === o10 || "object" != typeof o10 && "function" != typeof o10;
-var l2 = (o10, t6) => void 0 === t6 ? void 0 !== (o10 == null ? void 0 : o10._$litType$) : (o10 == null ? void 0 : o10._$litType$) === t6;
-var d2 = (o10) => {
-  var _a16;
-  return null != ((_a16 = o10 == null ? void 0 : o10._$litType$) == null ? void 0 : _a16.h);
-};
+var l2 = (o10, t6) => void 0 === t6 ? void 0 !== o10?._$litType$ : o10?._$litType$ === t6;
+var d2 = (o10) => null != o10?._$litType$?.h;
 var r3 = (o10) => void 0 === o10.strings;
 var m2 = {};
 var p2 = (o10, t6 = m2) => o10._$AH = t6;
@@ -411,7 +393,7 @@ var f2 = (e10, t6, r9 = {}) => {
     const t7 = s5.data;
     if (t7.startsWith("lit-part")) {
       if (0 === a4.length && void 0 !== n7) throw Error(`There must be only one root part per container. Found a part marker (${s5}) when we already have a root part marker (${o10})`);
-      i9 = m3(e10, s5, a4, r9), void 0 === n7 && (n7 = i9), o10 != null ? o10 : o10 = s5;
+      i9 = m3(e10, s5, a4, r9), void 0 === n7 && (n7 = i9), o10 ?? (o10 = s5);
     } else if (t7.startsWith("lit-node")) h2(s5, a4, r9);
     else if (t7.startsWith("/lit-part")) {
       if (1 === a4.length && i9 !== n7) throw Error("internal error");
@@ -447,7 +429,7 @@ var m3 = (t6, r9, a4, p5) => {
       const e11 = c2.prototype._$AC(f4), t7 = new l3(e11, m4);
       a4.push({ type: "template-instance", instance: t7, part: m4, templatePartIndex: 0, instancePartIndex: 0, result: f4 }), m4._$AH = t7;
     }
-  } else s2(f4) ? (a4.push({ part: m4, type: "iterable", value: f4, iterator: f4[Symbol.iterator](), done: false }), m4._$AH = []) : (a4.push({ part: m4, type: "leaf" }), m4._$AH = f4 != null ? f4 : "");
+  } else s2(f4) ? (a4.push({ part: m4, type: "iterable", value: f4, iterator: f4[Symbol.iterator](), done: false }), m4._$AH = []) : (a4.push({ part: m4, type: "leaf" }), m4._$AH = f4 ?? "");
   return m4;
 };
 var u2 = (e10, t6, r9) => {
@@ -672,12 +654,10 @@ var u3 = { toAttribute(t6, s5) {
 } };
 var f3 = (t6, s5) => !i5(t6, s5);
 var b2 = { attribute: true, type: String, converter: u3, reflect: false, useDefault: false, hasChanged: f3 };
-var _a2, _b;
-(_a2 = Symbol.metadata) != null ? _a2 : Symbol.metadata = Symbol("metadata"), (_b = a2.litPropertyMetadata) != null ? _b : a2.litPropertyMetadata = /* @__PURE__ */ new WeakMap();
+Symbol.metadata ?? (Symbol.metadata = Symbol("metadata")), a2.litPropertyMetadata ?? (a2.litPropertyMetadata = /* @__PURE__ */ new WeakMap());
 var y2 = class extends HTMLElement {
   static addInitializer(t6) {
-    var _a16;
-    this._$Ei(), ((_a16 = this.l) != null ? _a16 : this.l = []).push(t6);
+    this._$Ei(), (this.l ?? (this.l = [])).push(t6);
   }
   static get observedAttributes() {
     return this.finalize(), this._$Eh && [...this._$Eh.keys()];
@@ -689,20 +669,18 @@ var y2 = class extends HTMLElement {
     }
   }
   static getPropertyDescriptor(t6, s5, i9) {
-    var _a16;
-    const { get: e10, set: r9 } = (_a16 = h3(this.prototype, t6)) != null ? _a16 : { get() {
+    const { get: e10, set: r9 } = h3(this.prototype, t6) ?? { get() {
       return this[s5];
     }, set(t7) {
       this[s5] = t7;
     } };
     return { get: e10, set(s6) {
-      const h4 = e10 == null ? void 0 : e10.call(this);
-      r9 == null ? void 0 : r9.call(this, s6), this.requestUpdate(t6, h4, i9);
+      const h4 = e10?.call(this);
+      r9?.call(this, s6), this.requestUpdate(t6, h4, i9);
     }, configurable: true, enumerable: true };
   }
   static getPropertyOptions(t6) {
-    var _a16;
-    return (_a16 = this.elementProperties.get(t6)) != null ? _a16 : b2;
+    return this.elementProperties.get(t6) ?? b2;
   }
   static _$Ei() {
     if (this.hasOwnProperty(d4("elementProperties"))) return;
@@ -743,16 +721,13 @@ var y2 = class extends HTMLElement {
     super(), this._$Ep = void 0, this.isUpdatePending = false, this.hasUpdated = false, this._$Em = null, this._$Ev();
   }
   _$Ev() {
-    var _a16;
-    this._$ES = new Promise((t6) => this.enableUpdating = t6), this._$AL = /* @__PURE__ */ new Map(), this._$E_(), this.requestUpdate(), (_a16 = this.constructor.l) == null ? void 0 : _a16.forEach((t6) => t6(this));
+    this._$ES = new Promise((t6) => this.enableUpdating = t6), this._$AL = /* @__PURE__ */ new Map(), this._$E_(), this.requestUpdate(), this.constructor.l?.forEach((t6) => t6(this));
   }
   addController(t6) {
-    var _a16, _b2;
-    ((_a16 = this._$EO) != null ? _a16 : this._$EO = /* @__PURE__ */ new Set()).add(t6), void 0 !== this.renderRoot && this.isConnected && ((_b2 = t6.hostConnected) == null ? void 0 : _b2.call(t6));
+    (this._$EO ?? (this._$EO = /* @__PURE__ */ new Set())).add(t6), void 0 !== this.renderRoot && this.isConnected && t6.hostConnected?.();
   }
   removeController(t6) {
-    var _a16;
-    (_a16 = this._$EO) == null ? void 0 : _a16.delete(t6);
+    this._$EO?.delete(t6);
   }
   _$E_() {
     const t6 = /* @__PURE__ */ new Map(), s5 = this.constructor.elementProperties;
@@ -760,59 +735,46 @@ var y2 = class extends HTMLElement {
     t6.size > 0 && (this._$Ep = t6);
   }
   createRenderRoot() {
-    var _a16;
-    const t6 = (_a16 = this.shadowRoot) != null ? _a16 : this.attachShadow(this.constructor.shadowRootOptions);
+    const t6 = this.shadowRoot ?? this.attachShadow(this.constructor.shadowRootOptions);
     return S2(t6, this.constructor.elementStyles), t6;
   }
   connectedCallback() {
-    var _a16, _b2;
-    (_a16 = this.renderRoot) != null ? _a16 : this.renderRoot = this.createRenderRoot(), this.enableUpdating(true), (_b2 = this._$EO) == null ? void 0 : _b2.forEach((t6) => {
-      var _a17;
-      return (_a17 = t6.hostConnected) == null ? void 0 : _a17.call(t6);
-    });
+    this.renderRoot ?? (this.renderRoot = this.createRenderRoot()), this.enableUpdating(true), this._$EO?.forEach((t6) => t6.hostConnected?.());
   }
   enableUpdating(t6) {
   }
   disconnectedCallback() {
-    var _a16;
-    (_a16 = this._$EO) == null ? void 0 : _a16.forEach((t6) => {
-      var _a17;
-      return (_a17 = t6.hostDisconnected) == null ? void 0 : _a17.call(t6);
-    });
+    this._$EO?.forEach((t6) => t6.hostDisconnected?.());
   }
   attributeChangedCallback(t6, s5, i9) {
     this._$AK(t6, i9);
   }
   _$ET(t6, s5) {
-    var _a16;
     const i9 = this.constructor.elementProperties.get(t6), e10 = this.constructor._$Eu(t6, i9);
     if (void 0 !== e10 && true === i9.reflect) {
-      const h4 = (void 0 !== ((_a16 = i9.converter) == null ? void 0 : _a16.toAttribute) ? i9.converter : u3).toAttribute(s5, i9.type);
+      const h4 = (void 0 !== i9.converter?.toAttribute ? i9.converter : u3).toAttribute(s5, i9.type);
       this._$Em = t6, null == h4 ? this.removeAttribute(e10) : this.setAttribute(e10, h4), this._$Em = null;
     }
   }
   _$AK(t6, s5) {
-    var _a16, _b2, _c;
     const i9 = this.constructor, e10 = i9._$Eh.get(t6);
     if (void 0 !== e10 && this._$Em !== e10) {
-      const t7 = i9.getPropertyOptions(e10), h4 = "function" == typeof t7.converter ? { fromAttribute: t7.converter } : void 0 !== ((_a16 = t7.converter) == null ? void 0 : _a16.fromAttribute) ? t7.converter : u3;
+      const t7 = i9.getPropertyOptions(e10), h4 = "function" == typeof t7.converter ? { fromAttribute: t7.converter } : void 0 !== t7.converter?.fromAttribute ? t7.converter : u3;
       this._$Em = e10;
       const r9 = h4.fromAttribute(s5, t7.type);
-      this[e10] = (_c = r9 != null ? r9 : (_b2 = this._$Ej) == null ? void 0 : _b2.get(e10)) != null ? _c : r9, this._$Em = null;
+      this[e10] = r9 ?? this._$Ej?.get(e10) ?? r9, this._$Em = null;
     }
   }
   requestUpdate(t6, s5, i9, e10 = false, h4) {
-    var _a16, _b2;
     if (void 0 !== t6) {
       const r9 = this.constructor;
-      if (false === e10 && (h4 = this[t6]), i9 != null ? i9 : i9 = r9.getPropertyOptions(t6), !(((_a16 = i9.hasChanged) != null ? _a16 : f3)(h4, s5) || i9.useDefault && i9.reflect && h4 === ((_b2 = this._$Ej) == null ? void 0 : _b2.get(t6)) && !this.hasAttribute(r9._$Eu(t6, i9)))) return;
+      if (false === e10 && (h4 = this[t6]), i9 ?? (i9 = r9.getPropertyOptions(t6)), !((i9.hasChanged ?? f3)(h4, s5) || i9.useDefault && i9.reflect && h4 === this._$Ej?.get(t6) && !this.hasAttribute(r9._$Eu(t6, i9)))) return;
       this.C(t6, s5, i9);
     }
     false === this.isUpdatePending && (this._$ES = this._$EP());
   }
   C(t6, s5, { useDefault: i9, reflect: e10, wrapped: h4 }, r9) {
-    var _a16, _b2, _c;
-    i9 && !((_a16 = this._$Ej) != null ? _a16 : this._$Ej = /* @__PURE__ */ new Map()).has(t6) && (this._$Ej.set(t6, (_b2 = r9 != null ? r9 : s5) != null ? _b2 : this[t6]), true !== h4 || void 0 !== r9) || (this._$AL.has(t6) || (this.hasUpdated || i9 || (s5 = void 0), this._$AL.set(t6, s5)), true === e10 && this._$Em !== t6 && ((_c = this._$Eq) != null ? _c : this._$Eq = /* @__PURE__ */ new Set()).add(t6));
+    i9 && !(this._$Ej ?? (this._$Ej = /* @__PURE__ */ new Map())).has(t6) && (this._$Ej.set(t6, r9 ?? s5 ?? this[t6]), true !== h4 || void 0 !== r9) || (this._$AL.has(t6) || (this.hasUpdated || i9 || (s5 = void 0), this._$AL.set(t6, s5)), true === e10 && this._$Em !== t6 && (this._$Eq ?? (this._$Eq = /* @__PURE__ */ new Set())).add(t6));
   }
   async _$EP() {
     this.isUpdatePending = true;
@@ -828,10 +790,9 @@ var y2 = class extends HTMLElement {
     return this.performUpdate();
   }
   performUpdate() {
-    var _a16, _b2;
     if (!this.isUpdatePending) return;
     if (!this.hasUpdated) {
-      if ((_a16 = this.renderRoot) != null ? _a16 : this.renderRoot = this.createRenderRoot(), this._$Ep) {
+      if (this.renderRoot ?? (this.renderRoot = this.createRenderRoot()), this._$Ep) {
         for (const [t8, s6] of this._$Ep) this[t8] = s6;
         this._$Ep = void 0;
       }
@@ -844,10 +805,7 @@ var y2 = class extends HTMLElement {
     let t6 = false;
     const s5 = this._$AL;
     try {
-      t6 = this.shouldUpdate(s5), t6 ? (this.willUpdate(s5), (_b2 = this._$EO) == null ? void 0 : _b2.forEach((t7) => {
-        var _a17;
-        return (_a17 = t7.hostUpdate) == null ? void 0 : _a17.call(t7);
-      }), this.update(s5)) : this._$EM();
+      t6 = this.shouldUpdate(s5), t6 ? (this.willUpdate(s5), this._$EO?.forEach((t7) => t7.hostUpdate?.()), this.update(s5)) : this._$EM();
     } catch (s6) {
       throw t6 = false, this._$EM(), s6;
     }
@@ -856,11 +814,7 @@ var y2 = class extends HTMLElement {
   willUpdate(t6) {
   }
   _$AE(t6) {
-    var _a16;
-    (_a16 = this._$EO) == null ? void 0 : _a16.forEach((t7) => {
-      var _a17;
-      return (_a17 = t7.hostUpdated) == null ? void 0 : _a17.call(t7);
-    }), this.hasUpdated || (this.hasUpdated = true, this.firstUpdated(t6)), this.updated(t6);
+    this._$EO?.forEach((t7) => t7.hostUpdated?.()), this.hasUpdated || (this.hasUpdated = true, this.firstUpdated(t6)), this.updated(t6);
   }
   _$EM() {
     this._$AL = /* @__PURE__ */ new Map(), this.isUpdatePending = false;
@@ -882,8 +836,7 @@ var y2 = class extends HTMLElement {
   firstUpdated(t6) {
   }
 };
-var _a3;
-y2.elementStyles = [], y2.shadowRootOptions = { mode: "open" }, y2[d4("elementProperties")] = /* @__PURE__ */ new Map(), y2[d4("finalized")] = /* @__PURE__ */ new Map(), p4 == null ? void 0 : p4({ ReactiveElement: y2 }), ((_a3 = a2.reactiveElementVersions) != null ? _a3 : a2.reactiveElementVersions = []).push("2.1.2");
+y2.elementStyles = [], y2.shadowRootOptions = { mode: "open" }, y2[d4("elementProperties")] = /* @__PURE__ */ new Map(), y2[d4("finalized")] = /* @__PURE__ */ new Map(), p4?.({ ReactiveElement: y2 }), (a2.reactiveElementVersions ?? (a2.reactiveElementVersions = [])).push("2.1.2");
 
 // node_modules/lit-element/lit-element.js
 var s4 = globalThis;
@@ -892,32 +845,28 @@ var i6 = class extends y2 {
     super(...arguments), this.renderOptions = { host: this }, this._$Do = void 0;
   }
   createRenderRoot() {
-    var _a16, _b2;
+    var _a;
     const t6 = super.createRenderRoot();
-    return (_b2 = (_a16 = this.renderOptions).renderBefore) != null ? _b2 : _a16.renderBefore = t6.firstChild, t6;
+    return (_a = this.renderOptions).renderBefore ?? (_a.renderBefore = t6.firstChild), t6;
   }
   update(t6) {
     const r9 = this.render();
     this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(t6), this._$Do = D(r9, this.renderRoot, this.renderOptions);
   }
   connectedCallback() {
-    var _a16;
-    super.connectedCallback(), (_a16 = this._$Do) == null ? void 0 : _a16.setConnected(true);
+    super.connectedCallback(), this._$Do?.setConnected(true);
   }
   disconnectedCallback() {
-    var _a16;
-    super.disconnectedCallback(), (_a16 = this._$Do) == null ? void 0 : _a16.setConnected(false);
+    super.disconnectedCallback(), this._$Do?.setConnected(false);
   }
   render() {
     return E;
   }
 };
-var _a4;
-i6._$litElement$ = true, i6["finalized"] = true, (_a4 = s4.litElementHydrateSupport) == null ? void 0 : _a4.call(s4, { LitElement: i6 });
+i6._$litElement$ = true, i6["finalized"] = true, s4.litElementHydrateSupport?.({ LitElement: i6 });
 var o4 = s4.litElementPolyfillSupport;
-o4 == null ? void 0 : o4({ LitElement: i6 });
-var _a5;
-((_a5 = s4.litElementVersions) != null ? _a5 : s4.litElementVersions = []).push("4.2.2");
+o4?.({ LitElement: i6 });
+(s4.litElementVersions ?? (s4.litElementVersions = [])).push("4.2.2");
 
 // node_modules/lit-html/is-server.js
 var o5 = false;
@@ -961,7 +910,7 @@ function n5(t6) {
 
 // node_modules/@lit/reactive-element/decorators/state.js
 function r7(r9) {
-  return n5(__spreadProps(__spreadValues({}, r9), { state: true, attribute: false }));
+  return n5({ ...r9, state: true, attribute: false });
 }
 
 // node_modules/@lit/reactive-element/decorators/base.js
@@ -970,12 +919,9 @@ var e5 = (e10, t6, c6) => (c6.configurable = true, c6.enumerable = true, Reflect
 // node_modules/@lit/reactive-element/decorators/query.js
 function e6(e10, r9) {
   return (n7, s5, i9) => {
-    const o10 = (t6) => {
-      var _a16, _b2;
-      return (_b2 = (_a16 = t6.renderRoot) == null ? void 0 : _a16.querySelector(e10)) != null ? _b2 : null;
-    };
+    const o10 = (t6) => t6.renderRoot?.querySelector(e10) ?? null;
     if (r9) {
-      const { get: e11, set: r10 } = "object" == typeof s5 ? n7 : i9 != null ? i9 : (() => {
+      const { get: e11, set: r10 } = "object" == typeof s5 ? n7 : i9 ?? (() => {
         const t6 = Symbol();
         return { get() {
           return this[t6];
@@ -1043,8 +989,7 @@ var WebAwesomeElement = class extends i6 {
     this.customStates = {
       /** Adds or removes the specified custom state. */
       set: (customState, active) => {
-        var _a16;
-        if (!Boolean((_a16 = this.internals) == null ? void 0 : _a16.states)) return;
+        if (!Boolean(this.internals?.states)) return;
         try {
           if (active) {
             this.internals.states.add(customState);
@@ -1061,18 +1006,17 @@ var WebAwesomeElement = class extends i6 {
       },
       /** Determines whether or not the element currently has the specified state. */
       has: (customState) => {
-        var _a16;
-        if (!Boolean((_a16 = this.internals) == null ? void 0 : _a16.states)) return false;
+        if (!Boolean(this.internals?.states)) return false;
         try {
           return this.internals.states.has(customState);
-        } catch (e10) {
+        } catch {
           return false;
         }
       }
     };
     try {
       this.internals = this.attachInternals();
-    } catch (e10) {
+    } catch {
       console.error("Element internals are not supported in your browser. Consider using a polyfill");
     }
     this.customStates.set("wa-defined", true);
@@ -1089,10 +1033,9 @@ var WebAwesomeElement = class extends i6 {
     return [host_styles_default, ...styles];
   }
   connectedCallback() {
-    var _a16;
     super.connectedCallback();
     if (!this.didSSR) {
-      (_a16 = this.shadowRoot) == null ? void 0 : _a16.prepend(
+      this.shadowRoot?.prepend(
         document.createComment(
           ` Web Awesome: https://webawesome.com/docs/components/${this.localName.replace("wa-", "")} `
         )
@@ -1100,8 +1043,7 @@ var WebAwesomeElement = class extends i6 {
     }
     if (this.didSSR) {
       this.updateComplete.then(() => {
-        var _a17;
-        (_a17 = this.shadowRoot) == null ? void 0 : _a17.prepend(
+        this.shadowRoot?.prepend(
           document.createComment(
             ` Web Awesome: https://webawesome.com/docs/components/${this.localName.replace("wa-", "")} `
           )
@@ -1131,10 +1073,9 @@ var WebAwesomeElement = class extends i6 {
     });
   }
   firstUpdated(changedProperties) {
-    var _a16;
     super.firstUpdated(changedProperties);
     if (this.didSSR) {
-      (_a16 = this.shadowRoot) == null ? void 0 : _a16.querySelectorAll("slot").forEach((slotElement) => {
+      this.shadowRoot?.querySelectorAll("slot").forEach((slotElement) => {
         slotElement.dispatchEvent(new Event("slotchange", { bubbles: true, composed: false, cancelable: false }));
       });
     }
@@ -1196,7 +1137,10 @@ var WebAwesomeElement = class extends i6 {
   relayNativeEvent(event, eventOptions) {
     event.stopImmediatePropagation();
     this.dispatchEvent(
-      new event.constructor(event.type, __spreadValues(__spreadValues({}, event), eventOptions))
+      new event.constructor(event.type, {
+        ...event,
+        ...eventOptions
+      })
     );
   }
 };
@@ -1248,12 +1192,11 @@ var WebAwesomeFormAssociatedElement = class extends WebAwesomeElement {
       this.dispatchEvent(new WaInvalidEvent());
     };
     this.handleInteraction = (event) => {
-      var _a16;
       const emittedEvents = this.emittedEvents;
       if (!emittedEvents.includes(event.type)) {
         emittedEvents.push(event.type);
       }
-      if (emittedEvents.length === ((_a16 = this.assumeInteractionOn) == null ? void 0 : _a16.length)) {
+      if (emittedEvents.length === this.assumeInteractionOn?.length) {
         this.hasInteracted = true;
       }
     };
@@ -1291,8 +1234,7 @@ var WebAwesomeFormAssociatedElement = class extends WebAwesomeElement {
       this.updateValidity();
     }
     this.assumeInteractionOn.forEach((event) => {
-      var _a16;
-      (_a16 = this.addEventListener) == null ? void 0 : _a16.call(this, event, this.handleInteraction);
+      this.addEventListener?.(event, this.handleInteraction);
     });
   }
   firstUpdated(...args) {
@@ -1476,7 +1418,7 @@ var WebAwesomeFormAssociatedElement = class extends WebAwesomeElement {
       return;
     }
     const validators = this.allValidators;
-    if (!(validators == null ? void 0 : validators.length)) {
+    if (!validators?.length) {
       return;
     }
     const flags = {
@@ -1493,7 +1435,7 @@ var WebAwesomeFormAssociatedElement = class extends WebAwesomeElement {
       if (!finalMessage) {
         finalMessage = message;
       }
-      if ((invalidKeys == null ? void 0 : invalidKeys.length) >= 0) {
+      if (invalidKeys?.length >= 0) {
         invalidKeys.forEach((str) => flags[str] = true);
       }
     }
@@ -1574,8 +1516,7 @@ var HasSlotController = class {
     });
   }
   hasNamedSlot(name) {
-    var _a16, _b2;
-    return ((_b2 = (_a16 = this.host).querySelector) == null ? void 0 : _b2.call(_a16, `:scope > [slot="${name}"]`)) !== null;
+    return this.host.querySelector?.(`:scope > [slot="${name}"]`) !== null;
   }
   /**
    * @param slotName     - Name of the slot to look for
@@ -2063,9 +2004,10 @@ var variants_styles_default = i4`
 
 // node_modules/@awesome.me/webawesome/dist/chunks/chunk.PZAN6FPN.js
 function watch(propertyName, options) {
-  const resolvedOptions = __spreadValues({
-    waitUntilFirstUpdate: false
-  }, options);
+  const resolvedOptions = {
+    waitUntilFirstUpdate: false,
+    ...options
+  };
   return (proto, decoratedFnName) => {
     const { update: update2 } = proto;
     const watchedProperties = Array.isArray(propertyName) ? propertyName : [propertyName];
@@ -2146,7 +2088,7 @@ var LocalizeController = class {
     return `${this.host.lang || documentLanguage}`.toLowerCase();
   }
   getTranslationData(lang) {
-    var _a16, _b2;
+    var _a, _b;
     let locale;
     try {
       locale = new Intl.Locale(lang.replace(/_/g, "-"));
@@ -2154,14 +2096,14 @@ var LocalizeController = class {
       return { locale: void 0, language: "", region: "", primary: void 0, secondary: void 0 };
     }
     const language = locale.language.toLowerCase();
-    const region = (_b2 = (_a16 = locale.region) === null || _a16 === void 0 ? void 0 : _a16.toLowerCase()) !== null && _b2 !== void 0 ? _b2 : "";
+    const region = (_b = (_a = locale.region) === null || _a === void 0 ? void 0 : _a.toLowerCase()) !== null && _b !== void 0 ? _b : "";
     const primary = translations.get(`${language}-${region}`);
     const secondary = translations.get(language);
     return { locale, language, region, primary, secondary };
   }
   exists(key, options) {
-    var _a16;
-    const { primary, secondary } = this.getTranslationData((_a16 = options.lang) !== null && _a16 !== void 0 ? _a16 : this.lang());
+    var _a;
+    const { primary, secondary } = this.getTranslationData((_a = options.lang) !== null && _a !== void 0 ? _a : this.lang());
     options = Object.assign({ includeFallback: false }, options);
     if (primary && primary[key] || secondary && secondary[key] || options.includeFallback && fallback && fallback[key]) {
       return true;
@@ -2329,36 +2271,34 @@ registerTranslation(en_default);
 // node_modules/lit-html/directives/class-map.js
 var e7 = e2(class extends i3 {
   constructor(t6) {
-    var _a16;
-    if (super(t6), t6.type !== t2.ATTRIBUTE || "class" !== t6.name || ((_a16 = t6.strings) == null ? void 0 : _a16.length) > 2) throw Error("`classMap()` can only be used in the `class` attribute and must be the only part in the attribute.");
+    if (super(t6), t6.type !== t2.ATTRIBUTE || "class" !== t6.name || t6.strings?.length > 2) throw Error("`classMap()` can only be used in the `class` attribute and must be the only part in the attribute.");
   }
   render(t6) {
     return " " + Object.keys(t6).filter((s5) => t6[s5]).join(" ") + " ";
   }
   update(s5, [i9]) {
-    var _a16, _b2;
     if (void 0 === this.st) {
       this.st = /* @__PURE__ */ new Set(), void 0 !== s5.strings && (this.nt = new Set(s5.strings.join(" ").split(/\s/).filter((t6) => "" !== t6)));
-      for (const t6 in i9) i9[t6] && !((_a16 = this.nt) == null ? void 0 : _a16.has(t6)) && this.st.add(t6);
+      for (const t6 in i9) i9[t6] && !this.nt?.has(t6) && this.st.add(t6);
       return this.render(i9);
     }
     const r9 = s5.element.classList;
     for (const t6 of this.st) t6 in i9 || (r9.remove(t6), this.st.delete(t6));
     for (const t6 in i9) {
       const s6 = !!i9[t6];
-      s6 === this.st.has(t6) || ((_b2 = this.nt) == null ? void 0 : _b2.has(t6)) || (s6 ? (r9.add(t6), this.st.add(t6)) : (r9.remove(t6), this.st.delete(t6)));
+      s6 === this.st.has(t6) || this.nt?.has(t6) || (s6 ? (r9.add(t6), this.st.add(t6)) : (r9.remove(t6), this.st.delete(t6)));
     }
     return E;
   }
 });
 
 // node_modules/lit-html/directives/if-defined.js
-var o7 = (o10) => o10 != null ? o10 : A;
+var o7 = (o10) => o10 ?? A;
 
 // node_modules/lit-html/static.js
 var a3 = Symbol.for("");
 var o8 = (t6) => {
-  if ((t6 == null ? void 0 : t6.r) === a3) return t6 == null ? void 0 : t6._$litStatic$;
+  if (t6?.r === a3) return t6?._$litStatic$;
 };
 var i7 = (t6, ...r9) => ({ _$litStatic$: r9.reduce((r10, e10, a4) => r10 + ((t7) => {
   if (void 0 !== t7._$litStatic$) return t7._$litStatic$;
@@ -2434,7 +2374,6 @@ var WaButton = class extends WebAwesomeFormAssociatedElement {
     return button;
   }
   handleClick(event) {
-    var _a16;
     if (this.disabled || this.loading) {
       event.preventDefault();
       event.stopImmediatePropagation();
@@ -2446,7 +2385,7 @@ var WaButton = class extends WebAwesomeFormAssociatedElement {
     const form = this.getForm();
     if (!form) return;
     const lightDOMButton = this.constructLightDOMButton();
-    (_a16 = this.parentElement) == null ? void 0 : _a16.append(lightDOMButton);
+    this.parentElement?.append(lightDOMButton);
     lightDOMButton.click();
     lightDOMButton.remove();
   }
@@ -2460,7 +2399,6 @@ var WaButton = class extends WebAwesomeFormAssociatedElement {
     let hasText = false;
     let hasOtherElements = false;
     [...nodes].forEach((node) => {
-      var _a16;
       if (node.nodeType === Node.ELEMENT_NODE) {
         const element = node;
         if (element.localName === "wa-icon") {
@@ -2470,7 +2408,7 @@ var WaButton = class extends WebAwesomeFormAssociatedElement {
           hasOtherElements = true;
         }
       } else if (node.nodeType === Node.TEXT_NODE) {
-        const text = ((_a16 = node.textContent) == null ? void 0 : _a16.trim()) || "";
+        const text = node.textContent?.trim() || "";
         if (text.length > 0) {
           hasText = true;
         }
@@ -2559,7 +2497,7 @@ var WaButton = class extends WebAwesomeFormAssociatedElement {
     `;
   }
 };
-WaButton.shadowRootOptions = __spreadProps(__spreadValues({}, WebAwesomeFormAssociatedElement.shadowRootOptions), { delegatesFocus: true });
+WaButton.shadowRootOptions = { ...WebAwesomeFormAssociatedElement.shadowRootOptions, delegatesFocus: true };
 WaButton.css = [button_styles_default, variants_styles_default, size_styles_default];
 __decorateClass([
   e6(".button")
@@ -2654,8 +2592,7 @@ __decorateClass([
 WaButton = __decorateClass([
   t5("wa-button")
 ], WaButton);
-var _a6;
-(_a6 = WaButton.disableWarning) == null ? void 0 : _a6.call(WaButton, "change-in-update");
+WaButton.disableWarning?.("change-in-update");
 
 // node_modules/@awesome.me/webawesome/dist/chunks/chunk.W7A2VLCT.js
 var spinner_styles_default = i4`
@@ -3754,7 +3691,7 @@ var library = {
     return getIconUrl(name, family, variant);
   },
   mutator: (svg, hostEl) => {
-    if ((hostEl == null ? void 0 : hostEl.family) && !svg.hasAttribute("data-duotone-initialized")) {
+    if (hostEl?.family && !svg.hasAttribute("data-duotone-initialized")) {
       const { family, variant } = hostEl;
       if (
         // Duotone
@@ -3855,9 +3792,8 @@ var icons = {
 var systemLibrary = {
   name: "system",
   resolver: (name, _family = "classic", variant = "solid") => {
-    var _a16, _b2;
     let collection = icons[variant];
-    let svg = (_b2 = (_a16 = collection[name]) != null ? _a16 : icons.regular[name]) != null ? _b2 : icons.regular["circle-question"];
+    let svg = collection[name] ?? icons.regular[name] ?? icons.regular["circle-question"];
     if (svg) {
       return dataUri(svg);
     }
@@ -3898,9 +3834,8 @@ var WaIcon = class extends WebAwesomeElement {
     this.library = "default";
     this.rotate = 0;
     this.resolveIcon = async (url, library2) => {
-      var _a16;
       let fileData;
-      if (library2 == null ? void 0 : library2.spriteSheet) {
+      if (library2?.spriteSheet) {
         if (!this.hasUpdated) {
           await this.updateComplete;
         }
@@ -3917,21 +3852,21 @@ var WaIcon = class extends WebAwesomeElement {
       try {
         fileData = await fetch(url, { mode: "cors" });
         if (!fileData.ok) return fileData.status === 410 ? CACHEABLE_ERROR : RETRYABLE_ERROR;
-      } catch (e10) {
+      } catch {
         return RETRYABLE_ERROR;
       }
       try {
         const div = document.createElement("div");
         div.innerHTML = await fileData.text();
         const svg = div.firstElementChild;
-        if (((_a16 = svg == null ? void 0 : svg.tagName) == null ? void 0 : _a16.toLowerCase()) !== "svg") return CACHEABLE_ERROR;
+        if (svg?.tagName?.toLowerCase() !== "svg") return CACHEABLE_ERROR;
         if (!parser) parser = new DOMParser();
         const doc = parser.parseFromString(svg.outerHTML, "text/html");
         const svgEl = doc.body.querySelector("svg");
         if (!svgEl) return CACHEABLE_ERROR;
         svgEl.part.add("svg");
         return document.adoptNode(svgEl);
-      } catch (e10) {
+      } catch {
         return CACHEABLE_ERROR;
       }
     };
@@ -3959,7 +3894,7 @@ var WaIcon = class extends WebAwesomeElement {
       let url;
       try {
         url = await library2.resolver(this.name, family, this.variant, autoWidth);
-      } catch (e10) {
+      } catch {
         url = void 0;
       }
       return { url, fromLibrary: true };
@@ -3982,7 +3917,6 @@ var WaIcon = class extends WebAwesomeElement {
     }
   }
   async setIcon() {
-    var _a16;
     const { url, fromLibrary } = await this.getIconSource();
     const library2 = fromLibrary ? getIconLibrary(this.library) : void 0;
     if (!url) {
@@ -4014,7 +3948,7 @@ var WaIcon = class extends WebAwesomeElement {
         break;
       default:
         this.svg = svg.cloneNode(true);
-        (_a16 = library2 == null ? void 0 : library2.mutator) == null ? void 0 : _a16.call(library2, this.svg, this);
+        library2?.mutator?.(this.svg, this);
         this.dispatchEvent(new WaLoadEvent());
     }
   }
@@ -4025,15 +3959,14 @@ var WaIcon = class extends WebAwesomeElement {
     return super.willUpdate(changedProperties);
   }
   updated(changedProperties) {
-    var _a16, _b2;
     super.updated(changedProperties);
     const library2 = getIconLibrary(this.library);
     if (this.hasAttribute("rotate")) {
       this.style.setProperty("--rotate-angle", `${this.rotate}deg`);
     }
-    const svg = (_a16 = this.shadowRoot) == null ? void 0 : _a16.querySelector("svg");
+    const svg = this.shadowRoot?.querySelector("svg");
     if (svg) {
-      (_b2 = library2 == null ? void 0 : library2.mutator) == null ? void 0 : _b2.call(library2, svg, this);
+      library2?.mutator?.(svg, this);
     }
   }
   render() {
@@ -4434,8 +4367,7 @@ __decorateClass([
 WaCard = __decorateClass([
   t5("wa-card")
 ], WaCard);
-var _a7;
-(_a7 = WaCard.disableWarning) == null ? void 0 : _a7.call(WaCard, "change-in-update");
+WaCard.disableWarning?.("change-in-update");
 
 // node_modules/@awesome.me/webawesome/dist/chunks/chunk.YB6263IP.js
 var checkbox_styles_default = i4`
@@ -4554,16 +4486,15 @@ var RequiredValidator = (options = {}) => {
   }
   const obj = {
     observedAttributes: ["required"],
-    message: validationElement == null ? void 0 : validationElement.validationMessage,
+    message: validationElement?.validationMessage,
     // @TODO: Add a translation.
     checkValidity(element) {
-      var _a16;
       const validity = {
         message: "",
         isValid: true,
         invalidKeys: []
       };
-      const isRequired = (_a16 = element.required) != null ? _a16 : element.hasAttribute("required");
+      const isRequired = element.required ?? element.hasAttribute("required");
       if (!isRequired) {
         return validity;
       }
@@ -4647,11 +4578,10 @@ var l6 = e2(class extends i3 {
 // node_modules/@awesome.me/webawesome/dist/chunks/chunk.PKAOFPE6.js
 var WaCheckbox = class extends WebAwesomeFormAssociatedElement {
   constructor() {
-    var _a16;
     super(...arguments);
     this.hasSlotController = new HasSlotController(this, "hint");
     this.title = "";
-    this._value = (_a16 = this.getAttribute("value")) != null ? _a16 : null;
+    this._value = this.getAttribute("value") ?? null;
     this.size = "m";
     this.disabled = false;
     this.indeterminate = false;
@@ -4675,8 +4605,7 @@ var WaCheckbox = class extends WebAwesomeFormAssociatedElement {
   }
   /** The value of the checkbox, submitted as a name/value pair with form data. */
   get value() {
-    var _a16;
-    return (_a16 = this._value) != null ? _a16 : "on";
+    return this._value ?? "on";
   }
   set value(val) {
     this._value = val;
@@ -4685,11 +4614,10 @@ var WaCheckbox = class extends WebAwesomeFormAssociatedElement {
     warnDeprecatedSize(this.localName, this.size);
   }
   get checked() {
-    var _a16;
     if (this.valueHasChanged) {
       return Boolean(this._checked);
     }
-    return (_a16 = this._checked) != null ? _a16 : this.defaultChecked;
+    return this._checked ?? this.defaultChecked;
   }
   set checked(val) {
     this._checked = Boolean(val);
@@ -4807,7 +4735,7 @@ var WaCheckbox = class extends WebAwesomeFormAssociatedElement {
   }
 };
 WaCheckbox.css = [form_control_styles_default, size_styles_default, checkbox_styles_default];
-WaCheckbox.shadowRootOptions = __spreadProps(__spreadValues({}, WebAwesomeFormAssociatedElement.shadowRootOptions), { delegatesFocus: true });
+WaCheckbox.shadowRootOptions = { ...WebAwesomeFormAssociatedElement.shadowRootOptions, delegatesFocus: true };
 __decorateClass([
   e6('input[type="checkbox"]')
 ], WaCheckbox.prototype, "input", 2);
@@ -4853,8 +4781,7 @@ __decorateClass([
 WaCheckbox = __decorateClass([
   t5("wa-checkbox")
 ], WaCheckbox);
-var _a8;
-(_a8 = WaCheckbox.disableWarning) == null ? void 0 : _a8.call(WaCheckbox, "change-in-update");
+WaCheckbox.disableWarning?.("change-in-update");
 
 // node_modules/@awesome.me/webawesome/dist/chunks/chunk.NY2PQ35L.js
 var WaCopyEvent = class extends Event {
@@ -5054,9 +4981,8 @@ var WaCopyButton = class extends WebAwesomeElement {
     this.tooltipPlacement = "top";
     this.tooltip = "full";
     this.handleDefaultSlotChange = () => {
-      var _a16, _b2, _c;
-      const assigned = (_b2 = (_a16 = this.defaultSlot) == null ? void 0 : _a16.assignedElements({ flatten: true })) != null ? _b2 : [];
-      const trigger = (_c = assigned.find((el) => el instanceof HTMLElement)) != null ? _c : null;
+      const assigned = this.defaultSlot?.assignedElements({ flatten: true }) ?? [];
+      const trigger = assigned.find((el) => el instanceof HTMLElement) ?? null;
       if (trigger !== this.customTriggerEl) {
         this.releaseAssignedId(this.customTriggerEl);
         this.customTriggerEl = trigger;
@@ -5074,8 +5000,7 @@ var WaCopyButton = class extends WebAwesomeElement {
     };
   }
   get activeTooltip() {
-    var _a16, _b2;
-    return (_b2 = (_a16 = this.lightTooltip) != null ? _a16 : this.shadowTooltip) != null ? _b2 : null;
+    return this.lightTooltip ?? this.shadowTooltip ?? null;
   }
   get currentLabel() {
     if (this.status === "success") {
@@ -5724,12 +5649,13 @@ function getOppositePlacement(placement) {
   return oppositeSideMap[side] + placement.slice(side.length);
 }
 function expandPaddingObject(padding) {
-  return __spreadValues({
+  return {
     top: 0,
     right: 0,
     bottom: 0,
-    left: 0
-  }, padding);
+    left: 0,
+    ...padding
+  };
 }
 function getPaddingObject(padding) {
   return typeof padding !== "number" ? expandPaddingObject(padding) : {
@@ -5878,9 +5804,10 @@ var computePosition = async (reference, floating, config) => {
     middleware = [],
     platform: platform2
   } = config;
-  const platformWithDetectOverflow = platform2.detectOverflow ? platform2 : __spreadProps(__spreadValues({}, platform2), {
+  const platformWithDetectOverflow = platform2.detectOverflow ? platform2 : {
+    ...platform2,
     detectOverflow
-  });
+  };
   const rtl = await (platform2.isRTL == null ? void 0 : platform2.isRTL(floating));
   let rects = await platform2.getElementRects({
     reference,
@@ -5924,7 +5851,10 @@ var computePosition = async (reference, floating, config) => {
     });
     x2 = nextX != null ? nextX : x2;
     y3 = nextY != null ? nextY : y3;
-    middlewareData[name] = __spreadValues(__spreadValues({}, middlewareData[name]), data);
+    middlewareData[name] = {
+      ...middlewareData[name],
+      ...data
+    };
     if (reset && resetCount < MAX_RESET_COUNT) {
       resetCount++;
       if (typeof reset === "object") {
@@ -6005,12 +5935,13 @@ var arrow = (options) => ({
     const alignmentOffset = shouldAddOffset ? center < min$1 ? center - min$1 : center - max2 : 0;
     return {
       [axis]: coords[axis] + alignmentOffset,
-      data: __spreadValues({
+      data: {
         [axis]: offset3,
-        centerOffset: center - offset3 - alignmentOffset
-      }, shouldAddOffset && {
-        alignmentOffset
-      }),
+        centerOffset: center - offset3 - alignmentOffset,
+        ...shouldAddOffset && {
+          alignmentOffset
+        }
+      },
       reset: shouldAddOffset
     };
   }
@@ -6032,21 +5963,15 @@ var flip = function(options) {
         platform: platform2,
         elements
       } = state;
-      const _a16 = evaluate(options, state), {
+      const {
         mainAxis: checkMainAxis = true,
         crossAxis: checkCrossAxis = true,
         fallbackPlacements: specifiedFallbackPlacements,
         fallbackStrategy = "bestFit",
         fallbackAxisSideDirection = "none",
-        flipAlignment = true
-      } = _a16, detectOverflowOptions = __objRest(_a16, [
-        "mainAxis",
-        "crossAxis",
-        "fallbackPlacements",
-        "fallbackStrategy",
-        "fallbackAxisSideDirection",
-        "flipAlignment"
-      ]);
+        flipAlignment = true,
+        ...detectOverflowOptions
+      } = evaluate(options, state);
       if ((_middlewareData$arrow = middlewareData.arrow) != null && _middlewareData$arrow.alignmentOffset) {
         return {};
       }
@@ -6190,9 +6115,10 @@ var offset = function(options) {
       return {
         x: x2 + diffCoords.x,
         y: y3 + diffCoords.y,
-        data: __spreadProps(__spreadValues({}, diffCoords), {
+        data: {
+          ...diffCoords,
           placement
-        })
+        }
       };
     }
   };
@@ -6211,7 +6137,7 @@ var shift = function(options) {
         placement,
         platform: platform2
       } = state;
-      const _a16 = evaluate(options, state), {
+      const {
         mainAxis: checkMainAxis = true,
         crossAxis: checkCrossAxis = false,
         limiter = {
@@ -6225,12 +6151,9 @@ var shift = function(options) {
               y: y4
             };
           }
-        }
-      } = _a16, detectOverflowOptions = __objRest(_a16, [
-        "mainAxis",
-        "crossAxis",
-        "limiter"
-      ]);
+        },
+        ...detectOverflowOptions
+      } = evaluate(options, state);
       const coords = {
         x: x2,
         y: y3
@@ -6254,11 +6177,13 @@ var shift = function(options) {
         const max2 = crossAxisCoord - overflow[maxSide];
         crossAxisCoord = clamp(min2, crossAxisCoord, max2);
       }
-      const limitedCoords = limiter.fn(__spreadProps(__spreadValues({}, state), {
+      const limitedCoords = limiter.fn({
+        ...state,
         [mainAxis]: mainAxisCoord,
         [crossAxis]: crossAxisCoord
-      }));
-      return __spreadProps(__spreadValues({}, limitedCoords), {
+      });
+      return {
+        ...limitedCoords,
         data: {
           x: limitedCoords.x - x2,
           y: limitedCoords.y - y3,
@@ -6267,7 +6192,7 @@ var shift = function(options) {
             [crossAxis]: checkCrossAxis
           }
         }
-      });
+      };
     }
   };
 };
@@ -6286,12 +6211,11 @@ var size = function(options) {
         platform: platform2,
         elements
       } = state;
-      const _a16 = evaluate(options, state), {
+      const {
         apply = () => {
-        }
-      } = _a16, detectOverflowOptions = __objRest(_a16, [
-        "apply"
-      ]);
+        },
+        ...detectOverflowOptions
+      } = evaluate(options, state);
       const overflow = await platform2.detectOverflow(state, detectOverflowOptions);
       const side = getSide(placement);
       const alignment = getAlignment(placement);
@@ -6333,10 +6257,11 @@ var size = function(options) {
           availableHeight = height - 2 * (yMin !== 0 || yMax !== 0 ? yMin + yMax : max(overflow.top, overflow.bottom));
         }
       }
-      await apply(__spreadProps(__spreadValues({}, state), {
+      await apply({
+        ...state,
         availableWidth,
         availableHeight
-      }));
+      });
       const nextDimensions = await platform2.getDimensions(elements.floating);
       if (width !== nextDimensions.width || height !== nextDimensions.height) {
         return {
@@ -7015,10 +6940,11 @@ function observeMove(element, onMove) {
       isFirstUpdate = false;
     }
     try {
-      io = new IntersectionObserver(handleObserve, __spreadProps(__spreadValues({}, options), {
+      io = new IntersectionObserver(handleObserve, {
+        ...options,
         // Handle <iframe>s
         root: root.ownerDocument
-      }));
+      });
     } catch (_e) {
       io = new IntersectionObserver(handleObserve, options);
     }
@@ -7104,15 +7030,18 @@ var size2 = size;
 var arrow2 = arrow;
 var computePosition2 = (reference, floating, options) => {
   const cache = /* @__PURE__ */ new Map();
-  const mergedOptions = __spreadValues({
-    platform
-  }, options);
-  const platformWithCache = __spreadProps(__spreadValues({}, mergedOptions.platform), {
+  const mergedOptions = {
+    platform,
+    ...options
+  };
+  const platformWithCache = {
+    ...mergedOptions.platform,
     _c: cache
-  });
-  return computePosition(reference, floating, __spreadProps(__spreadValues({}, mergedOptions), {
+  };
+  return computePosition(reference, floating, {
+    ...mergedOptions,
     platform: platformWithCache
-  }));
+  });
 };
 
 // node_modules/composed-offset-position/dist/composed-offset-position.browser.min.mjs
@@ -7139,8 +7068,7 @@ function i8(e10) {
 function isVirtualElement(e10) {
   return e10 !== null && typeof e10 === "object" && "getBoundingClientRect" in e10 && ("contextElement" in e10 ? e10 instanceof Element : true);
 }
-var _a9;
-var SUPPORTS_POPOVER = Boolean((_a9 = globalThis == null ? void 0 : globalThis.HTMLElement) == null ? void 0 : _a9.prototype.hasOwnProperty("popover"));
+var SUPPORTS_POPOVER = Boolean(globalThis?.HTMLElement?.prototype.hasOwnProperty("popover"));
 var WaPopup = class extends WebAwesomeElement {
   constructor() {
     super(...arguments);
@@ -7272,19 +7200,17 @@ var WaPopup = class extends WebAwesomeElement {
     }
   }
   start() {
-    var _a16, _b2;
     if (!this.anchorEl || !this.active || !this.isConnected) {
       return;
     }
-    (_b2 = (_a16 = this.popup) == null ? void 0 : _a16.showPopover) == null ? void 0 : _b2.call(_a16);
+    this.popup?.showPopover?.();
     this.cleanup = autoUpdate(this.anchorEl, this.popup, () => {
       this.reposition();
     });
   }
   async stop() {
     return new Promise((resolve) => {
-      var _a16, _b2;
-      (_b2 = (_a16 = this.popup) == null ? void 0 : _a16.hidePopover) == null ? void 0 : _b2.call(_a16);
+      this.popup?.hidePopover?.();
       if (this.cleanup) {
         this.cleanup();
         this.cleanup = void 0;
@@ -7380,9 +7306,10 @@ var WaPopup = class extends WebAwesomeElement {
       placement: this.placement,
       middleware,
       strategy: this.SUPPORTS_POPOVER ? "absolute" : "fixed",
-      platform: __spreadProps(__spreadValues({}, platform), {
+      platform: {
+        ...platform,
         getOffsetParent: getOffsetParent2
-      })
+      }
     }).then(({ x: x2, y: y3, middlewareData, placement }) => {
       const isRtl = this.localize.dir() === "rtl";
       const staticSide = { top: "bottom", right: "left", bottom: "top", left: "right" }[placement.split("-")[0]];
@@ -7624,10 +7551,9 @@ var WaTooltip = class extends WebAwesomeElement {
       }
     };
     this.handleMouseOut = (event) => {
-      var _a16;
       if (this.hasTrigger("hover")) {
         const relatedTarget = event.relatedTarget;
-        const movedIntoAnchor = Boolean(relatedTarget && ((_a16 = this.anchor) == null ? void 0 : _a16.contains(relatedTarget)));
+        const movedIntoAnchor = Boolean(relatedTarget && this.anchor?.contains(relatedTarget));
         const movedIntoTooltip = Boolean(relatedTarget && this.contains(relatedTarget));
         if (movedIntoAnchor || movedIntoTooltip) {
           return;
@@ -7738,12 +7664,11 @@ var WaTooltip = class extends WebAwesomeElement {
     }
   }
   handleForChange() {
-    var _a16, _b2;
-    const rootNode = (_a16 = this.getRootNode) == null ? void 0 : _a16.call(this);
+    const rootNode = this.getRootNode?.();
     if (!rootNode) {
       return;
     }
-    const newAnchor = this.for ? (_b2 = rootNode.getElementById) == null ? void 0 : _b2.call(rootNode, this.for) : null;
+    const newAnchor = this.for ? rootNode.getElementById?.(this.for) : null;
     const oldAnchor = this.anchor;
     if (newAnchor === oldAnchor) {
       return;
@@ -8022,9 +7947,8 @@ var WaDetails = class extends WebAwesomeElement {
     this.iconPlacement = "end";
   }
   disconnectedCallback() {
-    var _a16;
     super.disconnectedCallback();
-    (_a16 = this.detailsObserver) == null ? void 0 : _a16.disconnect();
+    this.detailsObserver?.disconnect();
   }
   firstUpdated() {
     this.body.style.height = this.open ? "auto" : "0";
@@ -8052,9 +7976,8 @@ var WaDetails = class extends WebAwesomeElement {
   handleSummaryClick(event) {
     const eventPath = event.composedPath();
     const hasInteractiveElement = eventPath.some((element) => {
-      var _a16;
       if (!(element instanceof HTMLElement)) return false;
-      const tagName = (_a16 = element.tagName) == null ? void 0 : _a16.toLowerCase();
+      const tagName = element.tagName?.toLowerCase();
       if (["a", "button", "input", "textarea", "select"].includes(tagName)) {
         return true;
       }
@@ -8567,7 +8490,7 @@ var WaDialog = class extends WebAwesomeElement {
     this.dialog.close();
     unlockBodyScrolling(this);
     const trigger = this.originalTrigger;
-    if (typeof (trigger == null ? void 0 : trigger.focus) === "function") {
+    if (typeof trigger?.focus === "function") {
       setTimeout(() => trigger.focus());
     }
     this.dispatchEvent(new WaAfterHideEvent());
@@ -8715,10 +8638,10 @@ if (!o5) {
     const dialogAttrEl = event.target.closest("[data-dialog]");
     if (dialogAttrEl instanceof Element) {
       const [command, id3] = parseSpaceDelimitedTokens(dialogAttrEl.getAttribute("data-dialog") || "");
-      if (command === "open" && (id3 == null ? void 0 : id3.length)) {
+      if (command === "open" && id3?.length) {
         const doc = dialogAttrEl.getRootNode();
         const dialog = doc.getElementById(id3);
-        if ((dialog == null ? void 0 : dialog.localName) === "wa-dialog") {
+        if (dialog?.localName === "wa-dialog") {
           dialog.open = true;
         } else {
           console.warn(`A dialog with an ID of "${id3}" could not be found in this document.`);
@@ -9124,7 +9047,7 @@ var WaDrawer = class extends WebAwesomeElement {
     this.drawer.close();
     unlockBodyScrolling(this);
     const trigger = this.originalTrigger;
-    if (typeof (trigger == null ? void 0 : trigger.focus) === "function") {
+    if (typeof trigger?.focus === "function") {
       setTimeout(() => trigger.focus());
     }
     this.dispatchEvent(new WaAfterHideEvent());
@@ -9278,10 +9201,10 @@ if (!o5) {
     const drawerAttrEl = event.target.closest("[data-drawer]");
     if (drawerAttrEl instanceof Element) {
       const [command, id3] = parseSpaceDelimitedTokens(drawerAttrEl.getAttribute("data-drawer") || "");
-      if (command === "open" && (id3 == null ? void 0 : id3.length)) {
+      if (command === "open" && id3?.length) {
         const doc = drawerAttrEl.getRootNode();
         const drawer = doc.getElementById(id3);
-        if ((drawer == null ? void 0 : drawer.localName) === "wa-drawer") {
+        if (drawer?.localName === "wa-drawer") {
           drawer.open = true;
         } else {
           console.warn(`A drawer with an ID of "${id3}" could not be found in this document.`);
@@ -9570,21 +9493,19 @@ var WaDropdownItem = class extends WebAwesomeElement {
     warnDeprecatedSize(this.localName, this.size);
   }
   connectedCallback() {
-    var _a16, _b2, _c, _d, _e, _f;
     super.connectedCallback();
-    (_a16 = this.addEventListener) == null ? void 0 : _a16.call(this, "click", this.handleHostClick);
-    (_b2 = this.addEventListener) == null ? void 0 : _b2.call(this, "mouseenter", this.handleMouseEnter.bind(this));
-    (_d = (_c = this.shadowRoot) == null ? void 0 : _c.addEventListener) == null ? void 0 : _d.call(_c, "click", this.handleClick, { capture: true });
-    (_f = (_e = this.shadowRoot) == null ? void 0 : _e.addEventListener) == null ? void 0 : _f.call(_e, "slotchange", this.handleSlotChange);
+    this.addEventListener?.("click", this.handleHostClick);
+    this.addEventListener?.("mouseenter", this.handleMouseEnter.bind(this));
+    this.shadowRoot?.addEventListener?.("click", this.handleClick, { capture: true });
+    this.shadowRoot?.addEventListener?.("slotchange", this.handleSlotChange);
   }
   disconnectedCallback() {
-    var _a16, _b2, _c, _d, _e, _f;
     super.disconnectedCallback();
     this.closeSubmenu();
-    (_a16 = this.removeEventListener) == null ? void 0 : _a16.call(this, "click", this.handleHostClick);
-    (_b2 = this.removeEventListener) == null ? void 0 : _b2.call(this, "mouseenter", this.handleMouseEnter);
-    (_d = (_c = this.shadowRoot) == null ? void 0 : _c.removeEventListener) == null ? void 0 : _d.call(_c, "click", this.handleClick, { capture: true });
-    (_f = (_e = this.shadowRoot) == null ? void 0 : _e.removeEventListener) == null ? void 0 : _f.call(_e, "slotchange", this.handleSlotChange);
+    this.removeEventListener?.("click", this.handleHostClick);
+    this.removeEventListener?.("mouseenter", this.handleMouseEnter);
+    this.shadowRoot?.removeEventListener?.("click", this.handleClick, { capture: true });
+    this.shadowRoot?.removeEventListener?.("slotchange", this.handleSlotChange);
   }
   firstUpdated() {
     this.setAttribute("tabindex", "-1");
@@ -9632,11 +9553,10 @@ var WaDropdownItem = class extends WebAwesomeElement {
   }
   /** Opens the submenu. */
   async openSubmenu() {
-    var _a16;
     const submenu = this.submenuElement;
     if (!this.hasSubmenu || !submenu || !this.isConnected) return;
     this.notifyParentOfOpening();
-    (_a16 = submenu.showPopover) == null ? void 0 : _a16.call(submenu);
+    submenu.showPopover?.();
     submenu.hidden = false;
     submenu.setAttribute("data-visible", "");
     this.submenuOpen = true;
@@ -9670,17 +9590,16 @@ var WaDropdownItem = class extends WebAwesomeElement {
   }
   /** Closes the submenu. */
   async closeSubmenu() {
-    var _a16;
     const submenu = this.submenuElement;
     if (!this.hasSubmenu || !submenu) return;
     this.submenuOpen = false;
     this.setAttribute("aria-expanded", "false");
     if (!submenu.hidden) {
       await animateWithClass(submenu, "hide");
-      if (submenu == null ? void 0 : submenu.isConnected) {
+      if (submenu?.isConnected) {
         submenu.hidden = true;
         submenu.removeAttribute("data-visible");
-        (_a16 = submenu.hidePopover) == null ? void 0 : _a16.call(submenu);
+        submenu.hidePopover?.();
       }
     }
   }
@@ -9803,7 +9722,7 @@ function* activeElements(activeElement = document.activeElement) {
   if (activeElement === null || activeElement === void 0) return;
   yield activeElement;
   if ("shadowRoot" in activeElement && activeElement.shadowRoot && activeElement.shadowRoot.mode !== "closed") {
-    yield* __yieldStar(activeElements(activeElement.shadowRoot.activeElement));
+    yield* activeElements(activeElement.shadowRoot.activeElement);
   }
 }
 
@@ -9925,11 +9844,11 @@ var WaDropdown = class extends WebAwesomeElement {
         event.preventDefault();
         event.stopPropagation();
         this.open = false;
-        trigger == null ? void 0 : trigger.focus({ preventScroll: true });
+        trigger?.focus({ preventScroll: true });
         return;
       }
       const activeElement = [...activeElements()].find((el) => el.localName === "wa-dropdown-item");
-      const isFocusedOnItem = (activeElement == null ? void 0 : activeElement.localName) === "wa-dropdown-item";
+      const isFocusedOnItem = activeElement?.localName === "wa-dropdown-item";
       const currentSubmenuItem = this.getCurrentSubmenuItem();
       const isInSubmenu = !!currentSubmenuItem;
       let items;
@@ -10061,9 +9980,8 @@ var WaDropdown = class extends WebAwesomeElement {
       }
     };
     this.handleGlobalMouseMove = (event) => {
-      var _a16;
       const currentSubmenuItem = this.getCurrentSubmenuItem();
-      if (!(currentSubmenuItem == null ? void 0 : currentSubmenuItem.submenuOpen) || !currentSubmenuItem.submenuElement) return;
+      if (!currentSubmenuItem?.submenuOpen || !currentSubmenuItem.submenuElement) return;
       const submenuRect = currentSubmenuItem.submenuElement.getBoundingClientRect();
       const isRtl = this.localize.dir() === "rtl";
       const submenuEdgeX = isRtl ? submenuRect.right : submenuRect.left;
@@ -10073,7 +9991,7 @@ var WaDropdown = class extends WebAwesomeElement {
       currentSubmenuItem.submenuElement.style.setProperty("--safe-triangle-cursor-y", `${constrainedY}px`);
       const composedPath = event.composedPath();
       const submenuItemHovered = currentSubmenuItem.matches(":hover");
-      const submenuElementHovered = Boolean((_a16 = currentSubmenuItem.submenuElement) == null ? void 0 : _a16.matches(":hover"));
+      const submenuElementHovered = Boolean(currentSubmenuItem.submenuElement?.matches(":hover"));
       const isOverItem = submenuItemHovered || !!composedPath.find((el) => el === currentSubmenuItem);
       const isOverSubmenu = submenuElementHovered || !!composedPath.find(
         (el) => el instanceof HTMLElement && el.closest('[part="submenu"]') === currentSubmenuItem.submenuElement
@@ -10127,16 +10045,14 @@ var WaDropdown = class extends WebAwesomeElement {
   }
   /** Gets all dropdown items slotted in the menu. */
   getItems(includeDisabled = false) {
-    var _a16, _b2;
-    const items = ((_b2 = (_a16 = this.defaultSlot) == null ? void 0 : _a16.assignedElements({ flatten: true })) != null ? _b2 : []).filter(
+    const items = (this.defaultSlot?.assignedElements({ flatten: true }) ?? []).filter(
       (el) => el.localName === "wa-dropdown-item"
     );
     return includeDisabled ? items : items.filter((item) => !item.disabled);
   }
   /** Gets all dropdown items in a specific submenu. */
   getSubmenuItems(parentItem, includeDisabled = false) {
-    var _a16;
-    const submenuSlot = ((_a16 = parentItem.shadowRoot) == null ? void 0 : _a16.querySelector('slot[name="submenu"]')) || parentItem.querySelector('slot[name="submenu"]');
+    const submenuSlot = parentItem.shadowRoot?.querySelector('slot[name="submenu"]') || parentItem.querySelector('slot[name="submenu"]');
     if (!submenuSlot) {
       return [];
     }
@@ -10145,8 +10061,7 @@ var WaDropdown = class extends WebAwesomeElement {
   }
   /** Syncs item sizes with the dropdown's size property. */
   syncItemSizes() {
-    var _a16, _b2;
-    const items = ((_b2 = (_a16 = this.defaultSlot) == null ? void 0 : _a16.assignedElements({ flatten: true })) != null ? _b2 : []).filter(
+    const items = (this.defaultSlot?.assignedElements({ flatten: true }) ?? []).filter(
       (el) => el.localName === "wa-dropdown-item"
     );
     items.forEach((item) => item.size = this.size);
@@ -10363,9 +10278,8 @@ var WaDropdown = class extends WebAwesomeElement {
   }
   /** Updates the safe triangle coordinates for a submenu */
   updateSafeTriangleCoordinates(item) {
-    var _a16;
     if (!item.submenuElement || !item.submenuOpen) return;
-    const isKeyboardNavigation = (_a16 = document.activeElement) == null ? void 0 : _a16.matches(":focus-visible");
+    const isKeyboardNavigation = document.activeElement?.matches(":focus-visible");
     if (isKeyboardNavigation) {
       item.submenuElement.style.setProperty("--safe-triangle-visible", "none");
       return;
@@ -10397,12 +10311,11 @@ var WaDropdown = class extends WebAwesomeElement {
     this.dispatchEvent(selectEvent);
     if (!selectEvent.defaultPrevented) {
       this.open = false;
-      trigger == null ? void 0 : trigger.focus({ preventScroll: true });
+      trigger?.focus({ preventScroll: true });
     }
   }
   /** Syncs aria attributes on the slotted trigger element and the menu based on the dropdown's current state */
   async syncAriaAttributes() {
-    var _a16;
     const trigger = this.getTrigger();
     let nativeButton;
     if (!trigger) {
@@ -10420,11 +10333,10 @@ var WaDropdown = class extends WebAwesomeElement {
     }
     nativeButton.setAttribute("aria-haspopup", "menu");
     nativeButton.setAttribute("aria-expanded", this.open ? "true" : "false");
-    (_a16 = this.menu) == null ? void 0 : _a16.setAttribute("aria-expanded", "false");
+    this.menu?.setAttribute("aria-expanded", "false");
   }
   render() {
-    var _a16;
-    let active = this.didSSR && !this.hasUpdated ? this.open : (_a16 = this.popup) == null ? void 0 : _a16.active;
+    let active = this.didSSR && !this.hasUpdated ? this.open : this.popup?.active;
     return b`
       <wa-popup
         placement=${this.placement}
@@ -10620,7 +10532,7 @@ var WaInclude = class extends WebAwesomeElement {
         [...this.querySelectorAll("script")].forEach((script) => this.executeScript(script));
       }
       this.dispatchEvent(new WaLoadEvent());
-    } catch (e10) {
+    } catch {
       this.dispatchEvent(new WaIncludeErrorEvent({ status: -1 }));
     }
   }
@@ -10957,11 +10869,10 @@ var WaInput = class extends WebAwesomeFormAssociatedElement {
   }
   /** The current value of the input, submitted as a name/value pair with form data. */
   get value() {
-    var _a16;
     if (this.valueHasChanged) {
       return this._value;
     }
-    return (_a16 = this._value) != null ? _a16 : this.defaultValue;
+    return this._value ?? this.defaultValue;
   }
   set value(val) {
     if (this._value === val) {
@@ -11041,8 +10952,8 @@ var WaInput = class extends WebAwesomeFormAssociatedElement {
   }
   /** Replaces a range of text with a new string. */
   setRangeText(replacement, start, end, selectMode = "preserve") {
-    const selectionStart = start != null ? start : this.input.selectionStart;
-    const selectionEnd = end != null ? end : this.input.selectionEnd;
+    const selectionStart = start ?? this.input.selectionStart;
+    const selectionEnd = end ?? this.input.selectionEnd;
     this.input.setRangeText(replacement, selectionStart, selectionEnd, selectMode);
     if (this.value !== this.input.value) {
       this.value = this.input.value;
@@ -11076,7 +10987,6 @@ var WaInput = class extends WebAwesomeFormAssociatedElement {
     super.formResetCallback();
   }
   render() {
-    var _a16;
     const hasLabelSlot = this.hasSlotController.test("label", "withLabel");
     const hasHintSlot = this.hasSlotController.test("hint", "withHint");
     const hasLabel = this.label ? true : !!hasLabelSlot;
@@ -11118,7 +11028,7 @@ var WaInput = class extends WebAwesomeFormAssociatedElement {
           min=${o7(this.min)}
           max=${o7(this.max)}
           step=${o7(this.step)}
-          .value=${l6((_a16 = this.value) != null ? _a16 : "")}
+          .value=${l6(this.value ?? "")}
           autocapitalize=${o7(this.autocapitalize)}
           autocomplete=${o7(this.autocomplete)}
           autocorrect=${this.autocorrect ? "on" : "off"}
@@ -11185,7 +11095,7 @@ var WaInput = class extends WebAwesomeFormAssociatedElement {
   }
 };
 WaInput.css = [size_styles_default, form_control_styles_default, input_styles_default];
-WaInput.shadowRootOptions = __spreadProps(__spreadValues({}, WebAwesomeFormAssociatedElement.shadowRootOptions), { delegatesFocus: true });
+WaInput.shadowRootOptions = { ...WebAwesomeFormAssociatedElement.shadowRootOptions, delegatesFocus: true };
 __decorateClass([
   e6("input")
 ], WaInput.prototype, "input", 2);
@@ -11304,8 +11214,7 @@ __decorateClass([
 WaInput = __decorateClass([
   t5("wa-input")
 ], WaInput);
-var _a10;
-(_a10 = WaInput.disableWarning) == null ? void 0 : _a10.call(WaInput, "change-in-update");
+WaInput.disableWarning?.("change-in-update");
 
 // node_modules/@awesome.me/webawesome/dist/chunks/chunk.5J72BVE2.js
 var number_input_styles_default = i4`
@@ -11587,11 +11496,10 @@ var WaNumberInput = class extends WebAwesomeFormAssociatedElement {
   }
   /** The current value of the input, submitted as a name/value pair with form data. */
   get value() {
-    var _a16;
     if (this.valueHasChanged) {
       return this._value;
     }
-    return (_a16 = this._value) != null ? _a16 : this.defaultValue;
+    return this._value ?? this.defaultValue;
   }
   set value(val) {
     if (this._value === val) {
@@ -11710,7 +11618,6 @@ var WaNumberInput = class extends WebAwesomeFormAssociatedElement {
     super.formResetCallback();
   }
   render() {
-    var _a16;
     const hasLabelSlot = this.hasSlotController.test("label", "withLabel");
     const hasHintSlot = this.hasSlotController.test("hint", "withHint");
     const hasLabel = this.label ? true : !!hasLabelSlot;
@@ -11763,7 +11670,7 @@ var WaNumberInput = class extends WebAwesomeFormAssociatedElement {
           min=${o7(this.min)}
           max=${o7(this.max)}
           step=${o7(this.step)}
-          .value=${l6((_a16 = this.value) != null ? _a16 : "")}
+          .value=${l6(this.value ?? "")}
           autocomplete=${o7(this.autocomplete)}
           ?autofocus=${this.autofocus}
           enterkeyhint=${o7(this.enterkeyhint)}
@@ -11807,7 +11714,7 @@ var WaNumberInput = class extends WebAwesomeFormAssociatedElement {
   }
 };
 WaNumberInput.css = [size_styles_default, form_control_styles_default, number_input_styles_default];
-WaNumberInput.shadowRootOptions = __spreadProps(__spreadValues({}, WebAwesomeFormAssociatedElement.shadowRootOptions), { delegatesFocus: true });
+WaNumberInput.shadowRootOptions = { ...WebAwesomeFormAssociatedElement.shadowRootOptions, delegatesFocus: true };
 __decorateClass([
   e6("input")
 ], WaNumberInput.prototype, "input", 2);
@@ -11883,8 +11790,7 @@ __decorateClass([
 WaNumberInput = __decorateClass([
   t5("wa-number-input")
 ], WaNumberInput);
-var _a11;
-(_a11 = WaNumberInput.disableWarning) == null ? void 0 : _a11.call(WaNumberInput, "change-in-update");
+WaNumberInput.disableWarning?.("change-in-update");
 
 // node_modules/@awesome.me/webawesome/dist/chunks/chunk.C3KOHXUM.js
 var option_styles_default = i4`
@@ -11975,7 +11881,6 @@ var option_styles_default = i4`
 
 // node_modules/@awesome.me/webawesome/dist/chunks/chunk.LORKLTKP.js
 function getText(root, depth = 0) {
-  var _a16, _b2;
   if (!root || !globalThis.Node) {
     return "";
   }
@@ -11985,7 +11890,7 @@ function getText(root, depth = 0) {
   }
   let node = root;
   if (node.nodeType === Node.TEXT_NODE) {
-    return (_a16 = node.textContent) != null ? _a16 : "";
+    return node.textContent ?? "";
   }
   if (node.nodeType === Node.ELEMENT_NODE) {
     let element = node;
@@ -11998,7 +11903,7 @@ function getText(root, depth = 0) {
         return getText(assignedNodes, --depth);
       }
     }
-    return depth > -1 ? getText(element, --depth) : (_b2 = element.textContent) != null ? _b2 : "";
+    return depth > -1 ? getText(element, --depth) : element.textContent ?? "";
   }
   return node.hasChildNodes() ? getText(node.childNodes, --depth) : "";
 }
@@ -12083,9 +11988,8 @@ var WaOption = class extends WebAwesomeElement {
     super.willUpdate(changedProperties);
   }
   syncDefaultSelected() {
-    var _a16;
     if ("closest" in this) {
-      if (!((_a16 = this.closest("wa-combobox, wa-select")) == null ? void 0 : _a16.hasInteracted)) {
+      if (!this.closest("wa-combobox, wa-select")?.hasInteracted) {
         if (this.defaultSelected) {
           const oldVal = this.selected;
           this.selected = this.defaultSelected;
@@ -12115,7 +12019,6 @@ var WaOption = class extends WebAwesomeElement {
     super.updated(changedProperties);
   }
   async firstUpdated(changedProperties) {
-    var _a16;
     super.firstUpdated(changedProperties);
     if (this.didSSR && !this.hasUpdated) {
       await this.updateComplete;
@@ -12126,9 +12029,9 @@ var WaOption = class extends WebAwesomeElement {
     if (this.selected && !this.defaultSelected) {
       const parent = this.closest("wa-select, wa-combobox");
       if (parent && !parent.hasInteracted) {
-        await customElements.whenDefined(parent == null ? void 0 : parent.localName);
+        await customElements.whenDefined(parent?.localName);
         await parent.updateComplete;
-        (_a16 = parent.selectionChanged) == null ? void 0 : _a16.call(parent);
+        parent.selectionChanged?.();
       }
     }
   }
@@ -12487,7 +12390,6 @@ var o9 = e2(e9);
 
 // node_modules/@awesome.me/webawesome/dist/chunks/chunk.TK7N5KSX.js
 function toPx(value, element = document.documentElement) {
-  var _a16;
   if (!Number.isNaN(Number(value))) {
     return Number(value);
   }
@@ -12511,9 +12413,9 @@ function toPx(value, element = document.documentElement) {
   }
   const previousValue = element.style.getPropertyValue(resolver);
   element.style.setProperty(resolver, value);
-  const computedValue = (_a16 = getComputedStyle(element)) == null ? void 0 : _a16.getPropertyValue(resolver);
+  const computedValue = getComputedStyle(element)?.getPropertyValue(resolver);
   element.style.setProperty(resolver, previousValue);
-  if (computedValue == null ? void 0 : computedValue.endsWith("px")) {
+  if (computedValue?.endsWith("px")) {
     return parseFloat(computedValue);
   }
   return Number(computedValue) || 0;
@@ -12536,8 +12438,7 @@ var WaPage = class extends WebAwesomeElement {
       const path = e10.composedPath();
       const navigationToggleSlot = this.navigationToggleSlot;
       if (path.find((el) => {
-        var _a16;
-        return ((_a16 = el.hasAttribute) == null ? void 0 : _a16.call(el, "data-toggle-nav")) || el.assignedSlot === navigationToggleSlot || el === navigationToggleSlot;
+        return el.hasAttribute?.("data-toggle-nav") || el.assignedSlot === navigationToggleSlot || el === navigationToggleSlot;
       })) {
         e10.preventDefault();
         this.toggleNavigation();
@@ -12601,12 +12502,11 @@ var WaPage = class extends WebAwesomeElement {
     if (!o5) {
       setTimeout(() => {
         requestAnimationFrame(() => {
-          var _a16, _b2, _c, _d, _e;
-          (_a16 = this.pageResizeObserver) == null ? void 0 : _a16.observe(this);
-          (_b2 = this.headerResizeObserver) == null ? void 0 : _b2.observe(this.header);
-          (_c = this.subheaderResizeObserver) == null ? void 0 : _c.observe(this.subheader);
-          (_d = this.bannerResizeObserver) == null ? void 0 : _d.observe(this.banner);
-          (_e = this.footerResizeObserver) == null ? void 0 : _e.observe(this.footer);
+          this.pageResizeObserver?.observe(this);
+          this.headerResizeObserver?.observe(this.header);
+          this.subheaderResizeObserver?.observe(this.subheader);
+          this.bannerResizeObserver?.observe(this.banner);
+          this.footerResizeObserver?.observe(this.footer);
         });
       });
     }
@@ -12616,13 +12516,12 @@ var WaPage = class extends WebAwesomeElement {
    * This prevents awkward gaps when scrolling the page and the aside / menu dont "fill" the gaps.
    */
   visiblePixelsInViewport(element) {
-    var _a16;
     if (!element) {
       return null;
     }
     const elementHeight = element.clientHeight;
     const windowHeight = window.innerHeight;
-    const rect = (_a16 = element.getBoundingClientRect) == null ? void 0 : _a16.call(element);
+    const rect = element.getBoundingClientRect?.();
     if (!rect) {
       return null;
     }
@@ -12640,13 +12539,12 @@ var WaPage = class extends WebAwesomeElement {
     this.updateNavigationToggleState();
   }
   disconnectedCallback() {
-    var _a16, _b2, _c, _d, _e;
     super.disconnectedCallback();
-    (_a16 = this.pageResizeObserver) == null ? void 0 : _a16.unobserve(this);
-    (_b2 = this.headerResizeObserver) == null ? void 0 : _b2.unobserve(this.header);
-    (_c = this.subheaderResizeObserver) == null ? void 0 : _c.unobserve(this.subheader);
-    (_d = this.footerResizeObserver) == null ? void 0 : _d.unobserve(this.footer);
-    (_e = this.bannerResizeObserver) == null ? void 0 : _e.unobserve(this.banner);
+    this.pageResizeObserver?.unobserve(this);
+    this.headerResizeObserver?.unobserve(this.header);
+    this.subheaderResizeObserver?.unobserve(this.subheader);
+    this.footerResizeObserver?.unobserve(this.footer);
+    this.bannerResizeObserver?.unobserve(this.banner);
   }
   /**
    * Shows the mobile navigation drawer
@@ -13240,11 +13138,10 @@ var WaRadioGroup = class extends WebAwesomeFormAssociatedElement {
     return [...super.validators, ...validators];
   }
   get value() {
-    var _a16;
     if (this.valueHasChanged) {
       return this._value;
     }
-    return (_a16 = this._value) != null ? _a16 : this.defaultValue;
+    return this._value ?? this.defaultValue;
   }
   set value(val) {
     if (typeof val === "number") val = String(val);
@@ -13325,7 +13222,6 @@ var WaRadioGroup = class extends WebAwesomeFormAssociatedElement {
     }
   }
   handleKeyDown(event) {
-    var _a16;
     if (!["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(event.key) || this.disabled) {
       return;
     }
@@ -13335,7 +13231,7 @@ var WaRadioGroup = class extends WebAwesomeFormAssociatedElement {
     }
     event.preventDefault();
     const oldValue = this.value;
-    const checkedRadio = (_a16 = radios.find((radio) => radio.checked)) != null ? _a16 : radios[0];
+    const checkedRadio = radios.find((radio) => radio.checked) ?? radios[0];
     const incr = event.key === " " ? 0 : ["ArrowUp", "ArrowLeft"].includes(event.key) ? -1 : 1;
     let index = radios.indexOf(checkedRadio) + incr;
     if (!index) index = 0;
@@ -13428,7 +13324,7 @@ var WaRadioGroup = class extends WebAwesomeFormAssociatedElement {
   }
 };
 WaRadioGroup.css = [size_styles_default, form_control_styles_default, radio_group_styles_default];
-WaRadioGroup.shadowRootOptions = __spreadProps(__spreadValues({}, WebAwesomeFormAssociatedElement.shadowRootOptions), { delegatesFocus: true });
+WaRadioGroup.shadowRootOptions = { ...WebAwesomeFormAssociatedElement.shadowRootOptions, delegatesFocus: true };
 __decorateClass([
   e6("slot:not([name])")
 ], WaRadioGroup.prototype, "defaultSlot", 2);
@@ -13471,8 +13367,7 @@ __decorateClass([
 WaRadioGroup = __decorateClass([
   t5("wa-radio-group")
 ], WaRadioGroup);
-var _a12;
-(_a12 = WaRadioGroup.disableWarning) == null ? void 0 : _a12.call(WaRadioGroup, "change-in-update");
+WaRadioGroup.disableWarning?.("change-in-update");
 
 // node_modules/@awesome.me/webawesome/dist/chunks/chunk.BELHQIBT.js
 var radio_styles_default = i4`
@@ -13770,8 +13665,7 @@ __decorateClass([
 WaRadio = __decorateClass([
   t5("wa-radio")
 ], WaRadio);
-var _a13;
-(_a13 = WaRadio.disableWarning) == null ? void 0 : _a13.call(WaRadio, "change-in-update");
+WaRadio.disableWarning?.("change-in-update");
 
 // node_modules/@awesome.me/webawesome/dist/chunks/chunk.C6UR4IOH.js
 var switch_styles_default = i4`
@@ -13890,13 +13784,12 @@ var switch_styles_default = i4`
 // node_modules/@awesome.me/webawesome/dist/chunks/chunk.F6P22JWC.js
 var WaSwitch = class extends WebAwesomeFormAssociatedElement {
   constructor() {
-    var _a16;
     super(...arguments);
     this.hasSlotController = new HasSlotController(this, "hint");
     this.localize = new LocalizeController2(this);
     this.title = "";
     this.name = null;
-    this._value = (_a16 = this.getAttribute("value")) != null ? _a16 : null;
+    this._value = this.getAttribute("value") ?? null;
     this.size = "m";
     this.disabled = false;
     this._checked = null;
@@ -13910,8 +13803,7 @@ var WaSwitch = class extends WebAwesomeFormAssociatedElement {
   }
   /** The value of the switch, submitted as a name/value pair with form data. */
   get value() {
-    var _a16;
-    return (_a16 = this._value) != null ? _a16 : "on";
+    return this._value ?? "on";
   }
   set value(val) {
     this._value = val;
@@ -13920,11 +13812,10 @@ var WaSwitch = class extends WebAwesomeFormAssociatedElement {
     warnDeprecatedSize(this.localName, this.size);
   }
   get checked() {
-    var _a16;
     if (this.valueHasChanged) {
       return Boolean(this._checked);
     }
-    return (_a16 = this._checked) != null ? _a16 : this.defaultChecked;
+    return this._checked ?? this.defaultChecked;
   }
   set checked(val) {
     this._checked = Boolean(val);
@@ -13999,7 +13890,7 @@ var WaSwitch = class extends WebAwesomeFormAssociatedElement {
       this.internals.setFormValue(null, null);
       return;
     }
-    this.internals.setFormValue(value != null ? value : "on", stateValue);
+    this.internals.setFormValue(value ?? "on", stateValue);
   }
   formResetCallback() {
     this._checked = null;
@@ -14056,7 +13947,7 @@ var WaSwitch = class extends WebAwesomeFormAssociatedElement {
     `;
   }
 };
-WaSwitch.shadowRootOptions = __spreadProps(__spreadValues({}, WebAwesomeFormAssociatedElement.shadowRootOptions), { delegatesFocus: true });
+WaSwitch.shadowRootOptions = { ...WebAwesomeFormAssociatedElement.shadowRootOptions, delegatesFocus: true };
 WaSwitch.css = [form_control_styles_default, size_styles_default, switch_styles_default];
 __decorateClass([
   e6('input[type="checkbox"]')
@@ -14103,8 +13994,7 @@ __decorateClass([
 WaSwitch = __decorateClass([
   t5("wa-switch")
 ], WaSwitch);
-var _a14;
-(_a14 = WaSwitch.disableWarning) == null ? void 0 : _a14.call(WaSwitch, "change-in-update");
+WaSwitch.disableWarning?.("change-in-update");
 
 // node_modules/@awesome.me/webawesome/dist/chunks/chunk.YBFCQDTA.js
 var WaTabHideEvent = class extends Event {
@@ -14398,7 +14288,6 @@ var WaTabGroup = class extends WebAwesomeElement {
       this.mutationObserver.observe(this, { attributes: true, childList: true, subtree: true });
       this.resizeObserver.observe(this.nav);
       const intersectionObserver = new IntersectionObserver((entries, observer) => {
-        var _a16;
         if (entries[0].intersectionRatio > 0) {
           this.setAriaLabels();
           if (this.active) {
@@ -14407,7 +14296,7 @@ var WaTabGroup = class extends WebAwesomeElement {
               this.setActiveTab(tab);
             }
           } else {
-            this.setActiveTab((_a16 = this.getActiveTab()) != null ? _a16 : this.tabs[0], { emitEvents: false });
+            this.setActiveTab(this.getActiveTab() ?? this.tabs[0], { emitEvents: false });
           }
           observer.unobserve(entries[0].target);
         }
@@ -14416,11 +14305,10 @@ var WaTabGroup = class extends WebAwesomeElement {
     });
   }
   disconnectedCallback() {
-    var _a16, _b2;
     super.disconnectedCallback();
-    (_a16 = this.mutationObserver) == null ? void 0 : _a16.disconnect();
+    this.mutationObserver?.disconnect();
     if (this.nav) {
-      (_b2 = this.resizeObserver) == null ? void 0 : _b2.unobserve(this.nav);
+      this.resizeObserver?.unobserve(this.nav);
     }
   }
   getAllTabs() {
@@ -14438,7 +14326,7 @@ var WaTabGroup = class extends WebAwesomeElement {
   handleClick(event) {
     const target = event.target;
     const tab = target.closest("wa-tab");
-    const tabGroup = tab == null ? void 0 : tab.closest("wa-tab-group");
+    const tabGroup = tab?.closest("wa-tab-group");
     if (tabGroup !== this) {
       return;
     }
@@ -14449,7 +14337,7 @@ var WaTabGroup = class extends WebAwesomeElement {
   handleKeyDown(event) {
     const target = event.target;
     const tab = target.closest("wa-tab");
-    const tabGroup = tab == null ? void 0 : tab.closest("wa-tab-group");
+    const tabGroup = tab?.closest("wa-tab-group");
     if (tabGroup !== this) {
       return;
     }
@@ -14464,7 +14352,7 @@ var WaTabGroup = class extends WebAwesomeElement {
       const activeEl = this.tabs.find((t6) => t6.matches(":focus"));
       const isRtl = this.localize.dir() === "rtl";
       let nextTab = null;
-      if ((activeEl == null ? void 0 : activeEl.tagName.toLowerCase()) === "wa-tab") {
+      if (activeEl?.tagName.toLowerCase() === "wa-tab") {
         if (event.key === "Home") {
           nextTab = this.focusableTabs[0];
         } else if (event.key === "End") {
@@ -14529,10 +14417,11 @@ var WaTabGroup = class extends WebAwesomeElement {
     });
   }
   setActiveTab(tab, options) {
-    options = __spreadValues({
+    options = {
       emitEvents: true,
-      scrollBehavior: "auto"
-    }, options);
+      scrollBehavior: "auto",
+      ...options
+    };
     if (tab.closest("wa-tab-group") !== this) {
       return;
     }
@@ -14544,10 +14433,7 @@ var WaTabGroup = class extends WebAwesomeElement {
         el.active = el === this.activeTab;
         el.tabIndex = el === this.activeTab ? 0 : -1;
       });
-      this.panels.forEach((el) => {
-        var _a16;
-        return el.active = el.name === ((_a16 = this.activeTab) == null ? void 0 : _a16.panel);
-      });
+      this.panels.forEach((el) => el.active = el.name === this.activeTab?.panel);
       if (["top", "bottom"].includes(this.placement)) {
         scrollIntoView(this.activeTab, this.nav, "horizontal", options.scrollBehavior);
       }
@@ -14623,10 +14509,7 @@ var WaTabGroup = class extends WebAwesomeElement {
               ` : ""}
 
           <!-- We have a focus listener because in Firefox (and soon to be Chrome) overflow containers are focusable. -->
-          <div class="nav" @focus=${() => {
-      var _a16;
-      return (_a16 = this.activeTab) == null ? void 0 : _a16.focus({ preventScroll: true });
-    }}>
+          <div class="nav" @focus=${() => this.activeTab?.focus({ preventScroll: true })}>
             <div part="tabs" class="tabs" role="tablist">
               <slot name="nav" @slotchange=${this.syncTabsAndPanels}></slot>
             </div>
@@ -14776,8 +14659,7 @@ var WaTab = class extends WebAwesomeElement {
     }
   }
   render() {
-    var _a16;
-    this.id = ((_a16 = this.id) == null ? void 0 : _a16.length) > 0 ? this.id : this.componentId;
+    this.id = this.id?.length > 0 ? this.id : this.componentId;
     return b`
       <div
         part="base"
@@ -15178,13 +15060,11 @@ var WaZoomableFrame = class extends WebAwesomeElement {
   }
   /** Returns the internal iframe's `window` object. (Readonly property) */
   get contentWindow() {
-    var _a16;
-    return ((_a16 = this.iframe) == null ? void 0 : _a16.contentWindow) || null;
+    return this.iframe?.contentWindow || null;
   }
   /** Returns the internal iframe's `document` object. (Readonly property) */
   get contentDocument() {
-    var _a16;
-    return ((_a16 = this.iframe) == null ? void 0 : _a16.contentDocument) || null;
+    return this.iframe?.contentDocument || null;
   }
   parseZoomLevels(zoomLevelsString) {
     const tokens = parseSpaceDelimitedTokens(zoomLevelsString);
@@ -15240,7 +15120,6 @@ var WaZoomableFrame = class extends WebAwesomeElement {
     super.willUpdate(changedProperties);
   }
   updated(changedProperties) {
-    var _a16, _b2;
     if (changedProperties.has("zoomLevels")) {
       this.availableZoomLevels = this.parseZoomLevels(this.zoomLevels);
       if (this.availableZoomLevels.length > 0) {
@@ -15252,10 +15131,10 @@ var WaZoomableFrame = class extends WebAwesomeElement {
     }
     if (changedProperties.has("withThemeSync")) {
       if (this.withThemeSync) {
-        (_a16 = this.themeObserver) == null ? void 0 : _a16.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+        this.themeObserver?.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
         this.syncTheme();
       } else {
-        (_b2 = this.themeObserver) == null ? void 0 : _b2.disconnect();
+        this.themeObserver?.disconnect();
       }
     }
     super.updated(changedProperties);
@@ -15283,15 +15162,13 @@ var WaZoomableFrame = class extends WebAwesomeElement {
     }
   }
   disconnectedCallback() {
-    var _a16;
     super.disconnectedCallback();
-    (_a16 = this.themeObserver) == null ? void 0 : _a16.disconnect();
+    this.themeObserver?.disconnect();
   }
   syncTheme() {
-    var _a16;
     if (!this.withThemeSync) return;
     try {
-      const iframeRoot = (_a16 = this.contentDocument) == null ? void 0 : _a16.documentElement;
+      const iframeRoot = this.contentDocument?.documentElement;
       if (!iframeRoot) return;
       const prefixes = ["wa-theme-", "wa-brand-", "wa-palette-"];
       const schemeCls = /* @__PURE__ */ new Set();
@@ -15318,7 +15195,7 @@ var WaZoomableFrame = class extends WebAwesomeElement {
       const toRemove = Array.from(iframeRoot.classList).filter((c6) => prefixes.some((p5) => c6.startsWith(p5)));
       iframeRoot.classList.remove(...toRemove);
       iframeRoot.classList.add(...themeCls);
-    } catch (e10) {
+    } catch {
     }
   }
   handleLoad() {
@@ -15329,7 +15206,6 @@ var WaZoomableFrame = class extends WebAwesomeElement {
     this.dispatchEvent(new Event("error", { bubbles: false, cancelable: false, composed: true }));
   }
   render() {
-    var _a16, _b2, _c;
     return b`
       <div id="frame-container">
         <iframe
@@ -15339,9 +15215,9 @@ var WaZoomableFrame = class extends WebAwesomeElement {
           ?allowfullscreen=${this.allowfullscreen}
           loading=${this.loading}
           referrerpolicy=${this.referrerpolicy}
-          sandbox=${o7((_a16 = this.sandbox) != null ? _a16 : void 0)}
-          src=${o7((_b2 = this.src) != null ? _b2 : void 0)}
-          srcdoc=${o7((_c = this.srcdoc) != null ? _c : void 0)}
+          sandbox=${o7(this.sandbox ?? void 0)}
+          src=${o7(this.src ?? void 0)}
+          srcdoc=${o7(this.srcdoc ?? void 0)}
           @load=${this.handleLoad}
           @error=${this.handleError}
         ></iframe>
@@ -17629,10 +17505,11 @@ for (let i9 = 0; i9 < filenames2.length; i9++) {
   const match = filenames2[i9].match(/([^\/]+)\.json$/);
   if (!match) continue;
   const lang = match[1];
-  translations2[lang] = __spreadValues({
+  translations2[lang] = {
     language: lang,
-    direction: contents[i9].direction || "ltr"
-  }, contents[i9].strings);
+    direction: contents[i9].direction || "ltr",
+    ...contents[i9].strings
+  };
 }
 function getTranslations(langCode) {
   if (!langCode) {
@@ -17762,7 +17639,7 @@ var Announcer = class {
 };
 var scriptBundlePath;
 try {
-  if ((document == null ? void 0 : document.currentScript) && document.currentScript.tagName.toUpperCase() === "SCRIPT") {
+  if (document?.currentScript && document.currentScript.tagName.toUpperCase() === "SCRIPT") {
     const match = new URL(
       document.currentScript.src
     ).pathname.match(/^(.*\/)(?:pagefind[-_])?component[-_]?ui.js.*$/);
@@ -17775,7 +17652,6 @@ try {
 }
 var Instance = class {
   constructor(name, opts = {}) {
-    var _a16, _b2, _c;
     this.__pagefind__ = null;
     this.__loadPromise__ = null;
     this.__searchID__ = 0;
@@ -17803,10 +17679,10 @@ var Instance = class {
       translations: []
     };
     this.options = {
-      bundlePath: (_b2 = (_a16 = opts.bundlePath) != null ? _a16 : scriptBundlePath) != null ? _b2 : "/pagefind/",
-      mergeIndex: (_c = opts.mergeIndex) != null ? _c : []
+      bundlePath: opts.bundlePath ?? scriptBundlePath ?? "/pagefind/",
+      mergeIndex: opts.mergeIndex ?? []
     };
-    const pagefindOpts = __spreadValues({}, opts);
+    const pagefindOpts = { ...opts };
     delete pagefindOpts.bundlePath;
     delete pagefindOpts.mergeIndex;
     this.pagefindOptions = pagefindOpts;
@@ -17831,8 +17707,7 @@ var Instance = class {
     return id3;
   }
   add(component) {
-    var _a16;
-    (_a16 = component == null ? void 0 : component.register) == null ? void 0 : _a16.call(component, this);
+    component?.register?.(this);
     this.components.push(component);
   }
   registerInput(component, capabilities = {}) {
@@ -17875,42 +17750,27 @@ var Instance = class {
   getInputs(requiredCapability = null) {
     const components = this.componentsByType["input"] || [];
     if (!requiredCapability) return components;
-    return components.filter((c6) => {
-      var _a16;
-      return (_a16 = c6.capabilities) == null ? void 0 : _a16[requiredCapability];
-    });
+    return components.filter((c6) => c6.capabilities?.[requiredCapability]);
   }
   getResults(requiredCapability = null) {
     const components = this.componentsByType["results"] || [];
     if (!requiredCapability) return components;
-    return components.filter((c6) => {
-      var _a16;
-      return (_a16 = c6.capabilities) == null ? void 0 : _a16[requiredCapability];
-    });
+    return components.filter((c6) => c6.capabilities?.[requiredCapability]);
   }
   getSummaries(requiredCapability = null) {
     const components = this.componentsByType["summary"] || [];
     if (!requiredCapability) return components;
-    return components.filter((c6) => {
-      var _a16;
-      return (_a16 = c6.capabilities) == null ? void 0 : _a16[requiredCapability];
-    });
+    return components.filter((c6) => c6.capabilities?.[requiredCapability]);
   }
   getFilters(requiredCapability = null) {
     const components = this.componentsByType["filter"] || [];
     if (!requiredCapability) return components;
-    return components.filter((c6) => {
-      var _a16;
-      return (_a16 = c6.capabilities) == null ? void 0 : _a16[requiredCapability];
-    });
+    return components.filter((c6) => c6.capabilities?.[requiredCapability]);
   }
   getSorts(requiredCapability = null) {
     const components = this.componentsByType["sort"] || [];
     if (!requiredCapability) return components;
-    return components.filter((c6) => {
-      var _a16;
-      return (_a16 = c6.capabilities) == null ? void 0 : _a16[requiredCapability];
-    });
+    return components.filter((c6) => c6.capabilities?.[requiredCapability]);
   }
   getUtilities(subtype = null, requiredCapability = null) {
     let utilities = this.componentsByType["utility"] || [];
@@ -17918,10 +17778,7 @@ var Instance = class {
       utilities = utilities.filter((u5) => u5.componentSubtype === subtype);
     }
     if (requiredCapability) {
-      utilities = utilities.filter((c6) => {
-        var _a16;
-        return (_a16 = c6.capabilities) == null ? void 0 : _a16[requiredCapability];
-      });
+      utilities = utilities.filter((c6) => c6.capabilities?.[requiredCapability]);
     }
     return utilities;
   }
@@ -17930,16 +17787,13 @@ var Instance = class {
    * Used to determine if Instance should handle announcements as a fallback.
    */
   hasAnnouncementCapability() {
-    return this.components.some((c6) => {
-      var _a16;
-      return ((_a16 = c6.capabilities) == null ? void 0 : _a16.announcements) === true;
-    });
+    return this.components.some((c6) => c6.capabilities?.announcements === true);
   }
   /**
    * Register an active shortcut. Triggers hints to re-render.
    */
   registerShortcut(shortcut, owner) {
-    const entry = __spreadProps(__spreadValues({}, shortcut), { owner });
+    const entry = { ...shortcut, owner };
     this.activeShortcuts.push(entry);
     this.notifyShortcutsChanged();
   }
@@ -17973,10 +17827,7 @@ var Instance = class {
    */
   notifyShortcutsChanged() {
     const hints = this.getUtilities("keyboard-hints");
-    hints.forEach((h4) => {
-      var _a16;
-      return (_a16 = h4.render) == null ? void 0 : _a16.call(h4);
-    });
+    hints.forEach((h4) => h4.render?.());
   }
   /**
    * Focus the first result in the next keyboard-navigable results component.
@@ -18022,7 +17873,7 @@ var Instance = class {
       fromElement,
       inputs
     );
-    const inputEl = (inputComponent == null ? void 0 : inputComponent.inputEl) || (inputComponent == null ? void 0 : inputComponent.querySelector("input"));
+    const inputEl = inputComponent?.inputEl || inputComponent?.querySelector("input");
     if (inputEl) {
       inputEl.value += char;
       inputEl.focus();
@@ -18038,7 +17889,7 @@ var Instance = class {
       fromElement,
       inputs
     );
-    const inputEl = (inputComponent == null ? void 0 : inputComponent.inputEl) || (inputComponent == null ? void 0 : inputComponent.querySelector("input"));
+    const inputEl = inputComponent?.inputEl || inputComponent?.querySelector("input");
     if (inputEl) {
       inputEl.value = inputEl.value.slice(0, -1);
       inputEl.focus();
@@ -18049,10 +17900,7 @@ var Instance = class {
    * Trigger ARIA reconciliation on all registered components.
    */
   reconcileAria() {
-    this.components.forEach((c6) => {
-      var _a16;
-      return (_a16 = c6.reconcileAria) == null ? void 0 : _a16.call(c6);
-    });
+    this.components.forEach((c6) => c6.reconcileAria?.());
   }
   /**
    * Get current text direction.
@@ -18064,9 +17912,8 @@ var Instance = class {
    * Set the language for translations.
    */
   setLanguage(langCode) {
-    var _a16;
     if (!langCode) {
-      langCode = ((_a16 = document == null ? void 0 : document.documentElement) == null ? void 0 : _a16.lang) || "en";
+      langCode = document?.documentElement?.lang || "en";
     }
     this._translations = getTranslations(langCode);
     this._direction = this._translations.direction || "ltr";
@@ -18077,16 +17924,15 @@ var Instance = class {
    * Set user translation overrides.
    */
   setTranslations(overrides) {
-    this._userTranslations = __spreadValues(__spreadValues({}, this._userTranslations), overrides);
+    this._userTranslations = { ...this._userTranslations, ...overrides };
     this.__dispatch__("translations", this._translations, this._direction);
   }
   /**
    * Get a translated string.
    */
   translate(key, replacements = {}) {
-    var _a16, _b2, _c;
-    const str = (_b2 = this._userTranslations[key]) != null ? _b2 : (_a16 = this._translations) == null ? void 0 : _a16[key];
-    return interpolate(typeof str === "string" ? str : void 0, replacements, (_c = this._translations) == null ? void 0 : _c.language);
+    const str = this._userTranslations[key] ?? this._translations?.[key];
+    return interpolate(typeof str === "string" ? str : void 0, replacements, this._translations?.language);
   }
   /**
    * Announce a message to screen readers using a translation key.
@@ -18162,11 +18008,10 @@ var Instance = class {
     this.__search__(this.searchTerm, this.searchFilters);
   }
   __dispatch__(e10, ...args) {
-    var _a16;
-    (_a16 = this.__hooks__[e10]) == null ? void 0 : _a16.forEach((hook) => {
+    this.__hooks__[e10]?.forEach((hook) => {
       if (typeof hook === "function") {
         hook(...args);
-      } else if (hook == null ? void 0 : hook.callback) {
+      } else if (hook?.callback) {
         hook.callback(...args);
       }
     });
@@ -18183,7 +18028,6 @@ var Instance = class {
     }
   }
   async __search__(term, filters) {
-    var _a16, _b2, _c, _d;
     this.__dispatch__("loading");
     await this.__load__();
     const thisSearch = ++this.__searchID__;
@@ -18194,9 +18038,9 @@ var Instance = class {
     const searchTerm = term && term.length ? term : null;
     const results = await this.__pagefind__.search(searchTerm, { filters });
     if (results && this.__searchID__ === thisSearch) {
-      if (results.filters && ((_a16 = Object.keys(results.filters)) == null ? void 0 : _a16.length)) {
+      if (results.filters && Object.keys(results.filters)?.length) {
         this.availableFilters = results.filters;
-        this.totalFilters = (_b2 = results.totalFilters) != null ? _b2 : null;
+        this.totalFilters = results.totalFilters ?? null;
         this.__dispatch__("filters", {
           available: this.availableFilters,
           total: this.totalFilters
@@ -18205,7 +18049,7 @@ var Instance = class {
       this.searchResult = results;
       this.__dispatch__("results", this.searchResult);
       if (!this.hasAnnouncementCapability() && term) {
-        const count = (_d = (_c = results.results) == null ? void 0 : _c.length) != null ? _d : 0;
+        const count = results.results?.length ?? 0;
         const key = count === 0 ? "zero_results" : count === 1 ? "one_result" : "many_results";
         const priority = count === 0 ? "assertive" : "polite";
         this.announce(key, { SEARCH_TERM: term, COUNT: count }, priority);
@@ -18227,7 +18071,6 @@ var Instance = class {
     }
   }
   async __doLoad__() {
-    var _a16, _b2;
     if (this.__pagefind__) return;
     let pagefindModule;
     try {
@@ -18243,9 +18086,9 @@ var Instance = class {
           `You can configure this by passing a bundlePath option to the Pagefind Component UI`
         ].join("\n")
       );
-      if ((document == null ? void 0 : document.currentScript) && document.currentScript.tagName.toUpperCase() === "SCRIPT") {
+      if (document?.currentScript && document.currentScript.tagName.toUpperCase() === "SCRIPT") {
         console.error(
-          `[DEBUG: Loaded from ${(_b2 = (_a16 = document.currentScript) == null ? void 0 : _a16.src) != null ? _b2 : "bad script location"}]`
+          `[DEBUG: Loaded from ${document.currentScript?.src ?? "bad script location"}]`
         );
       } else {
         console.error("no known script location");
@@ -18268,7 +18111,7 @@ var Instance = class {
       if (!index.bundlePath) {
         throw new Error("mergeIndex requires a bundlePath parameter");
       }
-      const _c = index, { bundlePath: url } = _c, indexOpts = __objRest(_c, ["bundlePath"]);
+      const { bundlePath: url, ...indexOpts } = index;
       await imported_pagefind.mergeIndex(url, indexOpts);
     }
     this.__pagefind__ = imported_pagefind;
@@ -18288,19 +18131,15 @@ var Instance = class {
    */
   thinSubResults(results, limit = 3) {
     if (results.length <= limit) return results;
-    const topUrls = [...results].sort((a4, b3) => {
-      var _a16, _b2, _c, _d;
-      return ((_b2 = (_a16 = b3.locations) == null ? void 0 : _a16.length) != null ? _b2 : 0) - ((_d = (_c = a4.locations) == null ? void 0 : _c.length) != null ? _d : 0);
-    }).slice(0, limit).map((r9) => r9.url);
+    const topUrls = [...results].sort((a4, b3) => (b3.locations?.length ?? 0) - (a4.locations?.length ?? 0)).slice(0, limit).map((r9) => r9.url);
     return results.filter((r9) => topUrls.includes(r9.url));
   }
   /**
    * Get sub-results for display, excluding the root result and thinning to limit.
    */
   getDisplaySubResults(result, limit = 3) {
-    var _a16, _b2;
     if (!Array.isArray(result.sub_results)) return [];
-    const hasRootSubResult = ((_a16 = result.sub_results[0]) == null ? void 0 : _a16.url) === (((_b2 = result.meta) == null ? void 0 : _b2.url) || result.url);
+    const hasRootSubResult = result.sub_results[0]?.url === (result.meta?.url || result.url);
     const subResults = hasRootSubResult ? result.sub_results.slice(1) : result.sub_results;
     return this.thinSubResults(subResults, limit);
   }
@@ -18314,7 +18153,7 @@ var InstanceManager = class {
   }
   detectBundlePath() {
     try {
-      if ((document == null ? void 0 : document.currentScript) && document.currentScript.tagName.toUpperCase() === "SCRIPT") {
+      if (document?.currentScript && document.currentScript.tagName.toUpperCase() === "SCRIPT") {
         const scriptPath = new URL(
           document.currentScript.src
         ).pathname.match(/^(.*\/)(?:pagefind[-_])?.*\.js.*$/);
@@ -18331,7 +18170,10 @@ var InstanceManager = class {
     if (existing) {
       return existing;
     }
-    const instanceOptions = __spreadValues(__spreadValues({}, this.defaultOptions), options);
+    const instanceOptions = {
+      ...this.defaultOptions,
+      ...options
+    };
     const instance = new Instance(name, instanceOptions);
     this.instances.set(name, instance);
     return instance;
@@ -18366,30 +18208,12 @@ function configureInstance(name, options) {
 var truthy = (v3) => !(v3 == null || v3 === false || v3 === 0 || v3 === "" || Number.isNaN(v3) || Array.isArray(v3) && v3.length === 0 || typeof v3 === "object" && v3 !== null && !Array.isArray(v3) && Object.keys(v3).length === 0);
 var ck = (a4, n7, name) => a4.length < n7 ? `[Error: ${name}() needs ${n7} args]` : null;
 var fns = {
-  eq: (ctx, ...a4) => {
-    var _a16;
-    return (_a16 = ck(a4, 2, "eq")) != null ? _a16 : ev(a4[0], ctx) === ev(a4[1], ctx);
-  },
-  ne: (ctx, ...a4) => {
-    var _a16;
-    return (_a16 = ck(a4, 2, "ne")) != null ? _a16 : ev(a4[0], ctx) !== ev(a4[1], ctx);
-  },
-  gt: (ctx, ...a4) => {
-    var _a16;
-    return (_a16 = ck(a4, 2, "gt")) != null ? _a16 : Number(ev(a4[0], ctx)) > Number(ev(a4[1], ctx));
-  },
-  lt: (ctx, ...a4) => {
-    var _a16;
-    return (_a16 = ck(a4, 2, "lt")) != null ? _a16 : Number(ev(a4[0], ctx)) < Number(ev(a4[1], ctx));
-  },
-  gte: (ctx, ...a4) => {
-    var _a16;
-    return (_a16 = ck(a4, 2, "gte")) != null ? _a16 : Number(ev(a4[0], ctx)) >= Number(ev(a4[1], ctx));
-  },
-  lte: (ctx, ...a4) => {
-    var _a16;
-    return (_a16 = ck(a4, 2, "lte")) != null ? _a16 : Number(ev(a4[0], ctx)) <= Number(ev(a4[1], ctx));
-  },
+  eq: (ctx, ...a4) => ck(a4, 2, "eq") ?? ev(a4[0], ctx) === ev(a4[1], ctx),
+  ne: (ctx, ...a4) => ck(a4, 2, "ne") ?? ev(a4[0], ctx) !== ev(a4[1], ctx),
+  gt: (ctx, ...a4) => ck(a4, 2, "gt") ?? Number(ev(a4[0], ctx)) > Number(ev(a4[1], ctx)),
+  lt: (ctx, ...a4) => ck(a4, 2, "lt") ?? Number(ev(a4[0], ctx)) < Number(ev(a4[1], ctx)),
+  gte: (ctx, ...a4) => ck(a4, 2, "gte") ?? Number(ev(a4[0], ctx)) >= Number(ev(a4[1], ctx)),
+  lte: (ctx, ...a4) => ck(a4, 2, "lte") ?? Number(ev(a4[0], ctx)) <= Number(ev(a4[1], ctx)),
   and: (ctx, ...a4) => {
     let r9 = true;
     for (const e10 of a4) {
@@ -18408,10 +18232,7 @@ var fns = {
     }
     return r9;
   },
-  not: (ctx, ...a4) => {
-    var _a16;
-    return (_a16 = ck(a4, 1, "not")) != null ? _a16 : !truthy(ev(a4[0], ctx));
-  },
+  not: (ctx, ...a4) => ck(a4, 1, "not") ?? !truthy(ev(a4[0], ctx)),
   lowercase: (ctx, ...a4) => String(ev(a4[0], ctx)).toLowerCase(),
   uppercase: (ctx, ...a4) => String(ev(a4[0], ctx)).toUpperCase(),
   trim: (ctx, ...a4) => String(ev(a4[0], ctx)).trim(),
@@ -18423,10 +18244,7 @@ var fns = {
     const suffix = a4[2] ? String(ev(a4[2], ctx)) : "...";
     return s5.length > n7 ? s5.slice(0, n7) + suffix : s5;
   },
-  replace: (ctx, ...a4) => {
-    var _a16;
-    return (_a16 = ck(a4, 3, "replace")) != null ? _a16 : String(ev(a4[0], ctx)).split(String(ev(a4[1], ctx))).join(String(ev(a4[2], ctx)));
-  },
+  replace: (ctx, ...a4) => ck(a4, 3, "replace") ?? String(ev(a4[0], ctx)).split(String(ev(a4[1], ctx))).join(String(ev(a4[2], ctx))),
   limit: (ctx, ...a4) => {
     const e10 = ck(a4, 2, "limit");
     if (e10)
@@ -18455,10 +18273,7 @@ var fns = {
     const v3 = ev(a4[0], ctx);
     return Array.isArray(v3) ? v3.length : String(v3).length;
   },
-  join: (ctx, ...a4) => {
-    var _a16;
-    return (_a16 = ck(a4, 2, "join")) != null ? _a16 : ((r9) => Array.isArray(r9) ? r9.join(String(ev(a4[1], ctx))) : String(r9))(ev(a4[0], ctx));
-  },
+  join: (ctx, ...a4) => ck(a4, 2, "join") ?? ((r9) => Array.isArray(r9) ? r9.join(String(ev(a4[1], ctx))) : String(r9))(ev(a4[0], ctx)),
   default: (ctx, ...a4) => {
     const e10 = ck(a4, 2, "default");
     if (e10)
@@ -18467,8 +18282,7 @@ var fns = {
     return truthy(v3) ? v3 : ev(a4[1], ctx);
   },
   safeUrl: (ctx, ...a4) => {
-    var _a16;
-    const u5 = String((_a16 = ev(a4[0], ctx)) != null ? _a16 : "").trim();
+    const u5 = String(ev(a4[0], ctx) ?? "").trim();
     return u5 && /^(?:\.{0,2}\/|[#?]|(?:https?|ftp):\/\/|(?:mailto|tel):)/i.test(u5) ? u5 : "";
   }
 };
@@ -18507,7 +18321,7 @@ var rn = (nodes, ctx) => {
       else if (typeof v3 === "object" && v3 !== null)
         out += "[Error: cannot render object]";
       else {
-        const s5 = String(v3 != null ? v3 : "");
+        const s5 = String(v3 ?? "");
         out += n7.raw ? s5 : esc(s5);
       }
       continue;
@@ -18534,7 +18348,7 @@ var rn = (nodes, ctx) => {
         out += rn(n7.else, ctx);
       else
         for (let i9 = 0; i9 < arr.length; i9++) {
-          const local = __spreadProps(__spreadValues({}, ctx), { [n7.as]: arr[i9] });
+          const local = { ...ctx, [n7.as]: arr[i9] };
           if (n7.idx)
             local[n7.idx] = i9;
           out += rn(n7.body, local);
@@ -18959,13 +18773,12 @@ var PagefindInput = class extends PagefindElement {
     this.render();
   }
   render() {
-    var _a16, _b2, _c, _d, _e;
     this.innerHTML = "";
     const inputId = this.instance.generateId("pfmod-input");
-    const searchLabel = ((_a16 = this.instance) == null ? void 0 : _a16.translate("search_label")) || "Search this site";
-    const clearText = ((_b2 = this.instance) == null ? void 0 : _b2.translate("clear_search")) || "Clear";
-    const placeholderText = this.placeholder || ((_c = this.instance) == null ? void 0 : _c.translate("placeholder")) || "Search";
-    if (((_d = this.instance) == null ? void 0 : _d.direction) === "rtl") {
+    const searchLabel = this.instance?.translate("search_label") || "Search this site";
+    const clearText = this.instance?.translate("clear_search") || "Clear";
+    const placeholderText = this.placeholder || this.instance?.translate("placeholder") || "Search";
+    if (this.instance?.direction === "rtl") {
       this.setAttribute("dir", "rtl");
     } else {
       this.removeAttribute("dir");
@@ -18991,7 +18804,7 @@ var PagefindInput = class extends PagefindElement {
       this.inputEl.setAttribute("autofocus", "autofocus");
     }
     const hintId = this.instance.generateId("pf-input-hint");
-    const hintText = ((_e = this.instance) == null ? void 0 : _e.translate("input_hint")) || "Results will appear as you type";
+    const hintText = this.instance?.translate("input_hint") || "Results will appear as you type";
     const hint = document.createElement("span");
     hint.id = hintId;
     hint.setAttribute("data-pf-sr-hidden", "true");
@@ -19011,56 +18824,51 @@ var PagefindInput = class extends PagefindElement {
   setupEventHandlers() {
     if (!this.inputEl || !this.clearEl) return;
     this.inputEl.addEventListener("input", async (e10) => {
-      var _a16;
       const target = e10.target;
-      if (this.instance && typeof (target == null ? void 0 : target.value) === "string") {
+      if (this.instance && typeof target?.value === "string") {
         this.updateState(target.value);
         const thisSearchID = ++this.searchID;
         await asyncSleep(this.debounce);
         if (thisSearchID !== this.searchID) {
           return;
         }
-        (_a16 = this.instance) == null ? void 0 : _a16.triggerSearch(target.value);
+        this.instance?.triggerSearch(target.value);
       }
     });
     this.inputEl.addEventListener("keydown", (e10) => {
-      var _a16, _b2;
       if (e10.key === "Escape") {
         ++this.searchID;
         if (this.inputEl) this.inputEl.value = "";
-        (_a16 = this.instance) == null ? void 0 : _a16.triggerSearch("");
+        this.instance?.triggerSearch("");
         this.updateState("");
       }
       if (e10.key === "ArrowDown") {
         e10.preventDefault();
         if (this.inputEl) {
-          (_b2 = this.instance) == null ? void 0 : _b2.focusNextResults(this.inputEl);
+          this.instance?.focusNextResults(this.inputEl);
         }
       }
     });
     this.inputEl.addEventListener("focus", () => {
-      var _a16, _b2, _c, _d, _e;
-      (_a16 = this.instance) == null ? void 0 : _a16.triggerLoad();
-      const navigateText = ((_b2 = this.instance) == null ? void 0 : _b2.translate("keyboard_navigate")) || "navigate";
-      const clearText = ((_c = this.instance) == null ? void 0 : _c.translate("keyboard_clear")) || "clear";
-      (_d = this.instance) == null ? void 0 : _d.registerShortcut(
+      this.instance?.triggerLoad();
+      const navigateText = this.instance?.translate("keyboard_navigate") || "navigate";
+      const clearText = this.instance?.translate("keyboard_clear") || "clear";
+      this.instance?.registerShortcut(
         { label: "\u2193", description: navigateText },
         this
       );
-      (_e = this.instance) == null ? void 0 : _e.registerShortcut(
+      this.instance?.registerShortcut(
         { label: "esc", description: clearText },
         this
       );
     });
     this.inputEl.addEventListener("blur", () => {
-      var _a16;
-      (_a16 = this.instance) == null ? void 0 : _a16.deregisterAllShortcuts(this);
+      this.instance?.deregisterAllShortcuts(this);
     });
     this.clearEl.addEventListener("click", () => {
-      var _a16;
       if (this.inputEl) {
         this.inputEl.value = "";
-        (_a16 = this.instance) == null ? void 0 : _a16.triggerSearch("");
+        this.instance?.triggerSearch("");
         this.updateState("");
         this.inputEl.focus();
       }
@@ -19068,7 +18876,7 @@ var PagefindInput = class extends PagefindElement {
   }
   updateState(term) {
     if (this.clearEl) {
-      if (term && (term == null ? void 0 : term.length)) {
+      if (term && term?.length) {
         this.clearEl.removeAttribute("data-pf-suppressed");
       } else {
         this.clearEl.setAttribute("data-pf-suppressed", "true");
@@ -19103,8 +18911,7 @@ var PagefindInput = class extends PagefindElement {
     instance.on(
       "translations",
       () => {
-        var _a16;
-        const currentValue = ((_a16 = this.inputEl) == null ? void 0 : _a16.value) || "";
+        const currentValue = this.inputEl?.value || "";
         this.render();
         if (this.inputEl && currentValue) {
           this.inputEl.value = currentValue;
@@ -19143,9 +18950,8 @@ var PagefindSummary = class extends PagefindElement {
     this.render();
   }
   render() {
-    var _a16;
     this.innerHTML = "";
-    if (((_a16 = this.instance) == null ? void 0 : _a16.direction) === "rtl") {
+    if (this.instance?.direction === "rtl") {
       this.setAttribute("dir", "rtl");
     } else {
       this.removeAttribute("dir");
@@ -19169,10 +18975,9 @@ var PagefindSummary = class extends PagefindElement {
     instance.on(
       "results",
       (results) => {
-        var _a16, _b2;
         if (!this.containerEl || !results) return;
         const searchResult = results;
-        const count = (_b2 = (_a16 = searchResult == null ? void 0 : searchResult.results) == null ? void 0 : _a16.length) != null ? _b2 : 0;
+        const count = searchResult?.results?.length ?? 0;
         if (!this.term) {
           if (instance.faceted) {
             const key2 = count === 0 ? "total_zero_results" : count === 1 ? "total_one_result" : "total_many_results";
@@ -19322,9 +19127,8 @@ var Result = class {
     this.setupObserver();
   }
   setupObserver() {
-    var _a16;
     if (this.result !== null || this.observer !== null) return;
-    if (!((_a16 = this.placeholderNodes) == null ? void 0 : _a16.length)) return;
+    if (!this.placeholderNodes?.length) return;
     const options = {
       root: this.intersectionEl,
       rootMargin: "50px",
@@ -19332,9 +19136,8 @@ var Result = class {
       threshold: 0.01
     };
     this.observer = new IntersectionObserver((entries, obs) => {
-      var _a17;
       if (this.result !== null) return;
-      if ((_a17 = entries == null ? void 0 : entries[0]) == null ? void 0 : _a17.isIntersecting) {
+      if (entries?.[0]?.isIntersecting) {
         this.load();
         obs.disconnect();
         this.observer = null;
@@ -19343,8 +19146,7 @@ var Result = class {
     this.observer.observe(this.placeholderNodes[0]);
   }
   async load() {
-    var _a16, _b2;
-    if (!((_a16 = this.placeholderNodes) == null ? void 0 : _a16.length)) return;
+    if (!this.placeholderNodes?.length) return;
     if (this.result !== null || this.loading) return;
     this.loading = true;
     try {
@@ -19365,10 +19167,10 @@ var Result = class {
       if (firstNode instanceof Element) {
         firstNode.replaceWith(...resultNodes);
       }
-    } catch (e10) {
+    } catch {
       this.loading = false;
     }
-    (_b2 = this.onLoad) == null ? void 0 : _b2.call(this);
+    this.onLoad?.();
   }
   cleanup() {
     if (this.observer) {
@@ -19486,7 +19288,6 @@ var PagefindResults = class extends PagefindElement {
     return defaultPlaceholderTemplate({});
   }
   render() {
-    var _a16, _b2;
     const savedScripts = [];
     this.querySelectorAll('script[type="text/pagefind-template"]').forEach(
       (s5) => {
@@ -19495,8 +19296,8 @@ var PagefindResults = class extends PagefindElement {
     );
     this.innerHTML = "";
     savedScripts.forEach((s5) => this.appendChild(s5));
-    const resultsLabel = ((_a16 = this.instance) == null ? void 0 : _a16.translate("results_label")) || "Search results";
-    if (((_b2 = this.instance) == null ? void 0 : _b2.direction) === "rtl") {
+    const resultsLabel = this.instance?.translate("results_label") || "Search results";
+    if (this.instance?.direction === "rtl") {
       this.setAttribute("dir", "rtl");
     } else {
       this.removeAttribute("dir");
@@ -19643,7 +19444,6 @@ var PagefindResults = class extends PagefindElement {
   setupKeyboardHandlers() {
     if (!this.containerEl) return;
     this.containerEl.addEventListener("keydown", (e10) => {
-      var _a16, _b2, _c, _d;
       const anchor = e10.target.closest("a");
       if (!anchor) return;
       if (e10.key === "ArrowDown") {
@@ -19681,24 +19481,23 @@ var PagefindResults = class extends PagefindElement {
           if (neighbor.resultIndex !== -1)
             this.preloadAhead(neighbor.resultIndex, -1);
         } else {
-          (_a16 = this.instance) == null ? void 0 : _a16.focusPreviousInput(document.activeElement);
+          this.instance?.focusPreviousInput(document.activeElement);
         }
       } else if (e10.key === "Backspace") {
         e10.preventDefault();
-        (_b2 = this.instance) == null ? void 0 : _b2.focusInputAndDelete(document.activeElement);
+        this.instance?.focusInputAndDelete(document.activeElement);
       } else if (e10.key === "/") {
         e10.preventDefault();
-        (_c = this.instance) == null ? void 0 : _c.focusPreviousInput(document.activeElement);
+        this.instance?.focusPreviousInput(document.activeElement);
       } else if (e10.key.length === 1 && !e10.ctrlKey && !e10.metaKey && !e10.altKey) {
         e10.preventDefault();
-        (_d = this.instance) == null ? void 0 : _d.focusInputAndType(
+        this.instance?.focusInputAndType(
           document.activeElement,
           e10.key
         );
       }
     });
     this.containerEl.addEventListener("focusin", (e10) => {
-      var _a16, _b2, _c, _d, _e, _f;
       const anchor = e10.target.closest(
         "a"
       );
@@ -19706,28 +19505,27 @@ var PagefindResults = class extends PagefindElement {
       this.clearSelection();
       anchor.setAttribute("data-pf-selected", "");
       this.selectedAnchor = anchor;
-      const navigateText = ((_a16 = this.instance) == null ? void 0 : _a16.translate("keyboard_navigate")) || "navigate";
-      const selectText = ((_b2 = this.instance) == null ? void 0 : _b2.translate("keyboard_select")) || "select";
-      const searchText = ((_c = this.instance) == null ? void 0 : _c.translate("keyboard_search")) || "search";
-      (_d = this.instance) == null ? void 0 : _d.registerShortcut(
+      const navigateText = this.instance?.translate("keyboard_navigate") || "navigate";
+      const selectText = this.instance?.translate("keyboard_select") || "select";
+      const searchText = this.instance?.translate("keyboard_search") || "search";
+      this.instance?.registerShortcut(
         { label: "\u2191\u2193", description: navigateText },
         this
       );
-      (_e = this.instance) == null ? void 0 : _e.registerShortcut(
+      this.instance?.registerShortcut(
         { label: "\u21B5", description: selectText },
         this
       );
-      (_f = this.instance) == null ? void 0 : _f.registerShortcut(
+      this.instance?.registerShortcut(
         { label: "/", description: searchText },
         this
       );
     });
     this.containerEl.addEventListener("focusout", (e10) => {
-      var _a16, _b2;
       const focusEvent = e10;
-      if (!((_a16 = this.containerEl) == null ? void 0 : _a16.contains(focusEvent.relatedTarget))) {
+      if (!this.containerEl?.contains(focusEvent.relatedTarget)) {
         this.clearSelection();
-        (_b2 = this.instance) == null ? void 0 : _b2.deregisterAllShortcuts(this);
+        this.instance?.deregisterAllShortcuts(this);
       }
     });
   }
@@ -19760,9 +19558,8 @@ var PagefindResults = class extends PagefindElement {
   scheduleLoadingAnnouncement() {
     if (this.loadingAnnouncementTimeout) return;
     this.loadingAnnouncementTimeout = window.setTimeout(() => {
-      var _a16;
       this.loadingAnnouncementTimeout = null;
-      (_a16 = this.instance) == null ? void 0 : _a16.announce("loading", {}, "polite");
+      this.instance?.announce("loading", {}, "polite");
     }, 800);
   }
   clearLoadingAnnouncement() {
@@ -19847,17 +19644,15 @@ var PagefindFilterPane = class extends PagefindElement {
         break;
       case "count-desc":
         sorted.sort((a4, b3) => {
-          var _a16, _b2;
-          const countA = (_a16 = availableValues[a4[0]]) != null ? _a16 : a4[1];
-          const countB = (_b2 = availableValues[b3[0]]) != null ? _b2 : b3[1];
+          const countA = availableValues[a4[0]] ?? a4[1];
+          const countB = availableValues[b3[0]] ?? b3[1];
           return countB - countA;
         });
         break;
       case "count-asc":
         sorted.sort((a4, b3) => {
-          var _a16, _b2;
-          const countA = (_a16 = availableValues[a4[0]]) != null ? _a16 : a4[1];
-          const countB = (_b2 = availableValues[b3[0]]) != null ? _b2 : b3[1];
+          const countA = availableValues[a4[0]] ?? a4[1];
+          const countB = availableValues[b3[0]] ?? b3[1];
           return countA - countB;
         });
         break;
@@ -19865,9 +19660,8 @@ var PagefindFilterPane = class extends PagefindElement {
     return sorted;
   }
   render() {
-    var _a16;
     this.innerHTML = "";
-    if (((_a16 = this.instance) == null ? void 0 : _a16.direction) === "rtl") {
+    if (this.instance?.direction === "rtl") {
       this.setAttribute("dir", "rtl");
     } else {
       this.removeAttribute("dir");
@@ -19916,7 +19710,6 @@ var PagefindFilterPane = class extends PagefindElement {
     }
   }
   renderFilters() {
-    var _a16;
     if (!this.containerEl || !this.totalFilters) return;
     this.containerEl.innerHTML = "";
     this.filterElements.clear();
@@ -19925,7 +19718,7 @@ var PagefindFilterPane = class extends PagefindElement {
     const filterNames = Object.keys(this.totalFilters);
     for (const filterName of filterNames) {
       const values = this.totalFilters[filterName];
-      const availableValues = ((_a16 = this.availableFilters) == null ? void 0 : _a16[filterName]) || {};
+      const availableValues = this.availableFilters?.[filterName] || {};
       const group = this.renderFilterGroup(
         filterName,
         values,
@@ -19939,14 +19732,13 @@ var PagefindFilterPane = class extends PagefindElement {
     this.isRendered = true;
   }
   updateFilters() {
-    var _a16, _b2, _c, _d, _e, _f, _g, _h, _i, _j, _k;
     for (const [key, elements] of this.filterElements) {
       const colonIndex = key.indexOf(":");
       const filterName = key.slice(0, colonIndex);
       const value = key.slice(colonIndex + 1);
-      const availableCount = (_c = (_b2 = (_a16 = this.availableFilters) == null ? void 0 : _a16[filterName]) == null ? void 0 : _b2[value]) != null ? _c : 0;
-      const totalCount = (_f = (_e = (_d = this.totalFilters) == null ? void 0 : _d[filterName]) == null ? void 0 : _e[value]) != null ? _f : 0;
-      const isSelected = (_g = this.selectedFilters[filterName]) == null ? void 0 : _g.has(value);
+      const availableCount = this.availableFilters?.[filterName]?.[value] ?? 0;
+      const totalCount = this.totalFilters?.[filterName]?.[value] ?? 0;
+      const isSelected = this.selectedFilters[filterName]?.has(value);
       const count = isSelected ? totalCount : availableCount;
       elements.countSpan.textContent = String(count);
       const shouldShow = this.showEmpty || availableCount > 0 || isSelected;
@@ -19955,18 +19747,18 @@ var PagefindFilterPane = class extends PagefindElement {
       if (shouldShow && wasHidden) {
         this.groupVisibleCounts.set(
           filterName,
-          ((_h = this.groupVisibleCounts.get(filterName)) != null ? _h : 0) + 1
+          (this.groupVisibleCounts.get(filterName) ?? 0) + 1
         );
       } else if (!shouldShow && !wasHidden) {
         this.groupVisibleCounts.set(
           filterName,
-          ((_i = this.groupVisibleCounts.get(filterName)) != null ? _i : 1) - 1
+          (this.groupVisibleCounts.get(filterName) ?? 1) - 1
         );
       }
       elements.checkbox.checked = isSelected || false;
     }
     for (const [filterName, elements] of this.groupElements) {
-      const selectedCount = ((_j = this.selectedFilters[filterName]) == null ? void 0 : _j.size) || 0;
+      const selectedCount = this.selectedFilters[filterName]?.size || 0;
       if (elements.selectedCountSpan) {
         if (selectedCount > 0) {
           elements.selectedCountSpan.textContent = this.getSelectedText(selectedCount);
@@ -19975,17 +19767,16 @@ var PagefindFilterPane = class extends PagefindElement {
           elements.selectedCountSpan.setAttribute("data-pf-hidden", "true");
         }
       }
-      const visibleCount = (_k = this.groupVisibleCounts.get(filterName)) != null ? _k : 0;
+      const visibleCount = this.groupVisibleCounts.get(filterName) ?? 0;
       elements.group.toggleAttribute("data-pf-hidden", visibleCount === 0);
     }
   }
   renderFilterGroup(filterName, values, availableValues, filterCount) {
-    var _a16, _b2, _c;
     const rawEntries = Object.entries(values);
     if (rawEntries.length === 0) return null;
     const valueEntries = this.sortValues(rawEntries, availableValues);
     const displayName = filterName.charAt(0).toUpperCase() + filterName.slice(1);
-    const selectedCount = ((_a16 = this.selectedFilters[filterName]) == null ? void 0 : _a16.size) || 0;
+    const selectedCount = this.selectedFilters[filterName]?.size || 0;
     const shouldOpen = this.expanded || this.shouldGroupStartOpen(filterName, valueEntries.length, filterCount);
     let group;
     let optionsContainer;
@@ -20044,8 +19835,8 @@ var PagefindFilterPane = class extends PagefindElement {
     });
     let visibleCount = 0;
     for (const [value, totalCount] of valueEntries) {
-      const availableCount = (_b2 = availableValues[value]) != null ? _b2 : 0;
-      const isSelected = ((_c = this.selectedFilters[filterName]) == null ? void 0 : _c.has(value)) || false;
+      const availableCount = availableValues[value] ?? 0;
+      const isSelected = this.selectedFilters[filterName]?.has(value) || false;
       const count = isSelected ? totalCount : availableCount;
       const shouldShow = this.showEmpty || availableCount > 0 || isSelected;
       if (shouldShow) visibleCount++;
@@ -20100,7 +19891,6 @@ var PagefindFilterPane = class extends PagefindElement {
     });
   }
   handleCheckboxChange(filterName, value, checked) {
-    var _a16, _b2;
     if (!this.selectedFilters[filterName]) {
       this.selectedFilters[filterName] = /* @__PURE__ */ new Set();
     }
@@ -20110,7 +19900,7 @@ var PagefindFilterPane = class extends PagefindElement {
       this.selectedFilters[filterName].delete(value);
     }
     const groupElements = this.groupElements.get(filterName);
-    if (groupElements == null ? void 0 : groupElements.selectedCountSpan) {
+    if (groupElements?.selectedCountSpan) {
       const selectedCount = this.selectedFilters[filterName].size;
       if (selectedCount > 0) {
         groupElements.selectedCountSpan.textContent = this.getSelectedText(selectedCount);
@@ -20126,9 +19916,9 @@ var PagefindFilterPane = class extends PagefindElement {
       for (const [name, values] of Object.entries(this.selectedFilters)) {
         filters[name] = Array.from(values);
       }
-      (_a16 = this.instance) == null ? void 0 : _a16.triggerFilters(filters);
+      this.instance?.triggerFilters(filters);
     } else {
-      (_b2 = this.instance) == null ? void 0 : _b2.triggerFilter(filterName, selectedValues);
+      this.instance?.triggerFilter(filterName, selectedValues);
     }
   }
   register(instance) {
@@ -20263,17 +20053,15 @@ var PagefindFilterDropdown = class extends PagefindElement {
         break;
       case "count-desc":
         sorted.sort((a4, b3) => {
-          var _a16, _b2, _c, _d;
-          const countA = (_b2 = (_a16 = this.availableFilters[a4]) != null ? _a16 : this.totalFilters[a4]) != null ? _b2 : 0;
-          const countB = (_d = (_c = this.availableFilters[b3]) != null ? _c : this.totalFilters[b3]) != null ? _d : 0;
+          const countA = this.availableFilters[a4] ?? this.totalFilters[a4] ?? 0;
+          const countB = this.availableFilters[b3] ?? this.totalFilters[b3] ?? 0;
           return countB - countA;
         });
         break;
       case "count-asc":
         sorted.sort((a4, b3) => {
-          var _a16, _b2, _c, _d;
-          const countA = (_b2 = (_a16 = this.availableFilters[a4]) != null ? _a16 : this.totalFilters[a4]) != null ? _b2 : 0;
-          const countB = (_d = (_c = this.availableFilters[b3]) != null ? _c : this.totalFilters[b3]) != null ? _d : 0;
+          const countA = this.availableFilters[a4] ?? this.totalFilters[a4] ?? 0;
+          const countB = this.availableFilters[b3] ?? this.totalFilters[b3] ?? 0;
           return countA - countB;
         });
         break;
@@ -20281,7 +20069,6 @@ var PagefindFilterDropdown = class extends PagefindElement {
     return sorted;
   }
   render() {
-    var _a16, _b2;
     this.innerHTML = "";
     const id3 = this.ensureId("pf-dropdown");
     const triggerId = `${id3}-trigger`;
@@ -20334,9 +20121,9 @@ var PagefindFilterDropdown = class extends PagefindElement {
       this.clearEl.setAttribute("aria-disabled", "true");
       this.clearEl.setAttribute(
         "aria-label",
-        (((_a16 = this.instance) == null ? void 0 : _a16.translate("clear_search")) || "Clear") + " " + (this.getAttribute("label") || this.filterName || "")
+        (this.instance?.translate("clear_search") || "Clear") + " " + (this.getAttribute("label") || this.filterName || "")
       );
-      this.clearEl.textContent = ((_b2 = this.instance) == null ? void 0 : _b2.translate("clear_search")) || "Clear";
+      this.clearEl.textContent = this.instance?.translate("clear_search") || "Clear";
       this.wrapperEl.appendChild(this.clearEl);
       this.clearEl.addEventListener("click", () => this.clearAll());
     }
@@ -20344,10 +20131,7 @@ var PagefindFilterDropdown = class extends PagefindElement {
     this.triggerEl.addEventListener("click", () => this.toggle());
     this.triggerEl.addEventListener(
       "focus",
-      () => {
-        var _a17;
-        return (_a17 = this.instance) == null ? void 0 : _a17.triggerLoad();
-      }
+      () => this.instance?.triggerLoad()
     );
     this.triggerEl.addEventListener("keydown", (e10) => {
       if (this.isOpen) {
@@ -20366,8 +20150,7 @@ var PagefindFilterDropdown = class extends PagefindElement {
     }
   }
   open() {
-    var _a16, _b2, _c, _d, _e, _f, _g;
-    (_a16 = this.instance) == null ? void 0 : _a16.triggerLoad();
+    this.instance?.triggerLoad();
     if (this.isOpen || !this.menuEl || !this.triggerEl || !this.optionsEl)
       return;
     this.isOpen = true;
@@ -20381,18 +20164,18 @@ var PagefindFilterDropdown = class extends PagefindElement {
       const targetIndex = this.activeIndex >= 0 ? this.activeIndex : 0;
       this.setActiveIndex(targetIndex);
     }
-    const navigateText = ((_b2 = this.instance) == null ? void 0 : _b2.translate("keyboard_navigate")) || "navigate";
-    const selectText = ((_c = this.instance) == null ? void 0 : _c.translate("keyboard_select")) || "select";
-    const closeText = ((_d = this.instance) == null ? void 0 : _d.translate("keyboard_close")) || "close";
-    (_e = this.instance) == null ? void 0 : _e.registerShortcut(
+    const navigateText = this.instance?.translate("keyboard_navigate") || "navigate";
+    const selectText = this.instance?.translate("keyboard_select") || "select";
+    const closeText = this.instance?.translate("keyboard_close") || "close";
+    this.instance?.registerShortcut(
       { label: "\u2191\u2193", description: navigateText },
       this
     );
-    (_f = this.instance) == null ? void 0 : _f.registerShortcut(
+    this.instance?.registerShortcut(
       { label: "\u21B5", description: selectText },
       this
     );
-    (_g = this.instance) == null ? void 0 : _g.registerShortcut(
+    this.instance?.registerShortcut(
       { label: "esc", description: closeText },
       this
     );
@@ -20401,19 +20184,18 @@ var PagefindFilterDropdown = class extends PagefindElement {
     }, 0);
   }
   close(returnFocus = true) {
-    var _a16, _b2;
     if (!this.isOpen || !this.menuEl || !this.triggerEl || !this.optionsEl)
       return;
     this.isOpen = false;
     this.menuEl.hidden = true;
     this.triggerEl.setAttribute("aria-expanded", "false");
     this.triggerEl.classList.remove("open");
-    (_a16 = this.triggerEl) == null ? void 0 : _a16.removeAttribute("aria-activedescendant");
+    this.triggerEl?.removeAttribute("aria-activedescendant");
     if (this.focusedOptionEl) {
       this.focusedOptionEl.classList.remove("pf-dropdown-option-focused");
       this.focusedOptionEl = null;
     }
-    (_b2 = this.instance) == null ? void 0 : _b2.deregisterAllShortcuts(this);
+    this.instance?.deregisterAllShortcuts(this);
     document.removeEventListener("click", this._handleClickOutside);
     if (returnFocus) {
       this.triggerEl.focus();
@@ -20485,7 +20267,6 @@ var PagefindFilterDropdown = class extends PagefindElement {
     }
   }
   setActiveIndex(index) {
-    var _a16;
     if (index < 0 || index >= this.optionElements.length || !this.optionsEl)
       return;
     if (this.focusedOptionEl) {
@@ -20495,7 +20276,7 @@ var PagefindFilterDropdown = class extends PagefindElement {
     const option = this.optionElements[index];
     option.el.classList.add("pf-dropdown-option-focused");
     this.focusedOptionEl = option.el;
-    (_a16 = this.triggerEl) == null ? void 0 : _a16.setAttribute("aria-activedescendant", option.el.id);
+    this.triggerEl?.setAttribute("aria-activedescendant", option.el.id);
     this.scrollToCenter(option.el);
   }
   scrollToCenter(el) {
@@ -20555,7 +20336,6 @@ var PagefindFilterDropdown = class extends PagefindElement {
     }
   }
   updateOptions() {
-    var _a16;
     if (!this.optionsEl) return;
     this.filtersLoaded = true;
     this.optionsEl.removeAttribute("aria-busy");
@@ -20572,15 +20352,14 @@ var PagefindFilterDropdown = class extends PagefindElement {
       this.focusedOptionEl = null;
       return;
     }
-    (_a16 = this.wrapperEl) == null ? void 0 : _a16.removeAttribute("data-pf-hidden");
+    this.wrapperEl?.removeAttribute("data-pf-hidden");
     this.optionsEl.innerHTML = "";
     this.optionElements = [];
     this.focusedOptionEl = null;
     const baseId = this.id || this.ensureId("pf-dropdown");
     values.forEach((value, index) => {
-      var _a17, _b2, _c;
-      const availableCount = (_b2 = (_a17 = this.availableFilters) == null ? void 0 : _a17[value]) != null ? _b2 : 0;
-      const totalCount = (_c = this.totalFilters[value]) != null ? _c : 0;
+      const availableCount = this.availableFilters?.[value] ?? 0;
+      const totalCount = this.totalFilters[value] ?? 0;
       const isSelected = this.selectedValues.has(value);
       const shouldShow = this.showEmpty || availableCount > 0 || isSelected;
       if (!shouldShow) return;
@@ -20632,7 +20411,6 @@ var PagefindFilterDropdown = class extends PagefindElement {
     return option;
   }
   toggleOption(value) {
-    var _a16;
     const wasSelected = this.selectedValues.has(value);
     if (this.singleSelect) {
       if (this.selectedValues.has(value)) {
@@ -20652,7 +20430,7 @@ var PagefindFilterDropdown = class extends PagefindElement {
     const isNowSelected = this.selectedValues.has(value);
     if (isNowSelected !== wasSelected) {
       const action = isNowSelected ? "selected" : "deselected";
-      (_a16 = this.instance) == null ? void 0 : _a16.announceRaw(`${value} ${action}`);
+      this.instance?.announceRaw(`${value} ${action}`);
     }
     this.updateOptionStates();
     this.updateBadge();
@@ -20666,13 +20444,12 @@ var PagefindFilterDropdown = class extends PagefindElement {
     this.dispatchFilterChange();
   }
   dispatchFilterChange() {
-    var _a16, _b2;
     if (!this.filterName) return;
     const selectedArray = Array.from(this.selectedValues);
     if (selectedArray.length === 0) {
-      (_a16 = this.instance) == null ? void 0 : _a16.triggerFilter(this.filterName, []);
+      this.instance?.triggerFilter(this.filterName, []);
     } else {
-      (_b2 = this.instance) == null ? void 0 : _b2.triggerFilter(this.filterName, selectedArray);
+      this.instance?.triggerFilter(this.filterName, selectedArray);
     }
   }
   updateBadge() {
@@ -20710,10 +20487,9 @@ var PagefindFilterDropdown = class extends PagefindElement {
     instance.on(
       "filters",
       (filters) => {
-        var _a16, _b2;
         const f4 = filters;
-        this.availableFilters = ((_a16 = f4.available) == null ? void 0 : _a16[this.filterName]) || {};
-        this.totalFilters = ((_b2 = f4.total) == null ? void 0 : _b2[this.filterName]) || {};
+        this.availableFilters = f4.available?.[this.filterName] || {};
+        this.totalFilters = f4.total?.[this.filterName] || {};
         if (this.isRendered) {
           this.updateOptions();
         }
@@ -20724,7 +20500,7 @@ var PagefindFilterDropdown = class extends PagefindElement {
       "search",
       (_term, filters) => {
         const f4 = filters;
-        const externalValues = (f4 == null ? void 0 : f4[this.filterName]) || [];
+        const externalValues = f4?.[this.filterName] || [];
         this.selectedValues = new Set(externalValues);
         if (this.isRendered) {
           this.updateOptionStates();
@@ -20746,7 +20522,6 @@ var PagefindFilterDropdown = class extends PagefindElement {
     );
   }
   update() {
-    var _a16;
     const newFilterName = this.getAttribute("filter");
     if (newFilterName !== this.filterName) {
       this.filterName = newFilterName;
@@ -20771,7 +20546,7 @@ var PagefindFilterDropdown = class extends PagefindElement {
         this.singleSelect ? "false" : "true"
       );
     }
-    const labelSpan = (_a16 = this.triggerEl) == null ? void 0 : _a16.querySelector(
+    const labelSpan = this.triggerEl?.querySelector(
       ".pf-dropdown-trigger-label"
     );
     if (labelSpan) {
@@ -20780,9 +20555,8 @@ var PagefindFilterDropdown = class extends PagefindElement {
     this.updateOptions();
   }
   cleanup() {
-    var _a16;
     document.removeEventListener("click", this._handleClickOutside);
-    (_a16 = this.instance) == null ? void 0 : _a16.deregisterAllShortcuts(this);
+    this.instance?.deregisterAllShortcuts(this);
     this.focusedOptionEl = null;
     if (this.typeAheadTimeout) {
       clearTimeout(this.typeAheadTimeout);
@@ -20810,13 +20584,12 @@ var PagefindModal = class extends PagefindElement {
     this.render();
   }
   render() {
-    var _a16, _b2;
     const hasChildren = this.children.length > 0;
     const children = hasChildren ? Array.from(this.children) : null;
     this.innerHTML = "";
     const dialogId = this.id || this.instance.generateId("pagefind-modal");
-    const searchLabel = ((_a16 = this.instance) == null ? void 0 : _a16.translate("keyboard_search")) || "search";
-    if (((_b2 = this.instance) == null ? void 0 : _b2.direction) === "rtl") {
+    const searchLabel = this.instance?.translate("keyboard_search") || "search";
+    if (this.instance?.direction === "rtl") {
       this.setAttribute("dir", "rtl");
     } else {
       this.removeAttribute("dir");
@@ -20875,12 +20648,11 @@ var PagefindModal = class extends PagefindElement {
     });
   }
   open() {
-    var _a16, _b2, _c;
     if (this._isOpen || !this.dialogEl) return;
     this._isOpen = true;
     this.dialogEl.showModal();
-    const closeText = ((_a16 = this.instance) == null ? void 0 : _a16.translate("keyboard_close")) || "close";
-    (_b2 = this.instance) == null ? void 0 : _b2.registerShortcut(
+    const closeText = this.instance?.translate("keyboard_close") || "close";
+    this.instance?.registerShortcut(
       { label: "esc", description: closeText },
       this
     );
@@ -20897,23 +20669,19 @@ var PagefindModal = class extends PagefindElement {
         }
       }
     });
-    const triggers = ((_c = this.instance) == null ? void 0 : _c.getUtilities("modal-trigger")) || [];
-    triggers.forEach((t6) => {
-      var _a17;
-      return (_a17 = t6.buttonEl) == null ? void 0 : _a17.setAttribute("aria-expanded", "true");
-    });
+    const triggers = this.instance?.getUtilities("modal-trigger") || [];
+    triggers.forEach((t6) => t6.buttonEl?.setAttribute("aria-expanded", "true"));
   }
   close() {
     if (!this._isOpen || !this.dialogEl) return;
     this.dialogEl.close();
   }
   handleClose() {
-    var _a16, _b2;
-    (_a16 = this.instance) == null ? void 0 : _a16.deregisterAllShortcuts(this);
+    this.instance?.deregisterAllShortcuts(this);
     if (this.resetOnClose && this.instance) {
       this.instance.triggerSearch("");
     }
-    const triggers = ((_b2 = this.instance) == null ? void 0 : _b2.getUtilities("modal-trigger")) || [];
+    const triggers = this.instance?.getUtilities("modal-trigger") || [];
     const trigger = triggers[0];
     if (trigger && typeof trigger.handleModalClose === "function") {
       trigger.handleModalClose();
@@ -20937,21 +20705,18 @@ var PagefindModal = class extends PagefindElement {
     );
   }
   reconcileAria() {
-    var _a16;
-    const triggers = ((_a16 = this.instance) == null ? void 0 : _a16.getUtilities("modal-trigger")) || [];
+    const triggers = this.instance?.getUtilities("modal-trigger") || [];
     triggers.forEach((t6) => {
-      var _a17;
-      if (t6.buttonEl && ((_a17 = this.dialogEl) == null ? void 0 : _a17.id)) {
+      if (t6.buttonEl && this.dialogEl?.id) {
         t6.buttonEl.setAttribute("aria-controls", this.dialogEl.id);
       }
     });
   }
   cleanup() {
-    var _a16;
     if (this.dialogEl && this._closeHandler) {
       this.dialogEl.removeEventListener("close", this._closeHandler);
     }
-    (_a16 = this.instance) == null ? void 0 : _a16.deregisterAllShortcuts(this);
+    this.instance?.deregisterAllShortcuts(this);
   }
   update() {
     if (this.hasAttribute("reset-on-close")) {
@@ -20967,11 +20732,11 @@ function detectMac() {
   if (_isMac !== null) return _isMac;
   try {
     const uaData = navigator.userAgentData;
-    if (uaData == null ? void 0 : uaData.platform) {
+    if (uaData?.platform) {
       _isMac = uaData.platform.toLowerCase().includes("mac");
       return _isMac;
     }
-  } catch (e10) {
+  } catch {
   }
   _isMac = /mac/i.test(navigator.userAgent);
   return _isMac;
@@ -21065,8 +20830,7 @@ var PagefindModalTrigger = class extends PagefindElement {
     return ["placeholder", "shortcut", "hide-shortcut", "compact"];
   }
   get placeholder() {
-    var _a16;
-    return this._userPlaceholder || ((_a16 = this.instance) == null ? void 0 : _a16.translate("keyboard_search")) || "Search";
+    return this._userPlaceholder || this.instance?.translate("keyboard_search") || "Search";
   }
   init() {
     this.readAttributes();
@@ -21089,9 +20853,8 @@ var PagefindModalTrigger = class extends PagefindElement {
     this._keyBinding = parseKeyBinding(this.shortcut);
   }
   render() {
-    var _a16;
     this.innerHTML = "";
-    if (((_a16 = this.instance) == null ? void 0 : _a16.direction) === "rtl") {
+    if (this.instance?.direction === "rtl") {
       this.setAttribute("dir", "rtl");
     } else {
       this.removeAttribute("dir");
@@ -21147,8 +20910,7 @@ var PagefindModalTrigger = class extends PagefindElement {
     document.addEventListener("keydown", this._keydownHandler);
   }
   openModal() {
-    var _a16;
-    const modals = ((_a16 = this.instance) == null ? void 0 : _a16.getUtilities("modal")) || [];
+    const modals = this.instance?.getUtilities("modal") || [];
     const modal = modals[0];
     if (modal && typeof modal.open === "function") {
       modal.open();
@@ -21174,10 +20936,9 @@ var PagefindModalTrigger = class extends PagefindElement {
     );
   }
   reconcileAria() {
-    var _a16, _b2;
-    const modals = ((_a16 = this.instance) == null ? void 0 : _a16.getUtilities("modal")) || [];
+    const modals = this.instance?.getUtilities("modal") || [];
     const modal = modals[0];
-    if (((_b2 = modal == null ? void 0 : modal.dialogEl) == null ? void 0 : _b2.id) && this.buttonEl) {
+    if (modal?.dialogEl?.id && this.buttonEl) {
       this.buttonEl.setAttribute("aria-controls", modal.dialogEl.id);
     }
   }
@@ -21201,7 +20962,6 @@ var PagefindModalHeader = class extends PagefindElement {
     this.closeBtn = null;
   }
   init() {
-    var _a16;
     this.classList.add("pf-modal-header");
     const content = document.createElement("div");
     content.className = "pf-modal-header-content";
@@ -21213,7 +20973,7 @@ var PagefindModalHeader = class extends PagefindElement {
     this.closeBtn.className = "pf-modal-close";
     this.closeBtn.setAttribute(
       "aria-label",
-      ((_a16 = this.instance) == null ? void 0 : _a16.translate("keyboard_close")) || "Close"
+      this.instance?.translate("keyboard_close") || "Close"
     );
     this.closeBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 5L5 15M5 5l10 10"/></svg>`;
     this.closeBtn.addEventListener("click", () => {
@@ -21270,14 +21030,13 @@ var PagefindKeyboardHints = class extends PagefindElement {
     this.setAttribute("aria-hidden", "true");
   }
   render() {
-    var _a16, _b2;
     this.innerHTML = "";
-    if (((_a16 = this.instance) == null ? void 0 : _a16.direction) === "rtl") {
+    if (this.instance?.direction === "rtl") {
       this.setAttribute("dir", "rtl");
     } else {
       this.removeAttribute("dir");
     }
-    const shortcuts = ((_b2 = this.instance) == null ? void 0 : _b2.getActiveShortcuts()) || [];
+    const shortcuts = this.instance?.getActiveShortcuts() || [];
     if (shortcuts.length === 0) {
       return;
     }
@@ -21384,9 +21143,8 @@ var SearchboxResult = class {
       threshold: 0.01
     };
     this.observer = new IntersectionObserver((entries, obs) => {
-      var _a16;
       if (this.data !== null) return;
-      if ((_a16 = entries == null ? void 0 : entries[0]) == null ? void 0 : _a16.isIntersecting) {
+      if (entries?.[0]?.isIntersecting) {
         this.load();
         obs.disconnect();
         this.observer = null;
@@ -21395,7 +21153,6 @@ var SearchboxResult = class {
     this.observer.observe(this.placeholderEl);
   }
   async load() {
-    var _a16;
     if (this.data !== null || this.loading) return;
     this.loading = true;
     try {
@@ -21411,12 +21168,12 @@ var SearchboxResult = class {
           this.cacheOptions();
         }
       }
-    } catch (e10) {
+    } catch {
       await new Promise((r9) => setTimeout(r9, this.retryDelay || 100));
       this.retryDelay = Math.min((this.retryDelay || 100) * 2, 1e4);
       this.loading = false;
     }
-    (_a16 = this.onLoad) == null ? void 0 : _a16.call(this);
+    this.onLoad?.();
   }
   cacheOptions() {
     if (!this.data || !this.placeholderEl) {
@@ -21489,8 +21246,7 @@ var PagefindSearchbox = class extends PagefindElement {
     ];
   }
   get placeholder() {
-    var _a16;
-    return this._userPlaceholder || ((_a16 = this.instance) == null ? void 0 : _a16.translate("placeholder")) || "Search...";
+    return this._userPlaceholder || this.instance?.translate("placeholder") || "Search...";
   }
   readAttributes() {
     if (this.hasAttribute("placeholder")) {
@@ -21551,7 +21307,6 @@ var PagefindSearchbox = class extends PagefindElement {
     return defaultPlaceholderTemplate2({});
   }
   render() {
-    var _a16, _b2;
     const savedScripts = [];
     this.querySelectorAll('script[type="text/pagefind-template"]').forEach(
       (s5) => {
@@ -21600,8 +21355,8 @@ var PagefindSearchbox = class extends PagefindElement {
     this.dropdownEl = document.createElement("div");
     this.dropdownEl.className = "pf-searchbox-dropdown";
     this.containerEl.appendChild(this.dropdownEl);
-    const resultsLabel = ((_a16 = this.instance) == null ? void 0 : _a16.translate("results_label")) || "Search results";
-    if (((_b2 = this.instance) == null ? void 0 : _b2.direction) === "rtl") {
+    const resultsLabel = this.instance?.translate("results_label") || "Search results";
+    if (this.instance?.direction === "rtl") {
       this.setAttribute("dir", "rtl");
     } else {
       this.removeAttribute("dir");
@@ -21626,12 +21381,11 @@ var PagefindSearchbox = class extends PagefindElement {
     this.setupEventHandlers();
   }
   renderFooterHints() {
-    var _a16, _b2, _c;
     if (!this.footerEl) return;
     this.footerEl.innerHTML = "";
-    const navigateText = ((_a16 = this.instance) == null ? void 0 : _a16.translate("keyboard_navigate")) || "navigate";
-    const selectText = ((_b2 = this.instance) == null ? void 0 : _b2.translate("keyboard_select")) || "select";
-    const closeText = ((_c = this.instance) == null ? void 0 : _c.translate("keyboard_close")) || "close";
+    const navigateText = this.instance?.translate("keyboard_navigate") || "navigate";
+    const selectText = this.instance?.translate("keyboard_select") || "select";
+    const closeText = this.instance?.translate("keyboard_close") || "close";
     const navHint = document.createElement("div");
     navHint.className = "pf-searchbox-footer-hint";
     const navKeyUp = document.createElement("span");
@@ -21664,13 +21418,12 @@ var PagefindSearchbox = class extends PagefindElement {
   setupEventHandlers() {
     if (!this.inputEl || !this.resultsEl) return;
     this.inputEl.addEventListener("input", async (e10) => {
-      var _a16, _b2;
       const value = e10.target.value;
       this.searchTerm = value;
       if (!value || !value.trim()) {
         this.closeDropdown();
         this.results = [];
-        (_a16 = this.instance) == null ? void 0 : _a16.triggerSearch("");
+        this.instance?.triggerSearch("");
         return;
       }
       this.openDropdown();
@@ -21680,14 +21433,13 @@ var PagefindSearchbox = class extends PagefindElement {
       if (thisSearchID !== this.searchID) {
         return;
       }
-      (_b2 = this.instance) == null ? void 0 : _b2.triggerSearch(value);
+      this.instance?.triggerSearch(value);
     });
     this.inputEl.addEventListener("keydown", (e10) => {
-      var _a16, _b2, _c;
       switch (e10.key) {
         case "ArrowDown":
           e10.preventDefault();
-          if (!this.isOpen && ((_a16 = this.inputEl) == null ? void 0 : _a16.value.trim())) {
+          if (!this.isOpen && this.inputEl?.value.trim()) {
             this.openDropdown();
           }
           if (this.isOpen && this.results.length > 0) {
@@ -21704,7 +21456,7 @@ var PagefindSearchbox = class extends PagefindElement {
           if (this.isOpen && this.activeIndex >= 0) {
             e10.preventDefault();
             this.activateCurrentSelection(e10);
-          } else if (!this.isOpen && ((_b2 = this.inputEl) == null ? void 0 : _b2.value.trim())) {
+          } else if (!this.isOpen && this.inputEl?.value.trim()) {
             e10.preventDefault();
             this.openDropdown();
             if (this.results.length > 0) {
@@ -21713,7 +21465,7 @@ var PagefindSearchbox = class extends PagefindElement {
               this.activeOptionOffset = 0;
               this.updateSelectionUI();
             } else {
-              (_c = this.instance) == null ? void 0 : _c.triggerSearch(this.inputEl.value);
+              this.instance?.triggerSearch(this.inputEl.value);
             }
           }
           break;
@@ -21735,8 +21487,7 @@ var PagefindSearchbox = class extends PagefindElement {
       }
     });
     this.inputEl.addEventListener("focus", () => {
-      var _a16;
-      (_a16 = this.instance) == null ? void 0 : _a16.triggerLoad();
+      this.instance?.triggerLoad();
     });
     this.resultsEl.addEventListener("click", (e10) => {
       const resultLink = e10.target.closest("a");
@@ -21767,13 +21518,12 @@ var PagefindSearchbox = class extends PagefindElement {
   setupShortcutHandler() {
     if (!this._keyBinding) return;
     this._shortcutKeyHandler = (e10) => {
-      var _a16;
       if (!this._keyBinding || !keyBindingMatches(this._keyBinding, e10)) return;
       const activeEl = document.activeElement;
       const isTyping = activeEl && (activeEl.tagName === "INPUT" || activeEl.tagName === "TEXTAREA" || activeEl.isContentEditable);
       if (!isTyping) {
         e10.preventDefault();
-        (_a16 = this.inputEl) == null ? void 0 : _a16.focus();
+        this.inputEl?.focus();
       }
     };
     document.addEventListener("keydown", this._shortcutKeyHandler);
@@ -21797,30 +21547,28 @@ var PagefindSearchbox = class extends PagefindElement {
     this.selectedEl = null;
   }
   showLoadingState() {
-    var _a16;
     if (!this.resultsEl || !this.statusEl) return;
     this.isLoading = true;
     this.resultsEl.innerHTML = "";
     this.selectedEl = null;
     this.resultsEl.setAttribute("aria-busy", "true");
-    const searchingText = ((_a16 = this.instance) == null ? void 0 : _a16.translate("searching", { SEARCH_TERM: this.searchTerm })) || "Searching...";
+    const searchingText = this.instance?.translate("searching", { SEARCH_TERM: this.searchTerm }) || "Searching...";
     this.statusEl.textContent = searchingText;
     this.statusEl.className = "pf-searchbox-status pf-searchbox-loading";
     this.statusEl.hidden = false;
   }
   showEmptyState() {
-    var _a16, _b2;
     if (!this.resultsEl || !this.statusEl) return;
     this.resultsEl.innerHTML = "";
     this.selectedEl = null;
     this.resultsEl.removeAttribute("aria-busy");
-    const noResultsText = ((_a16 = this.instance) == null ? void 0 : _a16.translate("zero_results", {
+    const noResultsText = this.instance?.translate("zero_results", {
       SEARCH_TERM: this.searchTerm
-    })) || `No results for "${this.searchTerm}"`;
+    }) || `No results for "${this.searchTerm}"`;
     this.statusEl.textContent = noResultsText;
     this.statusEl.className = "pf-searchbox-status pf-searchbox-empty";
     this.statusEl.hidden = false;
-    (_b2 = this.instance) == null ? void 0 : _b2.announce(
+    this.instance?.announce(
       "zero_results",
       { SEARCH_TERM: this.searchTerm },
       "assertive"
@@ -21888,7 +21636,7 @@ var PagefindSearchbox = class extends PagefindElement {
       return;
     }
     const currentResult = this.results[this.activeIndex];
-    if (!(currentResult == null ? void 0 : currentResult.data)) {
+    if (!currentResult?.data) {
       if (currentResult) {
         this.pendingNavigation += delta;
         currentResult.load();
@@ -21938,9 +21686,8 @@ var PagefindSearchbox = class extends PagefindElement {
   scheduleLoadingAnnouncement() {
     if (this.loadingAnnouncementTimeout) return;
     this.loadingAnnouncementTimeout = window.setTimeout(() => {
-      var _a16;
       this.loadingAnnouncementTimeout = null;
-      (_a16 = this.instance) == null ? void 0 : _a16.announce("loading", {}, "polite");
+      this.instance?.announce("loading", {}, "polite");
     }, 800);
   }
   clearLoadingAnnouncement() {
@@ -21961,7 +21708,7 @@ var PagefindSearchbox = class extends PagefindElement {
     while (this.pendingNavigation !== 0) {
       if (direction45 > 0) {
         const currentResult = this.results[currentResultIndex];
-        if (currentResult == null ? void 0 : currentResult.data) {
+        if (currentResult?.data) {
           const options = this.getOptionsForResult(currentResult);
           if (currentOffset < options.length - 1) {
             currentOffset++;
@@ -21975,7 +21722,7 @@ var PagefindSearchbox = class extends PagefindElement {
           break;
         }
         const nextResult = this.results[nextIdx];
-        if (nextResult == null ? void 0 : nextResult.data) {
+        if (nextResult?.data) {
           currentResultIndex = nextIdx;
           currentOffset = 0;
           this.pendingNavigation--;
@@ -21999,7 +21746,7 @@ var PagefindSearchbox = class extends PagefindElement {
           break;
         }
         const prevResult = this.results[prevIdx];
-        if (prevResult == null ? void 0 : prevResult.data) {
+        if (prevResult?.data) {
           const prevOptions = this.getOptionsForResult(prevResult);
           currentResultIndex = prevIdx;
           currentOffset = Math.max(0, prevOptions.length - 1);
@@ -22219,17 +21966,16 @@ var PagefindSearchbox = class extends PagefindElement {
     }
   }
   announceResults() {
-    var _a16, _b2;
     const count = this.results.length;
     if (count === 0) {
-      (_a16 = this.instance) == null ? void 0 : _a16.announce(
+      this.instance?.announce(
         "zero_results",
         { SEARCH_TERM: this.searchTerm },
         "assertive"
       );
     } else {
       const key = count === 1 ? "one_result" : "many_results";
-      (_b2 = this.instance) == null ? void 0 : _b2.announce(key, {
+      this.instance?.announce(key, {
         SEARCH_TERM: this.searchTerm,
         COUNT: count
       });
@@ -22287,8 +22033,7 @@ var PagefindSearchbox = class extends PagefindElement {
     instance.on(
       "translations",
       () => {
-        var _a16;
-        const currentValue = ((_a16 = this.inputEl) == null ? void 0 : _a16.value) || "";
+        const currentValue = this.inputEl?.value || "";
         const wasOpen = this.isOpen;
         this.render();
         if (this.inputEl && currentValue) {
@@ -22345,11 +22090,11 @@ if (!customElements.get("pagefind-searchbox")) {
   customElements.define("pagefind-searchbox", PagefindSearchbox);
 }
 registerFunction("resolveUrl", (url, pageUrl) => {
-  const s5 = String(url != null ? url : "");
+  const s5 = String(url ?? "");
   if (!s5 || /^[a-z][a-z0-9+.-]*:/i.test(s5) || /^\/\//.test(s5) || s5.startsWith("/")) return s5;
   try {
-    return new URL(s5, new URL(String(pageUrl != null ? pageUrl : "/"), "https://p")).pathname;
-  } catch (e10) {
+    return new URL(s5, new URL(String(pageUrl ?? "/"), "https://p")).pathname;
+  } catch {
     return s5;
   }
 });
@@ -22359,8 +22104,7 @@ if (typeof window !== "undefined") {
 
 // docs/assets/js/index.js
 var application = new Application();
-var _a15;
-application.context = (_a15 = window == null ? void 0 : window.application) == null ? void 0 : _a15.context;
+application.context = window?.application?.context;
 window.application = application;
 application.start();
 var QuickSearchButton = class extends HTMLElement {
@@ -22368,14 +22112,10 @@ var QuickSearchButton = class extends HTMLElement {
     super();
     const instance = window.PagefindComponents.getInstanceManager().getInstance("default");
     instance.registerUtility(this, "modal-trigger");
-    this.addEventListener("click", () => {
-      var _a16;
-      return (_a16 = instance.getUtilities("modal")[0]) == null ? void 0 : _a16.open();
-    });
+    this.addEventListener("click", () => instance.getUtilities("modal")[0]?.open());
   }
   handleModalClose() {
-    var _a16;
-    (_a16 = this.buttonEl) == null ? void 0 : _a16.focus();
+    this.buttonEl?.focus();
   }
 };
 customElements.define("quick-search-button", QuickSearchButton);
@@ -22384,8 +22124,7 @@ var ColorSwitcherController = class extends Controller {
     super(...arguments);
     __publicField(this, "handleShortcut", (event) => {
       if (event.key === "\\" && !event.composedPath().some((el) => {
-        var _a16, _b2, _c;
-        return ["input", "textarea"].includes((_a16 = el == null ? void 0 : el.tagName) == null ? void 0 : _a16.toLowerCase()) || ((_b2 = el.hasAttribute) == null ? void 0 : _b2.call(el, "contenteditable")) || ((_c = el.getAttribute) == null ? void 0 : _c.call(el, "role")) === "textbox";
+        return ["input", "textarea"].includes(el?.tagName?.toLowerCase()) || el.hasAttribute?.("contenteditable") || el.getAttribute?.("role") === "textbox";
       })) {
         event.preventDefault();
         window.application.context.color.toggleMode();
@@ -22403,8 +22142,7 @@ __publicField(ColorSwitcherController, "controllerName", "color-switcher");
 application.register(ColorSwitcherController);
 application.register(ScrollSpyController);
 function getMenu(root = document) {
-  var _a16, _b2;
-  return (_b2 = (_a16 = root == null ? void 0 : root.querySelector("wa-page")) == null ? void 0 : _a16.shadowRoot) == null ? void 0 : _b2.querySelector("[part~='menu']");
+  return root?.querySelector("wa-page")?.shadowRoot?.querySelector("[part~='menu']");
 }
 function updateMenu(root = document) {
   const menu = getMenu(root);
@@ -22442,10 +22180,9 @@ function storeScrollPosition(e10) {
   window.addEventListener(eventName, storeScrollPosition);
 });
 function handleBodySwap(e10) {
-  var _a16, _b2;
   const newBody = e10.newBody;
   document.querySelectorAll("dialog.pf-modal[open]").forEach((d5) => d5.close());
-  const instanceManager2 = (_b2 = (_a16 = window.PagefindComponents) == null ? void 0 : _a16.getInstanceManager) == null ? void 0 : _b2.call(_a16);
+  const instanceManager2 = window.PagefindComponents?.getInstanceManager?.();
   if (instanceManager2) {
     instanceManager2.instances.clear();
   }

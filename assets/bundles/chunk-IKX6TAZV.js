@@ -3,10 +3,8 @@ import {
   __privateGet,
   __privateSet,
   __privateWrapper,
-  __publicField,
-  __spreadProps,
-  __spreadValues
-} from "./chunk-UKNFP365.js";
+  __publicField
+} from "./chunk-RR3RQRRX.js";
 
 // node_modules/@vue/shared/dist/shared.esm-bundler.js
 // @__NO_SIDE_EFFECTS__
@@ -1511,8 +1509,7 @@ var Controller = class {
           },
           [`${targetName}Target`]: {
             get() {
-              var _a;
-              return ((_a = this[`${targetName}Targets`]) == null ? void 0 : _a[0]) || null;
+              return this[`${targetName}Targets`]?.[0] || null;
             }
           }
         });
@@ -1539,12 +1536,11 @@ var Controller = class {
    * @returns {HTMLFormElement | null}
    */
   get form() {
-    var _a, _b;
     let form = this.element.form;
     if (form) {
       return form;
     }
-    const formAttr = (_b = (_a = this.element) == null ? void 0 : _a.getAttribute) == null ? void 0 : _b.call(_a, "form");
+    const formAttr = this.element?.getAttribute?.("form");
     if (formAttr) {
       return this.element.querySelector(`#${formAttr}`);
     }
@@ -1942,16 +1938,13 @@ var Application = class {
     this.started = false;
     this._pauseCount = 0;
     this.getControllerBinding = (node) => {
-      var _a;
-      return (_a = node.getAttribute) == null ? void 0 : _a.call(node, "flow-controller");
+      return node.getAttribute?.("flow-controller");
     };
     this.getTargetBinding = (node) => {
-      var _a, _b;
-      return (_b = (_a = node.getAttribute) == null ? void 0 : _a.call(node, `flow-target`)) == null ? void 0 : _b.split(/\s+/);
+      return node.getAttribute?.(`flow-target`)?.split(/\s+/);
     };
     this.getTextBinding = (node) => {
-      var _a;
-      return (_a = node.getAttribute) == null ? void 0 : _a.call(node, "flow-text");
+      return node.getAttribute?.("flow-text");
     };
     this.parseTextBinding = (el) => {
       const binding = this.getTextBinding(el);
@@ -1978,20 +1971,16 @@ var Application = class {
       return value == null ? "" : String(value);
     };
     this.getActionBinding = (node) => {
-      var _a;
-      return (_a = node.getAttribute) == null ? void 0 : _a.call(node, "flow-action");
+      return node.getAttribute?.("flow-action");
     };
     this.getContextBinding = (node) => {
-      var _a;
-      return (_a = node.getAttribute) == null ? void 0 : _a.call(node, "flow-context");
+      return node.getAttribute?.("flow-context");
     };
     this.getAttributeBinding = (node) => {
-      var _a;
-      return (_a = node.getAttribute) == null ? void 0 : _a.call(node, "flow-attr");
+      return node.getAttribute?.("flow-attr");
     };
     this.getPropertyBinding = (node) => {
-      var _a;
-      return (_a = node.getAttribute) == null ? void 0 : _a.call(node, "flow-prop");
+      return node.getAttribute?.("flow-prop");
     };
     this.modifierSchema = /** @const */
     {
@@ -2024,24 +2013,23 @@ var Application = class {
         );
       },
       "input[type='radio']": (element) => {
-        var _a, _b, _c;
         const elements = (
           /** @type {HTMLInputElement} */
-          (_a = element.form) == null ? void 0 : _a.elements
+          element.form?.elements
         );
         if (!elements) {
           return null;
         }
         return (
           /** @type {HTMLInputElement} */
-          (_c = (_b = Array.from(elements).find((el) => {
+          Array.from(elements).find((el) => {
             return (
               /** @type {HTMLInputElement} */
               el.name === /** @type {HTMLInputElement} */
               element.name && /** @type {HTMLInputElement} */
               el.checked === true
             );
-          })) == null ? void 0 : _b.value) != null ? _c : null
+          })?.value ?? null
         );
       },
       input: (element) => {
@@ -2127,7 +2115,7 @@ var Application = class {
     if (!name) {
       return;
     }
-    const form = el == null ? void 0 : el.form;
+    const form = el?.form;
     if (!form) {
       return;
     }
@@ -2148,9 +2136,8 @@ var Application = class {
    * @param {() => void} fn
    */
   flushChanges(fn) {
-    var _a, _b;
     if (this._pauseCount === 0) {
-      (_a = this.observer) == null ? void 0 : _a.disconnect();
+      this.observer?.disconnect();
     }
     this._pauseCount++;
     try {
@@ -2158,7 +2145,7 @@ var Application = class {
     } finally {
       this._pauseCount--;
       if (this._pauseCount === 0 && this.started) {
-        (_b = this.observer) == null ? void 0 : _b.takeRecords();
+        this.observer?.takeRecords();
         this._observe();
       }
     }
@@ -2292,13 +2279,12 @@ var Application = class {
    * @param {string | null} key
    */
   resolveValue(el, key) {
-    var _a;
     if (!key) {
       return null;
     }
     let negativeLength = 0;
     if (key.startsWith("!")) {
-      const negatives = (_a = key.match(/^\!+/g)) == null ? void 0 : _a[0];
+      const negatives = key.match(/^\!+/g)?.[0];
       if (negatives) {
         negativeLength = negatives.length;
       }
@@ -2335,9 +2321,8 @@ var Application = class {
     this.abortController = new AbortController();
     this.rootElement = options.rootElement || document.documentElement || this.rootElement;
     this.formEvents.forEach((evt) => {
-      var _a;
       this.rootElement.addEventListener(evt, this.eventUpdateContext, {
-        signal: (_a = this.abortController) == null ? void 0 : _a.signal
+        signal: this.abortController?.signal
       });
     });
     if (!this.started) {
@@ -2351,11 +2336,10 @@ var Application = class {
    * Takes records, and then disconnects the observer.
    */
   stop() {
-    var _a, _b;
     if (!this.started) return this;
     this.started = false;
     this._reconcileQueued = false;
-    (_a = this.observer) == null ? void 0 : _a.disconnect();
+    this.observer?.disconnect();
     for (const el of [...this._controllerInstanceMap.keys()]) {
       this._destroyElement(el);
     }
@@ -2365,7 +2349,7 @@ var Application = class {
     for (const el of [...this._bindingScopes.keys()]) {
       this._deleteCachedScopes(el);
     }
-    (_b = this.abortController) == null ? void 0 : _b.abort("application stopped");
+    this.abortController?.abort("application stopped");
     this._controllerInstanceMap.clear();
     this._actionListenerMap.clear();
     this._targetConnectionMap.clear();
@@ -2547,7 +2531,6 @@ var Application = class {
    * @param {string} [controllerName]
    */
   _disconnectElement(element, controllerName) {
-    var _a;
     const map = this._controllerInstanceMap.get(element);
     if (!map) return;
     const names = controllerName ? [controllerName] : [...map.keys()];
@@ -2556,7 +2539,7 @@ var Application = class {
       const inst = map.get(name);
       if (!inst || !inst.isConnected) continue;
       this._disconnectAllTargets(inst);
-      (_a = inst.disconnectedCallback) == null ? void 0 : _a.call(inst);
+      inst.disconnectedCallback?.();
       inst.isConnected = false;
       ary.push({ controller: inst, name });
     }
@@ -2588,8 +2571,7 @@ var Application = class {
     const listeners = this._actionListenerMap.get(element);
     if (!listeners) return;
     listeners.forEach(({ target, eventName, fn, options }) => {
-      var _a;
-      (_a = target == null ? void 0 : target.removeEventListener) == null ? void 0 : _a.call(target, eventName, fn, options);
+      target?.removeEventListener?.(eventName, fn, options);
     });
     this._actionListenerMap.delete(element);
   }
@@ -2598,7 +2580,6 @@ var Application = class {
    * @param {Element} el
    */
   _createControllerInstance(controllerName, el) {
-    var _a;
     let map = this._controllerInstanceMap.get(el);
     if (!map) {
       map = /* @__PURE__ */ new Map();
@@ -2623,18 +2604,17 @@ var Application = class {
     }
     if (!inst.isConnected) {
       inst.isConnected = true;
-      (_a = inst.connectedCallback) == null ? void 0 : _a.call(inst);
+      inst.connectedCallback?.();
     }
   }
   /** @param {Element} el */
   _reconcileActions(el) {
-    var _a, _b, _c;
     const attr = this.getActionBinding(el);
     const desired = /* @__PURE__ */ new Set();
     if (attr) {
       for (const parsed of this._parseActionsFromString(attr)) {
         desired.add(parsed.source);
-        if (!((_a = this._actionListenerMap.get(el)) == null ? void 0 : _a.has(parsed.source))) {
+        if (!this._actionListenerMap.get(el)?.has(parsed.source)) {
           this.addParsedActionToElement(parsed, el);
         }
       }
@@ -2648,7 +2628,7 @@ var Application = class {
         continue;
       }
       const rec = listeners.get(source);
-      (_c = (_b = rec == null ? void 0 : rec.target) == null ? void 0 : _b.removeEventListener) == null ? void 0 : _c.call(_b, rec.eventName, rec.fn, rec.options);
+      rec?.target?.removeEventListener?.(rec.eventName, rec.fn, rec.options);
       listeners.delete(source);
     }
     if (listeners.size === 0) {
@@ -2661,7 +2641,7 @@ var Application = class {
    * @return {Array<string>}
    */
   parseControllerNamesFromString(str) {
-    return (str == null ? void 0 : str.split(/\s+/)) || [];
+    return str?.split(/\s+/) || [];
   }
   /**
    * @param {Controller} controller
@@ -2729,7 +2709,6 @@ var Application = class {
    * @param {Element} element
    */
   addParsedActionToElement(parsedAction, element) {
-    var _a;
     if (parsedAction.errors.length > 0) {
       return;
     }
@@ -2826,9 +2805,10 @@ var Application = class {
       }
       options[option] = true;
     });
-    target.addEventListener(eventName, fn, __spreadProps(__spreadValues({}, options), {
-      signal: (_a = this.abortController) == null ? void 0 : _a.signal
-    }));
+    target.addEventListener(eventName, fn, {
+      ...options,
+      signal: this.abortController?.signal
+    });
     let listeners = this._actionListenerMap.get(element);
     if (!listeners) {
       listeners = /* @__PURE__ */ new Map();
@@ -3033,7 +3013,6 @@ var Application = class {
    * @param {Element} el
    */
   _generateSignature(el) {
-    var _a;
     let signature = "";
     for (const attr of el.attributes) {
       for (const effect2 of this._effects) {
@@ -3049,7 +3028,7 @@ var Application = class {
     if (signature.length === 0) {
       return null;
     }
-    const context = (_a = this.getClosestContextString(el)) != null ? _a : "";
+    const context = this.getClosestContextString(el) ?? "";
     let controllerId = "";
     if (context && context !== "$form" && context !== "$context") {
       const controller = this.getClosestController(el, context);
@@ -3128,4 +3107,4 @@ export {
   * @license MIT
   **)
 */
-//# sourceMappingURL=chunk-CNMVXYPG.js.map
+//# sourceMappingURL=chunk-IKX6TAZV.js.map
