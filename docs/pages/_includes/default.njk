@@ -11,7 +11,7 @@
   </head>
   <body>
     <!-- not sure why this needs to 30px smaller? maybe the auto injected nav button?? -->
-    <wa-page class="layout-{{ layout | stripExtension }}" mobile-breakpoint="1200">
+    <wa-page class="layout-{{ layout | stripExtension }}" mobile-breakpoint="1200" style="--header-height: 83px;">
       {% block header %}
         {% include "header.njk" %}
       {% endblock %}
