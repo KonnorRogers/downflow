@@ -148,6 +148,7 @@
       border: none;
     }
 
+    &::part(navigation-toggle),
     & [data-toggle-nav] {
       display: none;
     }
