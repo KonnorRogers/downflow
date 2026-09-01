@@ -29,11 +29,13 @@ export function jsBundlePlugin(options = {}) {
 
   return function (eleventyConfig) {
     let criticalCSS = "";
+    let chunks = []
     eleventyConfig.addWatchTarget(path.join(__dirname, "..", "assets", "js"));
     eleventyConfig.addGlobalData("criticalCSS", () => criticalCSS);
+    eleventyConfig.addGlobalData("chunks", () => chunks);
 
     eleventyConfig.on("eleventy.before", async function ({ directories }) {
-      await esbuild.build({
+      const result = await esbuild.build({
         entryPoints: entryPoints,
         sourcemap: true,
         bundle: true,
@@ -48,7 +50,25 @@ export function jsBundlePlugin(options = {}) {
         // external: [
         //   "downflow"
         // ]
+        // entryNames: '[name]-[hash]',
+        metafile: true
       });
+
+      // Log or extract mappings directly from the metafile outputs
+      const manifest = {};
+
+      chunks = []
+      for (const [key, value] of Object.entries(result.metafile.outputs)) {
+        if (key.includes("assets/bundles/chunk-") && !key.endsWith(".map")) {
+          const url = "/assets" + key.split("assets")[1]
+          chunks.push(url)
+        }
+        // console.log({key,value})
+        if (value.entryPoint) {
+          manifest[value.entryPoint] = key;
+        }
+      }
+
 
       const cssFile = path.join(directories.output, outputPath, "index.css")
       criticalCSS = fs.readFileSync(cssFile, {encoding: "utf8"})

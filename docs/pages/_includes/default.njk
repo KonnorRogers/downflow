@@ -4,6 +4,10 @@
     {% block head %}
       {% include "head.njk" %}
     {% endblock %}
+    <link rel="modulepreload" href="{{ "/assets/search/pagefind/pagefind.js" | url }}">
+    {% for chunk in chunks %}
+      <link rel="modulepreload" href="{{ chunk | url }}">
+    {% endfor %}
   </head>
   <body>
     <!-- not sure why this needs to 30px smaller? maybe the auto injected nav button?? -->
