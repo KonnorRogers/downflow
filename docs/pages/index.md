@@ -10,8 +10,12 @@ title: Downflow
     height="256"
     src="{{ "/assets/images/water-dude.png" | url }}"
     alt="pixel art image of a water droplet"
-    style="width: auto; margin: 0 auto; margin-top: var(--wa-space-xl);"
+    style="
+      height: 256px; width: 256px;
+      margin: 0 auto; margin-top: var(--wa-space-xl);
+    "
     fetchpriority="high"
+    style=""
   >
   <h1 style="margin-top: 0;">Let your state <mark class="emphasis">flow</mark></h1>
   <p class="wa-font-size-xl">Reactive DOM updates that don't drive a steamroller through your DOM.</p>

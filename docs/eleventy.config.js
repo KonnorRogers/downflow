@@ -192,10 +192,10 @@ export default async function (eleventyConfig) {
   eleventyConfig.addShortcode("npm", function (content) {
     return [
       `<wa-tab-group class="npm-block" active="npm" flow-prop="active:packageManager" flow-action="wa-tab-show#setPackageManager">`,
-      `<wa-tab panel="npm">npm</wa-tab>`,
+      `<wa-tab panel="npm" active>npm</wa-tab>`,
       `<wa-tab panel="pnpm">pnpm</wa-tab>`,
       `<wa-tab panel="yarn">yarn</wa-tab>`,
-      `<wa-tab-panel name="npm">${shell(content)}</wa-tab-panel>`,
+      `<wa-tab-panel name="npm" active>${shell(content)}</wa-tab-panel>`,
       `<wa-tab-panel name="pnpm">${shell(toPNPM(content))}</wa-tab-panel>`,
       `<wa-tab-panel name="yarn">${shell(toYarn(content))}</wa-tab-panel>`,
       `</wa-tab-group>`,

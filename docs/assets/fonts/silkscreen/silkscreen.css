@@ -4,6 +4,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
+  size-adjust: 120%;
   src: url("./silkscreen-regular.ttf") format("truetype");
 }
 
@@ -13,5 +14,6 @@
 	font-weight: 700;
 	font-stretch: normal;
 	font-style: normal;
+      	size-adjust: 120%;
 	src: url('./silkscreen-bold.ttf') format('truetype');
 }
