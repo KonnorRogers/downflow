@@ -7,9 +7,11 @@ import { EffectScheduler } from "./effect-scheduler.js";
 export { Controller };
 
 /**
- * @typedef {Object} EffectPlugin
+ * @typedef {Object} Plugin
  * @property {string} name
- * @property {(el: Element) => any} run
+ * @property {(el: Element) => any} [run]
+ * @property {"effect" | "observer"} type
+ * @property {(el: Element) => any} [parseElement]
  * @property {(attributeName: string) => boolean} match
  */
 
@@ -129,9 +131,15 @@ export class Application {
 
     /**
      * last-seen text|attr|prop signature
-     * @type {Map<Element, string>}
+     * @type {WeakMap<Element, string>}
      */
-    this._bindingSignatures = new Map();
+    this._bindingSignatures = new WeakMap();
+
+    /**
+     * last-seen bind signature
+     * @type {WeakMap<Element, {value: any, signature: string, bindings: ReturnType<Application["parseBindAttributes"]>}>}
+     */
+    this._bindAttributeCache = new WeakMap()
 
     /**
      * If the registry has started listening for new elements.
@@ -141,14 +149,6 @@ export class Application {
 
     /** @type {number} */
     this._pauseCount = 0;
-
-    /**
-     * The attribute to use for finding a controller. Defaults to "flow-controller".
-     * @type {(node: Element) => string | null | undefined}
-     */
-    this.getControllerBinding = (node) => {
-      return node.getAttribute?.("flow-controller");
-    };
 
     /**
      * The attribute to use for finding a controller. Defaults to "flow-target".
@@ -183,6 +183,10 @@ export class Application {
        */
       const filters = [];
       let key = binding.trim();
+
+      /**
+       * We should probably introduce proper parsing for filters. This will let us also support some additional syntax like `===` / `==`. But for now, this is good enough.
+       */
       binding.split("|").forEach((str, index) => {
         if (index === 0) {
           key = str.trim();
@@ -330,7 +334,7 @@ export class Application {
         return;
       }
 
-      this.updateBindingsForElement(target);
+      this.updateBindValueForElement(target);
     };
 
     /**
@@ -339,11 +343,13 @@ export class Application {
     this.filters = {};
 
     /**
-     * @type {EffectPlugin[]}
+     * Private for now until ive played with it more.
+     * @type {Plugin[]}
      */
-    this._effects = [
+    this._plugins = [
       {
         name: "__downflow__text",
+        type: "effect",
         run: (el) => this._effectText(el),
         match(attributeName) {
           return Boolean(attributeName.match(/flow-text/));
@@ -351,6 +357,7 @@ export class Application {
       },
       {
         name: "__downflow__properties",
+        type: "effect",
         run: (el) => this._effectProperties(el),
         match(attributeName) {
           return Boolean(attributeName.match(/flow-prop/));
@@ -358,32 +365,94 @@ export class Application {
       },
       {
         name: "__downflow__attributes",
+        type: "effect",
         run: (el) => this._effectAttributes(el),
         match(attributeName) {
           return Boolean(attributeName.match(/flow-attr/));
         },
       },
-    ];
+      {
+        name: "__downflow__bind",
+        type: "observer",
+        match(attributeName) {
+          return Boolean(attributeName.match(/flow-bind/));
+        },
+      },
+      {
+        name: "__downflow__controllers",
+        type: "observer",
+        parseElement (el) {
+          const str = el.getAttribute("flow-controller")
+          return new Set(str?.split(/\s+/) || []);
+        },
+        match(attributeName) {
+          return Boolean(attributeName.match("flow-controller"));
+        },
+      },
+      {
+        name: "__downflow__targets",
+        type: "observer",
+        match(attributeName) {
+          return Boolean(attributeName.match("flow-target"));
+        },
+      },
+      {
+        name: "__downflow__actions",
+        type: "observer",
+        match(attributeName) {
+          return Boolean(attributeName === "flow-action");
+        },
+      },
+      {
+        name: "__downflow__context",
+        type: "observer",
+        match(attributeName) {
+          return Boolean(attributeName === "flow-context");
+        },
+      },
+      {
+        name: "__downflow__value",
+        type: "observer",
+        // run (binding) {},
+        // parseAttribute (attributeName, attributeValue) {},
+        match(attributeName) {
+          return Boolean(attributeName === "value");
+        },
+      },
+    ]
+
+    /**
+     * @type {Plugin[]}
+     */
+    this._effects = this._plugins.filter((plugin) => {
+      return plugin.type === "effect"
+    });
+
+    this._observers = this._plugins.filter((plugin) => {
+      return plugin.type === "observer"
+    })
   }
 
   // This function is purposely *not* run as part of an effect.
   /**
    * @param {Element} el
    */
-  updateBindingsForElement(el) {
-    const bindings = this.parseBindings(el);
+  updateBindValueForElement(el) {
+    const bindings = this._bindAttributeCache.get(el)?.bindings;
 
-    bindings.forEach((binding) => {
-      const context = this.resolveContext(el, binding.contextString);
-      const keys = binding.property.split(".");
-      const finalKey = keys.pop();
-      const obj = dig_p(context, ...keys);
+    if (bindings?.length) {
+      bindings.forEach((binding) => {
+        const context = this.resolveContext(el, binding.contextString);
+        const keys = binding.property.split(".");
+        const finalKey = keys.pop();
+        const obj = dig_p(context, ...keys);
 
-      if (finalKey && obj) {
-        // @ts-expect-error
-        obj[finalKey] = this._readFormControl(el);
-      }
-    });
+        if (finalKey && obj) {
+          // @ts-expect-error
+          obj[finalKey] = this._readFormControl(el);
+        }
+      });
+    }
 
     // Bindings for `$form`
     // @ts-expect-error
@@ -707,7 +776,10 @@ export class Application {
     this._controllerInstanceMap.clear();
     this._actionListenerMap.clear();
     this._targetConnectionMap.clear();
-    this._bindingSignatures.clear();
+
+    // WeakMaps dont have a native clear, so we set it to a new instance.
+    this._bindingSignatures = new WeakMap();
+    this._bindingAttributeSignatures = new WeakMap();
     return this;
   }
 
@@ -778,10 +850,45 @@ export class Application {
   }
 
   /**
-   * @param {MutationRecord[]} _mutations
+   * @param {string} attr
    */
-  handleMutations(_mutations) {
-    if (this._reconcileQueued) return;
+  isFlowAttribute (attr) {
+    for (const p of this._plugins) {
+      if (p?.match?.(attr)) {
+        return true
+      }
+    }
+
+    return false
+  }
+
+  /**
+   * @param {MutationRecord[]} mutations
+   */
+  handleMutations(mutations) {
+    if (this._reconcileQueued) {
+      return;
+    }
+
+    let needsReconcile = false
+
+    for (const mutation of mutations) {
+      if (mutation.type === "attributes" && mutation.attributeName) {
+        if (!this.isFlowAttribute(mutation.attributeName)) {
+          continue
+        }
+      } else if (mutation.type === "childList") {
+        // If we ever start doing dirty tracking and not walking entire DOM.
+      } else {
+        // Nothing to catch here. just characaterData.
+      }
+
+      // all other mutation types need to reconcile.
+      needsReconcile = true
+    }
+
+    if (!needsReconcile) { return }
+
     this._reconcileQueued = true;
     queueMicrotask(() => {
       this._reconcileQueued = false;
@@ -792,13 +899,13 @@ export class Application {
   }
 
   reconcile(root = this.rootElement) {
-    const seen = new Set();
+    const seen = new Map();
 
     this.flushChanges(() => {
       // Walk the DOM. Find any changes and upgrade / downgrade accordingly.
       this.walkElements(root, (el) => {
-        seen.add(el);
-        this.updateBindingsForElement(el);
+        seen.set(el, true);
+        this._reconcileBindAttribute(el); // this is a special case and purposely not part of reconcile bindings because the "bind" attribute is "writer", not a "reader".
         this._reconcileControllers(el); // desired flow-controller names vs connected
         this._reconcileActions(el); // desired action sources vs listener map
         this._reconcileBindings(el); // rebind only if a binding changed
@@ -806,50 +913,104 @@ export class Application {
 
       // Find detached elements
       for (const el of [...this._controllerInstanceMap.keys()]) {
-        if (!seen.has(el)) {
-          // Don't fully delete this controller so we can re-use it.
+        if (!seen.get(el)) {
           this._disconnectElement(el);
         }
       }
 
       for (const el of [...this._actionListenerMap.keys()]) {
-        if (!seen.has(el)) {
+        if (!seen.get(el)) {
           this._removeActionsForElement(el);
         }
       }
 
       for (const el of [...this._bindingScopes.keys()]) {
-        if (!seen.has(el)) {
+        if (!seen.get(el)) {
           this._deleteCachedScopes(el);
         }
       }
 
       // Controllers are stable, time to handle targets
       for (const map of this._controllerInstanceMap.values()) {
-        for (const controller of map.values()) {
-          if (controller.isConnected) {
-            this._reconcileTargets(controller);
-          }
-        }
+        this._connectTargets(map)
       }
     });
+  }
+
+  /**
+   * @param {Map<string, Controller>} map
+   */
+  _connectTargets (map) {
+    for (const controller of map.values()) {
+      if (controller.isConnected) {
+        this._reconcileTargets(controller);
+      }
+    }
+  }
+
+  /**
+    * @param {Element} el
+    */
+  _teardownElement(el) {
+    this._disconnectElement(el);
+    this._removeActionsForElement(el);
+    this._deleteCachedScopes(el);
+  }
+
+  /**
+   * @param {Element} el
+   */
+  _reconcileBindAttribute (el) {
+    const bindings = this.parseBindAttributes(el)
+
+    if (bindings.length <= 0) {
+      this._bindAttributeCache.delete(el)
+      return
+    }
+
+    const signature = this._getBindAttributeSignature(bindings)
+
+    let obj = this._bindAttributeCache.get(el)
+
+    if (!obj || obj.signature !== signature) {
+      obj = {
+        signature,
+        bindings,
+        value: this._readFormControl(el),
+      }
+
+      this._bindAttributeCache.set(el, obj)
+      this.updateBindValueForElement(el)
+      return
+    }
+
+    if (obj.value !== this._readFormControl(el)) {
+      this.updateBindValueForElement(el)
+    }
   }
 
   /**
    * @param {Element} el
    */
   _reconcileControllers(el) {
-    const binding = this.getControllerBinding(el);
-    const desired = new Set(
-      binding ? this.parseControllerNamesFromString(binding) : [],
-    );
+    const plugin = this._plugins.find((plugin) => plugin.name === "__downflow__controllers")
+
+    if (!plugin) { return }
+
+    const desired = plugin?.parseElement?.(el)
+
+    if (!desired) { return }
 
     for (const name of desired) {
-      this._createControllerInstance(name, el); // idempotent: creates + connects
+      // creates + connects, won't recreate if the controller is instantiated already.
+      this._createControllerInstance(name, el);
     }
 
     const map = this._controllerInstanceMap.get(el);
-    if (!map) return;
+    if (!map) {
+      return
+    };
+
     const names = [];
     for (const name of map.keys()) {
       if (!desired.has(name)) {
@@ -1041,7 +1202,6 @@ export class Application {
    * @return {Array<string>}
    */
   parseControllerNamesFromString(str) {
-    return str?.split(/\s+/) || [];
   }
 
   /**
@@ -1377,7 +1537,7 @@ export class Application {
   _runEffects(el) {
     this._runEffect(() => {
       this._effects.forEach((effect) => {
-        effect.run(el);
+        effect.run?.(el);
       });
     });
   }
@@ -1479,9 +1639,21 @@ export class Application {
   }
 
   /**
+   * @param {ReturnType<typeof this.parseBindAttributes>} bindings
+   */
+  _getBindAttributeSignature (bindings) {
+    const signature = bindings.map((binding) => {
+      return binding.property + "->" + binding.contextString
+    }).join(" || ")
+
+    return signature
+  }
+
+  /**
+   * This parses `flow-bind:foo` / `flow-bind="foo"`. Not to be confused with other "bindings" on the elements.
    * @param {Element} el
    */
-  parseBindings(el) {
+  parseBindAttributes(el) {
     // There are a few ways to define bindings. We can do
     // - `flow-bind="name"`
     // - `flow-bind:name`

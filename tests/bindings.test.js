@@ -18,7 +18,7 @@ test("Should properly parse bindings", async () => {
 
   const el = await fixture(html`<input flow-bind="name" />`);
 
-  const bindings = application.parseBindings(el);
+  const bindings = application.parseBindAttributes(el);
 
   assert.deepEqual(bindings[0], { contextString: undefined, property: "name" });
 });
@@ -28,7 +28,7 @@ test("Should properly parse bindings", async () => {
 
   const el = await fixture(html`<input flow-bind="foo.bar.baz" />`);
 
-  const bindings = application.parseBindings(el);
+  const bindings = application.parseBindAttributes(el);
 
   assert.deepEqual(bindings[0], {
     contextString: undefined,
