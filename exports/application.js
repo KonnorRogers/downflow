@@ -7,27 +7,6 @@ import { EffectScheduler } from "./effect-scheduler.js";
 export { Controller };
 
 /**
- * @typedef {EffectPlugin | BindingPlugin} Plugin
- */
-
-/**
- * @typedef {Object} BindingPlugin
- * @property {string} name
- * @property {"binding"} type
- * @property {(el: Element) => any} [parseElement]
- * @property {(value: any) => any} [run]
- * @property {(attributeName: string) => boolean} match
- */
-
-/**
- * @typedef {Object} EffectPlugin
- * @property {string} name
- * @property {(el: Element) => any} run
- * @property {"effect"} type
- * @property {(attributeName: string) => boolean} match
- */
-
-/**
  * @typedef {object} RegistryOptions
  * @property {Element | ShadowRoot} [RegistryOptions.rootElement=document.documentElement]
  */
@@ -358,89 +337,119 @@ export class Application {
      */
     this.filters = {};
 
-    /**
-     * Private for now until ive played with it more.
-     * @type {Plugin[]}
-     */
-    this._plugins = [
-      {
-        name: "__downflow__text",
-        type: "effect",
-        run: (el) => this._effectText(el),
-        match(attributeName) {
-          return Boolean(attributeName.match(/flow-text/));
-        },
-      },
-      {
-        name: "__downflow__properties",
-        type: "effect",
-        run: (el) => this._effectProperties(el),
-        match(attributeName) {
-          return Boolean(attributeName.match(/flow-prop/));
-        },
-      },
-      {
-        name: "__downflow__attributes",
-        type: "effect",
-        run: (el) => this._effectAttributes(el),
-        match(attributeName) {
-          return Boolean(attributeName.match(/flow-attr/));
-        },
-      },
-      {
-        name: "__downflow__bind",
-        type: "binding",
-        match(attributeName) {
-          return Boolean(attributeName.match(/flow-bind/));
-        },
-      },
-      {
-        name: "__downflow__controllers",
-        type: "binding",
-        match(attributeName) {
-          return Boolean(attributeName.match("flow-controller"));
-        },
-      },
-      {
-        name: "__downflow__targets",
-        type: "binding",
-        match(attributeName) {
-          return Boolean(attributeName.match("flow-target"));
-        },
-      },
-      {
-        name: "__downflow__actions",
-        type: "binding",
-        match(attributeName) {
-          return Boolean(attributeName === "flow-action");
-        },
-      },
-      {
-        name: "__downflow__context",
-        type: "binding",
-        match(attributeName) {
-          return Boolean(attributeName === "flow-context");
-        },
-      },
-      {
-        name: "__downflow__value",
-        type: "binding",
-        match(attributeName) {
-          return Boolean(attributeName === "value");
-        },
-      },
-    ]
+    const self = this
 
-    /**
-     * @type {Plugin[]}
-     */
-    this._effects = this._plugins.filter((plugin) => {
-      return plugin.type === "effect"
-    });
+    // Wrapped in a closure to not expose as public API. BindingPlugin needs quite a bit of work, as it changes how reconcile works. Im not even sure if its all the same plugin, or if it needs "stages".
+    // For example, the "target" reconciler will need the "controller" reconciler to finish first, so we'd need some guarantees around hook timing?
+    {
+      /**
+      * @typedef {EffectPlugin | BindingPlugin} Plugin
+      */
 
-    this._bindingPlugins = this._plugins.filter((plugin) => {
-      return plugin.type === "binding"
-    })
+      /**
+      * @typedef {Object} BindingPlugin
+      * @property {string} name
+      * @property {"binding"} type
+      * @property {(el: Element) => any} [parseElement]
+      * @property {(value: any) => any} [run]
+      * @property {(el: Element, attributeName: string) => boolean} match
+      */
+
+      /**
+      * @typedef {Object} EffectPlugin
+      * @property {string} name
+      * @property {(el: Element) => any} run
+      * @property {"effect"} type
+      * @property {(el: Element, attributeName: string) => boolean} match
+      */
+
+      /**
+      * Private for now until ive played with it more.
+      * I *think* what will
+      * @type {Plugin[]}
+      */
+      this._plugins = [
+        {
+          name: "__downflow__text",
+          type: "effect",
+          run: (el) => this._effectText(el),
+          match(el, attributeName) {
+            return Boolean(attributeName.match(/flow-text/));
+          },
+        },
+        {
+          name: "__downflow__properties",
+          type: "effect",
+          run: (el) => this._effectProperties(el),
+          match(el, attributeName) {
+            return Boolean(attributeName.match(/flow-prop/));
+          },
+        },
+        {
+          name: "__downflow__attributes",
+          type: "effect",
+          run: (el) => this._effectAttributes(el),
+          match(el, attributeName) {
+            return Boolean(attributeName.match(/flow-attr/));
+          },
+        },
+        {
+          name: "__downflow__bind",
+          type: "binding",
+          match(el, attributeName) {
+            return Boolean(attributeName.match(/flow-bind/));
+          },
+        },
+        {
+          name: "__downflow__controllers",
+          type: "binding",
+          match(el, attributeName) {
+            return Boolean(attributeName.match("flow-controller"));
+          },
+        },
+        {
+          name: "__downflow__targets",
+          type: "binding",
+          match(el, attributeName) {
+            return Boolean(attributeName.match("flow-target"));
+          },
+        },
+        {
+          name: "__downflow__actions",
+          type: "binding",
+          match(el, attributeName) {
+            return Boolean(attributeName === "flow-action");
+          },
+        },
+        {
+          name: "__downflow__context",
+          type: "binding",
+          match(el, attributeName) {
+            return Boolean(attributeName === "flow-context");
+          },
+        },
+        // This watches if the value attribute changes, which can be useful if its "bound".
+        {
+          name: "__downflow__value",
+          type: "binding",
+          match(el, attributeName) {
+            // Check the bind attribute cache first to reduce churn of unbound elements
+            return Boolean(self._bindAttributeCache.get(el) && attributeName === "value");
+          },
+        },
+      ]
+
+      /**
+      * @type {Plugin[]}
+      */
+      this._effects = this._plugins.filter((plugin) => {
+        return plugin.type === "effect"
+      });
+
+      this._bindingPlugins = this._plugins.filter((plugin) => {
+        return plugin.type === "binding"
+      })
+    }
   }
 
   // This function is purposely *not* run as part of an effect.
@@ -1013,7 +1022,6 @@ export class Application {
     }
 
     const map = this._controllerInstanceMap.get(el);
-
     if (!map) {
       return
     };
