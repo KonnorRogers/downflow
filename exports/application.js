@@ -7,11 +7,23 @@ import { EffectScheduler } from "./effect-scheduler.js";
 export { Controller };
 
 /**
- * @typedef {Object} Plugin
+ * @typedef {EffectPlugin | BindingPlugin} Plugin
+ */
+
+/**
+ * @typedef {Object} BindingPlugin
  * @property {string} name
- * @property {(el: Element) => any} [run]
- * @property {"effect" | "observer"} type
+ * @property {"binding"} type
  * @property {(el: Element) => any} [parseElement]
+ * @property {(value: any) => any} [run]
+ * @property {(attributeName: string) => boolean} match
+ */
+
+/**
+ * @typedef {Object} EffectPlugin
+ * @property {string} name
+ * @property {(el: Element) => any} run
+ * @property {"effect"} type
  * @property {(attributeName: string) => boolean} match
  */
 
@@ -156,6 +168,10 @@ export class Application {
      */
     this.getTargetBinding = (node) => {
       return node.getAttribute?.(`flow-target`)?.split(/\s+/);
+    };
+
+    this.getControllerBinding = (node) => {
+      return node.getAttribute?.(`flow-controller`);
     };
 
     /**
@@ -373,48 +389,42 @@ export class Application {
       },
       {
         name: "__downflow__bind",
-        type: "observer",
+        type: "binding",
         match(attributeName) {
           return Boolean(attributeName.match(/flow-bind/));
         },
       },
       {
         name: "__downflow__controllers",
-        type: "observer",
-        parseElement (el) {
-          const str = el.getAttribute("flow-controller")
-          return new Set(str?.split(/\s+/) || []);
-        },
+        type: "binding",
         match(attributeName) {
           return Boolean(attributeName.match("flow-controller"));
         },
       },
       {
         name: "__downflow__targets",
-        type: "observer",
+        type: "binding",
         match(attributeName) {
           return Boolean(attributeName.match("flow-target"));
         },
       },
       {
         name: "__downflow__actions",
-        type: "observer",
+        type: "binding",
         match(attributeName) {
           return Boolean(attributeName === "flow-action");
         },
       },
       {
         name: "__downflow__context",
-        type: "observer",
+        type: "binding",
         match(attributeName) {
           return Boolean(attributeName === "flow-context");
         },
       },
       {
         name: "__downflow__value",
-        type: "observer",
-        // run (binding) {},
-        // parseAttribute (attributeName, attributeValue) {},
+        type: "binding",
         match(attributeName) {
           return Boolean(attributeName === "value");
         },
@@ -428,8 +438,8 @@ export class Application {
       return plugin.type === "effect"
     });
 
-    this._observers = this._plugins.filter((plugin) => {
-      return plugin.type === "observer"
+    this._bindingPlugins = this._plugins.filter((plugin) => {
+      return plugin.type === "binding"
     })
   }
 
@@ -993,13 +1003,9 @@ export class Application {
    * @param {Element} el
    */
   _reconcileControllers(el) {
-    const plugin = this._plugins.find((plugin) => plugin.name === "__downflow__controllers")
+    const str = this.getControllerBinding(el)
 
-    if (!plugin) { return }
-
-    const desired = plugin?.parseElement?.(el)
-
-    if (!desired) { return }
+    const desired = this._parseControllerNamesFromString(str)
 
     for (const name of desired) {
       // creates + connects, won't recreate if the controller is instantiated already.
@@ -1007,11 +1013,13 @@ export class Application {
     }
 
     const map = this._controllerInstanceMap.get(el);
+
     if (!map) {
       return
     };
 
     const names = [];
+
     for (const name of map.keys()) {
       if (!desired.has(name)) {
         names.push(name);
@@ -1199,9 +1207,10 @@ export class Application {
   /**
    * Takes an attribute and turns it into an array of controller names.
    * @param {string} str
-   * @return {Array<string>}
+   * @return {Set<string>}
    */
-  parseControllerNamesFromString(str) {
+  _parseControllerNamesFromString(str) {
+    return new Set(str?.split(/\s+/) || [])
   }
 
   /**
