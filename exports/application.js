@@ -339,117 +339,95 @@ export class Application {
 
     const self = this
 
-    // Wrapped in a closure to not expose as public API. BindingPlugin needs quite a bit of work, as it changes how reconcile works. Im not even sure if its all the same plugin, or if it needs "stages".
-    // For example, the "target" reconciler will need the "controller" reconciler to finish first, so we'd need some guarantees around hook timing?
-    {
-      /**
-      * @typedef {EffectPlugin | BindingPlugin} Plugin
-      */
+    /**
+     * Private for now until ive played with it more.
+     * I *think* what will
+     * @type {import("../internal/plugins.js").Plugin[]}
+     */
+    this._plugins = [
+      {
+        name: "__downflow__text",
+        type: "effect",
+        run: (el) => this._effectText(el),
+        match(el, attributeName) {
+          return Boolean(attributeName.match(/flow-text/));
+        },
+      },
+      {
+        name: "__downflow__properties",
+        type: "effect",
+        run: (el) => this._effectProperties(el),
+        match(el, attributeName) {
+          return Boolean(attributeName.match(/flow-prop/));
+        },
+      },
+      {
+        name: "__downflow__attributes",
+        type: "effect",
+        run: (el) => this._effectAttributes(el),
+        match(el, attributeName) {
+          return Boolean(attributeName.match(/flow-attr/));
+        },
+      },
+      {
+        name: "__downflow__bind",
+        type: "binding",
+        match(el, attributeName) {
+          return Boolean(attributeName.match(/flow-bind/));
+        },
+      },
+      {
+        name: "__downflow__controllers",
+        type: "binding",
+        match(el, attributeName) {
+          return Boolean(attributeName.match("flow-controller"));
+        },
+      },
+      {
+        name: "__downflow__targets",
+        type: "binding",
+        match(el, attributeName) {
+          return Boolean(attributeName.match("flow-target"));
+        },
+      },
+      {
+        name: "__downflow__actions",
+        type: "binding",
+        match(el, attributeName) {
+          return Boolean(attributeName === "flow-action");
+        },
+      },
+      {
+        name: "__downflow__context",
+        type: "binding",
+        match(el, attributeName) {
+          return Boolean(attributeName === "flow-context");
+        },
+      },
+      // This watches if the value attribute changes, which can be useful if its "bound".
+      {
+        name: "__downflow__value",
+        type: "binding",
+        match(el, attributeName) {
+          // Check the bind attribute cache first to reduce churn of unbound elements
+          return Boolean(self._bindAttributeCache.get(el) && attributeName === "value");
+        },
+      },
+    ]
 
-      /**
-      * @typedef {Object} BindingPlugin
-      * @property {string} name
-      * @property {"binding"} type
-      * @property {(el: Element) => any} [parseElement]
-      * @property {(value: any) => any} [run]
-      * @property {(el: Element, attributeName: string) => boolean} match
-      */
+    /**
+     * @type {import("../internal/plugins.js").EffectPlugin[]}
+     */
+    this._effects = this._plugins.filter((plugin) => {
+      return plugin.type === "effect"
+    });
 
-      /**
-      * @typedef {Object} EffectPlugin
-      * @property {string} name
-      * @property {(el: Element) => any} run
-      * @property {"effect"} type
-      * @property {(el: Element, attributeName: string) => boolean} match
-      */
-
-      /**
-      * Private for now until ive played with it more.
-      * I *think* what will
-      * @type {Plugin[]}
-      */
-      this._plugins = [
-        {
-          name: "__downflow__text",
-          type: "effect",
-          run: (el) => this._effectText(el),
-          match(el, attributeName) {
-            return Boolean(attributeName.match(/flow-text/));
-          },
-        },
-        {
-          name: "__downflow__properties",
-          type: "effect",
-          run: (el) => this._effectProperties(el),
-          match(el, attributeName) {
-            return Boolean(attributeName.match(/flow-prop/));
-          },
-        },
-        {
-          name: "__downflow__attributes",
-          type: "effect",
-          run: (el) => this._effectAttributes(el),
-          match(el, attributeName) {
-            return Boolean(attributeName.match(/flow-attr/));
-          },
-        },
-        {
-          name: "__downflow__bind",
-          type: "binding",
-          match(el, attributeName) {
-            return Boolean(attributeName.match(/flow-bind/));
-          },
-        },
-        {
-          name: "__downflow__controllers",
-          type: "binding",
-          match(el, attributeName) {
-            return Boolean(attributeName.match("flow-controller"));
-          },
-        },
-        {
-          name: "__downflow__targets",
-          type: "binding",
-          match(el, attributeName) {
-            return Boolean(attributeName.match("flow-target"));
-          },
-        },
-        {
-          name: "__downflow__actions",
-          type: "binding",
-          match(el, attributeName) {
-            return Boolean(attributeName === "flow-action");
-          },
-        },
-        {
-          name: "__downflow__context",
-          type: "binding",
-          match(el, attributeName) {
-            return Boolean(attributeName === "flow-context");
-          },
-        },
-        // This watches if the value attribute changes, which can be useful if its "bound".
-        {
-          name: "__downflow__value",
-          type: "binding",
-          match(el, attributeName) {
-            // Check the bind attribute cache first to reduce churn of unbound elements
-            return Boolean(self._bindAttributeCache.get(el) && attributeName === "value");
-          },
-        },
-      ]
-
-      /**
-      * @type {Plugin[]}
-      */
-      this._effects = this._plugins.filter((plugin) => {
-        return plugin.type === "effect"
-      });
-
-      this._bindingPlugins = this._plugins.filter((plugin) => {
-        return plugin.type === "binding"
-      })
-    }
+    /**
+     * @type {import("../internal/plugins.js").BindingPlugin[]}
+     */
+    this._bindingPlugins = this._plugins.filter((plugin) => {
+      return plugin.type === "binding"
+    })
   }
 
   // This function is purposely *not* run as part of an effect.
@@ -869,11 +847,12 @@ export class Application {
   }
 
   /**
+   * @param {Element} element
    * @param {string} attr
    */
-  isFlowAttribute (attr) {
+  isFlowAttribute (element, attr) {
     for (const p of this._plugins) {
-      if (p?.match?.(attr)) {
+      if (p?.match?.(element, attr)) {
         return true
       }
     }
@@ -893,7 +872,7 @@ export class Application {
 
     for (const mutation of mutations) {
       if (mutation.type === "attributes" && mutation.attributeName) {
-        if (!this.isFlowAttribute(mutation.attributeName)) {
+        if (!this.isFlowAttribute(/** @type {Element} */ (mutation.target), mutation.attributeName)) {
           continue
         }
       } else if (mutation.type === "childList") {
@@ -1715,7 +1694,7 @@ export class Application {
     // not sure if this is the best way to "diff" an element, but this allows custom plugins.
     for (const attr of el.attributes) {
       for (const effect of this._effects) {
-        if (effect.match(attr.name)) {
+        if (effect.match(el, attr.name)) {
           if (signature.length > 0) {
             signature += ">> ";
           }
